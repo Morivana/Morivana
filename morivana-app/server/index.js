@@ -1,9 +1,14 @@
 import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import { MongoClient, ServerApiVersion } from 'mongodb'
 
-const { MONGODB_URI, MONGODB_DB = 'morivana', PORT = 5174 } = process.env
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+const { MONGODB_URI, MONGODB_DB = 'morivana', PORT = 5174, NODE_ENV } = process.env
 
 if (!MONGODB_URI) {
   console.error('Missing MONGODB_URI in environment. Set it in morivana-app/.env')
@@ -52,6 +57,16 @@ app.post('/api/waitlist', async (req, res) => {
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }))
 
-app.listen(PORT, () => {
-  console.log(`Waitlist API listening on http://localhost:${PORT}`)
+// --- Serve Vite production build in production ---
+const distPath = path.resolve(__dirname, '..', 'dist')
+app.use(express.static(distPath))
+
+// SPA fallback: serve index.html for any non-API route
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'))
 })
+
+app.listen(PORT, () => {
+  console.log(`Morivana server listening on http://localhost:${PORT} (${NODE_ENV || 'development'})`)
+})
+
