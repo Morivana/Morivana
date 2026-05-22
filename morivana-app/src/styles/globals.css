@@ -1,0 +1,902 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design tokens ─── */
+:root {
+  /* Brand palette: #194102 / #CDD883 / #E9FEDC / #FFFFFF
+     Light-first, deep-forest as ink, citrus as one hero accent. */
+
+  /* Surfaces */
+  --surface-base: #FFFFFF;
+  --surface-soft: #F4FBEC;
+  --surface-mint: #E9FEDC;
+  --surface-deep: #194102;
+
+  /* Ink */
+  --ink: #0E2701;
+  --ink-soft: #3F5C32;
+  --ink-mute: #7A8A6E;
+  --ink-on-dark: #E9FEDC;
+  --ink-on-dark-mute: rgba(233, 254, 220, 0.65);
+
+  /* Accent */
+  --accent: #CDD883;
+  --accent-strong: #B8C66B;
+  --accent-on: #0E2701;
+
+  /* Hairlines */
+  --line-soft: rgba(14, 39, 1, 0.10);
+  --line-on-dark: rgba(233, 254, 220, 0.16);
+
+  /* ─── Typographic system (unified site-wide) ───
+     Four families do all the work:
+       --font-serif    → editorial headlines + italic voice (Playfair Display)
+       --font-display  → geometric humanist display (Inter, Gotham look-alike)
+       --font-body     → body + UI (Inter)
+       --font-mono     → mechanical labels, kickers, machine-stamped detail
+                         (JetBrains Mono, GT Mechanik look-alike)
+  */
+  --font-serif: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  --font-display: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* Legacy aliases - keep semantic API, retire Bebas Neue */
+  --green-dark: var(--surface-deep);
+  --green-mid: #2C6B1A;
+  --green-bright: #4F8A35;
+  --green-light: var(--ink-soft);
+  --citrus: var(--accent);
+  --citrus-dim: var(--accent-strong);
+  --cream: var(--surface-soft);
+  --warm-white: var(--surface-base);
+  --orange: var(--accent);
+  --yellow: var(--accent);
+  --pink-accent: var(--accent);
+  --dark: var(--ink);
+}
+
+/* ─── Base reset ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: auto;
+  /* Lenis handles smooth scroll */
+  font-size: 16px;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--surface-base);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'ss01', 'cv01';
+}
+
+/* Heading defaults - serif by default, kept light so component-level styles
+   can override without specificity wars. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+a {
+  color: inherit;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Sections on the deep-forest anchor surface auto-invert text colors. */
+.surface-deep {
+  background-color: var(--surface-deep);
+  color: var(--ink-on-dark);
+  position: relative;
+}
+
+.surface-soft {
+  background-color: var(--surface-soft);
+  color: var(--ink);
+}
+
+.surface-mint {
+  background-color: var(--surface-mint);
+  color: var(--ink);
+}
+
+/* Section stacking convention:
+     - section: position relative, no z-index (no new context)
+     - .section-bg : background decoration plane, z-index 0
+                     (FloatingLeaves and per-component decorations apply this
+                     by extending it OR by setting z-index 0 themselves)
+     - .section-content : foreground plane, z-index 2
+
+   We do NOT use a blanket "every direct child" selector here — that was the
+   earlier approach and it silently overrode per-component `position: absolute`
+   on decoration elements (cta-collage / cta-scrim / cta-glow), collapsing
+   them into the document flow. Instead each section opts in by wrapping its
+   foreground in .section-content. Components that introduce extra absolute
+   decoration (collage, grain, orbs) keep their own z-index: 0 declarations
+   and live peacefully in the background plane alongside the leaves. */
+main section {
+  position: relative;
+  z-index: auto;
+}
+
+.section-content {
+  position: relative;
+  z-index: 2;
+}
+
+.section-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ─── Typography helpers ─── */
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.font-condensed {
+  font-family: var(--font-display);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+/* Serif italic - editorial flourish */
+.serif-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* ─── Section kicker label ─── */
+.kicker {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  color: var(--ink-soft);
+}
+
+.surface-deep .kicker {
+  color: var(--accent);
+}
+
+/* ─── Section headline ─── */
+.section-headline {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--surface-deep);
+}
+
+.surface-deep .section-headline {
+  color: var(--ink-on-dark);
+}
+
+/* Eyebrow serif headline used alongside the display sans */
+.headline-serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
+
+.surface-deep .headline-serif {
+  color: var(--ink-on-dark);
+}
+
+/* ─── Nav pill ─── */
+.nav-pill {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--surface-deep);
+  border: 1.5px solid var(--line-soft);
+  border-radius: 999px;
+  padding: 7px 16px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.nav-pill:hover {
+  background: var(--surface-deep);
+  color: var(--ink-on-dark);
+  border-color: var(--surface-deep);
+}
+
+.nav-pill:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ─── CTA Button ─── */
+.cta-btn {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: var(--surface-deep);
+  color: var(--accent);
+  border: none;
+  border-radius: 999px;
+  padding: 14px 30px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 6px 24px rgba(25, 65, 2, 0.18);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.cta-btn:hover {
+  background: var(--ink);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 32px rgba(25, 65, 2, 0.28);
+}
+
+.cta-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.surface-deep .cta-btn {
+  background: var(--accent);
+  color: var(--accent-on);
+  box-shadow: 0 6px 24px rgba(205, 216, 131, 0.25);
+}
+
+.surface-deep .cta-btn:hover {
+  background: var(--accent-strong);
+}
+
+.cta-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ─── Dotted separator ─── */
+.dotted-line {
+  border: none;
+  border-top: 2px dotted var(--line-soft);
+  width: 100%;
+}
+
+.surface-deep .dotted-line {
+  border-top-color: var(--line-on-dark);
+}
+
+/* ─── Ingredient icon circle ─── */
+.ingredient-icon {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ─── Countdown ─── */
+.countdown {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.countdown-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  min-width: 48px;
+}
+
+.countdown-num {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 3.4rem;
+  color: var(--surface-deep);
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.surface-deep .countdown-num {
+  color: var(--accent);
+}
+
+.countdown-sep {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 2.6rem;
+  color: var(--ink-mute);
+  line-height: 0.95;
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+.surface-deep .countdown-sep {
+  color: var(--ink-on-dark-mute);
+}
+
+.countdown-label {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.66rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 8px;
+}
+
+.surface-deep .countdown-label {
+  color: var(--ink-on-dark-mute);
+}
+
+/* ─── Loading spinner ─── */
+.model-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(200, 230, 48, 0.15);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ─── Benefit card ─── */
+.benefit-card {
+  background: var(--surface-base);
+  border: 1px solid var(--line-soft);
+  border-radius: 16px;
+  padding: 32px 28px;
+  transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+  cursor: default;
+}
+
+.benefit-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--surface-deep);
+  box-shadow: 0 18px 40px rgba(25, 65, 2, 0.10);
+}
+
+.surface-deep .benefit-card {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--line-on-dark);
+  color: var(--ink-on-dark);
+}
+
+.surface-deep .benefit-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* ─── Form fields ─── */
+.waitlist-input {
+  background: var(--surface-base) !important;
+  border: 1.5px solid var(--line-soft) !important;
+  border-radius: 999px !important;
+  color: var(--ink) !important;
+  font-family: var(--font-body) !important;
+  font-weight: 500 !important;
+  font-size: 0.95rem !important;
+  padding: 14px 22px !important;
+  outline: none !important;
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.waitlist-input::placeholder {
+  color: var(--ink-mute) !important;
+  font-weight: 400 !important;
+}
+
+.waitlist-input:focus {
+  border-color: var(--surface-deep) !important;
+  box-shadow: 0 0 0 3px rgba(25, 65, 2, 0.12) !important;
+}
+
+.surface-deep .waitlist-input {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: var(--line-on-dark) !important;
+  color: var(--ink-on-dark) !important;
+}
+
+.surface-deep .waitlist-input::placeholder {
+  color: var(--ink-on-dark-mute) !important;
+}
+
+.surface-deep .waitlist-input:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(205, 216, 131, 0.18) !important;
+}
+
+/* ─── Scroll story layout ─── */
+.scroll-story-wrapper {
+  position: relative;
+  overflow: visible;
+}
+
+.story-text-col {
+  width: 55%;
+  padding: 100px 60px 100px 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+}
+
+.how-to-use-section {
+  padding: 120px 64px;
+}
+
+/* ─── Responsive cascade ───
+   Breakpoints:
+   - ≤1280px : large tablet / narrow laptop tweaks
+   - ≤992px  : tablet portrait / collapse to single column
+   - ≤768px  : large phone
+   - ≤480px  : standard phone
+   - ≤360px  : small phone
+   Each layer only overrides what changes from the previous one. */
+
+@media (max-width: 1280px) {
+  .story-text-col {
+    width: 58%;
+    padding: 80px 48px 80px 56px;
+  }
+
+  .how-to-use-section {
+    padding: 96px 48px;
+  }
+}
+
+@media (max-width: 992px) {
+  .canvas-3d {
+    display: block !important;
+  }
+
+  .mobile-product-img {
+    display: none !important;
+  }
+
+  .sticky-canvas-container {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    pointer-events: none !important;
+    z-index: 5 !important;
+  }
+
+  .sticky-canvas-col {
+    position: sticky !important;
+    top: 64px !important;
+    height: 38vh !important;
+    width: 100% !important;
+    pointer-events: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .story-text-col {
+    width: 100% !important;
+    padding: 42vh 24px 60px 24px !important;
+    gap: 24px !important;
+    position: relative !important;
+    z-index: 10 !important;
+  }
+
+  .how-to-use-section {
+    padding: 80px 24px !important;
+  }
+
+  .hero-layout {
+    flex-direction: column !important;
+  }
+
+  .hero-text-col {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .benefit-cards-row {
+    flex-direction: column !important;
+  }
+
+  .footer-cols {
+    flex-direction: column !important;
+    gap: 32px !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .nav-pills-left,
+  .nav-pills-right {
+    display: none !important;
+  }
+
+  .nav-mobile-hamburger {
+    display: block !important;
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  /* Logo stays visible and centered on mobile */
+  .nav-center-logo {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .steps-row {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  .step-arrow {
+    transform: rotate(90deg) !important;
+    margin: 10px 0 !important;
+  }
+
+  .countdown {
+    gap: 10px !important;
+  }
+
+  .countdown-num {
+    font-size: 2.6rem !important;
+  }
+
+  .countdown-sep {
+    font-size: 2rem !important;
+    margin-left: 2px !important;
+    margin-right: 2px !important;
+  }
+
+  .countdown-label {
+    font-size: 0.58rem !important;
+  }
+
+  .footer-col-item {
+    text-align: center !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .footer-col-item div {
+    justify-content: center !important;
+  }
+
+  .cta-btn {
+    padding: 12px 24px !important;
+    font-size: clamp(0.7rem, 3vw, 0.82rem) !important;
+    white-space: normal !important;
+    text-align: center !important;
+  }
+
+  /* Mobile perf: drop GPU layer promotion on decorative elements */
+  .fl-leaf,
+  .fl-inner {
+    will-change: auto !important;
+  }
+
+  /* Disable Ken Burns tile drift on mobile — pure decoration, not worth GPU cost */
+  .cta-tile {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+
+  /* Navbar shrink */
+  nav[style] {
+    padding: 0 16px !important;
+  }
+
+  /* Footer breathing room */
+  footer {
+    padding: 48px 24px !important;
+  }
+
+  footer .footer-cols {
+    gap: 28px !important;
+  }
+
+  /* Hero scroll indicator pinned closer to bottom */
+  #hero>div:last-of-type {
+    bottom: 20px !important;
+  }
+
+  /* Countdown tighter */
+  .countdown-num {
+    font-size: 2.3rem !important;
+  }
+
+  .countdown-sep {
+    font-size: 1.8rem !important;
+  }
+
+  /* Section vertical rhythm tightens on phones */
+  #ingredients,
+  #benefits {
+    padding: 64px 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
+
+  /* Navbar even tighter; logo centers */
+  nav[style] {
+    padding: 0 14px !important;
+    height: 60px !important;
+  }
+
+  /* Story column doesn't need 42vh of top space on tiny phones;
+     the sticky canvas itself takes ~38vh, so 30vh top padding is plenty. */
+  .story-text-col {
+    padding: 32vh 20px 48px 20px !important;
+    gap: 20px !important;
+  }
+
+  /* How-to-use cards row goes column with smaller gap */
+  .how-to-use-section {
+    padding: 60px 18px !important;
+  }
+
+  /* Hero text column padding */
+  .hero-text-col {
+    padding: 76px 20px 0 !important;
+    gap: 12px !important;
+  }
+
+  /* Countdown shrinks again */
+  .countdown {
+    gap: 8px !important;
+  }
+
+  .countdown-block {
+    min-width: 38px !important;
+  }
+
+  .countdown-num {
+    font-size: 1.95rem !important;
+  }
+
+  .countdown-sep {
+    font-size: 1.5rem !important;
+    margin-top: 2px !important;
+  }
+
+  .countdown-label {
+    font-size: 0.54rem !important;
+    letter-spacing: 0.22em !important;
+  }
+
+  /* Cert chips wrap nicely */
+  footer span {
+    font-size: 0.6rem !important;
+    letter-spacing: 0.2em !important;
+  }
+
+  /* CTA button sits comfortably on a single line */
+  .cta-btn {
+    padding: 12px 22px !important;
+    font-size: 0.76rem !important;
+    letter-spacing: 0.14em !important;
+  }
+
+  /* Form fields shrink padding */
+  .waitlist-input {
+    padding: 12px 18px !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (max-width: 360px) {
+  html {
+    font-size: 13.5px;
+  }
+
+  .hero-text-col {
+    padding: 72px 16px 0 !important;
+  }
+
+  footer {
+    padding: 40px 18px !important;
+  }
+
+  .countdown-num {
+    font-size: 1.75rem !important;
+  }
+
+  .countdown-block {
+    min-width: 34px !important;
+  }
+}
+
+/* Ultra-wide: cap content widths so the layout doesn't sprawl on 4K */
+@media (min-width: 1600px) {
+  .story-text-col {
+    padding: 120px 80px;
+  }
+}
+
+/* ─── Misc utilities ─── */
+.text-citrus {
+  color: var(--accent);
+}
+
+.text-cream {
+  color: var(--cream);
+}
+
+.text-green-light {
+  color: var(--green-light);
+}
+
+.bg-dark {
+  background-color: var(--dark);
+}
+
+.bg-green-dark {
+  background-color: var(--green-dark);
+}
+
+/* Animated underline for footer links */
+.footer-link {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-strong);
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 2px;
+  transition: color 0.2s;
+}
+
+.footer-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: right 0.3s cubic-bezier(.2, .7, .2, 1);
+}
+
+.footer-link:hover {
+  color: var(--accent);
+}
+
+.footer-link:hover::after {
+  right: 0;
+}
+
+/* Pro tip box */
+.pro-tip-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 20px 28px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+/* How step cards */
+.how-step {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 36px 24px;
+  text-align: center;
+  transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+
+.how-step:hover {
+  transform: translateY(-4px);
+  border-color: rgba(200, 230, 48, 0.3);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Success state */
+.success-state {
+  text-align: center;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Selection color matches brand */
+::selection {
+  background: var(--accent);
+  color: var(--accent-on);
+}
+
+/* Respect reduced-motion globally */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

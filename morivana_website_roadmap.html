@@ -1,0 +1,331 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.wrap { padding: 1.5rem 0; }
+.phase-toggle { display: flex; gap: 8px; margin-bottom: 1.5rem; }
+.phase-btn { padding: 8px 20px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--color-text-secondary); transition: all 0.15s; }
+.phase-btn.active { background: #1a3d2b; color: #d8f3dc; border-color: #1a3d2b; }
+.phase-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 1rem; }
+.section-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); margin-bottom: 10px; overflow: hidden; }
+.section-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; }
+.section-header:hover { background: var(--color-background-secondary); }
+.sec-num { width: 24px; height: 24px; border-radius: 50%; background: #1a3d2b; color: #d8f3dc; font-size: 11px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.sec-title { font-size: 14px; font-weight: 500; color: var(--color-text-primary); flex: 1; }
+.sec-tag { font-size: 11px; padding: 3px 8px; border-radius: 20px; font-weight: 500; }
+.tag-must { background: #d8f3dc; color: #1a3d2b; }
+.tag-opt { background: var(--color-background-secondary); color: var(--color-text-secondary); }
+.chevron { font-size: 14px; color: var(--color-text-secondary); transition: transform 0.2s; }
+.chevron.open { transform: rotate(180deg); }
+.section-body { padding: 0 16px 16px 52px; display: none; }
+.section-body.open { display: block; }
+.content-item { margin-bottom: 14px; }
+.content-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: var(--color-text-secondary); margin-bottom: 4px; }
+.content-value { font-size: 13px; color: var(--color-text-primary); line-height: 1.65; background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; }
+.content-value ul { padding-left: 16px; }
+.content-value li { margin-bottom: 4px; }
+.divider { height: 0.5px; background: var(--color-border-tertiary); margin: 1.5rem 0 1rem; }
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Morivana website roadmap — launching soon and full e-commerce sections</h2>
+
+  <div class="phase-toggle">
+    <button class="phase-btn active" onclick="switchPhase('launch')">Phase 1 — Launching soon</button>
+    <button class="phase-btn" onclick="switchPhase('live')">Phase 2 — Live store</button>
+  </div>
+
+  <div id="phase-launch">
+    <div class="phase-label">6 sections · Goal: build hype + collect emails before launch</div>
+
+    <div class="section-card">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="sec-num">1</div>
+        <span class="sec-title">Hero / above the fold</span>
+        <span class="sec-tag tag-must">Must have</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+      <div class="section-body">
+        <div class="content-item"><div class="content-label">Headline</div><div class="content-value">Your big bold one-liner. Example: "Your daily green ritual, arriving soon." or "One scoop. Every superfood. Every morning."</div></div>
+        <div class="content-item"><div class="content-label">Sub-headline</div><div class="content-value">1–2 lines explaining what Morivana is. Example: "A daily super greens blend with moringa, spirulina, amla & more — made for busy people who want real nutrition without the effort."</div></div>
+        <div class="content-item"><div class="content-label">Visual</div><div class="content-value">Full-width product image (your packaging front) or an AI-generated lifestyle photo — the morning ritual scene works best here.</div></div>
+        <div class="content-item"><div class="content-label">CTA</div><div class="content-value">Email capture field + button. "Notify me at launch" or "Join the waitlist — get 15% off"</div></div>
+        <div class="content-item"><div class="content-label">Countdown timer</div><div class="content-value">Optional but powerful. "Launching in X days" creates urgency even pre-launch.</div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="sec-num">2</div>
+        <span class="sec-title">What is Morivana</span>
+        <span class="sec-tag tag-must">Must have</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+      <div class="section-body">
+        <div class="content-item"><div class="content-label">Section headline</div><div class="content-value">"Not just a greens powder. A morning ritual." or "Everything your body needs. Nothing it doesn't."</div></div>
+        <div class="content-item"><div class="content-label">Body copy</div><div class="content-value">2–3 short paragraphs or 3 icon+text blocks. Cover: what it is (daily greens blend), who it's for (busy people), and what it does (energy, digestion, gut health, immunity).</div></div>
+        <div class="content-item"><div class="content-label">Visual</div><div class="content-value">Flat lay photo with ingredients OR a lifestyle photo of someone mixing the drink in the morning.</div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="sec-num">3</div>
+        <span class="sec-title">Key ingredients spotlight</span>
+        <span class="sec-tag tag-must">Must have</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+      <div class="section-body">
+        <div class="content-item"><div class="content-label">Section headline</div><div class="content-value">"8 superfoods. One scoop." or "What's inside every serving."</div></div>
+        <div class="content-item"><div class="content-label">Ingredient cards (one per ingredient)</div><div class="content-value"><ul><li>Moringa — "The most nutrient-dense plant on earth. Rich in iron, calcium & antioxidants."</li><li>Spirulina — "A blue-green algae powerhouse for protein and energy."</li><li>Amla — "Vitamin C from the Indian gooseberry. Boosts immunity & skin."</li><li>Ginger — "Soothes digestion and reduces inflammation."</li><li>Lemon — "Natural detox support and alkalizing effect."</li><li>Inulin (fiber) — "Prebiotic fiber that feeds your gut bacteria."</li><li>Orange Peel — "Packed with flavonoids and digestive enzymes."</li><li>Monk Fruit — "Natural zero-calorie sweetener. No sugar spike."</li></ul></div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="sec-num">4</div>
+        <span class="sec-title">Benefits / Why it works</span>
+        <span class="sec-tag tag-must">Must have</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+      <div class="section-body">
+        <div class="content-item"><div class="content-label">Section headline</div><div class="content-value">"Feel the difference from day one." or "What Morivana does for you."</div></div>
+        <div class="content-item"><div class="content-label">Benefit blocks (icon + headline + 1 line)</div><div class="content-value"><ul><li>Energy without caffeine — "Moringa and spirulina fuel your body naturally."</li><li>Better digestion — "Ginger and inulin work together to ease your gut."</li><li>Stronger immunity — "Amla and lemon deliver a daily dose of vitamin C."</li><li>Skin & hair health — "Antioxidants from moringa fight free radical damage."</li><li>Simple daily habit — "Just one scoop in water. Done in 30 seconds."</li></ul></div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="sec-num">5</div>
+        <span class="sec-title">How to use</span>
+        <span class="sec-tag tag-opt">Optional</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+      <div class="section-body">
+        <div class="content-item"><div class="content-label">Section headline</div><div class="content-value">"Your 30-second morning ritual." or "Simple. Daily. Powerful."</div></div>
+        <div class="content-item"><div class="content-label">3-step visual flow</div><div class="content-value"><ul><li>Step 1: Add 1 scoop (5g) to a glass</li><li>Step 2: Mix with 200ml water, milk, or smoothie</li><li>Step 3: Drink and start your day</li></ul></div></div>
+        <div class="content-item"><div class="content-label">Note</div><div class="content-value">Best taken in the morning on an empty stomach for maximum absorption.</div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="sec-num">6</div>
+        <span class="sec-title">Waitlist CTA + footer</span>
+        <span class="sec-tag tag-must">Must have</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+      <div class="section-body">
+        <div class="content-item"><div class="content-label">CTA headline</div><div class="content-value">"Be the first to try Morivana." or "Join 500+ people on the waitlist."</div></div>
+        <div class="content-item"><div class="content-label">Sub-copy</div><div class="content-value">"Sign up for early access and get an exclusive launch discount. Limited first batch available."</div></div>
+        <div class="content-item"><div class="content-label">Email form</div><div class="content-value">Name + Email + "Notify me" button. Connect to Mailchimp, Brevo, or any email tool via API.</div></div>
+        <div class="content-item"><div class="content-label">Footer</div><div class="content-value">Logo, tagline, Instagram link, Privacy Policy link. Keep it minimal.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="phase-live" style="display:none;">
+    <div class="phase-label">13 sections · Goal: convert visitors into buyers + build brand loyalty</div>
+
+    <div class="section-card">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="sec-num">1</div>
+        <span class="sec-title">Navbar</span>
+        <span class="sec-tag tag-must">Must have</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+      <div class="section-body">
+        <div class="content-item"><div class="content-label">Links</div><div class="content-value">Logo · Shop · Ingredients · Why Morivana · Recipes · About · Cart icon</div></div>
+        <div class="content-item"><div class="content-label">Announcement bar (above navbar)</div><div class="content-value">"Free shipping on orders over ₹599" or "Launch offer: 15% off your first order — code MORI15"</div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="sec-num">2</div>
+        <span class="sec-title">Hero section</span>
+        <span class="sec-tag tag-must">Must have</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+      <div class="section-body">
+        <div class="content-item"><div class="content-label">Headline</div><div class="content-value">"One scoop. Eight superfoods. Every morning." — bold, large, serif font.</div></div>
+        <div class="content-item"><div class="content-label">Sub-copy</div><div class="content-value">"Morivana Daily Super Greens blends moringa, spirulina, amla and more into your easiest daily habit."</div></div>
+        <div class="content-item"><div class="content-label">CTAs</div><div class="content-value">Primary: "Shop now" → product page. Secondary: "See ingredients" → scrolls down.</div></div>
+        <div class="content-item"><div class="content-label">Visual</div><div class="content-value">Product packaging hero shot (white background studio) OR outdoor morning lifestyle photo. Full screen.</div></div>
+        <div class="content-item"><div class="content-label">Trust badges</div><div class="content-value">Below hero: "100% Natural · No Artificial Sweeteners · Vegan Friendly · 10 Servings"</div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="sec-num">3</div>
+        <span class="sec-title">Social proof bar</span>
+        <span class="sec-tag tag-must">Must have</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+      <div class="section-body">
+        <div class="content-item"><div class="content-label">Content</div><div class="content-value">Star rating average + review count · "As seen on Instagram" · Number of customers served. Example: "★★★★★ Loved by 1,200+ customers"</div></div>
+        <div class="content-item"><div class="content-label">Note</div><div class="content-value">Add this once you have real reviews. At launch, use waitlist sign-up count instead.</div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="sec-num">4</div>
+        <span class="sec-title">Product section</span>
+        <span class="sec-tag tag-must">Must have</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+      <div class="section-body">
+        <div class="content-item"><div class="content-label">Product name</div><div class="content-value">Morivana Daily Super Greens — Daily Greens Blend</div></div>
+        <div class="content-item"><div class="content-label">Product images</div><div class="content-value">Front pack · Back pack · Flat lay with ingredients · Lifestyle in-use shot — at least 4 images.</div></div>
+        <div class="content-item"><div class="content-label">Price display</div><div class="content-value">Show INR for India / CAD for Canada via IP detection. Include original price + sale price if applicable.</div></div>
+        <div class="content-item"><div class="content-label">Short description</div><div class="content-value">"50g · 10 servings · 5g per scoop. Mix with water, milk, or smoothies. Energize · Refresh · Nourish."</div></div>
+        <div class="content-item"><div class="content-label">Add to cart + Buy now buttons</div><div class="content-value">Prominent green CTA. Below it: "Free shipping above ₹599 · Secure checkout · Easy returns"</div></div>
+        <div class="content-item"><div class="content-label">Tabs below product</div><div class="content-value">Ingredients · Nutrition facts · How to use · Storage</div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="sec-num">5</div>
+        <span class="sec-title">Ingredients deep-dive</span>
+        <span class="sec-tag tag-must">Must have</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+      <div class="section-body">
+        <div class="content-item"><div class="content-label">Headline</div><div class="content-value">"Every ingredient earns its place." or "Nothing hidden. Nothing artificial."</div></div>
+        <div class="content-item"><div class="content-label">Format</div><div class="content-value">Ingredient name + icon/image + 2-line benefit description. Card grid of 8. Same content as the pre-launch version but with more depth and sourcing details if available.</div></div>
+        <div class="content-item"><div class="content-label">Add</div><div class="content-value">"Why we chose each ingredient" — short paragraph about your sourcing philosophy or commitment to natural ingredients.</div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="sec-num">6</div>
+        <span class="sec-title">Benefits section</span>
+        <span class="sec-tag tag-must">Must have</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+      <div class="section-body">
+        <div class="content-item"><div class="content-label">Format</div><div class="content-value">Alternating image + text layout (like Hungry Tiger). One benefit per row, big visual on one side, explanation on the other.</div></div>
+        <div class="content-item"><div class="content-label">Benefits to cover</div><div class="content-value"><ul><li>All-day energy without caffeine crash</li><li>Gut health and smoother digestion</li><li>Stronger immunity from daily vitamin C</li><li>Clearer skin from antioxidant load</li><li>A mindful morning habit that takes 30 seconds</li></ul></div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="sec-num">7</div>
+        <span class="sec-title">How to use</span>
+        <span class="sec-tag tag-must">Must have</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+      <div class="section-body">
+        <div class="content-item"><div class="content-label">Headline</div><div class="content-value">"Your easiest healthy habit." or "30 seconds to a better morning."</div></div>
+        <div class="content-item"><div class="content-label">3-step visual</div><div class="content-value">Step 1: Scoop → Step 2: Mix → Step 3: Drink. With icons and a short line each.</div></div>
+        <div class="content-item"><div class="content-label">Mixing ideas</div><div class="content-value">"Try it with water · coconut water · warm milk · your morning smoothie"</div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="sec-num">8</div>
+        <span class="sec-title">Comparison section</span>
+        <span class="sec-tag tag-opt">Optional</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+      <div class="section-body">
+        <div class="content-item"><div class="content-label">Headline</div><div class="content-value">"Morivana vs your current routine."</div></div>
+        <div class="content-item"><div class="content-label">Table columns</div><div class="content-value">Morivana vs Juicing daily vs Buying supplements vs Skipping nutrition. Compare on: time, cost, nutrient coverage, effort, taste, portability.</div></div>
+        <div class="content-item"><div class="content-label">Purpose</div><div class="content-value">This section handles objections before they arise. Very effective for converting skeptical visitors.</div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="sec-num">9</div>
+        <span class="sec-title">Testimonials / Reviews</span>
+        <span class="sec-tag tag-must">Must have</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+      <div class="section-body">
+        <div class="content-item"><div class="content-label">Headline</div><div class="content-value">"Real people. Real results." or "What your mornings could feel like."</div></div>
+        <div class="content-item"><div class="content-label">Format</div><div class="content-value">3–5 review cards with: star rating, reviewer name, city, short quote (2–3 lines), optional photo.</div></div>
+        <div class="content-item"><div class="content-label">At launch</div><div class="content-value">Use beta tester reviews or send free samples to 10 people before launch and collect genuine feedback. Never fake reviews.</div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="sec-num">10</div>
+        <span class="sec-title">Recipes / Usage ideas</span>
+        <span class="sec-tag tag-opt">Optional</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+      <div class="section-body">
+        <div class="content-item"><div class="content-label">Headline</div><div class="content-value">"More ways to use Morivana."</div></div>
+        <div class="content-item"><div class="content-label">Recipe ideas</div><div class="content-value"><ul><li>Morivana morning water (plain mix)</li><li>Green smoothie with banana and coconut milk</li><li>Morivana lemonade (mix with lemon + honey)</li><li>Add to overnight oats</li></ul></div></div>
+        <div class="content-item"><div class="content-label">Format</div><div class="content-value">Card grid with image + recipe name + prep time. Can be a separate /recipes page linked from here.</div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="sec-num">11</div>
+        <span class="sec-title">About the brand</span>
+        <span class="sec-tag tag-must">Must have</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+      <div class="section-body">
+        <div class="content-item"><div class="content-label">Headline</div><div class="content-value">"Why we built Morivana." or "Made with care for your wellness."</div></div>
+        <div class="content-item"><div class="content-label">Story copy</div><div class="content-value">Your personal reason for starting the brand. Who it's for. What you believe about nutrition and wellness. Keep it honest and human — 3–4 short paragraphs.</div></div>
+        <div class="content-item"><div class="content-label">Visual</div><div class="content-value">Founder photo (optional) or a warm lifestyle image. Authentic over polished.</div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="sec-num">12</div>
+        <span class="sec-title">FAQ</span>
+        <span class="sec-tag tag-must">Must have</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+      <div class="section-body">
+        <div class="content-item"><div class="content-label">Questions to cover</div><div class="content-value"><ul><li>Is it safe to take daily?</li><li>Can I take it if I'm pregnant or on medication?</li><li>Does it taste good?</li><li>Is it vegan / gluten-free?</li><li>How long until I see results?</li><li>What's the best time to take it?</li><li>Can I mix it with hot water?</li><li>What is your return/refund policy?</li><li>How long does one pack last?</li></ul></div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="sec-num">13</div>
+        <span class="sec-title">Final CTA + Footer</span>
+        <span class="sec-tag tag-must">Must have</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+      <div class="section-body">
+        <div class="content-item"><div class="content-label">CTA headline</div><div class="content-value">"Start your green ritual today." or "Your healthiest morning is one scoop away."</div></div>
+        <div class="content-item"><div class="content-label">CTA button</div><div class="content-value">"Shop Morivana" — links to product/cart.</div></div>
+        <div class="content-item"><div class="content-label">Email signup</div><div class="content-value">"Get wellness tips + exclusive offers in your inbox." Name + email field.</div></div>
+        <div class="content-item"><div class="content-label">Footer columns</div><div class="content-value">Col 1: Logo + tagline + social links. Col 2: Shop · About · Recipes · FAQ. Col 3: Shipping policy · Return policy · Privacy policy · Contact. Col 4: India / Canada flag toggle for currency.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggle(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+
+function switchPhase(phase) {
+  document.getElementById('phase-launch').style.display = phase === 'launch' ? 'block' : 'none';
+  document.getElementById('phase-live').style.display = phase === 'live' ? 'block' : 'none';
+  document.querySelectorAll('.phase-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', (phase === 'launch' && i === 0) || (phase === 'live' && i === 1));
+  });
+}
+</script>
