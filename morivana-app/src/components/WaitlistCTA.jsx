@@ -252,14 +252,14 @@ export default function WaitlistCTA() {
         }
       `}</style>
 
-      <div style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: '640px', width: '100%' }}>
+      <div style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: '800px', width: '100%' }}>
         {/* Kicker */}
         <div className="kicker cta-reveal" style={{ marginBottom: '20px', display: 'flex', justifyContent: 'center' }}>
           LIMITED FIRST BATCH · INDIA &amp; CANADA
         </div>
 
         {/* Headline - editorial serif eyebrow + display sans */}
-        <h2 style={{ margin: '0 0 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px', overflow: 'hidden' }}>
+        <h2 style={{ margin: '0 0 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
           <div style={{ overflow: 'hidden' }}>
             <span
               className="cta-headline-word"
@@ -284,7 +284,7 @@ export default function WaitlistCTA() {
                 display: 'inline-block',
                 fontFamily: 'var(--font-display)',
                 fontWeight: 900,
-                fontSize: 'clamp(36px, 9vw, 128px)',
+                fontSize: 'clamp(36px, 8vw, 120px)',
                 lineHeight: 0.9,
                 color: 'var(--accent)',
                 letterSpacing: '-0.02em',

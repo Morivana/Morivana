@@ -93,12 +93,12 @@ export default function Benefits() {
 
       {/* Zigzag column - pouch sits centered behind via global 3D layer */}
       <div className="benefits-zigzag" style={{
-        maxWidth: '960px',
+        maxWidth: '1080px',
         margin: '0 auto',
         padding: '0 32px',
         display: 'flex',
         flexDirection: 'column',
-        gap: '18px',
+        gap: '28px',
       }}>
         {benefits.map((b, i) => {
           const isRight = i % 2 === 1
@@ -107,7 +107,7 @@ export default function Benefits() {
               key={i}
               className="benefit-card"
               style={{
-                width: '40%',
+                width: '38%',
                 marginLeft: isRight ? 'auto' : 0,
                 marginRight: isRight ? 0 : 'auto',
                 padding: '18px 20px',
@@ -141,25 +141,6 @@ export default function Benefits() {
                 background: 'radial-gradient(circle at top, rgba(205,216,131,0.18) 0%, transparent 70%)',
                 pointerEvents: 'none',
               }} />
-
-              {/* Tag chip */}
-              <div style={{
-                position: 'absolute',
-                top: '12px',
-                [isRight ? 'left' : 'right']: '16px',
-                fontFamily: 'var(--font-body)',
-                fontWeight: 700,
-                fontSize: '0.58rem',
-                letterSpacing: '0.24em',
-                textTransform: 'uppercase',
-                color: 'var(--surface-deep)',
-                background: '#F8FBE6',
-                border: '1px solid rgba(25,65,2,0.10)',
-                borderRadius: '999px',
-                padding: '4px 10px',
-              }}>
-                {b.tag}
-              </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '10px' }}>
                 <div style={{

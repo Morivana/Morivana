@@ -43,10 +43,6 @@ export default function WhatIsMorivana() {
         {/* Text content - left side, leaves right open for 3D overlay */}
         <div className="story-text-col">
           <div className="what-text-block">
-            <div className="kicker">NOT JUST A GREENS POWDER</div>
-          </div>
-
-          <div className="what-text-block">
             <h2 style={{
               margin: 0,
               display: 'flex',
@@ -57,12 +53,12 @@ export default function WhatIsMorivana() {
                 fontFamily: 'var(--font-serif)',
                 fontStyle: 'italic',
                 fontWeight: 500,
-                fontSize: 'clamp(24px, 3.2vw, 44px)',
-                lineHeight: 1.05,
-                color: 'var(--ink)',
-                letterSpacing: '-0.005em',
+                fontSize: 'clamp(18px, 2.4vw, 32px)',
+                lineHeight: 1.15,
+                color: 'var(--ink-soft)',
+                letterSpacing: '0.005em',
               }}>
-                Not a powder.
+                NOT JUST A POWDER
               </span>
               <span className="what-display-heading" style={{
                 fontFamily: 'var(--font-display)',

@@ -152,12 +152,12 @@ export default function Ingredients() {
       {/* Zigzag column - pouch sits centered behind via the global 3D layer.
           Even cards (0,2,4,6) align left; odd cards (1,3,5,7) align right. */}
       <div className="ingredients-zigzag" style={{
-        maxWidth: '960px',
+        maxWidth: '1080px',
         margin: '0 auto',
         padding: '0 32px',
         display: 'flex',
         flexDirection: 'column',
-        gap: '16px',
+        gap: '20px',
       }}>
         {ingredients.map((ing, i) => {
           const isRight = i % 2 === 1
@@ -166,7 +166,7 @@ export default function Ingredients() {
               key={i}
               className="ingredient-card"
               style={{
-                width: '40%',
+                width: '38%',
                 marginLeft: isRight ? 'auto' : 0,
                 marginRight: isRight ? 0 : 'auto',
                 display: 'flex',
@@ -191,28 +191,6 @@ export default function Ingredients() {
                 e.currentTarget.style.borderColor = 'rgba(25,65,2,0.12)'
               }}
             >
-              {/* Numbered badge */}
-              <div style={{
-                position: 'absolute',
-                top: '-10px',
-                [isRight ? 'right' : 'left']: '14px',
-                width: '26px',
-                height: '26px',
-                borderRadius: '50%',
-                background: 'var(--surface-deep)',
-                color: 'var(--accent)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontFamily: 'var(--font-body)',
-                fontWeight: 700,
-                fontSize: '0.7rem',
-                letterSpacing: '0.04em',
-                fontVariantNumeric: 'tabular-nums',
-              }}>
-                {String(i + 1).padStart(2, '0')}
-              </div>
-
               <div style={{
                 width: '44px',
                 height: '44px',

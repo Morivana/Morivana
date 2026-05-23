@@ -146,12 +146,12 @@ function PouchModel({ isMobile }) {
     // Hero state: centered, below text, big
     // Mobile: 10% smaller and positioned higher (closer to countdown)
     const heroPos = isMobile ? [0, -0.8, 0] : [0, -1.6, 0]
-    const heroScale = isMobile ? 0.76 : 1.05
+    const heroScale = isMobile ? 0.68 : 0.95
 
     // Story state: right side, smaller
     const storyPosX = isMobile ? 0 : 1.6
     const storyPosY = isMobile ? 0.2 : 0.0
-    const storyScale = isMobile ? 0.5 : 0.75
+    const storyScale = isMobile ? 0.45 : 0.68
 
     outerRef.current.position.set(heroPos[0], heroPos[1], heroPos[2])
     outerRef.current.scale.setScalar(heroScale)
@@ -210,10 +210,9 @@ function PouchModel({ isMobile }) {
       .fromTo(outerRef.current.position,
         { x: storyPosX },
         { x: 0, ease: 'power2.inOut', duration: 1, immediateRender: false }, 0)
-      // Hold at center through most of the span (no-op tween to consume timeline time)
-      .to(outerRef.current.position, { x: 0, duration: 6 }, 1)
-      // Exit: travel 0 -> storyPosX
-      .to(outerRef.current.position, { x: storyPosX, ease: 'power2.inOut', duration: 1 }, 7)
+      // Hold at center through the rest of the span — pouch stays centered
+      // until it fades out entering HowToUse.
+      .to(outerRef.current.position, { x: 0, duration: 7 }, 1)
 
     triggers.push(centerTween.scrollTrigger)
 
