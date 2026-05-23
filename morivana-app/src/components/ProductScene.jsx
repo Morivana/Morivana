@@ -144,13 +144,14 @@ function PouchModel({ isMobile }) {
     if (!outerRef.current || !innerRef.current) return
 
     // Hero state: centered, below text, big
-    const heroPos = isMobile ? [0, -1.4, 0] : [0, -1.6, 0]
-    const heroScale = isMobile ? 0.85 : 1.05
+    // Mobile: 10% smaller and positioned higher (closer to countdown)
+    const heroPos = isMobile ? [0, -0.8, 0] : [0, -1.6, 0]
+    const heroScale = isMobile ? 0.76 : 1.05
 
     // Story state: right side, smaller
     const storyPosX = isMobile ? 0 : 1.6
     const storyPosY = isMobile ? 0.2 : 0.0
-    const storyScale = isMobile ? 0.55 : 0.75
+    const storyScale = isMobile ? 0.5 : 0.75
 
     outerRef.current.position.set(heroPos[0], heroPos[1], heroPos[2])
     outerRef.current.scale.setScalar(heroScale)

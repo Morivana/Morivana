@@ -175,10 +175,10 @@ export default function Benefits() {
                 }}>
                   {b.icon}
                 </div>
-                <div style={{
+                <div className="benefit-title" style={{
                   fontFamily: 'var(--font-display)',
                   fontWeight: 700,
-                  fontSize: '1.18rem',
+                  fontSize: 'clamp(0.95rem, 3vw, 1.18rem)',
                   letterSpacing: '0.04em',
                   color: 'var(--surface-deep)',
                   lineHeight: 1.05,
@@ -210,6 +210,14 @@ export default function Benefits() {
             width: 100% !important;
             margin-left: 0 !important;
             margin-right: 0 !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .benefits-zigzag .benefit-card {
+            padding: 14px 14px !important;
+          }
+          .benefits-zigzag .benefit-card .benefit-title {
+            font-size: 1rem !important;
           }
         }
       `}</style>

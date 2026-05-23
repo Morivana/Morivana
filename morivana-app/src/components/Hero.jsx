@@ -137,7 +137,7 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
           style={{
             maxWidth: '700px',
             width: '100%',
-            padding: '90px 32px 0',
+            padding: '80px 32px 0',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'flex-start',
@@ -291,6 +291,42 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
         @keyframes scrollPulse {
           0%, 100% { opacity: 0.3; transform: scaleY(0.7); }
           50% { opacity: 1; transform: scaleY(1); }
+        }
+        @media (max-width: 768px) {
+          .hero-text-col {
+            padding: 24px 20px 0 !important;
+            gap: 10px !important;
+          }
+          .hero-headline span:last-child {
+            font-size: clamp(32px, 9vw, 56px) !important;
+            white-space: normal !important;
+          }
+          .hero-headline span:first-child {
+            font-size: clamp(16px, 4.5vw, 24px) !important;
+          }
+          .hero-body {
+            font-size: 0.9rem !important;
+          }
+          .hero-sublabel {
+            font-size: 0.75rem !important;
+            letter-spacing: 0.24em !important;
+          }
+          .hero-kicker {
+            font-size: 0.58rem !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .hero-text-col {
+            padding: 16px 16px 0 !important;
+            gap: 8px !important;
+          }
+          .hero-headline span:last-child {
+            font-size: clamp(28px, 8.5vw, 48px) !important;
+          }
+          .hero-cta .cta-btn {
+            font-size: 0.72rem !important;
+            padding: 12px 20px !important;
+          }
         }
       `}</style>
     </section>

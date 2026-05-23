@@ -289,6 +289,20 @@ export default function Ingredients() {
             margin-right: 0 !important;
           }
         }
+        @media (max-width: 480px) {
+          .ing-hero-image {
+            max-width: 280px !important;
+            margin-bottom: 36px !important;
+          }
+          .ingredients-zigzag .ingredient-card {
+            padding: 12px 14px !important;
+            gap: 10px !important;
+          }
+          .ingredients-zigzag .ingredient-card div:first-of-type {
+            width: 36px !important;
+            height: 36px !important;
+          }
+        }
       `}</style>
     </section>
   )

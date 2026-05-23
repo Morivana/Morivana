@@ -64,10 +64,10 @@ export default function WhatIsMorivana() {
               }}>
                 Not a powder.
               </span>
-              <span style={{
+              <span className="what-display-heading" style={{
                 fontFamily: 'var(--font-display)',
                 fontWeight: 800,
-                fontSize: 'clamp(46px, 7.5vw, 112px)',
+                fontSize: 'clamp(32px, 7.5vw, 112px)',
                 lineHeight: 0.9,
                 color: 'var(--surface-deep)',
                 letterSpacing: '0.01em',

@@ -238,6 +238,15 @@ export default function WaitlistCTA() {
           .cta-tile--7 { grid-row: 4 / 5 !important; }
           .cta-tile--2, .cta-tile--4, .cta-tile--5 { display: none; }
         }
+        @media (max-width: 480px) {
+          .cta-section {
+            min-height: auto !important;
+            padding: 48px 16px !important;
+          }
+          .cta-form-row {
+            gap: 12px !important;
+          }
+        }
         @media (prefers-reduced-motion: reduce) {
           .cta-tile { animation: none !important; }
         }
@@ -259,7 +268,7 @@ export default function WaitlistCTA() {
                 fontFamily: 'var(--font-serif)',
                 fontStyle: 'italic',
                 fontWeight: 500,
-                fontSize: 'clamp(26px, 3.6vw, 48px)',
+                fontSize: 'clamp(18px, 3.6vw, 48px)',
                 lineHeight: 1.05,
                 color: 'var(--ink-on-dark)',
                 letterSpacing: '-0.005em',
@@ -275,7 +284,7 @@ export default function WaitlistCTA() {
                 display: 'inline-block',
                 fontFamily: 'var(--font-display)',
                 fontWeight: 900,
-                fontSize: 'clamp(56px, 9vw, 128px)',
+                fontSize: 'clamp(36px, 9vw, 128px)',
                 lineHeight: 0.9,
                 color: 'var(--accent)',
                 letterSpacing: '-0.02em',
@@ -446,7 +455,7 @@ export default function WaitlistCTA() {
           <span style={{
             fontFamily: 'var(--font-body)',
             fontWeight: 600,
-            fontSize: '0.82rem',
+            fontSize: 'clamp(0.7rem, 2.5vw, 0.82rem)',
             color: 'var(--cream)',
             letterSpacing: '0.06em',
           }}>

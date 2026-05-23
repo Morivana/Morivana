@@ -47,7 +47,7 @@ export default function Footer() {
             fontFamily: 'var(--font-serif)',
             fontStyle: 'italic',
             fontWeight: 600,
-            fontSize: '44px',
+            fontSize: 'clamp(28px, 7vw, 44px)',
             color: 'var(--accent)',
             lineHeight: 0.95,
             letterSpacing: '-0.01em',
@@ -88,11 +88,12 @@ export default function Footer() {
               marginTop: '14px',
               fontFamily: 'var(--font-body)',
               fontWeight: 500,
-              fontSize: '0.82rem',
+              fontSize: 'clamp(0.7rem, 2.5vw, 0.82rem)',
               color: 'var(--ink-on-dark)',
               opacity: 0.85,
               textDecoration: 'none',
               letterSpacing: '0.01em',
+              wordBreak: 'break-all',
               transition: 'color 0.2s, opacity 0.2s',
             }}
             onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.opacity = '1' }}
@@ -118,7 +119,7 @@ export default function Footer() {
 
         {/* Column 2 - Links */}
         <div className="footer-col-item" style={{ flex: '0 0 auto', display: 'flex', flexDirection: 'column', gap: '12px', justifyContent: 'center' }}>
-          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'center' }}>
             {footerLinks.map(link => (
               <a key={link.label} href={link.href} className="footer-link">
                 {link.label}

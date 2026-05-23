@@ -233,7 +233,7 @@ export default function Loader({ onDismiss, onLeaveStart }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 'clamp(24px, 5vw, 56px)',
+        padding: 'clamp(16px, 4vw, 56px)',
         overflow: 'hidden',
         pointerEvents: leaving ? 'none' : 'auto',
       }}
@@ -286,6 +286,7 @@ export default function Loader({ onDismiss, onLeaveStart }) {
           flexDirection: 'column',
           alignItems: 'center',
           gap: '22px',
+          boxSizing: 'border-box',
         }}
       >
         {/* Coming soon eyebrow */}
@@ -365,12 +366,13 @@ export default function Loader({ onDismiss, onLeaveStart }) {
           className="loader-form-row"
           style={{
             width: '100%',
-            maxWidth: '420px',
+            maxWidth: '100%',
             display: 'flex',
             flexDirection: 'column',
             gap: '22px',
             opacity: 0,
             marginTop: '6px',
+            boxSizing: 'border-box',
           }}
         >
           <div className="loader-field">
@@ -483,8 +485,16 @@ export default function Loader({ onDismiss, onLeaveStart }) {
           }
         }
 
+        .loader-field {
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
+          overflow: hidden;
+        }
         .loader-field input {
           width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
           background: transparent;
           border: none;
           border-bottom: 1px solid rgba(245, 237, 214, 0.45);
@@ -528,6 +538,8 @@ export default function Loader({ onDismiss, onLeaveStart }) {
         .loader-btn {
           position: relative;
           width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
           padding: 18px 28px;
           background: ${PALETTE.base};
           border: 1px solid rgba(245, 237, 214, 0.65);
@@ -606,8 +618,82 @@ export default function Loader({ onDismiss, onLeaveStart }) {
         }
 
         @media (max-width: 520px) {
+          .loader-root {
+            padding: 12px 0 !important;
+            align-items: center !important;
+          }
+          .loader-stage {
+            width: calc(100vw - 48px) !important;
+            max-width: calc(100vw - 48px) !important;
+            gap: 14px !important;
+            padding: 0 !important;
+          }
           .loader-stage h1 {
-            letter-spacing: 0.04em !important;
+            letter-spacing: 0.03em !important;
+            font-size: clamp(30px, 10vw, 56px) !important;
+          }
+          .loader-form-row {
+            width: 100% !important;
+            max-width: 100% !important;
+            gap: 14px !important;
+            padding: 0 !important;
+          }
+          .loader-field {
+            width: 100% !important;
+          }
+          .loader-field input {
+            font-size: 0.85rem !important;
+            padding: 10px 0 !important;
+            width: 100% !important;
+          }
+          .loader-btn {
+            padding: 12px 14px !important;
+            font-size: 0.65rem !important;
+            letter-spacing: 0.18em !important;
+            width: 100% !important;
+          }
+          .loader-skip {
+            font-size: 0.8rem !important;
+          }
+          .loader-eyebrow {
+            font-size: 0.56rem !important;
+            letter-spacing: 0.28em !important;
+            gap: 8px !important;
+          }
+          .loader-tagline {
+            font-size: clamp(14px, 4vw, 20px) !important;
+          }
+          .loader-meta {
+            margin-top: 8px !important;
+          }
+        }
+        @media (max-width: 380px) {
+          .loader-stage {
+            width: calc(100vw - 32px) !important;
+            max-width: calc(100vw - 32px) !important;
+            gap: 10px !important;
+          }
+          .loader-stage h1 {
+            font-size: clamp(26px, 9vw, 44px) !important;
+            letter-spacing: 0.02em !important;
+          }
+          .loader-form-row {
+            gap: 12px !important;
+          }
+          .loader-field input {
+            font-size: 0.8rem !important;
+            padding: 8px 0 !important;
+          }
+          .loader-btn {
+            padding: 10px 10px !important;
+            font-size: 0.6rem !important;
+            letter-spacing: 0.14em !important;
+          }
+          .loader-skip {
+            font-size: 0.75rem !important;
+          }
+          .loader-meta {
+            margin-top: 4px !important;
           }
         }
 

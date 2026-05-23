@@ -665,6 +665,16 @@ main section {
     bottom: 20px !important;
   }
 
+  /* Hero min-height reduced so content doesn't float in too much space */
+  #hero {
+    min-height: auto !important;
+    padding-bottom: 60px !important;
+  }
+
+  .hero-layout {
+    min-height: auto !important;
+  }
+
   /* Countdown tighter */
   .countdown-num {
     font-size: 2.3rem !important;
@@ -679,6 +689,21 @@ main section {
   #benefits {
     padding: 64px 0 !important;
   }
+
+  /* Section headlines scale down */
+  .section-headline {
+    font-size: clamp(28px, 7vw, 48px) !important;
+  }
+
+  .headline-serif {
+    font-size: clamp(18px, 4vw, 28px) !important;
+  }
+
+  /* Ingredient/benefit cards padding */
+  .ingredient-card,
+  .benefit-card {
+    padding: 14px 14px !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -689,14 +714,24 @@ main section {
   /* Navbar even tighter; logo centers */
   nav[style] {
     padding: 0 14px !important;
-    height: 60px !important;
+    height: 56px !important;
+  }
+
+  /* Logo scales down on small screens */
+  .nav-center-logo div:first-child {
+    font-size: 20px !important;
+  }
+
+  .nav-center-logo div:last-child {
+    font-size: 8px !important;
+    letter-spacing: 0.24em !important;
   }
 
   /* Story column doesn't need 42vh of top space on tiny phones;
      the sticky canvas itself takes ~38vh, so 30vh top padding is plenty. */
   .story-text-col {
-    padding: 32vh 20px 48px 20px !important;
-    gap: 20px !important;
+    padding: 32vh 16px 48px 16px !important;
+    gap: 16px !important;
   }
 
   /* How-to-use cards row goes column with smaller gap */
@@ -704,74 +739,116 @@ main section {
     padding: 60px 18px !important;
   }
 
-  /* Hero text column padding */
-  .hero-text-col {
-    padding: 76px 20px 0 !important;
-    gap: 12px !important;
+  /* Hero adjustments for mobile */
+  #hero {
+    padding-top: 56px !important;
+    padding-bottom: 48px !important;
   }
 
   /* Countdown shrinks again */
   .countdown {
-    gap: 8px !important;
+    gap: 6px !important;
   }
 
   .countdown-block {
-    min-width: 38px !important;
+    min-width: 36px !important;
   }
 
   .countdown-num {
-    font-size: 1.95rem !important;
+    font-size: 1.7rem !important;
   }
 
   .countdown-sep {
-    font-size: 1.5rem !important;
+    font-size: 1.3rem !important;
     margin-top: 2px !important;
   }
 
   .countdown-label {
-    font-size: 0.54rem !important;
-    letter-spacing: 0.22em !important;
+    font-size: 0.5rem !important;
+    letter-spacing: 0.18em !important;
   }
 
   /* Cert chips wrap nicely */
   footer span {
-    font-size: 0.6rem !important;
-    letter-spacing: 0.2em !important;
+    font-size: 0.56rem !important;
+    letter-spacing: 0.18em !important;
   }
 
   /* CTA button sits comfortably on a single line */
   .cta-btn {
-    padding: 12px 22px !important;
-    font-size: 0.76rem !important;
-    letter-spacing: 0.14em !important;
+    padding: 11px 20px !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.12em !important;
   }
 
   /* Form fields shrink padding */
   .waitlist-input {
-    padding: 12px 18px !important;
-    font-size: 0.9rem !important;
+    padding: 11px 16px !important;
+    font-size: 0.85rem !important;
+  }
+
+  /* Section padding tighter */
+  #ingredients,
+  #benefits {
+    padding: 48px 0 !important;
+  }
+
+  /* Kicker text smaller */
+  .kicker {
+    font-size: 0.58rem !important;
+    letter-spacing: 0.24em !important;
+  }
+
+  /* Ingredient cards compact */
+  .ingredients-zigzag,
+  .benefits-zigzag {
+    padding: 0 16px !important;
+    gap: 14px !important;
   }
 }
 
 @media (max-width: 360px) {
   html {
-    font-size: 13.5px;
+    font-size: 13px;
   }
 
-  .hero-text-col {
-    padding: 72px 16px 0 !important;
+  nav[style] {
+    height: 52px !important;
+    padding: 0 12px !important;
+  }
+
+  #hero {
+    padding-top: 52px !important;
   }
 
   footer {
-    padding: 40px 18px !important;
+    padding: 36px 14px !important;
   }
 
   .countdown-num {
-    font-size: 1.75rem !important;
+    font-size: 1.5rem !important;
   }
 
   .countdown-block {
-    min-width: 34px !important;
+    min-width: 30px !important;
+  }
+
+  .countdown-sep {
+    font-size: 1.1rem !important;
+  }
+
+  .story-text-col {
+    padding: 28vh 14px 40px 14px !important;
+  }
+
+  .ingredients-zigzag,
+  .benefits-zigzag {
+    padding: 0 12px !important;
+  }
+
+  .cta-btn {
+    padding: 10px 16px !important;
+    font-size: 0.68rem !important;
   }
 }
 
