@@ -54,16 +54,16 @@ export default function WaitlistCTA() {
           },
         })
       })
-      // Headline reveal
+      // Headline reveal - word-by-word rise
       gsap.from('.cta-headline-word', {
-        y: 80,
+        y: 60,
         opacity: 0,
-        stagger: 0.08,
-        duration: 0.8,
+        stagger: 0.14,
+        duration: 1.4,
         ease: 'power3.out',
         scrollTrigger: {
-          trigger: '.cta-headline-word',
-          start: 'top 85%',
+          trigger: '#waitlist-cta',
+          start: 'top 70%',
           toggleActions: 'play none none none',
         },
       })

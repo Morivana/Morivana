@@ -378,7 +378,7 @@ export default function Loader({ onDismiss, onLeaveStart }) {
           <div className="loader-field">
             <input
               type="text"
-              placeholder="Your first name"
+              placeholder="Your First Name"
               disabled={isSubmitting || submitted}
               {...register('name', { required: 'Name is required' })}
             />
@@ -388,7 +388,7 @@ export default function Loader({ onDismiss, onLeaveStart }) {
           <div className="loader-field">
             <input
               type="email"
-              placeholder="Your email address"
+              placeholder="Your Email Address"
               disabled={isSubmitting || submitted}
               {...register('email', {
                 required: 'Email is required',
@@ -412,8 +412,8 @@ export default function Loader({ onDismiss, onLeaveStart }) {
                   ? 'WELCOME →'
                   : 'PREPARING…'
                 : isSubmitting
-                ? 'JOINING…'
-                : 'NOTIFY ME  →'}
+                  ? 'JOINING…'
+                  : 'NOTIFY ME  →'}
             </span>
             <span className="loader-btn-shimmer" aria-hidden="true" />
           </button>

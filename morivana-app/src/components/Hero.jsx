@@ -48,9 +48,10 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
         duration: 0.7 * s.mul, ease: 'power3.out',
         delay: s.lead,
       })
-      gsap.from('.hero-headline', {
-        opacity: 0, y: s.headlineY,
-        duration: 0.9 * s.mul, ease: 'power3.out',
+      gsap.from('.hero-word', {
+        y: 60, opacity: 0,
+        duration: 1.4 * s.mul, ease: 'power3.out',
+        stagger: 0.14,
         delay: 0.35 * s.mul,
       })
       gsap.from('.hero-divider', {
@@ -153,29 +154,35 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
 
           {/* Headline - editorial serif eyebrow + display sans */}
           <div className="hero-headline" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <span style={{
-              fontFamily: 'var(--font-serif)',
-              fontStyle: 'italic',
-              fontWeight: 500,
-              fontSize: 'clamp(20px, 2.6vw, 36px)',
-              lineHeight: 1.1,
-              color: 'var(--ink)',
-              letterSpacing: '-0.005em',
-            }}>
-              Quietly powerful,
-            </span>
-            <span style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: 900,
-              fontSize: 'clamp(36px, 11vw, 168px)',
-              lineHeight: 0.9,
-              color: 'var(--surface-deep)',
-              letterSpacing: '-0.02em',
-              textTransform: 'uppercase',
-              whiteSpace: 'nowrap',
-            }}>
-              PURE GREENS
-            </span>
+            <div style={{ overflow: 'hidden' }}>
+              <span className="hero-word" style={{
+                display: 'inline-block',
+                fontFamily: 'var(--font-serif)',
+                fontStyle: 'italic',
+                fontWeight: 500,
+                fontSize: 'clamp(20px, 2.6vw, 36px)',
+                lineHeight: 1.1,
+                color: 'var(--ink)',
+                letterSpacing: '-0.005em',
+              }}>
+                Quietly powerful,
+              </span>
+            </div>
+            <div style={{ overflow: 'hidden' }}>
+              <span className="hero-word" style={{
+                display: 'inline-block',
+                fontFamily: 'var(--font-display)',
+                fontWeight: 900,
+                fontSize: 'clamp(36px, 11vw, 168px)',
+                lineHeight: 0.9,
+                color: 'var(--surface-deep)',
+                letterSpacing: '-0.02em',
+                textTransform: 'uppercase',
+                whiteSpace: 'nowrap',
+              }}>
+                PURE GREENS
+              </span>
+            </div>
           </div>
 
           {/* Dotted divider */}

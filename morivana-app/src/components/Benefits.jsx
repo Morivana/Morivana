@@ -14,6 +14,15 @@ const benefits = [
 export default function Benefits() {
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Word-by-word headline reveal
+      gsap.from('.benefits-word', {
+        y: 60, opacity: 0,
+        duration: 1.4,
+        ease: 'power3.out',
+        stagger: 0.14,
+        scrollTrigger: { trigger: '#benefits', start: 'top 70%', toggleActions: 'play none none none' },
+      })
+
       gsap.utils.toArray('.benefits-reveal').forEach((el) => {
         gsap.from(el, {
           y: 30, opacity: 0, duration: 0.8, ease: 'power3.out',
@@ -48,34 +57,40 @@ export default function Benefits() {
         <div className="kicker benefits-reveal" style={{ marginBottom: '14px', justifyContent: 'center', display: 'flex' }}>
           WHY MORIVANA WORKS
         </div>
-        <h2 className="benefits-reveal" style={{
+        <h2 style={{
           margin: 0,
           display: 'flex',
           flexDirection: 'column',
           gap: '2px',
         }}>
-          <span style={{
-            fontFamily: 'var(--font-serif)',
-            fontStyle: 'italic',
-            fontWeight: 500,
-            fontSize: 'clamp(22px, 2.6vw, 34px)',
-            lineHeight: 1.1,
-            color: 'var(--ink)',
-            letterSpacing: '-0.005em',
-          }}>
-            Feel the difference
-          </span>
-          <span style={{
-            fontFamily: 'var(--font-display)',
-            fontWeight: 800,
-            fontSize: 'clamp(34px, 5vw, 64px)',
-            lineHeight: 0.95,
-            color: 'var(--surface-deep)',
-            letterSpacing: '0.01em',
-            textTransform: 'uppercase',
-          }}>
-            FROM DAY ONE
-          </span>
+          <div style={{ overflow: 'hidden' }}>
+            <span className="benefits-word" style={{
+              display: 'inline-block',
+              fontFamily: 'var(--font-serif)',
+              fontStyle: 'italic',
+              fontWeight: 500,
+              fontSize: 'clamp(22px, 2.6vw, 34px)',
+              lineHeight: 1.1,
+              color: 'var(--ink)',
+              letterSpacing: '-0.005em',
+            }}>
+              Feel the difference
+            </span>
+          </div>
+          <div style={{ overflow: 'hidden' }}>
+            <span className="benefits-word" style={{
+              display: 'inline-block',
+              fontFamily: 'var(--font-display)',
+              fontWeight: 800,
+              fontSize: 'clamp(34px, 5vw, 64px)',
+              lineHeight: 0.95,
+              color: 'var(--surface-deep)',
+              letterSpacing: '0.01em',
+              textTransform: 'uppercase',
+            }}>
+              FROM DAY ONE
+            </span>
+          </div>
         </h2>
         <p className="benefits-reveal" style={{
           fontFamily: 'var(--font-body)',

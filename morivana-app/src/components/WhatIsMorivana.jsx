@@ -12,7 +12,17 @@ const highlights = [
 export default function WhatIsMorivana() {
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Word-by-word headline reveal
+      gsap.from('.what-word', {
+        y: 60, opacity: 0,
+        duration: 1.4,
+        ease: 'power3.out',
+        stagger: 0.14,
+        scrollTrigger: { trigger: '#what-section', start: 'top 70%', toggleActions: 'play none none none' },
+      })
+      // Other content blocks
       gsap.utils.toArray('.what-text-block').forEach((block) => {
+        if (block.querySelector('.what-word')) return
         gsap.from(block, {
           y: 40,
           opacity: 0,
@@ -49,28 +59,34 @@ export default function WhatIsMorivana() {
               flexDirection: 'column',
               gap: '4px',
             }}>
-              <span style={{
-                fontFamily: 'var(--font-serif)',
-                fontStyle: 'italic',
-                fontWeight: 500,
-                fontSize: 'clamp(18px, 2.4vw, 32px)',
-                lineHeight: 1.15,
-                color: 'var(--ink-soft)',
-                letterSpacing: '0.005em',
-              }}>
-                NOT JUST A POWDER
-              </span>
-              <span className="what-display-heading" style={{
-                fontFamily: 'var(--font-display)',
-                fontWeight: 800,
-                fontSize: 'clamp(32px, 7.5vw, 112px)',
-                lineHeight: 0.9,
-                color: 'var(--surface-deep)',
-                letterSpacing: '0.01em',
-                textTransform: 'uppercase',
-              }}>
-                A MORNING RITUAL
-              </span>
+              <div style={{ overflow: 'hidden' }}>
+                <span className="what-word" style={{
+                  display: 'inline-block',
+                  fontFamily: 'var(--font-serif)',
+                  fontStyle: 'italic',
+                  fontWeight: 500,
+                  fontSize: 'clamp(18px, 2.4vw, 32px)',
+                  lineHeight: 1.15,
+                  color: 'var(--ink-soft)',
+                  letterSpacing: '0.005em',
+                }}>
+                  NOT JUST A POWDER
+                </span>
+              </div>
+              <div style={{ overflow: 'hidden' }}>
+                <span className="what-word what-display-heading" style={{
+                  display: 'inline-block',
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 800,
+                  fontSize: 'clamp(32px, 7.5vw, 112px)',
+                  lineHeight: 0.9,
+                  color: 'var(--surface-deep)',
+                  letterSpacing: '0.01em',
+                  textTransform: 'uppercase',
+                }}>
+                  A MORNING RITUAL
+                </span>
+              </div>
             </h2>
           </div>
 

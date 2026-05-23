@@ -26,6 +26,15 @@ const ingredients = [
 export default function Ingredients() {
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Word-by-word headline reveal
+      gsap.from('.ing-word', {
+        y: 60, opacity: 0,
+        duration: 1.4,
+        ease: 'power3.out',
+        stagger: 0.14,
+        scrollTrigger: { trigger: '#ingredients', start: 'top 70%', toggleActions: 'play none none none' },
+      })
+
       gsap.utils.toArray('.ing-reveal').forEach((el) => {
         gsap.from(el, {
           y: 30, opacity: 0, duration: 0.8, ease: 'power3.out',
@@ -60,34 +69,40 @@ export default function Ingredients() {
         <div className="kicker ing-reveal" style={{ marginBottom: '14px', justifyContent: 'center', display: 'flex' }}>
           CLEAN LABEL
         </div>
-        <h2 className="ing-reveal" style={{
+        <h2 style={{
           margin: 0,
           display: 'flex',
           flexDirection: 'column',
           gap: '2px',
         }}>
-          <span style={{
-            fontFamily: 'var(--font-serif)',
-            fontStyle: 'italic',
-            fontWeight: 500,
-            fontSize: 'clamp(22px, 2.6vw, 34px)',
-            lineHeight: 1.1,
-            color: 'var(--ink)',
-            letterSpacing: '-0.005em',
-          }}>
-            What's inside
-          </span>
-          <span style={{
-            fontFamily: 'var(--font-display)',
-            fontWeight: 800,
-            fontSize: 'clamp(34px, 5vw, 64px)',
-            lineHeight: 0.95,
-            color: 'var(--surface-deep)',
-            letterSpacing: '0.01em',
-            textTransform: 'uppercase',
-          }}>
-            EVERY SCOOP
-          </span>
+          <div style={{ overflow: 'hidden' }}>
+            <span className="ing-word" style={{
+              display: 'inline-block',
+              fontFamily: 'var(--font-serif)',
+              fontStyle: 'italic',
+              fontWeight: 500,
+              fontSize: 'clamp(22px, 2.6vw, 34px)',
+              lineHeight: 1.1,
+              color: 'var(--ink)',
+              letterSpacing: '-0.005em',
+            }}>
+              What's inside
+            </span>
+          </div>
+          <div style={{ overflow: 'hidden' }}>
+            <span className="ing-word" style={{
+              display: 'inline-block',
+              fontFamily: 'var(--font-display)',
+              fontWeight: 800,
+              fontSize: 'clamp(34px, 5vw, 64px)',
+              lineHeight: 0.95,
+              color: 'var(--surface-deep)',
+              letterSpacing: '0.01em',
+              textTransform: 'uppercase',
+            }}>
+              EVERY SCOOP
+            </span>
+          </div>
         </h2>
         <p className="ing-reveal" style={{
           fontFamily: 'var(--font-body)',
