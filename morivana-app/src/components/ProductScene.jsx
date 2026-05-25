@@ -5,10 +5,10 @@ import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import { animate, createTimeline, utils } from 'animejs'
 
-useGLTF.preload('/models/morivana-labeled.glb')
+useGLTF.preload('/models/morivana_pouch_fixed.glb')
 
 function PouchModel({ isMobile }) {
-  const { scene } = useGLTF('/models/morivana-labeled.glb')
+  const { scene } = useGLTF('/models/morivana_pouch_fixed.glb')
   const outerRef = useRef()   // position + scale (set by master scroll timeline)
   const innerRef = useRef()   // rotation (idle spin + scroll-driven rotation)
   const lifeRef  = useRef()   // empty group between inner + mesh - drives "alive" micro-motion
