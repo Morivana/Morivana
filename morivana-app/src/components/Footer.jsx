@@ -60,7 +60,7 @@ export default function Footer() {
             fontSize: '0.78rem',
             color: 'var(--ink-on-dark)',
             opacity: 0.85,
-            letterSpacing: '0.28em',
+            letterSpacing: '0.22em',
             textTransform: 'uppercase',
             marginTop: '10px',
           }}>
@@ -71,7 +71,7 @@ export default function Footer() {
             fontWeight: 500,
             fontSize: '0.72rem',
             color: 'var(--accent-strong)',
-            letterSpacing: '0.2em',
+            letterSpacing: '0.16em',
             textTransform: 'uppercase',
             marginTop: '8px',
           }}>
@@ -162,7 +162,7 @@ export default function Footer() {
             fontFamily: 'var(--font-body)',
             fontWeight: 700,
             fontSize: '0.66rem',
-            letterSpacing: '0.26em',
+            letterSpacing: '0.20em',
             textTransform: 'uppercase',
             color: 'var(--accent-strong)',
             display: 'inline-flex',

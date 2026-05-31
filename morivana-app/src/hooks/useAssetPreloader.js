@@ -11,7 +11,7 @@ const CRITICAL_IMAGES = [
   '/packaging_highres.png',
 ]
 
-const CRITICAL_MODELS = ['/models/highres.glb']
+const CRITICAL_MODELS = ['/models/morivana_pouch_fixed.glb']
 
 function preloadImage(src) {
   return new Promise((resolve) => {

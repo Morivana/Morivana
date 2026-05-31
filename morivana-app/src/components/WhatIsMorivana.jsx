@@ -1,12 +1,11 @@
 import { useEffect } from 'react'
 import gsap from 'gsap'
-import { DoubleCone3D, Torus3D, Sphere3D } from './ui/ThreeDIcons'
 import FloatingLeaves from './FloatingLeaves'
 
 const highlights = [
-  { icon: <DoubleCone3D size={42} light={true} />, label: 'ENERGIZE', desc: 'Natural energy from moringa & spirulina' },
-  { icon: <Torus3D size={42} light={true} />, label: 'REFRESH', desc: 'Citrus cleanse from lemon & orange peel' },
-  { icon: <Sphere3D size={42} light={true} />, label: 'NOURISH', desc: 'Gut support from inulin prebiotic fiber' },
+  { num: '01', label: 'ENERGIZE', desc: 'Natural energy from moringa & spirulina' },
+  { num: '02', label: 'REFRESH', desc: 'Citrus cleanse from lemon & orange peel' },
+  { num: '03', label: 'NOURISH', desc: 'Gut support from inulin prebiotic fiber' },
 ]
 
 export default function WhatIsMorivana() {
@@ -60,6 +59,18 @@ export default function WhatIsMorivana() {
               gap: '4px',
             }}>
               <div style={{ overflow: 'hidden' }}>
+                <span className="what-word what-display-heading" style={{
+                  display: 'inline-block',
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 800,
+                  fontSize: 'clamp(24px, 7.5vw, 112px)',
+                  lineHeight: 0.9,
+                  color: 'var(--surface-deep)',
+                  letterSpacing: '0.01em',
+                  textTransform: 'uppercase',
+                }}>A MORNING RITUAL</span>
+              </div>
+              <div style={{ overflow: 'hidden' }}>
                 <span className="what-word" style={{
                   display: 'inline-block',
                   fontFamily: 'var(--font-serif)',
@@ -69,23 +80,8 @@ export default function WhatIsMorivana() {
                   lineHeight: 1.15,
                   color: 'var(--ink-soft)',
                   letterSpacing: '0.005em',
-                }}>
-                  NOT JUST A POWDER
-                </span>
-              </div>
-              <div style={{ overflow: 'hidden' }}>
-                <span className="what-word what-display-heading" style={{
-                  display: 'inline-block',
-                  fontFamily: 'var(--font-display)',
-                  fontWeight: 800,
-                  fontSize: 'clamp(32px, 7.5vw, 112px)',
-                  lineHeight: 0.9,
-                  color: 'var(--surface-deep)',
-                  letterSpacing: '0.01em',
-                  textTransform: 'uppercase',
-                }}>
-                  A MORNING RITUAL
-                </span>
+                  fontOpticalSizing: 'auto',
+                }}>Not just a powder</span>
               </div>
             </h2>
           </div>
@@ -131,23 +127,39 @@ export default function WhatIsMorivana() {
             </p>
           </div>
 
-          {/* 3-icon highlights */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '8px' }}>
+          {/* Numbered highlights — typographic, no icons */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '8px' }}>
             {highlights.map(h => (
               <div
                 key={h.label}
                 className="what-text-block"
-                style={{ display: 'flex', alignItems: 'center', gap: '16px' }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'baseline',
+                  gap: '18px',
+                  paddingBottom: '14px',
+                  borderBottom: '1px solid rgba(25,65,2,0.10)',
+                }}
               >
-                <div className="ingredient-icon" style={{ fontSize: '1.6rem' }}>{h.icon}</div>
-                <div>
+                <div style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontWeight: 600,
+                  fontSize: '0.72rem',
+                  letterSpacing: '0.18em',
+                  color: 'var(--ink-mute)',
+                  minWidth: '28px',
+                }}>
+                  N°{h.num}
+                </div>
+                <div style={{ flex: 1 }}>
                   <div style={{
-                    fontFamily: 'var(--font-body)',
-                    fontWeight: 700,
-                    fontSize: '0.85rem',
-                    letterSpacing: '0.28em',
+                    fontFamily: 'var(--font-display)',
+                    fontWeight: 800,
+                    fontSize: '1.05rem',
+                    letterSpacing: '0.06em',
                     textTransform: 'uppercase',
                     color: 'var(--surface-deep)',
+                    marginBottom: '4px',
                   }}>
                     {h.label}
                   </div>
@@ -155,8 +167,7 @@ export default function WhatIsMorivana() {
                     fontFamily: 'var(--font-body)',
                     fontSize: '0.9rem',
                     color: 'var(--ink-soft)',
-                    opacity: 0.85,
-                    marginTop: '4px',
+                    opacity: 0.9,
                   }}>
                     {h.desc}
                   </div>

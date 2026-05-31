@@ -1,20 +1,58 @@
 import { useEffect } from 'react'
 import gsap from 'gsap'
-import { DoubleCone3D, Helix3D, Cone3D, Sphere3D, Cylinder3D } from './ui/ThreeDIcons'
 import FloatingLeaves from './FloatingLeaves'
 
 const benefits = [
-  { icon: <DoubleCone3D size={28} light={true} />, title: 'ALL-DAY ENERGY',     desc: 'No caffeine crash. Moringa + spirulina fuel you naturally.', tag: 'Energy' },
-  { icon: <Helix3D size={28} light={true} />,      title: 'BETTER DIGESTION',   desc: 'Ginger + inulin = smoother gut, every morning.',            tag: 'Gut' },
-  { icon: <Cone3D size={28} light={true} />,       title: 'STRONGER IMMUNITY',  desc: 'Amla + lemon = daily vitamin C hit.',                       tag: 'Immunity' },
-  { icon: <Sphere3D size={28} light={true} />,     title: 'CLEARER SKIN',       desc: 'Antioxidant load from moringa fights free radicals.',       tag: 'Skin' },
-  { icon: <Cylinder3D size={28} light={true} />,   title: '30-SECOND HABIT',    desc: 'One scoop. No blending. No prep. Just results.',            tag: 'Ritual' },
+  {
+    phase: 'DAY 01',
+    when: 'You feel it the first morning.',
+    title: 'All-day energy',
+    desc: 'Moringa and spirulina fuel a steady, level kind of energy. No caffeine, no crash, no jittery 11am.',
+    tag: 'Energy',
+    metric: '+6 hrs',
+    metricLabel: 'Sustained focus',
+  },
+  {
+    phase: 'DAY 03',
+    when: 'Your morning starts smoother.',
+    title: 'Better digestion',
+    desc: 'Ginger calms. Inulin feeds the good bacteria. Within three days, the gut starts running quieter.',
+    tag: 'Gut',
+    metric: '8g',
+    metricLabel: 'Daily fiber',
+  },
+  {
+    phase: 'WEEK 01',
+    when: 'Your defenses get sharper.',
+    title: 'Stronger immunity',
+    desc: 'Amla delivers more vitamin C than an orange. Lemon stacks the citrus load. A daily shield.',
+    tag: 'Immunity',
+    metric: '600%',
+    metricLabel: 'Daily vitamin C',
+  },
+  {
+    phase: 'WEEK 02',
+    when: 'You see it in the mirror.',
+    title: 'Clearer skin',
+    desc: 'Moringa carries 46 antioxidants that quietly mop up the free radicals dulling your skin.',
+    tag: 'Skin',
+    metric: '46',
+    metricLabel: 'Antioxidants',
+  },
+  {
+    phase: 'EVERY DAY',
+    when: 'It takes thirty seconds.',
+    title: 'A ritual you keep',
+    desc: 'One scoop, one glass. No blender, no measuring, no Sunday-prep. The habit sticks because the friction is gone.',
+    tag: 'Ritual',
+    metric: '30s',
+    metricLabel: 'A day',
+  },
 ]
 
 export default function Benefits() {
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Word-by-word headline reveal
       gsap.from('.benefits-word', {
         y: 60, opacity: 0,
         duration: 1.4,
@@ -30,15 +68,27 @@ export default function Benefits() {
         })
       })
 
-      gsap.utils.toArray('.benefit-card').forEach((card, i) => {
-        const fromLeft = i % 2 === 0
-        gsap.from(card, {
-          x: fromLeft ? -60 : 60,
+      gsap.utils.toArray('.timeline-row').forEach((row, i) => {
+        gsap.from(row, {
+          x: -30,
           opacity: 0,
-          duration: 0.85,
+          duration: 0.8,
           ease: 'power3.out',
-          scrollTrigger: { trigger: card, start: 'top 88%', toggleActions: 'play none none none' },
+          delay: i * 0.05,
+          scrollTrigger: { trigger: row, start: 'top 92%', toggleActions: 'play none none none' },
         })
+      })
+
+      gsap.from('.timeline-spine-fill', {
+        scaleY: 0,
+        transformOrigin: 'top',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.timeline-wrap',
+          start: 'top 70%',
+          end: 'bottom 60%',
+          scrub: 0.6,
+        },
       })
     })
     return () => ctx.revert()
@@ -47,174 +97,333 @@ export default function Benefits() {
   return (
     <section
       id="benefits"
-      style={{ background: 'var(--surface-base)', position: 'relative', padding: '88px 0' }}
+      style={{ background: 'var(--surface-base)', position: 'relative', padding: '88px 0', overflow: 'hidden' }}
     >
       <FloatingLeaves variant="light" density="sparse" />
 
       <div className="section-content">
-      {/* Section header */}
-      <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 56px', padding: '0 32px' }}>
-        <div className="kicker benefits-reveal" style={{ marginBottom: '14px', justifyContent: 'center', display: 'flex' }}>
-          WHY MORIVANA WORKS
+        <div className="ben-header">
+          <div className="ben-header-main">
+            <div className="kicker benefits-reveal" style={{ marginBottom: '14px' }}>
+              <span style={{ fontFamily: 'var(--font-mono)' }}>FILE.02</span>
+              &nbsp;&nbsp;·&nbsp;&nbsp;THE OUTCOMES
+            </div>
+            <h2 style={{ margin: 0 }}>
+              <div style={{ overflow: 'hidden' }}>
+                <span className="benefits-word ben-head-display">A timeline</span>
+              </div>
+              <div style={{ overflow: 'hidden' }}>
+                <span className="benefits-word ben-head-serif">your body keeps.</span>
+              </div>
+            </h2>
+          </div>
+
+          <div className="benefits-reveal ben-header-note">
+            <div className="ben-lot">Observed · Five outcomes</div>
+            <p>
+              The same scoop, every morning. Here's what shows up — and when —
+              if you stay with it.
+            </p>
+          </div>
         </div>
-        <h2 style={{
-          margin: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '2px',
-        }}>
-          <div style={{ overflow: 'hidden' }}>
-            <span className="benefits-word" style={{
-              display: 'inline-block',
-              fontFamily: 'var(--font-serif)',
-              fontStyle: 'italic',
-              fontWeight: 500,
-              fontSize: 'clamp(22px, 2.6vw, 34px)',
-              lineHeight: 1.1,
-              color: 'var(--ink)',
-              letterSpacing: '-0.005em',
-            }}>
-              Feel the difference
-            </span>
-          </div>
-          <div style={{ overflow: 'hidden' }}>
-            <span className="benefits-word" style={{
-              display: 'inline-block',
-              fontFamily: 'var(--font-display)',
-              fontWeight: 800,
-              fontSize: 'clamp(34px, 5vw, 64px)',
-              lineHeight: 0.95,
-              color: 'var(--surface-deep)',
-              letterSpacing: '0.01em',
-              textTransform: 'uppercase',
-            }}>
-              FROM DAY ONE
-            </span>
-          </div>
-        </h2>
-        <p className="benefits-reveal" style={{
-          fontFamily: 'var(--font-body)',
-          fontSize: '0.95rem',
-          color: 'var(--ink-soft)',
-          marginTop: '18px',
-          lineHeight: 1.65,
-          maxWidth: '500px',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-        }}>
-          Five outcomes, one daily scoop. Engineered from whole-food superfoods. No shortcuts.
-        </p>
-      </div>
 
-      {/* Zigzag column - pouch sits centered behind via global 3D layer */}
-      <div className="benefits-zigzag" style={{
-        maxWidth: '1080px',
-        margin: '0 auto',
-        padding: '0 32px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '28px',
-      }}>
-        {benefits.map((b, i) => {
-          const isRight = i % 2 === 1
-          return (
-            <div
-              key={i}
-              className="benefit-card"
-              style={{
-                width: '38%',
-                marginLeft: isRight ? 'auto' : 0,
-                marginRight: isRight ? 0 : 'auto',
-                padding: '18px 20px',
-                background: '#EDF2D9',
-                border: '1px solid rgba(25,65,2,0.12)',
-                borderRadius: '14px',
-                boxShadow: '0 4px 16px rgba(25,65,2,0.04)',
-                transition: 'transform 0.3s cubic-bezier(.2,.7,.2,1), box-shadow 0.3s, border-color 0.3s',
-                cursor: 'default',
-                position: 'relative',
-                overflow: 'hidden',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.transform = `translateY(-2px) ${isRight ? 'translateX(-4px)' : 'translateX(4px)'}`
-                e.currentTarget.style.boxShadow = '0 12px 30px rgba(25,65,2,0.10)'
-                e.currentTarget.style.borderColor = 'var(--accent)'
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.transform = 'translateY(0) translateX(0)'
-                e.currentTarget.style.boxShadow = '0 4px 16px rgba(25,65,2,0.04)'
-                e.currentTarget.style.borderColor = 'rgba(25,65,2,0.12)'
-              }}
-            >
-              {/* Subtle accent wedge */}
-              <div style={{
-                position: 'absolute',
-                top: 0,
-                [isRight ? 'left' : 'right']: 0,
-                width: '70px',
-                height: '70px',
-                background: 'radial-gradient(circle at top, rgba(205,216,131,0.18) 0%, transparent 70%)',
-                pointerEvents: 'none',
-              }} />
+        <div className="timeline-wrap">
+          <div className="timeline-spine">
+            <div className="timeline-spine-fill" />
+          </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '10px' }}>
-                <div style={{
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '10px',
-                  background: '#F8FBE6',
-                  border: '1px solid rgba(25,65,2,0.10)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                }}>
-                  {b.icon}
-                </div>
-                <div className="benefit-title" style={{
-                  fontFamily: 'var(--font-display)',
-                  fontWeight: 700,
-                  fontSize: 'clamp(0.95rem, 3vw, 1.18rem)',
-                  letterSpacing: '0.04em',
-                  color: 'var(--surface-deep)',
-                  lineHeight: 1.05,
-                  textTransform: 'uppercase',
-                }}>
-                  {b.title}
+          {benefits.map((b, i) => (
+            <div key={i} className="timeline-row">
+              <div className="tr-phase">
+                <div className="tr-phase-tag">{b.phase}</div>
+                <div className="tr-phase-when">{b.when}</div>
+              </div>
+
+              <div className="tr-node">
+                <div className="tr-dot">
+                  <div className="tr-dot-inner" />
                 </div>
               </div>
 
-              <p style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.86rem',
-                color: '#2C4A1E',
-                lineHeight: 1.55,
-                marginTop: '4px',
-              }}>
-                {b.desc}
-              </p>
+              <div className="tr-content">
+                <div className="tr-title-row">
+                  <h3 className="tr-title">{b.title}</h3>
+                  <span className="tr-tag">{b.tag}</span>
+                </div>
+                <p className="tr-desc">{b.desc}</p>
+              </div>
+
+              <div className="tr-metric">
+                <div className="tr-metric-num">{b.metric}</div>
+                <div className="tr-metric-label">{b.metricLabel}</div>
+              </div>
             </div>
-          )
-        })}
-      </div>
+          ))}
+        </div>
       </div>
 
-      {/* Mobile: full-width cards */}
       <style>{`
-        @media (max-width: 992px) {
-          .benefits-zigzag .benefit-card {
-            width: 100% !important;
-            margin-left: 0 !important;
-            margin-right: 0 !important;
-          }
+        .ben-header {
+          max-width: 1100px;
+          margin: 0 auto 64px;
+          padding: 0 clamp(20px, 4vw, 32px);
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          gap: 32px;
+          flex-wrap: wrap;
         }
-        @media (max-width: 480px) {
-          .benefits-zigzag .benefit-card {
-            padding: 14px 14px !important;
+        .ben-header-main { max-width: 640px; }
+        .ben-head-display {
+          display: inline-block;
+          font-family: var(--font-display);
+          font-weight: 800;
+          font-size: clamp(36px, 6vw, 84px);
+          line-height: 0.92;
+          color: var(--surface-deep);
+          letter-spacing: -0.02em;
+          text-transform: uppercase;
+        }
+        .ben-head-serif {
+          display: inline-block;
+          font-family: var(--font-serif);
+          font-style: italic;
+          font-weight: 500;
+          font-size: clamp(24px, 4vw, 52px);
+          line-height: 1.0;
+          color: var(--ink);
+          letter-spacing: -0.01em;
+        }
+        .ben-header-note {
+          max-width: 300px;
+          border-left: 2px solid var(--surface-deep);
+          padding-left: 20px;
+        }
+        .ben-lot {
+          font-family: var(--font-mono);
+          font-size: 0.7rem;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: var(--ink-mute);
+          margin-bottom: 8px;
+        }
+        .ben-header-note p {
+          font-family: var(--font-body);
+          font-size: 0.92rem;
+          color: var(--ink-soft);
+          line-height: 1.6;
+          margin: 0;
+        }
+
+        .timeline-wrap {
+          max-width: 1080px;
+          margin: 0 auto;
+          padding: 0 clamp(20px, 4vw, 32px);
+          position: relative;
+        }
+        .timeline-spine {
+          position: absolute;
+          left: calc(clamp(20px, 4vw, 32px) + 110px);
+          top: 28px;
+          bottom: 28px;
+          width: 2px;
+          background: rgba(25,65,2,0.10);
+          pointer-events: none;
+        }
+        .timeline-spine-fill {
+          position: absolute;
+          inset: 0;
+          background: var(--surface-deep);
+          transform-origin: top;
+        }
+        .timeline-row {
+          display: grid;
+          grid-template-columns: 110px 24px 1fr 200px;
+          gap: 18px;
+          align-items: start;
+          padding: 28px 0;
+          border-bottom: 1px dashed rgba(25,65,2,0.16);
+        }
+        .timeline-row:last-child { border-bottom: none; }
+
+        .tr-phase { padding-top: 6px; }
+        .tr-phase-tag {
+          font-family: var(--font-mono);
+          font-size: 0.78rem;
+          letter-spacing: 0.18em;
+          color: var(--surface-deep);
+          font-weight: 700;
+          margin-bottom: 6px;
+        }
+        .tr-phase-when {
+          font-family: var(--font-serif);
+          font-style: italic;
+          font-size: 0.82rem;
+          color: var(--ink-soft);
+          line-height: 1.35;
+        }
+
+        .tr-node {
+          display: flex;
+          justify-content: center;
+          padding-top: 10px;
+        }
+        .tr-dot {
+          width: 14px;
+          height: 14px;
+          border-radius: 50%;
+          background: var(--surface-base);
+          border: 2px solid var(--surface-deep);
+          position: relative;
+          z-index: 1;
+        }
+        .tr-dot-inner {
+          position: absolute;
+          inset: 3px;
+          border-radius: 50%;
+          background: var(--accent);
+        }
+
+        .tr-content { padding-right: 12px; }
+        .tr-title-row {
+          display: flex;
+          align-items: baseline;
+          gap: 12px;
+          flex-wrap: wrap;
+          margin-bottom: 10px;
+        }
+        .tr-title {
+          font-family: var(--font-display);
+          font-weight: 800;
+          font-size: clamp(1.4rem, 3vw, 2.0rem);
+          letter-spacing: -0.01em;
+          color: var(--surface-deep);
+          margin: 0;
+          line-height: 1.0;
+          text-transform: uppercase;
+        }
+        .tr-tag {
+          font-family: var(--font-mono);
+          font-size: 0.62rem;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          padding: 3px 8px;
+          border-radius: 999px;
+          background: var(--surface-deep);
+          color: var(--accent);
+        }
+        .tr-desc {
+          font-family: var(--font-body);
+          font-size: 0.95rem;
+          line-height: 1.6;
+          color: var(--ink-soft);
+          margin: 0;
+          max-width: 480px;
+        }
+
+        .tr-metric {
+          background: #F4FBEC;
+          border: 1px solid rgba(25,65,2,0.12);
+          border-radius: 12px;
+          padding: 16px 18px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: flex-start;
+          align-self: center;
+        }
+        .tr-metric-num {
+          font-family: var(--font-display);
+          font-weight: 800;
+          font-size: 2rem;
+          line-height: 1.0;
+          color: var(--surface-deep);
+          letter-spacing: -0.02em;
+          margin-bottom: 4px;
+        }
+        .tr-metric-label {
+          font-family: var(--font-mono);
+          font-size: 0.62rem;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          color: var(--ink-mute);
+        }
+
+        /* Tablet landscape — tighten metric column */
+        @media (max-width: 1080px) {
+          .timeline-row {
+            grid-template-columns: 100px 24px 1fr 170px;
+            gap: 14px;
           }
-          .benefits-zigzag .benefit-card .benefit-title {
-            font-size: 1rem !important;
+          .timeline-spine { left: calc(clamp(20px, 4vw, 32px) + 100px); }
+          .tr-metric { padding: 14px 16px; }
+          .tr-metric-num { font-size: 1.7rem; }
+        }
+
+        /* iPad portrait — drop the metric to bottom */
+        @media (max-width: 900px) {
+          #benefits { padding: 72px 0 !important; }
+          .ben-header { margin-bottom: 44px; gap: 24px; }
+          .ben-header-note { max-width: 100%; }
+          .timeline-row {
+            grid-template-columns: 100px 24px 1fr;
+            gap: 16px;
           }
+          .timeline-spine { left: calc(clamp(20px, 4vw, 32px) + 100px); }
+          .tr-metric {
+            grid-column: 1 / -1;
+            margin-left: 140px;
+            margin-top: 12px;
+            flex-direction: row;
+            align-items: center;
+            gap: 14px;
+            align-self: stretch;
+          }
+          .tr-metric-num { font-size: 1.6rem; margin-bottom: 0; }
+        }
+
+        /* Large phone — collapse phase to a single row above content */
+        @media (max-width: 640px) {
+          .timeline-wrap { padding-left: 20px; padding-right: 20px; }
+          .timeline-spine { left: 26px; top: 36px; bottom: 36px; }
+          .timeline-row {
+            grid-template-columns: 14px 1fr;
+            gap: 16px;
+            padding: 24px 0;
+          }
+          .tr-phase {
+            grid-column: 2 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 12px;
+            padding-top: 0;
+            margin-bottom: 8px;
+          }
+          .tr-phase-tag { margin-bottom: 0; }
+          .tr-node {
+            justify-content: flex-start;
+            padding-top: 6px;
+          }
+          .tr-content {
+            grid-column: 2 / -1;
+            padding-right: 0;
+          }
+          .tr-metric {
+            grid-column: 2 / -1;
+            margin-left: 0;
+          }
+          .tr-title { font-size: 1.35rem; }
+          .tr-desc { font-size: 0.9rem; }
+        }
+
+        @media (max-width: 380px) {
+          #benefits { padding: 56px 0 !important; }
+          .ben-header { padding: 0 20px; }
+          .timeline-wrap { padding-left: 18px; padding-right: 18px; }
+          .timeline-spine { left: 24px; }
+          .tr-metric { padding: 12px 14px; }
+          .tr-metric-num { font-size: 1.4rem; }
         }
       `}</style>
     </section>

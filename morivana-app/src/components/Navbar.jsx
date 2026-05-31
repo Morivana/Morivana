@@ -96,7 +96,7 @@ export default function Navbar() {
           fontWeight: 600,
           fontSize: '10px',
           color: 'var(--ink-mute)',
-          letterSpacing: '0.32em',
+          letterSpacing: '0.24em',
           textTransform: 'uppercase',
           marginTop: '4px',
         }}>
@@ -166,7 +166,7 @@ export default function Navbar() {
                 border:     'none',
                 textAlign:  'left',
                 cursor:     'pointer',
-                letterSpacing: '0.16em',
+                letterSpacing: '0.12em',
                 textTransform: 'uppercase',
                 padding: '10px 0',
                 borderBottom: '1px solid var(--line-soft)',

@@ -7,7 +7,7 @@ import { animate, createTimeline, utils } from 'animejs'
 
 useGLTF.preload('/models/morivana_pouch_fixed.glb')
 
-function PouchModel({ isMobile }) {
+function PouchModel({ isMobile, isHighPerf }) {
   const { scene } = useGLTF('/models/morivana_pouch_fixed.glb')
   const outerRef = useRef()   // position + scale (set by master scroll timeline)
   const innerRef = useRef()   // rotation (idle spin + scroll-driven rotation)
@@ -78,13 +78,7 @@ function PouchModel({ isMobile }) {
       alternate: true,
     }))
 
-    // 2) Continuous slow yaw drift - pouch is never "still".
-    animations.push(animate(life, {
-      yawDrift: [0, Math.PI * 2],
-      duration: 28000,
-      ease: 'linear',
-      loop: true,
-    }))
+    // Idle yaw drift removed — pouch only rotates on scroll, not on its own.
 
     // 3) Breathing scale
     animations.push(animate(life, {
@@ -95,8 +89,10 @@ function PouchModel({ isMobile }) {
       alternate: true,
     }))
 
-    // Desktop-only: extra micro-detail animations (sway, tilts, sheen)
-    if (!isMobile) {
+    // High-perf only (desktop ≥1280px): extra micro-detail animations
+    // (sway, tilts, sheen). Skipped on phone AND tablet to avoid 60fps
+    // anime.js loops that were saturating mid-range hardware.
+    if (isHighPerf) {
       animations.push(animate(life, {
         swayX: [{ to: 0.018 }, { to: -0.018 }],
         duration: 5200,
@@ -136,7 +132,7 @@ function PouchModel({ isMobile }) {
       // Reset proxies so re-mounts start clean.
       utils.set(life, { bobY: 0, swayX: 0, tiltX: 0, tiltZ: 0, yawDrift: 0, breathe: 1, sheen: 0 })
     }
-  }, [scene, life, isMobile])
+  }, [scene, life, isMobile, isHighPerf])
 
   // Master scroll timeline: hero -> story handoff
   useEffect(() => {
@@ -186,43 +182,57 @@ function PouchModel({ isMobile }) {
       end: 'bottom 40%',
       scrub: 1.5,
       onUpdate: (self) => {
+        if (!self.isActive) return
         innerRef.current.rotation.x = self.progress * 0.26
       },
     }))
 
-    // Pouch X-position handoff: smoothly travel from story-side (storyPosX) to center (0)
-    // when entering Ingredients, hold center across Ingredients + Benefits, and travel back
-    // to story-side when leaving Benefits. Driven by a single fromTo tween scrubbed across
-    // the combined span, so the pouch moves exactly once each way - no per-tick re-tweens.
-    const centerTween = gsap.timeline({
-      scrollTrigger: {
-        trigger: '#ingredients',
-        endTrigger: '#benefits',
-        start: 'top 80%',
-        end: 'bottom 60%',
-        scrub: 1.2,
+    // Pouch X-position handoff: storyPosX -> 0 on enter, hold center across
+    // Ingredients + Benefits.
+    //
+    // Why direct onUpdate instead of a gsap.timeline().fromTo() like before:
+    // a scrubbed fromTo writes its `from` value (storyPosX) whenever the
+    // playhead is at time=0, which happens on every ScrollTrigger.refresh()
+    // including on initial load at scrollY=0. Even with `immediateRender:
+    // false` that suppresses the write at *creation*, the first refresh tick
+    // still clamps progress to 0 and renders the from-state — so the pouch
+    // flashed to the right (storyPosX) on initial reveal before the hero
+    // trigger could overwrite it. Direct writes gated by `self.isActive`
+    // never run at scroll=0, so the initial hero-state pose is preserved.
+    triggers.push(ScrollTrigger.create({
+      trigger: '#ingredients',
+      endTrigger: '#benefits',
+      start: 'top 80%',
+      end: 'bottom 60%',
+      scrub: 1.2,
+      onUpdate: (self) => {
+        // Outside the active range, the previous-section trigger (hero/whatis)
+        // or the next-section state owns position.x. Don't overwrite it.
+        if (!self.isActive) return
+        const p = self.progress
+        // Lerp storyPosX -> 0 in the first 15% of the span, then hold at 0.
+        const enterEnd = 0.15
+        if (p < enterEnd) {
+          const t = p / enterEnd
+          const eased = t * t * (3 - 2 * t) // smoothstep
+          outerRef.current.position.x = storyPosX + (0 - storyPosX) * eased
+        } else {
+          outerRef.current.position.x = 0
+        }
       },
-    })
-      // Enter: travel storyPosX -> 0. `immediateRender: false` is critical —
-      // without it, ScrollTrigger.refresh() force-applies the `from` value
-      // (storyPosX) to the object even at scrollY=0, which is what made the
-      // pouch sit in the bottom-right on initial hero reveal.
-      .fromTo(outerRef.current.position,
-        { x: storyPosX },
-        { x: 0, ease: 'power2.inOut', duration: 1, immediateRender: false }, 0)
-      // Hold at center through the rest of the span — pouch stays centered
-      // until it fades out entering HowToUse.
-      .to(outerRef.current.position, { x: 0, duration: 7 }, 1)
+    }))
 
-    triggers.push(centerTween.scrollTrigger)
-
-    // Ingredients - rotation only (Y axis spin + small X tilt)
+    // Ingredients - rotation only (Y axis spin + small X tilt). Same
+    // isActive guard as above: at scroll=0, these onUpdates would otherwise
+    // fire with progress clamped to 0 and write a 2π Y-rotation + 0.26 X-tilt
+    // over the hero pose, contributing to the initial glitch.
     triggers.push(ScrollTrigger.create({
       trigger: '#ingredients',
       start: 'top 70%',
       end: 'bottom top',
       scrub: 1.5,
       onUpdate: (self) => {
+        if (!self.isActive) return
         innerRef.current.rotation.y = Math.PI * 2 + self.progress * Math.PI
         innerRef.current.rotation.x = 0.26 * (1 - self.progress)
       },
@@ -235,6 +245,7 @@ function PouchModel({ isMobile }) {
       end: 'bottom top',
       scrub: 1.5,
       onUpdate: (self) => {
+        if (!self.isActive) return
         innerRef.current.rotation.y = Math.PI * 3 + self.progress * Math.PI
         scene.traverse((child) => {
           if (child.isMesh && child.material && child.material.emissive) {
@@ -247,6 +258,11 @@ function PouchModel({ isMobile }) {
         })
       },
     }))
+
+    // WhatIsMorivana tilt trigger above also benefits from the guard so it
+    // doesn't write rotation.x=0 over the hero's initial pose at scrollY=0
+    // (currently harmless because hero also has rotation.x=0, but keeps the
+    // pattern consistent if hero's initial pose ever changes).
 
     // Helper: ramp every mesh material's opacity. The pouch model is GLTF, so
     // materials need `transparent: true` before they honor opacity. We capture
@@ -343,13 +359,35 @@ function ModelLoader() {
   )
 }
 
+// Three viewport tiers:
+//   isMobile   — width < 992. Layout switch: pouch shifts to top-center.
+//   isHighPerf — width >= 1280. Unlocks Environment HDRI, extra lights,
+//                contact shadows, and idle micro-animations.
+//   tablet (992..1279) sits in the middle: desktop layout but lighter
+//   rendering (no HDRI, no contact shadows, no idle micro-loops). This is
+//   what was driving the iPad lag — the old code branched only on isMobile,
+//   so iPad got the full desktop rendering load.
+function getTier() {
+  if (typeof window === 'undefined') return { isMobile: false, isHighPerf: true }
+  const w = window.innerWidth
+  return { isMobile: w < 992, isHighPerf: w >= 1280 }
+}
+
 export default function ProductScene({ style = {} }) {
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 992)
+  const [tier, setTier] = useState(getTier)
+  const { isMobile, isHighPerf } = tier
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 992)
+    let raf = 0
+    const handleResize = () => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => setTier(getTier()))
+    }
     window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      cancelAnimationFrame(raf)
+    }
   }, [])
 
   return (
@@ -357,17 +395,21 @@ export default function ProductScene({ style = {} }) {
       <Suspense fallback={<ModelLoader />}>
         <Canvas
           camera={{ position: [0, 0, 4.2], fov: 40 }}
-          gl={{ antialias: !isMobile, alpha: true, powerPreference: isMobile ? 'low-power' : 'high-performance' }}
-          dpr={isMobile ? [1, 1.5] : [1, 2]}
+          gl={{
+            antialias: isHighPerf,
+            alpha: true,
+            powerPreference: isHighPerf ? 'high-performance' : 'low-power',
+          }}
+          dpr={isHighPerf ? [1, 2] : [1, 1.5]}
           style={{ background: 'transparent', width: '100%', height: '100%', pointerEvents: 'none' }}
         >
           <ambientLight intensity={0.6} />
-          <directionalLight position={[5, 5, 5]} intensity={1.2} castShadow={!isMobile} />
+          <directionalLight position={[5, 5, 5]} intensity={1.2} castShadow={isHighPerf} />
           <directionalLight position={[-3, 2, -2]} intensity={0.4} color="#CDD883" />
-          {!isMobile && <pointLight position={[0, 3, 2]} intensity={0.5} color="#E9FEDC" />}
-          {!isMobile && <Environment preset="forest" />}
-          <PouchModel isMobile={isMobile} />
-          {!isMobile && (
+          {isHighPerf && <pointLight position={[0, 3, 2]} intensity={0.5} color="#E9FEDC" />}
+          {isHighPerf && <Environment preset="forest" />}
+          <PouchModel isMobile={isMobile} isHighPerf={isHighPerf} />
+          {isHighPerf && (
             <ContactShadows
               position={[0, -1.8, 0]}
               opacity={0.4}

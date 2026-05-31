@@ -18,9 +18,9 @@ export default {
         'brand-dark':   '#0d1f0d',
       },
       fontFamily: {
-        display:   ['"Bebas Neue"', 'cursive'],
-        condensed: ['"Barlow Condensed"', 'sans-serif'],
-        body:      ['Barlow', 'sans-serif'],
+        display:   ['"Montserrat"', 'sans-serif'],
+        condensed: ['"Montserrat"', 'sans-serif'],
+        body:      ['"DM Sans"', 'sans-serif'],
       },
     }
   },

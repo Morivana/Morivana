@@ -25,27 +25,27 @@ import LeafSprig from './ui/LeafSprig'
 
 const PRESETS = {
   sparse: [
-    { top: '8%',  left: '4%',  size: 130, rotate: -22, opacity: 0.16 },
-    { top: '72%', right: '6%', size: 110, rotate: 18,  opacity: 0.14 },
-    { top: '40%', left: '88%', size: 80,  rotate: -10, opacity: 0.12 },
+    { top: '8%',  left: '4%',  size: 100, rotate: -22, opacity: 0.08 },
+    { top: '72%', right: '6%', size: 85,  rotate: 18,  opacity: 0.07 },
+    { top: '40%', left: '88%', size: 65,  rotate: -10, opacity: 0.06 },
   ],
   normal: [
-    { top: '6%',  left: '3%',  size: 140, rotate: -22, opacity: 0.18 },
-    { top: '14%', right: '5%', size: 100, rotate: 28,  opacity: 0.15 },
-    { top: '38%', left: '6%',  size: 88,  rotate: 15,  opacity: 0.14 },
-    { top: '52%', right: '8%', size: 76,  rotate: -30, opacity: 0.13 },
-    { top: '74%', left: '10%', size: 120, rotate: -10, opacity: 0.16 },
-    { top: '82%', right: '4%', size: 150, rotate: 18,  opacity: 0.18 },
+    { top: '6%',  left: '3%',  size: 110, rotate: -22, opacity: 0.09 },
+    { top: '14%', right: '5%', size: 80,  rotate: 28,  opacity: 0.08 },
+    { top: '38%', left: '6%',  size: 70,  rotate: 15,  opacity: 0.07 },
+    { top: '52%', right: '8%', size: 60,  rotate: -30, opacity: 0.06 },
+    { top: '74%', left: '10%', size: 95,  rotate: -10, opacity: 0.08 },
+    { top: '82%', right: '4%', size: 120, rotate: 18,  opacity: 0.09 },
   ],
   dense: [
-    { top: '5%',  left: '3%',  size: 150, rotate: -22, opacity: 0.18 },
-    { top: '12%', right: '4%', size: 110, rotate: 28,  opacity: 0.16 },
-    { top: '28%', left: '7%',  size: 95,  rotate: 15,  opacity: 0.14 },
-    { top: '34%', right: '10%',size: 80,  rotate: -30, opacity: 0.13 },
-    { top: '50%', left: '12%', size: 70,  rotate: 40,  opacity: 0.12 },
-    { top: '58%', right: '14%',size: 95,  rotate: 8,   opacity: 0.15 },
-    { top: '74%', left: '5%',  size: 130, rotate: -10, opacity: 0.17 },
-    { top: '82%', right: '3%', size: 165, rotate: 18,  opacity: 0.2 },
+    { top: '5%',  left: '3%',  size: 120, rotate: -22, opacity: 0.10 },
+    { top: '12%', right: '4%', size: 90,  rotate: 28,  opacity: 0.08 },
+    { top: '28%', left: '7%',  size: 75,  rotate: 15,  opacity: 0.07 },
+    { top: '34%', right: '10%',size: 65,  rotate: -30, opacity: 0.06 },
+    { top: '50%', left: '12%', size: 55,  rotate: 40,  opacity: 0.06 },
+    { top: '58%', right: '14%',size: 75,  rotate: 8,   opacity: 0.07 },
+    { top: '74%', left: '5%',  size: 100, rotate: -10, opacity: 0.08 },
+    { top: '82%', right: '3%', size: 130, rotate: 18,  opacity: 0.10 },
   ],
 }
 
@@ -54,24 +54,38 @@ const PALETTES = {
   dark:  { leafFill: 'rgba(205,216,131,0.85)', stroke: '#0E2701' },
 }
 
+function getTier() {
+  if (typeof window === 'undefined') return { isMobile: false, isHighPerf: true }
+  const w = window.innerWidth
+  return { isMobile: w < 992, isHighPerf: w >= 1280 }
+}
+
 export default function FloatingLeaves({
   variant = 'light',
   density = 'normal',
   count,
 }) {
   const rootRef = useRef()
-  const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== 'undefined' && window.innerWidth < 992
-  )
+  const [tier, setTier] = useState(getTier)
+  const { isMobile, isHighPerf } = tier
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 992)
+    let raf = 0
+    const handleResize = () => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => setTier(getTier()))
+    }
     window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      cancelAnimationFrame(raf)
+    }
   }, [])
 
-  // On mobile, cap at 3 leaves regardless of density to reduce DOM + animation load
-  const maxLeaves = isMobile ? 3 : Infinity
+  // Cap counts aggressively below desktop. Each leaf is its own animated
+  // layer + (on desktop) two anime.js loops; running too many simultaneously
+  // is what was driving the mid-range / iPad jank.
+  const maxLeaves = isMobile ? 2 : isHighPerf ? Infinity : 4
   const baseLeaves = count
     ? PRESETS.dense.slice(0, count)
     : PRESETS[density] || PRESETS.normal
@@ -80,10 +94,10 @@ export default function FloatingLeaves({
   const palette = PALETTES[variant] || PALETTES.light
 
   // GSAP scroll-driven drift (cheap transforms tied to the parent section's
-  // visibility) + Anime.js continuous idle motion (rotation, scale, opacity
-  // pulse) running independently on each leaf. The two systems write to
-  // different transform axes (scroll = y/x translate, Anime = rotation/scale)
-  // so they layer without fighting.
+  // visibility) + Anime.js continuous idle motion. The Anime.js loops are
+  // paused whenever the leaves container is offscreen via IntersectionObserver
+  // — without that, 5+ instances of this component kept dozens of loops
+  // running every frame across the whole page.
   useEffect(() => {
     if (!rootRef.current) return
 
@@ -124,11 +138,11 @@ export default function FloatingLeaves({
 
     // Anime.js — idle life animations. Each leaf gets its own loop with a
     // unique period so they never fall into a robotic sync.
-    // On mobile, only run rotation sway to save CPU/battery.
+    // High-perf only gets the extra scale + opacity loops. Phone & tablet
+    // get rotation only.
     const animations = []
     const inners = rootRef.current.querySelectorAll('.fl-inner')
     inners.forEach((el, i) => {
-      // Slight rotation sway — sub-cycle of 5..9s
       animations.push(animate(el, {
         rotate: [
           { to: `${(i % 2 === 0 ? -1 : 1) * (4 + (i % 3) * 1.5)}deg` },
@@ -141,8 +155,7 @@ export default function FloatingLeaves({
         delay: i * 180,
       }))
 
-      // Desktop-only: breathing scale + opacity shimmer
-      if (!isMobile) {
+      if (isHighPerf) {
         animations.push(animate(el, {
           scale: [{ to: 1.06 }, { to: 0.96 }],
           duration: 4200 + (i * 510) % 3500,
@@ -163,12 +176,35 @@ export default function FloatingLeaves({
       }
     })
 
+    // IntersectionObserver pauses every anime.js loop the moment the
+    // container scrolls out of view, and resumes when it comes back. With
+    // 5+ instances of this component across the page, this prevents the
+    // off-screen sections from holding ~30+ loops on the main thread at
+    // once — the biggest single source of pre-fix lag on iPad-class GPUs.
+    let isVisible = true
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          const nowVisible = e.isIntersecting
+          if (nowVisible === isVisible) continue
+          isVisible = nowVisible
+          animations.forEach(a => {
+            if (nowVisible) a.play?.()
+            else a.pause?.()
+          })
+        }
+      },
+      { rootMargin: '120px' }
+    )
+    io.observe(rootRef.current)
+
     return () => {
+      io.disconnect()
       ctx.revert()
       animations.forEach(a => a.pause())
       inners.forEach(el => utils.set(el, { rotate: 0, scale: 1, opacity: 1 }))
     }
-  }, [variant, density, count, isMobile])
+  }, [variant, density, count, isMobile, isHighPerf])
 
   return (
     <div
@@ -198,14 +234,16 @@ export default function FloatingLeaves({
             top: l.top,
             left: l.left,
             right: l.right,
-            willChange: 'transform',
+            // will-change only on high-perf — promoting every leaf to its
+            // own GPU layer was costing iPad more than it saved.
+            willChange: isHighPerf ? 'transform' : 'auto',
           }}
         >
           <div
             className="fl-inner"
             style={{
               transform: `rotate(${l.rotate}deg)`,
-              willChange: 'transform, opacity',
+              willChange: isHighPerf ? 'transform, opacity' : 'auto',
             }}
           >
             <LeafSprig

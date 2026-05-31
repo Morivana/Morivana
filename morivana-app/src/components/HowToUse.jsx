@@ -169,8 +169,8 @@ export default function HowToUse() {
         <div className="rt-header">
           <div className="rt-kicker rt-word">SIMPLE AS ONE · TWO · THREE</div>
           <h2 className="rt-headline">
-            <span className="rt-word rt-headline-serif">Your 30-second</span>
             <span className="rt-word rt-headline-sans">MORNING RITUAL</span>
+            <span className="rt-word rt-headline-serif">Your 30-second</span>
           </h2>
           <p className="rt-subhead rt-word">
             A measured pause before the day. Spoon, swirl, sip, then repeat tomorrow.
@@ -284,10 +284,10 @@ export default function HowToUse() {
         /* Header */
         .rt-header { text-align: center; margin-bottom: 56px; }
         .rt-kicker {
-          font-family: 'DM Sans', sans-serif;
+          font-family: var(--font-body);
           font-weight: 700;
           font-size: 0.66rem;
-          letter-spacing: 0.38em;
+          letter-spacing: 0.26em;
           text-transform: uppercase;
           color: var(--rt-gold);
           margin-bottom: 16px;
@@ -302,29 +302,31 @@ export default function HowToUse() {
           align-items: center;
         }
         .rt-headline-serif {
-          font-family: 'Playfair Display', 'Cormorant Garamond', serif;
+          font-family: var(--font-serif);
           font-style: italic;
           font-weight: 500;
           font-size: clamp(26px, 3.4vw, 44px);
           color: var(--rt-heading);
           letter-spacing: -0.005em;
+          font-optical-sizing: auto;
         }
         .rt-headline-sans {
-          font-family: 'Barlow Condensed', 'DM Sans', sans-serif;
+          font-family: var(--font-display);
           font-weight: 800;
-          font-size: clamp(40px, 6vw, 86px);
+          font-size: clamp(28px, 7vw, 86px);
           color: var(--rt-heading);
           letter-spacing: 0.01em;
           text-transform: uppercase;
+          font-optical-sizing: auto;
         }
         .rt-subhead {
-          font-family: 'DM Sans', sans-serif;
+          font-family: var(--font-body);
           font-weight: 400;
           font-size: 0.92rem;
           color: var(--rt-body);
           margin: 16px auto 0;
           max-width: 460px;
-          line-height: 1.6;
+          line-height: 1.65;
         }
 
         /* Cards row */
@@ -391,28 +393,29 @@ export default function HowToUse() {
         .rt-card:hover .rt-step-media img { transform: scale(1.04); }
 
         .rt-step-label {
-          font-family: 'DM Sans', sans-serif;
+          font-family: var(--font-body);
           font-weight: 700;
           font-size: 0.62rem;
-          letter-spacing: 0.3em;
+          letter-spacing: 0.24em;
           color: var(--rt-gold);
           margin-bottom: 10px;
           text-transform: uppercase;
         }
         .rt-step-title {
-          font-family: 'Playfair Display', serif;
+          font-family: var(--font-serif);
           font-weight: 700;
           font-size: clamp(26px, 2.6vw, 34px);
           color: var(--rt-heading);
           letter-spacing: -0.01em;
           line-height: 1;
           margin-bottom: 10px;
+          font-optical-sizing: auto;
         }
         .rt-step-body {
-          font-family: 'DM Sans', sans-serif;
+          font-family: var(--font-body);
           font-size: 0.82rem;
           color: var(--rt-body);
-          line-height: 1.5;
+          line-height: 1.65;
           margin: 0 0 16px;
           min-height: 3.2em;
         }
@@ -438,10 +441,10 @@ export default function HowToUse() {
         /* Pills */
         .rt-pills-wrap { text-align: center; margin-bottom: 56px; }
         .rt-pills-label {
-          font-family: 'DM Sans', sans-serif;
+          font-family: var(--font-body);
           font-weight: 700;
           font-size: 0.64rem;
-          letter-spacing: 0.34em;
+          letter-spacing: 0.24em;
           text-transform: uppercase;
           color: var(--rt-gold-dim);
           margin-bottom: 14px;
@@ -453,10 +456,10 @@ export default function HowToUse() {
         .rt-pill {
           position: relative;
           isolation: isolate;
-          font-family: 'DM Sans', sans-serif;
+          font-family: var(--font-body);
           font-weight: 700;
           font-size: 0.68rem;
-          letter-spacing: 0.16em;
+          letter-spacing: 0.14em;
           text-transform: uppercase;
           color: var(--rt-heading);
           background: transparent;
@@ -515,15 +518,15 @@ export default function HowToUse() {
           48%     { transform: scale(1); }
         }
         .rt-protip p {
-          font-family: 'DM Sans', sans-serif;
+          font-family: var(--font-body);
           font-size: 0.82rem;
           color: var(--rt-body);
-          line-height: 1.55;
+          line-height: 1.6;
           margin: 0;
         }
         .rt-protip strong {
           color: var(--rt-gold);
-          font-family: 'Playfair Display', serif;
+          font-family: var(--font-serif);
           font-style: italic;
           font-weight: 600;
           letter-spacing: 0.02em;
@@ -547,22 +550,6 @@ export default function HowToUse() {
           .rt-pills-wrap { margin-bottom: 40px; }
           .rt-protip { padding: 12px 14px; gap: 10px; }
           .rt-protip p { font-size: 0.78rem; }
-        }
-        @media (max-width: 480px) {
-          .rt-section { padding: 60px 14px 80px; }
-          .rt-cards { gap: 24px; }
-          .rt-card-inner { padding: 18px 16px 14px; }
-          .rt-step-media { width: calc(100% + 32px); margin: -18px -16px 12px; }
-          .rt-pill { padding: 6px 12px; font-size: 0.62rem; letter-spacing: 0.12em; }
-          .rt-pills { gap: 6px; }
-        }
-        @media (max-width: 360px) {
-          .rt-pill { font-size: 0.58rem; padding: 6px 10px; }
-        }
-        /* old container width tighter on large tablet */
-        @media (min-width: 769px) and (max-width: 1024px) {
-          .rt-container { max-width: 720px; }
-        }
           /* vertical dotted connector between stacked cards */
           .rt-card:not(:last-child) .rt-card-inner::after {
             content: '';
@@ -574,6 +561,21 @@ export default function HowToUse() {
             border-left: 2px dotted var(--rt-gold-dim);
             transform: translateX(-50%);
           }
+        }
+        @media (max-width: 480px) {
+          .rt-section { padding: 60px 14px 80px; }
+          .rt-cards { gap: 24px; }
+          .rt-card-inner { padding: 18px 16px 14px; }
+          .rt-step-media { width: calc(100% + 32px); margin: -18px -16px 12px; }
+          .rt-pill { padding: 6px 12px; font-size: 0.62rem; letter-spacing: 0.10em; }
+          .rt-pills { gap: 6px; }
+        }
+        @media (max-width: 360px) {
+          .rt-pill { font-size: 0.58rem; padding: 6px 10px; }
+        }
+        /* old container width tighter on large tablet */
+        @media (min-width: 769px) and (max-width: 1024px) {
+          .rt-container { max-width: 720px; }
         }
       `}</style>
     </section>

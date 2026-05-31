@@ -1,32 +1,77 @@
 import { useEffect } from 'react'
 import gsap from 'gsap'
 import FloatingLeaves from './FloatingLeaves'
-import {
-  Pyramid3D,
-  Helix3D,
-  Sphere3D,
-  Cube3D,
-  Cone3D,
-  Cylinder3D,
-  Torus3D,
-  DoubleCone3D
-} from './ui/ThreeDIcons'
 
 const ingredients = [
-  { icon: <Pyramid3D size={28} light={true} />,    name: 'MORINGA POWDER', benefit: 'The most nutrient-dense plant on earth. Iron, calcium & antioxidants.' },
-  { icon: <Helix3D size={28} light={true} />,      name: 'SPIRULINA',      benefit: 'Blue-green algae powerhouse for protein and energy.' },
-  { icon: <Sphere3D size={28} light={true} />,     name: 'AMLA',           benefit: 'Vitamin C from the Indian gooseberry. Immunity & skin.' },
-  { icon: <Cube3D size={28} light={true} />,       name: 'GINGER POWDER',  benefit: 'Soothes digestion. Reduces inflammation naturally.' },
-  { icon: <Cone3D size={28} light={true} />,       name: 'LEMON POWDER',   benefit: 'Natural detox. Alkalizing effect on your body.' },
-  { icon: <Cylinder3D size={28} light={true} />,   name: 'INULIN',         benefit: 'Prebiotic fiber that feeds your gut microbiome.' },
-  { icon: <Torus3D size={28} light={true} />,      name: 'ORANGE PEEL',    benefit: 'Flavonoids and digestive enzymes from whole citrus.' },
-  { icon: <DoubleCone3D size={28} light={true} />, name: 'MONK FRUIT',     benefit: 'Zero-calorie natural sweetener. No sugar spike.' },
+  {
+    name: 'Moringa',
+    latin: 'Moringa oleifera',
+    compound: 'Quercetin',
+    origin: 'Tamil Nadu, IN',
+    benefit: 'The most nutrient-dense leaf on earth — iron, calcium, and 92 antioxidants in a single scoop.',
+    potency: 92,
+  },
+  {
+    name: 'Spirulina',
+    latin: 'Arthrospira platensis',
+    compound: 'Phycocyanin',
+    origin: 'Pond-grown',
+    benefit: 'Blue-green algae packed with complete protein and natural energy.',
+    potency: 88,
+  },
+  {
+    name: 'Amla',
+    latin: 'Phyllanthus emblica',
+    compound: 'Vitamin C',
+    origin: 'Uttarakhand, IN',
+    benefit: 'The Indian gooseberry. One of the richest natural sources of vitamin C on the planet.',
+    potency: 96,
+  },
+  {
+    name: 'Ginger',
+    latin: 'Zingiber officinale',
+    compound: 'Gingerol',
+    origin: 'Kerala, IN',
+    benefit: 'Calms digestion, eases inflammation, and adds a quiet warmth to every sip.',
+    potency: 82,
+  },
+  {
+    name: 'Lemon',
+    latin: 'Citrus limon',
+    compound: 'Citric acid',
+    origin: 'Sun-dried zest',
+    benefit: 'Cold-dried lemon for an alkalizing, brightening lift — without the acidity of juice.',
+    potency: 78,
+  },
+  {
+    name: 'Inulin',
+    latin: 'Cichorium intybus',
+    compound: 'Prebiotic fiber',
+    origin: 'Chicory root',
+    benefit: 'Soluble fiber that feeds the good bacteria in your gut. Quiet, daily repair.',
+    potency: 84,
+  },
+  {
+    name: 'Orange Peel',
+    latin: 'Citrus sinensis',
+    compound: 'Hesperidin',
+    origin: 'Whole-fruit dried',
+    benefit: 'Flavonoids and digestive enzymes from the part of the orange most never use.',
+    potency: 74,
+  },
+  {
+    name: 'Monk Fruit',
+    latin: 'Siraitia grosvenorii',
+    compound: 'Mogroside V',
+    origin: 'Guangxi, CN',
+    benefit: 'A natural sweetness with zero sugar, zero calories, and no aftertaste.',
+    potency: 90,
+  },
 ]
 
 export default function Ingredients() {
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Word-by-word headline reveal
       gsap.from('.ing-word', {
         y: 60, opacity: 0,
         duration: 1.4,
@@ -42,14 +87,14 @@ export default function Ingredients() {
         })
       })
 
-      gsap.utils.toArray('.ingredient-card').forEach((card, i) => {
-        const fromLeft = i % 2 === 0
+      gsap.utils.toArray('.ingredient-monograph').forEach((card, i) => {
         gsap.from(card, {
-          x: fromLeft ? -60 : 60,
+          y: 40,
           opacity: 0,
-          duration: 0.85,
+          duration: 0.8,
           ease: 'power3.out',
-          scrollTrigger: { trigger: card, start: 'top 88%', toggleActions: 'play none none none' },
+          delay: (i % 4) * 0.08,
+          scrollTrigger: { trigger: card, start: 'top 92%', toggleActions: 'play none none none' },
         })
       })
     })
@@ -59,242 +104,253 @@ export default function Ingredients() {
   return (
     <section
       id="ingredients"
-      style={{ background: 'var(--surface-soft)', position: 'relative', padding: '88px 0' }}
+      style={{ background: 'var(--surface-soft)', position: 'relative', padding: '88px 0', overflow: 'hidden' }}
     >
       <FloatingLeaves variant="light" density="sparse" />
 
       <div className="section-content">
-      {/* Section header - centered above the zigzag column */}
-      <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 40px', padding: '0 32px' }}>
-        <div className="kicker ing-reveal" style={{ marginBottom: '14px', justifyContent: 'center', display: 'flex' }}>
-          CLEAN LABEL
-        </div>
-        <h2 style={{
-          margin: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '2px',
-        }}>
-          <div style={{ overflow: 'hidden' }}>
-            <span className="ing-word" style={{
-              display: 'inline-block',
-              fontFamily: 'var(--font-serif)',
-              fontStyle: 'italic',
-              fontWeight: 500,
-              fontSize: 'clamp(22px, 2.6vw, 34px)',
-              lineHeight: 1.1,
-              color: 'var(--ink)',
-              letterSpacing: '-0.005em',
-            }}>
-              What's inside
-            </span>
-          </div>
-          <div style={{ overflow: 'hidden' }}>
-            <span className="ing-word" style={{
-              display: 'inline-block',
-              fontFamily: 'var(--font-display)',
-              fontWeight: 800,
-              fontSize: 'clamp(34px, 5vw, 64px)',
-              lineHeight: 0.95,
-              color: 'var(--surface-deep)',
-              letterSpacing: '0.01em',
-              textTransform: 'uppercase',
-            }}>
-              EVERY SCOOP
-            </span>
-          </div>
-        </h2>
-        <p className="ing-reveal" style={{
-          fontFamily: 'var(--font-body)',
-          fontSize: '0.95rem',
-          color: 'var(--ink-soft)',
-          marginTop: '18px',
-          lineHeight: 1.65,
-          maxWidth: '500px',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-        }}>
-          Eight whole-food superfoods. No fillers, no synthetic additives, no compromise.
-        </p>
-      </div>
-
-      {/* Hero ingredient still-life - visually anchors the section with the
-          real ingredients laid out around the pouch. */}
-      <div className="ing-reveal ing-hero-image" style={{
-        maxWidth: '420px',
-        margin: '0 auto 56px',
-        padding: '0 32px',
-        position: 'relative',
-      }}>
-        <div style={{
-          position: 'relative',
-          borderRadius: '20px',
-          overflow: 'hidden',
-          boxShadow: '0 20px 60px rgba(25,65,2,0.18), 0 4px 16px rgba(25,65,2,0.08)',
-          border: '1px solid rgba(25,65,2,0.10)',
-        }}>
-          <img
-            src="/morivana-ingredients.png"
-            alt="Morivana pouch surrounded by raw moringa, ginger, citrus and herbs"
-            loading="lazy"
-            style={{
-              width: '100%',
-              height: 'auto',
-              display: 'block',
-            }}
-          />
-        </div>
-        <div style={{
-          position: 'absolute',
-          bottom: '-14px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          background: 'var(--surface-deep)',
-          color: 'var(--accent)',
-          fontFamily: 'var(--font-body)',
-          fontWeight: 700,
-          fontSize: '0.66rem',
-          letterSpacing: '0.26em',
-          textTransform: 'uppercase',
-          padding: '7px 18px',
-          borderRadius: '999px',
-          whiteSpace: 'nowrap',
-        }}>
-          Whole-Food Sourced
-        </div>
-      </div>
-
-      {/* Zigzag column - pouch sits centered behind via the global 3D layer.
-          Even cards (0,2,4,6) align left; odd cards (1,3,5,7) align right. */}
-      <div className="ingredients-zigzag" style={{
-        maxWidth: '1080px',
-        margin: '0 auto',
-        padding: '0 32px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '20px',
-      }}>
-        {ingredients.map((ing, i) => {
-          const isRight = i % 2 === 1
-          return (
-            <div
-              key={i}
-              className="ingredient-card"
-              style={{
-                width: '38%',
-                marginLeft: isRight ? 'auto' : 0,
-                marginRight: isRight ? 0 : 'auto',
-                display: 'flex',
-                gap: '14px',
-                padding: '16px 18px',
-                background: '#EDF2D9',
-                border: '1px solid rgba(25,65,2,0.12)',
-                borderRadius: '14px',
-                boxShadow: '0 4px 16px rgba(25,65,2,0.04)',
-                transition: 'transform 0.3s cubic-bezier(.2,.7,.2,1), box-shadow 0.3s, border-color 0.3s',
-                cursor: 'default',
-                position: 'relative',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.transform = `translateY(-2px) ${isRight ? 'translateX(-4px)' : 'translateX(4px)'}`
-                e.currentTarget.style.boxShadow = '0 10px 28px rgba(25,65,2,0.10)'
-                e.currentTarget.style.borderColor = 'var(--accent)'
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.transform = 'translateY(0) translateX(0)'
-                e.currentTarget.style.boxShadow = '0 4px 16px rgba(25,65,2,0.04)'
-                e.currentTarget.style.borderColor = 'rgba(25,65,2,0.12)'
-              }}
-            >
-              <div style={{
-                width: '44px',
-                height: '44px',
-                borderRadius: '10px',
-                background: '#F8FBE6',
-                border: '1px solid rgba(25,65,2,0.10)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-              }}>
-                {ing.icon}
-              </div>
-
-              <div style={{ flex: 1 }}>
-                <div style={{
-                  fontFamily: 'var(--font-body)',
-                  fontWeight: 700,
-                  fontSize: '0.78rem',
-                  letterSpacing: '0.22em',
-                  textTransform: 'uppercase',
-                  color: 'var(--surface-deep)',
-                  marginBottom: '4px',
-                }}>
-                  {ing.name}
-                </div>
-                <div style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '0.85rem',
-                  color: '#2C4A1E',
-                  lineHeight: 1.55,
-                }}>
-                  {ing.benefit}
-                </div>
-              </div>
+        <div className="ing-header">
+          <div className="ing-header-main">
+            <div className="kicker ing-reveal" style={{ marginBottom: '14px' }}>
+              <span style={{ fontFamily: 'var(--font-mono)' }}>FILE.01</span>
+              &nbsp;&nbsp;·&nbsp;&nbsp;THE FORMULA
             </div>
-          )
-        })}
+            <h2 style={{ margin: 0 }}>
+              <div style={{ overflow: 'hidden' }}>
+                <span className="ing-word ing-head-display">Eight plants.</span>
+              </div>
+              <div style={{ overflow: 'hidden' }}>
+                <span className="ing-word ing-head-serif">Nothing else.</span>
+              </div>
+            </h2>
+          </div>
+
+          <div className="ing-reveal ing-header-note">
+            <div className="ing-lot">Lot · 2026-A · Page 01/01</div>
+            <p>
+              Read it like a monograph. Every entry below is a whole plant —
+              cold-dried, ground, weighed. Nothing synthesized.
+            </p>
+          </div>
+        </div>
+
+        <div className="ingredient-grid">
+          {ingredients.map((ing, i) => {
+            const idx = String(i + 1).padStart(2, '0')
+            return (
+              <article key={i} className="ingredient-monograph">
+                <div className="im-top">
+                  <div className="im-idx">N°{idx}</div>
+                  <div className="im-compound">{ing.compound}</div>
+                </div>
+
+                <div className="im-name">{ing.name}</div>
+                <div className="im-latin">{ing.latin}</div>
+
+                <div className="im-body">
+                  <div className="im-divider" />
+                  <div className="im-origin">{ing.origin}</div>
+                  <p className="im-benefit">{ing.benefit}</p>
+                </div>
+              </article>
+            )
+          })}
+        </div>
+
+        <div className="ing-reveal ing-certs">
+          {['Vegan', 'Soy-Free', 'No Added Sugar', 'No Artificial Sweeteners'].map(cert => (
+            <span key={cert} className="ing-cert">{cert}</span>
+          ))}
+        </div>
       </div>
 
-      {/* Certifications */}
-      <div className="ing-reveal" style={{
-        display: 'flex',
-        gap: '8px',
-        flexWrap: 'wrap',
-        marginTop: '44px',
-        justifyContent: 'center',
-        padding: '0 32px',
-      }}>
-        {['Vegan', 'Soy-Free', 'No Added Sugar', 'No Artificial Sweeteners'].map(cert => (
-          <span key={cert} style={{
-            fontFamily: 'var(--font-body)',
-            fontWeight: 700,
-            fontSize: '0.66rem',
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: 'var(--accent-on)',
-            background: 'var(--accent)',
-            borderRadius: '999px',
-            padding: '6px 14px',
-          }}>
-            {cert}
-          </span>
-        ))}
-      </div>
-      </div>
-
-      {/* Mobile: stack cards full-width */}
       <style>{`
-        @media (max-width: 992px) {
-          .ingredients-zigzag .ingredient-card {
-            width: 100% !important;
-            margin-left: 0 !important;
-            margin-right: 0 !important;
-          }
+        #ingredients .section-content { width: 100%; }
+
+        .ing-header {
+          max-width: 1100px;
+          margin: 0 auto 56px;
+          padding: 0 clamp(20px, 4vw, 32px);
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          gap: 32px;
+          flex-wrap: wrap;
         }
-        @media (max-width: 480px) {
-          .ing-hero-image {
-            max-width: 280px !important;
-            margin-bottom: 36px !important;
-          }
-          .ingredients-zigzag .ingredient-card {
-            padding: 12px 14px !important;
-            gap: 10px !important;
-          }
-          .ingredients-zigzag .ingredient-card div:first-of-type {
-            width: 36px !important;
-            height: 36px !important;
-          }
+        .ing-header-main { max-width: 640px; }
+        .ing-head-display {
+          display: inline-block;
+          font-family: var(--font-display);
+          font-weight: 800;
+          font-size: clamp(36px, 6vw, 84px);
+          line-height: 0.92;
+          color: var(--surface-deep);
+          letter-spacing: -0.02em;
+          text-transform: uppercase;
+        }
+        .ing-head-serif {
+          display: inline-block;
+          font-family: var(--font-serif);
+          font-style: italic;
+          font-weight: 500;
+          font-size: clamp(24px, 4vw, 52px);
+          line-height: 1.0;
+          color: var(--ink);
+          letter-spacing: -0.01em;
+        }
+        .ing-header-note {
+          max-width: 300px;
+          border-left: 2px solid var(--surface-deep);
+          padding-left: 20px;
+        }
+        .ing-lot {
+          font-family: var(--font-mono);
+          font-size: 0.7rem;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: var(--ink-mute);
+          margin-bottom: 8px;
+        }
+        .ing-header-note p {
+          font-family: var(--font-body);
+          font-size: 0.92rem;
+          color: var(--ink-soft);
+          line-height: 1.6;
+          margin: 0;
+        }
+
+        .ingredient-grid {
+          max-width: 1100px;
+          margin: 0 auto;
+          padding: 0 clamp(20px, 4vw, 32px);
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 1px;
+          background: rgba(25,65,2,0.18);
+          border: 1px solid rgba(25,65,2,0.18);
+          border-radius: 4px;
+          overflow: hidden;
+        }
+
+        .ingredient-monograph {
+          background: #e2e9b986;
+          color: var(--surface-deep);
+          padding: 22px 20px 20px;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+        }
+
+        .im-top {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 12px;
+        }
+        .im-idx {
+          font-family: var(--font-mono);
+          font-size: 0.72rem;
+          letter-spacing: 0.12em;
+          color: var(--ink-mute);
+        }
+        .im-compound {
+          font-family: var(--font-mono);
+          font-size: 0.6rem;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          padding: 4px 9px;
+          border: 1px solid rgba(25,65,2,0.25);
+          border-radius: 999px;
+          color: var(--ink-soft);
+          white-space: nowrap;
+        }
+
+        .im-name {
+          font-family: var(--font-display);
+          font-weight: 800;
+          font-size: clamp(1.3rem, 2.2vw, 1.55rem);
+          line-height: 1.0;
+          letter-spacing: -0.01em;
+          text-transform: uppercase;
+          margin-bottom: 4px;
+        }
+        .im-latin {
+          font-family: var(--font-serif);
+          font-style: italic;
+          font-size: 0.88rem;
+          color: var(--ink-soft);
+          margin-bottom: 14px;
+        }
+
+        .im-body { flex: 1; }
+        .im-divider {
+          height: 1px;
+          background: repeating-linear-gradient(to right, rgba(25,65,2,0.4) 0 3px, transparent 3px 6px);
+          margin-bottom: 10px;
+        }
+        .im-origin {
+          font-family: var(--font-mono);
+          font-size: 0.62rem;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          color: var(--ink-mute);
+          margin-bottom: 8px;
+        }
+        .im-benefit {
+          font-family: var(--font-body);
+          font-size: 0.84rem;
+          line-height: 1.55;
+          color: var(--ink-soft);
+          margin: 0;
+        }
+
+        .ing-certs {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+          margin-top: 44px;
+          justify-content: center;
+          padding: 0 clamp(20px, 4vw, 32px);
+        }
+        .ing-cert {
+          font-family: var(--font-body);
+          font-weight: 700;
+          font-size: 0.66rem;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: var(--accent-on);
+          background: var(--accent);
+          border-radius: 999px;
+          padding: 6px 14px;
+        }
+
+        /* Tablet landscape (iPad landscape ~1024px) — slightly tighter */
+        @media (max-width: 1100px) {
+          .ingredient-grid { grid-template-columns: repeat(3, 1fr); }
+          .ingredient-monograph { min-height: 230px; }
+        }
+
+        /* iPad portrait & small tablets */
+        @media (max-width: 880px) {
+          #ingredients { padding: 72px 0 !important; }
+          .ing-header { margin-bottom: 44px; gap: 24px; }
+          .ing-header-note { max-width: 100%; border-left-width: 2px; }
+          .ingredient-grid { grid-template-columns: repeat(2, 1fr); }
+          .ingredient-monograph { min-height: 220px; padding: 20px 18px 18px; }
+        }
+
+        /* Large phone */
+        @media (max-width: 560px) {
+          .ingredient-grid { grid-template-columns: 1fr; }
+          .ingredient-monograph { min-height: auto; padding: 18px 18px 18px; }
+          .im-body { min-height: 70px; }
+        }
+
+        /* Small phone */
+        @media (max-width: 380px) {
+          .ing-header { padding: 0 20px; }
+          .ingredient-grid { padding: 0 20px; }
+          .ingredient-monograph { padding: 16px 16px; }
         }
       `}</style>
     </section>

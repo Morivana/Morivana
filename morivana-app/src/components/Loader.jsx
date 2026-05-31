@@ -316,6 +316,31 @@ export default function Loader({ onDismiss, onLeaveStart }) {
           />
         </div>
 
+        {/* Wordmark */}
+        <h1
+          ref={wordmarkRef}
+          style={{
+            margin: 0,
+            fontFamily: 'var(--font-serif)',
+            fontWeight: 700,
+            fontSize: 'clamp(38px, 12vw, 148px)',
+            color: PALETTE.cream,
+            letterSpacing: '0.06em',
+            lineHeight: 0.95,
+            textTransform: 'uppercase',
+            display: 'inline-flex',
+            justifyContent: 'center',
+            flexWrap: 'nowrap',
+            maxWidth: '100%',
+          }}
+        >
+          {Array.from('MORIVANÁ').map((c, i) => (
+            <span key={i} className="loader-letter" style={{ display: 'inline-block', opacity: 0 }}>
+              {c}
+            </span>
+          ))}
+        </h1>
+
         {/* Tagline */}
         <div
           className="loader-tagline"
@@ -332,32 +357,6 @@ export default function Loader({ onDismiss, onLeaveStart }) {
         >
           Be the first to taste
         </div>
-
-        {/* Wordmark */}
-        <h1
-          ref={wordmarkRef}
-          style={{
-            margin: 0,
-            fontFamily: 'var(--font-serif)',
-            fontWeight: 700,
-            fontSize: 'clamp(38px, 12vw, 148px)',
-            color: PALETTE.cream,
-            letterSpacing: '0.06em',
-            lineHeight: 0.95,
-            textTransform: 'uppercase',
-            display: 'inline-flex',
-            justifyContent: 'center',
-            flexWrap: 'nowrap',
-            whiteSpace: 'nowrap',
-            maxWidth: '100%',
-          }}
-        >
-          {Array.from('MORIVANÁ').map((c, i) => (
-            <span key={i} className="loader-letter" style={{ display: 'inline-block', opacity: 0 }}>
-              {c}
-            </span>
-          ))}
-        </h1>
 
         {/* Form */}
         <form

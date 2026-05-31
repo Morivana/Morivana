@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import gsap from 'gsap'
-import { Sphere3D } from './ui/ThreeDIcons'
 import FloatingLeaves from './FloatingLeaves'
 
 export default function WaitlistCTA() {
@@ -265,6 +264,22 @@ export default function WaitlistCTA() {
               className="cta-headline-word"
               style={{
                 display: 'inline-block',
+                fontFamily: 'var(--font-display)',
+                fontWeight: 900,
+                fontSize: 'clamp(36px, 8vw, 120px)',
+                lineHeight: 0.9,
+                color: 'var(--accent)',
+                letterSpacing: '-0.025em',
+                textTransform: 'uppercase',
+                fontOpticalSizing: 'auto',
+              }}
+            >MORIVANÁ</span>
+          </div>
+          <div style={{ overflow: 'hidden' }}>
+            <span
+              className="cta-headline-word"
+              style={{
+                display: 'inline-block',
                 fontFamily: 'var(--font-serif)',
                 fontStyle: 'italic',
                 fontWeight: 500,
@@ -272,27 +287,9 @@ export default function WaitlistCTA() {
                 lineHeight: 1.05,
                 color: 'var(--ink-on-dark)',
                 letterSpacing: '-0.005em',
+                fontOpticalSizing: 'auto',
               }}
-            >
-              Be the first to taste
-            </span>
-          </div>
-          <div style={{ overflow: 'hidden' }}>
-            <span
-              className="cta-headline-word"
-              style={{
-                display: 'inline-block',
-                fontFamily: 'var(--font-display)',
-                fontWeight: 900,
-                fontSize: 'clamp(36px, 8vw, 120px)',
-                lineHeight: 0.9,
-                color: 'var(--accent)',
-                letterSpacing: '-0.02em',
-                textTransform: 'uppercase',
-              }}
-            >
-              MORIVANÁ
-            </span>
+            >Be the first to taste</span>
           </div>
         </h2>
 
@@ -317,11 +314,14 @@ export default function WaitlistCTA() {
         {isSubmitSuccessful ? (
           <div className="success-state">
             <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              marginBottom: '16px',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.72rem',
+              letterSpacing: '0.28em',
+              textTransform: 'uppercase',
+              color: 'var(--accent)',
+              marginBottom: '20px',
             }}>
-              <Sphere3D size={64} light={true} />
+              ✓ Confirmed
             </div>
             <div style={{
               fontFamily: 'var(--font-display)',
@@ -417,7 +417,7 @@ export default function WaitlistCTA() {
               {/* Trust line */}
               <p style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: '0.76rem',
+                fontSize: '0.8rem',
                 color: 'var(--ink-on-dark)',
                 opacity: 0.6,
                 marginTop: '6px',

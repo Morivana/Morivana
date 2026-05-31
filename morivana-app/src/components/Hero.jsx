@@ -104,7 +104,7 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
         position: 'relative',
       }}
     >
-      <FloatingLeaves variant="light" density="dense" />
+      <FloatingLeaves variant="light" density="sparse" />
 
       {bigEntrance && (
         <div
@@ -136,72 +136,65 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
         <div
           className="hero-text-col"
           style={{
-            maxWidth: '700px',
+            maxWidth: '740px',
             width: '100%',
-            padding: '80px 32px 0',
+            padding: '72px 32px 0',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'flex-start',
             alignItems: 'center',
             textAlign: 'center',
-            gap: '14px',
           }}
         >
           {/* Kicker */}
-          <div className="kicker hero-kicker">
+          <div className="kicker hero-kicker" style={{ marginBottom: '20px' }}>
             CLEAN SUPER GREENS POWDER
           </div>
 
-          {/* Headline - editorial serif eyebrow + display sans */}
-          <div className="hero-headline" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          {/* Headline — split PURE / GREENS for maximum impact at large sizes */}
+          <div className="hero-headline" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px', marginBottom: '6px' }}>
             <div style={{ overflow: 'hidden' }}>
-              <span className="hero-word" style={{
-                display: 'inline-block',
-                fontFamily: 'var(--font-serif)',
-                fontStyle: 'italic',
-                fontWeight: 500,
-                fontSize: 'clamp(20px, 2.6vw, 36px)',
-                lineHeight: 1.1,
-                color: 'var(--ink)',
-                letterSpacing: '-0.005em',
-              }}>
-                Quietly powerful,
-              </span>
-            </div>
-            <div style={{ overflow: 'hidden' }}>
-              <span className="hero-word" style={{
+              <span className="hero-word hero-word-display" style={{
                 display: 'inline-block',
                 fontFamily: 'var(--font-display)',
                 fontWeight: 900,
-                fontSize: 'clamp(36px, 11vw, 168px)',
-                lineHeight: 0.9,
+                fontSize: 'clamp(52px, 9vw, 128px)',
+                lineHeight: 0.92,
                 color: 'var(--surface-deep)',
-                letterSpacing: '-0.02em',
+                letterSpacing: '-0.03em',
                 textTransform: 'uppercase',
-                whiteSpace: 'nowrap',
-              }}>
-                PURE GREENS
-              </span>
+              }}>PURE</span>
+            </div>
+            <div style={{ overflow: 'hidden' }}>
+              <span className="hero-word hero-word-display" style={{
+                display: 'inline-block',
+                fontFamily: 'var(--font-display)',
+                fontWeight: 900,
+                fontSize: 'clamp(52px, 9vw, 128px)',
+                lineHeight: 0.92,
+                color: 'var(--surface-deep)',
+                letterSpacing: '-0.03em',
+                textTransform: 'uppercase',
+              }}>GREENS</span>
             </div>
           </div>
 
-          {/* Dotted divider */}
-          <hr className="dotted-line hero-divider" style={{ width: '60%', marginTop: '4px', marginLeft: 'auto', marginRight: 'auto' }} />
-
-          {/* Sub-label */}
-          <div
-            className="hero-sublabel"
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontWeight: 700,
-              fontSize: '0.9rem',
-              letterSpacing: '0.32em',
-              textTransform: 'uppercase',
+          {/* Italic sub-headline */}
+          <div style={{ overflow: 'hidden', marginBottom: '22px' }}>
+            <span className="hero-word hero-word-italic" style={{
+              display: 'inline-block',
+              fontFamily: 'var(--font-serif)',
+              fontStyle: 'italic',
+              fontWeight: 500,
+              fontSize: 'clamp(18px, 2.6vw, 30px)',
+              lineHeight: 1.2,
               color: 'var(--ink-soft)',
-            }}
-          >
-            MORINGA BLEND
+              letterSpacing: '-0.005em',
+            }}>Quietly powerful</span>
           </div>
+
+          {/* Dotted divider */}
+          <hr className="dotted-line hero-divider" style={{ width: '44%', marginLeft: 'auto', marginRight: 'auto', marginBottom: '22px' }} />
 
           {/* Body paragraph */}
           <p
@@ -209,11 +202,12 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
             style={{
               fontFamily: 'var(--font-body)',
               fontWeight: 400,
-              fontSize: '1.02rem',
-              lineHeight: 1.65,
+              fontSize: '1.05rem',
+              lineHeight: 1.75,
               color: 'var(--ink-soft)',
-              maxWidth: '400px',
+              maxWidth: '420px',
               textAlign: 'center',
+              marginBottom: '28px',
             }}
           >
             Bold nutrition from the power of moringa.<br />
@@ -221,7 +215,7 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
           </p>
 
           {/* CTA */}
-          <div className="hero-cta" style={{ marginTop: '8px' }}>
+          <div className="hero-cta" style={{ marginBottom: '16px' }}>
             <button
               className="cta-btn"
               onClick={scrollToWaitlist}
@@ -232,26 +226,28 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
 
           {/* Sub-trust */}
           <div
+            className="hero-sublabel"
             style={{
               fontFamily: 'var(--font-body)',
               fontWeight: 600,
-              fontSize: '0.74rem',
+              fontSize: '0.72rem',
               color: 'var(--ink-mute)',
               letterSpacing: '0.22em',
               textTransform: 'uppercase',
+              marginBottom: '28px',
             }}
           >
             50g · 10 Servings · Ships India &amp; Canada
           </div>
 
           {/* Countdown */}
-          <div style={{ marginTop: '12px' }}>
+          <div>
             <div
               style={{
                 fontFamily: 'var(--font-body)',
                 fontWeight: 700,
-                fontSize: '0.64rem',
-                letterSpacing: '0.32em',
+                fontSize: '0.62rem',
+                letterSpacing: '0.22em',
                 textTransform: 'uppercase',
                 color: 'var(--ink-mute)',
                 marginBottom: '10px',
@@ -280,7 +276,7 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
           fontFamily: 'var(--font-body)',
           fontWeight: 600,
           fontSize: '0.62rem',
-          letterSpacing: '0.36em',
+          letterSpacing: '0.28em',
           textTransform: 'uppercase',
           color: 'var(--ink-mute)',
         }}>
@@ -301,38 +297,55 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
         }
         @media (max-width: 768px) {
           .hero-text-col {
-            padding: 24px 20px 0 !important;
-            gap: 10px !important;
+            padding: 36px 24px 0 !important;
           }
-          .hero-headline span:last-child {
-            font-size: clamp(32px, 9vw, 56px) !important;
-            white-space: normal !important;
+          .hero-word-display {
+            font-size: clamp(44px, 13vw, 76px) !important;
           }
-          .hero-headline span:first-child {
-            font-size: clamp(16px, 4.5vw, 24px) !important;
+          .hero-word-italic {
+            font-size: clamp(17px, 4.5vw, 26px) !important;
           }
           .hero-body {
-            font-size: 0.9rem !important;
+            font-size: 0.92rem !important;
+            margin-bottom: 22px !important;
           }
           .hero-sublabel {
-            font-size: 0.75rem !important;
-            letter-spacing: 0.24em !important;
+            font-size: 0.68rem !important;
+            letter-spacing: 0.2em !important;
+            margin-bottom: 20px !important;
           }
           .hero-kicker {
-            font-size: 0.58rem !important;
+            font-size: 0.62rem !important;
+            margin-bottom: 16px !important;
+          }
+          .hero-headline {
+            margin-bottom: 4px !important;
+          }
+          .hero-divider {
+            margin-bottom: 18px !important;
           }
         }
         @media (max-width: 480px) {
           .hero-text-col {
-            padding: 16px 16px 0 !important;
-            gap: 8px !important;
+            padding: 28px 20px 0 !important;
           }
-          .hero-headline span:last-child {
-            font-size: clamp(28px, 8.5vw, 48px) !important;
+          .hero-word-display {
+            font-size: clamp(40px, 12vw, 60px) !important;
+          }
+          .hero-word-italic {
+            font-size: clamp(15px, 4vw, 22px) !important;
+          }
+          .hero-body {
+            font-size: 0.88rem !important;
+            margin-bottom: 20px !important;
           }
           .hero-cta .cta-btn {
-            font-size: 0.72rem !important;
-            padding: 12px 20px !important;
+            font-size: 0.74rem !important;
+            padding: 13px 24px !important;
+          }
+          .hero-kicker {
+            font-size: 0.6rem !important;
+            margin-bottom: 14px !important;
           }
         }
       `}</style>
