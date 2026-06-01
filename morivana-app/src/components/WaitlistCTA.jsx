@@ -13,7 +13,8 @@ export default function WaitlistCTA() {
 
   const onSubmit = async (data) => {
     try {
-      const res = await fetch('/api/waitlist', {
+      const apiBase = import.meta.env.VITE_API_URL ?? ''
+      const res = await fetch(`${apiBase}/api/waitlist`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: data.name, email: data.email }),

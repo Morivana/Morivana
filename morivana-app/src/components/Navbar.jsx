@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useAuth, UserButton } from '@clerk/clerk-react'
 import gsap from 'gsap'
 
 const leftLinks  = ['Ingredients', 'Benefits', 'How To Use']
@@ -8,6 +10,7 @@ export default function Navbar() {
   const navRef        = useRef()
   const [scrolled, setScrolled]   = useState(false)
   const [menuOpen, setMenuOpen]   = useState(false)
+  const { isSignedIn } = useAuth()
 
   // Scroll to section helper
   const scrollTo = (id) => {
@@ -104,7 +107,7 @@ export default function Navbar() {
         </div>
       </button>
 
-      {/* Right: About pill + CTA */}
+      {/* Right: About pill + CTA + Auth controls */}
       <div className="nav-pills-right" style={{ display: 'flex', gap: 10, alignItems: 'center', justifySelf: 'end' }}>
         {rightLinks.map(link => (
           <button key={link} className="nav-pill" onClick={() => scrollTo(link)}>
@@ -118,6 +121,33 @@ export default function Navbar() {
         >
           Notify Me
         </button>
+
+        {/* Auth controls — only added to existing right area, no layout change */}
+        {isSignedIn ? (
+          <UserButton afterSignOutUrl="/" />
+        ) : (
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <Link
+              to="/sign-in"
+              className="nav-pill"
+              style={{ textDecoration: 'none' }}
+            >
+              Login
+            </Link>
+            <Link
+              to="/sign-up"
+              className="nav-pill"
+              style={{
+                textDecoration: 'none',
+                background: 'var(--surface-deep)',
+                color: 'var(--ink-on-dark)',
+                borderColor: 'var(--surface-deep)',
+              }}
+            >
+              Sign Up
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* Mobile hamburger — sits in left column on mobile */}
@@ -182,6 +212,33 @@ export default function Navbar() {
           >
             Notify Me
           </button>
+
+          {/* Mobile auth controls */}
+          {isSignedIn ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 8 }}>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--ink-mute)' }}>My Account</span>
+              <UserButton afterSignOutUrl="/" />
+            </div>
+          ) : (
+            <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
+              <Link
+                to="/sign-in"
+                className="nav-pill"
+                style={{ textDecoration: 'none', flex: 1, justifyContent: 'center' }}
+                onClick={() => setMenuOpen(false)}
+              >
+                Login
+              </Link>
+              <Link
+                to="/sign-up"
+                className="cta-btn"
+                style={{ textDecoration: 'none', flex: 1, justifyContent: 'center' }}
+                onClick={() => setMenuOpen(false)}
+              >
+                Sign Up
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </nav>

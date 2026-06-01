@@ -111,7 +111,7 @@ export default function Benefits() {
               <span className="benefits-word ben-head-display">A timeline</span>
             </div>
             <div style={{ overflow: 'hidden' }}>
-              <span className="benefits-word ben-head-serif">your body keeps.</span>
+              <span className="benefits-word ben-head-serif">Your body keeps.</span>
             </div>
           </h2>
           <div className="benefits-reveal ben-header-note">

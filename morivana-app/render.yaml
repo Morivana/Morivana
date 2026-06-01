@@ -1,0 +1,68 @@
+# render.yaml — Morivana Infrastructure as Code
+#
+# Defines two Render services from a single repo:
+#   1. morivana-api    → Web Service  (Express + MongoDB)
+#   2. morivana-web    → Static Site  (Vite build → dist/)
+#
+# Deploy steps:
+#   1. Push this file to GitHub
+#   2. In Render Dashboard → "New Blueprint" → point to this repo
+#   3. Render reads this file and creates/syncs both services
+#   4. Set the secret env vars manually in each service's dashboard:
+#      API service:  MONGODB_URI, ALLOWED_ORIGIN
+#      Web service:  VITE_CLERK_PUBLISHABLE_KEY, VITE_API_URL
+
+services:
+
+  # ── Backend API — Web Service ──────────────────────────────────────────────
+  - type: web
+    name: morivana-api
+    runtime: node
+    rootDir: morivana-app          # subfolder inside the repo
+    buildCommand: npm install
+    startCommand: node server/index.js
+    healthCheckPath: /api/health
+    # Auto-deploy on push to main
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_DB
+        value: morivana
+      - key: PORT
+        value: "10000"             # Render injects its own PORT; this is a fallback
+      # ⚠ Set these manually in the Render Dashboard (not committed to git):
+      - key: MONGODB_URI
+        sync: false                # secret — paste in dashboard
+      - key: ALLOWED_ORIGIN
+        sync: false                # e.g. https://morivana-web.onrender.com (set AFTER web deploys)
+
+  # ── Frontend — Static Site ─────────────────────────────────────────────────
+  - type: web
+    name: morivana-web
+    runtime: static
+    rootDir: morivana-app
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    autoDeploy: true
+    headers:
+      # Immutable cache for Vite's hashed assets (JS/CSS bundles)
+      - path: /assets/*
+        name: Cache-Control
+        value: "public, max-age=31536000, immutable"
+      # No-cache for index.html so new deploys are picked up immediately
+      - path: /index.html
+        name: Cache-Control
+        value: "no-cache, no-store, must-revalidate"
+    routes:
+      # SPA fallback: any path that doesn't match a real file serves index.html
+      # This is what makes React Router work on page refresh / direct URL access
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      # ⚠ Set these in Render Dashboard:
+      - key: VITE_CLERK_PUBLISHABLE_KEY
+        sync: false                # pk_live_... from Clerk dashboard
+      - key: VITE_API_URL
+        sync: false                # https://morivana-api.onrender.com

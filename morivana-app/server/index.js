@@ -1,20 +1,22 @@
 import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
-import path from 'path'
-import { fileURLToPath } from 'url'
 import { MongoClient, ServerApiVersion } from 'mongodb'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
-const { MONGODB_URI, MONGODB_DB = 'morivana', PORT = 5174, NODE_ENV } = process.env
+const {
+  MONGODB_URI,
+  MONGODB_DB = 'morivana',
+  PORT = 5174,
+  NODE_ENV,
+  ALLOWED_ORIGIN,
+} = process.env
 
 if (!MONGODB_URI) {
   console.error('Missing MONGODB_URI in environment. Set it in morivana-app/.env')
   process.exit(1)
 }
 
+// ── MongoDB ─────────────────────────────────────────────────────────────────
 const client = new MongoClient(MONGODB_URI, {
   serverApi: { version: ServerApiVersion.v1, strict: true, deprecationErrors: true },
 })
@@ -24,17 +26,29 @@ const db = client.db(MONGODB_DB)
 const waitlist = db.collection('waitlist')
 await waitlist.createIndex({ email: 1 }, { unique: true })
 
+// ── CORS ─────────────────────────────────────────────────────────────────────
+// In production, restrict to the deployed static-site origin.
+// In development, allow all origins (Vite dev server proxies /api calls).
+const corsOptions = NODE_ENV === 'production' && ALLOWED_ORIGIN
+  ? {
+      origin: ALLOWED_ORIGIN.split(',').map(o => o.trim()),
+      methods: ['GET', 'POST', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+    }
+  : { origin: true }  // dev: permissive
+
 const app = express()
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(express.json())
 
+// ── Routes ───────────────────────────────────────────────────────────────────
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 app.post('/api/waitlist', async (req, res) => {
-  const name = String(req.body?.name ?? '').trim()
+  const name  = String(req.body?.name  ?? '').trim()
   const email = String(req.body?.email ?? '').trim().toLowerCase()
 
-  if (!name) return res.status(400).json({ error: 'Name is required' })
+  if (!name)              return res.status(400).json({ error: 'Name is required' })
   if (!EMAIL_RE.test(email)) return res.status(400).json({ error: 'Valid email is required' })
 
   try {
@@ -55,18 +69,13 @@ app.post('/api/waitlist', async (req, res) => {
   }
 })
 
-app.get('/api/health', (_req, res) => res.json({ ok: true }))
+app.get('/api/health', (_req, res) => res.json({ ok: true, env: NODE_ENV }))
 
-// --- Serve Vite production build in production ---
-const distPath = path.resolve(__dirname, '..', 'dist')
-app.use(express.static(distPath))
-
-// SPA fallback: serve index.html for any non-API route
-app.get(/^\/(?!api\/).*/, (_req, res) => {
-  res.sendFile(path.join(distPath, 'index.html'))
-})
+// ── Start ────────────────────────────────────────────────────────────────────
+// NOTE: Static file serving is intentionally removed.
+// The frontend is deployed as a Render Static Site (dist/ folder) — Express
+// no longer needs to serve HTML. Only /api/* routes live here.
 
 app.listen(PORT, () => {
-  console.log(`Morivana server listening on http://localhost:${PORT} (${NODE_ENV || 'development'})`)
+  console.log(`Morivana API listening on http://localhost:${PORT} (${NODE_ENV || 'development'})`)
 })
-

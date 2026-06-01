@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import { useLenis } from './hooks/useLenis'
@@ -17,7 +18,16 @@ import WaitlistCTA from './components/WaitlistCTA'
 import Footer from './components/Footer'
 import ProductScene from './components/ProductScene'
 
-function App() {
+// Auth
+import ProtectedRoute from './components/auth/ProtectedRoute'
+import SignInPage from './pages/SignInPage'
+import SignUpPage from './pages/SignUpPage'
+import AccountPage from './pages/AccountPage'
+import OrdersPage from './pages/OrdersPage'
+import CheckoutPage from './pages/CheckoutPage'
+
+// ─── Home page (existing scroll-story landing) ───────────────────────────────
+function HomePage() {
   const lenisRef = useLenis()
 
   // Two-phase loader handoff:
@@ -74,13 +84,11 @@ function App() {
           onDismiss={() => setLoaderDone(true)}
         />
       )}
-      <Navbar />
       {/* Single fixed 3D canvas that lives across hero + story sections.
           The pouch position/scale/rotation inside is scroll-driven.
           Leaves are NOT a root-level layer anymore — each section embeds its
           own <FloatingLeaves /> so they always sit between section bg and
           section content regardless of page-level stacking. */}
-
       <div
         className="global-canvas-layer"
         style={{
@@ -110,6 +118,51 @@ function App() {
       </main>
       <Footer />
     </div>
+  )
+}
+
+// ─── App shell with routing ───────────────────────────────────────────────────
+function App() {
+  return (
+    <>
+      {/* Navbar persists across all routes */}
+      <Navbar />
+
+      <Routes>
+        {/* Landing page — all existing scroll sections */}
+        <Route path="/" element={<HomePage />} />
+
+        {/* Auth pages */}
+        <Route path="/sign-in/*" element={<SignInPage />} />
+        <Route path="/sign-up/*" element={<SignUpPage />} />
+
+        {/* Protected pages */}
+        <Route
+          path="/account"
+          element={
+            <ProtectedRoute>
+              <AccountPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <OrdersPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute>
+              <CheckoutPage />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </>
   )
 }
 
