@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
-import CountdownTimer from './ui/CountdownTimer'
 import FloatingLeaves from './FloatingLeaves'
 
 export default function Hero({ revealKey = 0, bigEntrance = false }) {
@@ -16,8 +15,8 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
     // In bigEntrance the parent column does the rising, so per-child y is 0
     // (otherwise they compound and the headline overshoots past readable).
     const s = bigEntrance
-      ? { mul: 1.15, lead: 0.0,  headlineY: 0,  kickerY: 0,  ctaScale: 0.9 }
-      : { mul: 1.0,  lead: 0.20, headlineY: 60, kickerY: 30, ctaScale: 0.9 }
+      ? { mul: 1.15, lead: 0.0, headlineY: 0, kickerY: 0, ctaScale: 0.9 }
+      : { mul: 1.0, lead: 0.20, headlineY: 60, kickerY: 30, ctaScale: 0.9 }
 
     const ctx = gsap.context(() => {
       if (bigEntrance) {
@@ -120,7 +119,7 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
         />
       )}
 
-      {/* Text content - anchored to top half so 3D pouch can sit below */}
+      {/* Text content — editorial newspaper layout */}
       <div
         className="hero-layout"
         style={{
@@ -136,165 +135,133 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
         <div
           className="hero-text-col"
           style={{
-            maxWidth: '740px',
+            maxWidth: '900px',
             width: '100%',
-            padding: '72px 32px 0',
+            padding: '72px 40px 0',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'flex-start',
-            alignItems: 'center',
-            textAlign: 'center',
+            alignItems: 'stretch',
+            textAlign: 'left',
           }}
         >
-          {/* Kicker */}
-          <div className="kicker hero-kicker" style={{ marginBottom: '20px' }}>
-            CLEAN SUPER GREENS POWDER
+          {/* ── BIG HEADLINE ── */}
+          <div className="hero-headline" style={{ marginBottom: '12px' }}>
+            <span className="hero-word hero-word-display" style={{
+              display: 'block',
+              fontFamily: 'var(--font-display)',
+              fontWeight: 700,
+              fontSize: 'clamp(48px, 8.5vw, 120px)',
+              lineHeight: 0.9,
+              color: 'var(--surface-deep)',
+              letterSpacing: '-0.03em',
+              textTransform: 'uppercase',
+              whiteSpace: 'nowrap',
+            }}>PURE GREENS</span>
           </div>
 
-          {/* Headline — split PURE / GREENS for maximum impact at large sizes */}
-          <div className="hero-headline" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px', marginBottom: '6px' }}>
-            <div style={{ overflow: 'hidden' }}>
-              <span className="hero-word hero-word-display" style={{
-                display: 'inline-block',
-                fontFamily: 'var(--font-display)',
-                fontWeight: 900,
-                fontSize: 'clamp(52px, 9vw, 128px)',
-                lineHeight: 0.92,
-                color: 'var(--surface-deep)',
-                letterSpacing: '-0.03em',
-                textTransform: 'uppercase',
-              }}>PURE</span>
+          {/* ── TWO-COLUMN META ROW ── */}
+          <div className="hero-meta-row" style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            alignItems: 'flex-end',
+            marginBottom: '18px',
+            gap: '0 40px',
+          }}>
+            {/* Left: italic tagline + kicker */}
+            <div>
+              <div style={{ overflow: 'hidden', marginBottom: '4px' }}>
+                <span className="hero-word hero-word-italic" style={{
+                  display: 'inline-block',
+                  fontFamily: 'var(--font-serif)',
+                  fontWeight: 500,
+                  fontSize: 'clamp(15px, 1.8vw, 22px)',
+                  lineHeight: 1.3,
+                  color: 'var(--ink-soft)',
+                }}>Quietly powerful</span>
+              </div>
+              <div className="kicker hero-kicker" style={{ margin: 0, textAlign: 'left' }}>
+                CLEAN SUPER GREENS POWDER
+              </div>
             </div>
-            <div style={{ overflow: 'hidden' }}>
-              <span className="hero-word hero-word-display" style={{
-                display: 'inline-block',
-                fontFamily: 'var(--font-display)',
-                fontWeight: 900,
-                fontSize: 'clamp(52px, 9vw, 128px)',
-                lineHeight: 0.92,
-                color: 'var(--surface-deep)',
-                letterSpacing: '-0.03em',
-                textTransform: 'uppercase',
-              }}>GREENS</span>
-            </div>
-          </div>
 
-          {/* Italic sub-headline */}
-          <div style={{ overflow: 'hidden', marginBottom: '22px' }}>
-            <span className="hero-word hero-word-italic" style={{
-              display: 'inline-block',
-              fontFamily: 'var(--font-serif)',
-              fontStyle: 'italic',
-              fontWeight: 500,
-              fontSize: 'clamp(18px, 2.6vw, 30px)',
-              lineHeight: 1.2,
-              color: 'var(--ink-soft)',
-              letterSpacing: '-0.005em',
-            }}>Quietly powerful</span>
-          </div>
-
-          {/* Dotted divider */}
-          <hr className="dotted-line hero-divider" style={{ width: '44%', marginLeft: 'auto', marginRight: 'auto', marginBottom: '22px' }} />
-
-          {/* Body paragraph */}
-          <p
-            className="hero-body"
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontWeight: 400,
-              fontSize: '1.05rem',
-              lineHeight: 1.75,
-              color: 'var(--ink-soft)',
-              maxWidth: '420px',
-              textAlign: 'center',
-              marginBottom: '28px',
-            }}
-          >
-            Bold nutrition from the power of moringa.<br />
-            Crafted for those who crave better health.
-          </p>
-
-          {/* CTA */}
-          <div className="hero-cta" style={{ marginBottom: '16px' }}>
-            <button
-              className="cta-btn"
-              onClick={scrollToWaitlist}
+            {/* Right: body copy */}
+            <p
+              className="hero-body"
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontWeight: 400,
+                fontSize: 'clamp(0.82rem, 1.1vw, 0.95rem)',
+                lineHeight: 1.7,
+                color: 'var(--ink-soft)',
+                margin: 0,
+                textAlign: 'right',
+              }}
             >
-              Join the waitlist · Get 15% off
-            </button>
+              Bold nutrition from the power of moringa.<br />
+              Crafted for those who crave better health.
+            </p>
           </div>
 
-          {/* Sub-trust */}
+          {/* ── FULL-WIDTH DIVIDER ── */}
+          <hr className="dotted-line hero-divider" style={{ width: '100%', marginBottom: '36px' }} />
+
+          {/* ── LAUNCHING SOON label ── */}
           <div
             className="hero-sublabel"
             style={{
               fontFamily: 'var(--font-body)',
-              fontWeight: 600,
-              fontSize: '0.72rem',
-              color: 'var(--ink-mute)',
-              letterSpacing: '0.22em',
+              fontWeight: 700,
+              fontSize: '0.75rem',
+              color: 'var(--surface-deep)',
+              letterSpacing: '0.28em',
               textTransform: 'uppercase',
-              marginBottom: '28px',
+              textAlign: 'center',
+              marginBottom: '20px',
             }}
           >
-            50g · 10 Servings · Ships India &amp; Canada
+            Launching Soon
           </div>
 
-          {/* Countdown */}
-          <div>
-            <div
+          {/* ── CTA ── */}
+          <div className="hero-cta" style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+            <button
+              className="cta-btn"
+              onClick={scrollToWaitlist}
+            >
+              Join the Waitlist and Get 15% Off
+            </button>
+          </div>
+
+
+
+          {/* ── Bottom product specs ── */}
+          <div
+            style={{
+              borderTop: '1px solid rgba(28,58,28,0.12)',
+              paddingTop: '18px',
+              textAlign: 'center',
+            }}
+          >
+            <span
               style={{
                 fontFamily: 'var(--font-body)',
-                fontWeight: 700,
-                fontSize: '0.62rem',
-                letterSpacing: '0.22em',
-                textTransform: 'uppercase',
+                fontWeight: 600,
+                fontSize: '0.72rem',
                 color: 'var(--ink-mute)',
-                marginBottom: '10px',
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
               }}
             >
-              Launching in
-            </div>
-            <CountdownTimer />
+              50g · 10 Servings · Ships India &amp; Canada
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div style={{
-        position: 'absolute',
-        bottom: '32px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '8px',
-        opacity: 0.5,
-      }}>
-        <div style={{
-          fontFamily: 'var(--font-body)',
-          fontWeight: 600,
-          fontSize: '0.62rem',
-          letterSpacing: '0.28em',
-          textTransform: 'uppercase',
-          color: 'var(--ink-mute)',
-        }}>
-          Scroll
-        </div>
-        <div style={{
-          width: '1px',
-          height: '40px',
-          background: 'linear-gradient(to bottom, var(--ink-mute), transparent)',
-          animation: 'scrollPulse 1.8s ease-in-out infinite',
-        }} />
-      </div>
+
 
       <style>{`
-        @keyframes scrollPulse {
-          0%, 100% { opacity: 0.3; transform: scaleY(0.7); }
-          50% { opacity: 1; transform: scaleY(1); }
-        }
         @media (max-width: 768px) {
           .hero-text-col {
             padding: 36px 24px 0 !important;
@@ -303,26 +270,31 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
             font-size: clamp(44px, 13vw, 76px) !important;
           }
           .hero-word-italic {
-            font-size: clamp(17px, 4.5vw, 26px) !important;
+            font-size: clamp(15px, 4vw, 20px) !important;
+          }
+          .hero-meta-row {
+            grid-template-columns: 1fr !important;
+            gap: 12px 0 !important;
+          }
+          .hero-meta-row .hero-body {
+            text-align: left !important;
           }
           .hero-body {
-            font-size: 0.92rem !important;
-            margin-bottom: 22px !important;
+            font-size: 0.9rem !important;
           }
           .hero-sublabel {
             font-size: 0.68rem !important;
             letter-spacing: 0.2em !important;
-            margin-bottom: 20px !important;
+            margin-bottom: 16px !important;
           }
           .hero-kicker {
             font-size: 0.62rem !important;
-            margin-bottom: 16px !important;
           }
           .hero-headline {
-            margin-bottom: 4px !important;
+            margin-bottom: 8px !important;
           }
           .hero-divider {
-            margin-bottom: 18px !important;
+            margin-bottom: 24px !important;
           }
         }
         @media (max-width: 480px) {
@@ -333,11 +305,10 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
             font-size: clamp(40px, 12vw, 60px) !important;
           }
           .hero-word-italic {
-            font-size: clamp(15px, 4vw, 22px) !important;
+            font-size: clamp(14px, 4vw, 18px) !important;
           }
           .hero-body {
-            font-size: 0.88rem !important;
-            margin-bottom: 20px !important;
+            font-size: 0.86rem !important;
           }
           .hero-cta .cta-btn {
             font-size: 0.74rem !important;
@@ -345,7 +316,6 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
           }
           .hero-kicker {
             font-size: 0.6rem !important;
-            margin-bottom: 14px !important;
           }
         }
       `}</style>

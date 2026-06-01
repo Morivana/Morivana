@@ -110,26 +110,20 @@ export default function Ingredients() {
 
       <div className="section-content">
         <div className="ing-header">
-          <div className="ing-header-main">
-            <div className="kicker ing-reveal" style={{ marginBottom: '14px' }}>
-              <span style={{ fontFamily: 'var(--font-mono)' }}>FILE.01</span>
-              &nbsp;&nbsp;·&nbsp;&nbsp;THE FORMULA
-            </div>
-            <h2 style={{ margin: 0 }}>
-              <div style={{ overflow: 'hidden' }}>
-                <span className="ing-word ing-head-display">Eight plants.</span>
-              </div>
-              <div style={{ overflow: 'hidden' }}>
-                <span className="ing-word ing-head-serif">Nothing else.</span>
-              </div>
-            </h2>
+          <div className="kicker ing-reveal" style={{ marginBottom: '14px' }}>
+            THE FORMULA
           </div>
-
+          <h2 style={{ margin: '0 0 16px' }}>
+            <div style={{ overflow: 'hidden' }}>
+              <span className="ing-word ing-head-display">Eight plants.</span>
+            </div>
+            <div style={{ overflow: 'hidden' }}>
+              <span className="ing-word ing-head-serif">Nothing else.</span>
+            </div>
+          </h2>
           <div className="ing-reveal ing-header-note">
-            <div className="ing-lot">Lot · 2026-A · Page 01/01</div>
             <p>
-              Read it like a monograph. Every entry below is a whole plant —
-              cold-dried, ground, weighed. Nothing synthesized.
+              Every entry below is a whole plant — cold-dried, ground, weighed. Nothing synthesized.
             </p>
           </div>
         </div>
@@ -140,7 +134,7 @@ export default function Ingredients() {
             return (
               <article key={i} className="ingredient-monograph">
                 <div className="im-top">
-                  <div className="im-idx">N°{idx}</div>
+                  <div className="im-idx">{idx}</div>
                   <div className="im-compound">{ing.compound}</div>
                 </div>
 
@@ -171,13 +165,7 @@ export default function Ingredients() {
           max-width: 1100px;
           margin: 0 auto 56px;
           padding: 0 clamp(20px, 4vw, 32px);
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-end;
-          gap: 32px;
-          flex-wrap: wrap;
         }
-        .ing-header-main { max-width: 640px; }
         .ing-head-display {
           display: inline-block;
           font-family: var(--font-display);
@@ -191,25 +179,11 @@ export default function Ingredients() {
         .ing-head-serif {
           display: inline-block;
           font-family: var(--font-serif);
-          font-style: italic;
           font-weight: 500;
-          font-size: clamp(24px, 4vw, 52px);
-          line-height: 1.0;
+          font-size: clamp(14px, 4vw, 32px);
+          line-height: 1.2;
           color: var(--ink);
           letter-spacing: -0.01em;
-        }
-        .ing-header-note {
-          max-width: 300px;
-          border-left: 2px solid var(--surface-deep);
-          padding-left: 20px;
-        }
-        .ing-lot {
-          font-family: var(--font-mono);
-          font-size: 0.7rem;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-          color: var(--ink-mute);
-          margin-bottom: 8px;
         }
         .ing-header-note p {
           font-family: var(--font-body);
@@ -217,6 +191,7 @@ export default function Ingredients() {
           color: var(--ink-soft);
           line-height: 1.6;
           margin: 0;
+          max-width: 560px;
         }
 
         .ingredient-grid {

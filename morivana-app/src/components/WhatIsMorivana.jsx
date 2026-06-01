@@ -149,7 +149,7 @@ export default function WhatIsMorivana() {
                   color: 'var(--ink-mute)',
                   minWidth: '28px',
                 }}>
-                  N°{h.num}
+                  {h.num}
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{

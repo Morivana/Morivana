@@ -105,8 +105,7 @@ export default function Benefits() {
         <div className="ben-header">
           <div className="ben-header-main">
             <div className="kicker benefits-reveal" style={{ marginBottom: '14px' }}>
-              <span style={{ fontFamily: 'var(--font-mono)' }}>FILE.02</span>
-              &nbsp;&nbsp;·&nbsp;&nbsp;THE OUTCOMES
+              THE OUTCOMES
             </div>
             <h2 style={{ margin: 0 }}>
               <div style={{ overflow: 'hidden' }}>
@@ -121,8 +120,7 @@ export default function Benefits() {
           <div className="benefits-reveal ben-header-note">
             <div className="ben-lot">Observed · Five outcomes</div>
             <p>
-              The same scoop, every morning. Here's what shows up — and when —
-              if you stay with it.
+              The same scoop, every morning. Here's what shows up and when if you stay with it.
             </p>
           </div>
         </div>
