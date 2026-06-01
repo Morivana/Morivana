@@ -25,6 +25,7 @@ import SignUpPage from './pages/SignUpPage'
 import AccountPage from './pages/AccountPage'
 import OrdersPage from './pages/OrdersPage'
 import CheckoutPage from './pages/CheckoutPage'
+import ErrorBoundary from './components/ErrorBoundary'
 
 // ─── Home page (existing scroll-story landing) ───────────────────────────────
 function HomePage() {
@@ -128,40 +129,42 @@ function App() {
       {/* Navbar persists across all routes */}
       <Navbar />
 
-      <Routes>
-        {/* Landing page — all existing scroll sections */}
-        <Route path="/" element={<HomePage />} />
+      <ErrorBoundary>
+        <Routes>
+          {/* Landing page — all existing scroll sections */}
+          <Route path="/" element={<HomePage />} />
 
-        {/* Auth pages */}
-        <Route path="/sign-in/*" element={<SignInPage />} />
-        <Route path="/sign-up/*" element={<SignUpPage />} />
+          {/* Auth pages */}
+          <Route path="/sign-in/*" element={<SignInPage />} />
+          <Route path="/sign-up/*" element={<SignUpPage />} />
 
-        {/* Protected pages */}
-        <Route
-          path="/account"
-          element={
-            <ProtectedRoute>
-              <AccountPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/orders"
-          element={
-            <ProtectedRoute>
-              <OrdersPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/checkout"
-          element={
-            <ProtectedRoute>
-              <CheckoutPage />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+          {/* Protected pages */}
+          <Route
+            path="/account"
+            element={
+              <ProtectedRoute>
+                <AccountPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/orders"
+            element={
+              <ProtectedRoute>
+                <OrdersPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute>
+                <CheckoutPage />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </ErrorBoundary>
     </>
   )
 }

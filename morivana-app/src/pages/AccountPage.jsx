@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useUser, useClerk } from '@clerk/clerk-react'
 import { Link, useNavigate } from 'react-router-dom'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 // ─── Sidebar nav items ────────────────────────────────────────────────────────
 const NAV_ITEMS = [
@@ -260,12 +261,20 @@ function SettingsSection({ user }) {
 
 // ─── Main AccountPage ─────────────────────────────────────────────────────────
 export default function AccountPage() {
-  const { user } = useUser()
+  const { isLoaded, isSignedIn, user } = useUser()
   const { signOut } = useClerk()
   const navigate = useNavigate()
   const [activeSection, setActiveSection] = useState('personal')
 
-  const handleSignOut = () => signOut(() => navigate('/'))
+  const handleSignOut = () => signOut({ redirectUrl: '/' })
+
+  if (!isLoaded) {
+    return <LoadingSpinner />
+  }
+
+  if (!isSignedIn || !user) {
+    return null
+  }
 
   const renderSection = () => {
     switch (activeSection) {
