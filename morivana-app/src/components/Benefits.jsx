@@ -103,24 +103,20 @@ export default function Benefits() {
 
       <div className="section-content">
         <div className="ben-header">
-          <div className="ben-header-main">
-            <div className="kicker benefits-reveal" style={{ marginBottom: '14px' }}>
-              THE OUTCOMES
-            </div>
-            <h2 style={{ margin: 0 }}>
-              <div style={{ overflow: 'hidden' }}>
-                <span className="benefits-word ben-head-display">A timeline</span>
-              </div>
-              <div style={{ overflow: 'hidden' }}>
-                <span className="benefits-word ben-head-serif">your body keeps.</span>
-              </div>
-            </h2>
+          <div className="kicker benefits-reveal" style={{ marginBottom: '14px' }}>
+            THE OUTCOMES
           </div>
-
+          <h2 style={{ margin: '0 0 16px' }}>
+            <div style={{ overflow: 'hidden' }}>
+              <span className="benefits-word ben-head-display">A timeline</span>
+            </div>
+            <div style={{ overflow: 'hidden' }}>
+              <span className="benefits-word ben-head-serif">your body keeps.</span>
+            </div>
+          </h2>
           <div className="benefits-reveal ben-header-note">
-            <div className="ben-lot">Observed · Five outcomes</div>
             <p>
-              The same scoop, every morning. Here's what shows up and when if you stay with it.
+              The same scoop, every morning. Here’s what shows up and when if you stay with it.
             </p>
           </div>
         </div>
@@ -165,13 +161,7 @@ export default function Benefits() {
           max-width: 1100px;
           margin: 0 auto 64px;
           padding: 0 clamp(20px, 4vw, 32px);
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-end;
-          gap: 32px;
-          flex-wrap: wrap;
         }
-        .ben-header-main { max-width: 640px; }
         .ben-head-display {
           display: inline-block;
           font-family: var(--font-display);
@@ -186,24 +176,11 @@ export default function Benefits() {
           display: inline-block;
           font-family: var(--font-serif);
           font-style: italic;
-          font-weight: 500;
-          font-size: clamp(24px, 4vw, 52px);
-          line-height: 1.0;
+          ont-weight: 500;
+          font-size: clamp(14px, 4vw, 32px);
+          line-height: 1.2;
           color: var(--ink);
           letter-spacing: -0.01em;
-        }
-        .ben-header-note {
-          max-width: 300px;
-          border-left: 2px solid var(--surface-deep);
-          padding-left: 20px;
-        }
-        .ben-lot {
-          font-family: var(--font-mono);
-          font-size: 0.7rem;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-          color: var(--ink-mute);
-          margin-bottom: 8px;
         }
         .ben-header-note p {
           font-family: var(--font-body);
@@ -211,6 +188,7 @@ export default function Benefits() {
           color: var(--ink-soft);
           line-height: 1.6;
           margin: 0;
+          max-width: 560px;
         }
 
         .timeline-wrap {
@@ -332,8 +310,8 @@ export default function Benefits() {
         }
         .tr-metric-num {
           font-family: var(--font-display);
-          font-weight: 800;
-          font-size: 2rem;
+          font-weight: 600;
+          font-size: 1rem;
           line-height: 1.0;
           color: var(--surface-deep);
           letter-spacing: -0.02em;

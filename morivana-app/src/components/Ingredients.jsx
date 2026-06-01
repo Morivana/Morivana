@@ -123,7 +123,7 @@ export default function Ingredients() {
           </h2>
           <div className="ing-reveal ing-header-note">
             <p>
-              Every entry below is a whole plant — cold-dried, ground, weighed. Nothing synthesized.
+              Every entry below is a whole plant cold-dried, ground, weighed. Nothing synthesized.
             </p>
           </div>
         </div>
