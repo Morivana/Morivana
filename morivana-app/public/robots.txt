@@ -1,9 +1,3 @@
 User-agent: *
 Allow: /
-Disallow: /sign-in
-Disallow: /sign-up
-Disallow: /account
-Disallow: /orders
-Disallow: /checkout
-
-Sitemap: https://www.morivana.com/sitemap.xml
+Sitemap: https://morivana-web.onrender.com/sitemap.xml

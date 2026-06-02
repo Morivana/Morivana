@@ -47,7 +47,7 @@ export default function LoadingSpinner() {
           style={{
             fontFamily: 'var(--font-body)',
             fontWeight: 700,
-            fontSize: '10px',
+            fontSize: '14px',
             color: 'var(--ink-on-dark)',
             opacity: 0.65,
             letterSpacing: '0.28em',

@@ -222,6 +222,7 @@ export default function Navbar() {
 
       <nav
         ref={navRef}
+        className="main-header"
         style={{
           position: 'fixed',
           top: 0,

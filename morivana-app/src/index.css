@@ -1,6 +1,83 @@
-/* Minimal CSS Reset */
+/* Global CSS Usability & Mobile Optimizations */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
+  font-size: 16px;
+}
+
+p, li {
+  font-size: 1rem !important;
+  line-height: 1.7 !important;
+}
+
+/* Ensure no element has font-size below 14px */
+.im-idx, .im-compound, .im-origin, .im-benefit, .im-latin,
+.tr-phase-tag, .tr-phase-when, .tr-tag, .tr-metric-label,
+.rt-kicker, .rt-step-label, .rt-step-body, .rt-pills-label, .rt-pill, .rt-protip p,
+.ing-cert, .footer-link, .kicker, .hero-kicker, .hero-sublabel, .countdown-label,
+.waitlist-input, .cta-btn, .success-state p, .nav-pill, .nav-link,
+.logo-text, .brand-text, .nav-center-logo div, .footer-col-item a,
+footer span, footer p, footer a, .hero-body,
+small, sub, sup, caption, figcaption {
+  font-size: 14px !important;
+}
+
+/* Minimum Tap Target Sizes for Accessibility */
+a, button {
+  min-height: 48px;
+  min-width: 48px;
+  padding: 12px 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  touch-action: manipulation; /* Remove 300ms tap delay */
+}
+
+/* Exclude inline paragraph and list links from block tap-target sizing to prevent text breaks */
+p a, li a, span a, td a, th a {
+  display: inline;
+  min-height: 0;
+  min-width: 0;
+  padding: 0;
+}
+
+/* Responsive Image Rules */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Mobile Nav Link Layout */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  nav a {
+    font-size: 1rem !important;
+    padding: 10px 16px !important;
+  }
+  /* Retain row layout for active header navbar so it doesn't break logo + hamburger positioning */
+  nav.main-header {
+    flex-direction: row !important;
+    gap: 24px !important;
+    height: 60px !important;
+    padding: 0 16px !important;
+  }
+  nav.main-header a {
+    font-size: inherit !important;
+    padding: inherit !important;
+  }
+}
+
+/* Enforce minimum root font size on ultra-small mobile viewports */
+@media (max-width: 360px) {
+  html {
+    font-size: 14px !important;
+  }
 }

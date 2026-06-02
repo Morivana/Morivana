@@ -316,7 +316,7 @@ export default function WaitlistCTA() {
           <div className="success-state">
             <div style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: '0.72rem',
+              fontSize: '14px',
               letterSpacing: '0.28em',
               textTransform: 'uppercase',
               color: 'var(--accent)',
@@ -365,7 +365,7 @@ export default function WaitlistCTA() {
                   {...register('name', { required: 'Name is required' })}
                 />
                 {errors.name && (
-                  <p style={{ fontFamily: 'var(--font-body)', color: '#ff8aa6', fontSize: '0.78rem', marginTop: '6px', textAlign: 'left', paddingLeft: '18px' }}>
+                  <p style={{ fontFamily: 'var(--font-body)', color: '#ff8aa6', fontSize: '14px', marginTop: '6px', textAlign: 'left', paddingLeft: '18px' }}>
                     {errors.name.message}
                   </p>
                 )}
@@ -386,7 +386,7 @@ export default function WaitlistCTA() {
                   })}
                 />
                 {errors.email && (
-                  <p style={{ fontFamily: 'var(--font-body)', color: '#ff8aa6', fontSize: '0.78rem', marginTop: '6px', textAlign: 'left', paddingLeft: '18px' }}>
+                  <p style={{ fontFamily: 'var(--font-body)', color: '#ff8aa6', fontSize: '14px', marginTop: '6px', textAlign: 'left', paddingLeft: '18px' }}>
                     {errors.email.message}
                   </p>
                 )}
@@ -397,7 +397,7 @@ export default function WaitlistCTA() {
                 type="submit"
                 className="cta-btn"
                 disabled={isSubmitting}
-                style={{ padding: '16px 32px', fontSize: '0.85rem', position: 'relative' }}
+                style={{ padding: '16px 32px', fontSize: '14px', position: 'relative' }}
               >
                 {isSubmitting ? (
                   <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
@@ -410,7 +410,7 @@ export default function WaitlistCTA() {
               </button>
 
               {errors.root && (
-                <p style={{ fontFamily: 'var(--font-body)', color: '#ff8aa6', fontSize: '0.82rem', marginTop: '4px', textAlign: 'center' }}>
+                <p style={{ fontFamily: 'var(--font-body)', color: '#ff8aa6', fontSize: '14px', marginTop: '4px', textAlign: 'center' }}>
                   {errors.root.message}
                 </p>
               )}
@@ -418,7 +418,7 @@ export default function WaitlistCTA() {
               {/* Trust line */}
               <p style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: '0.8rem',
+                fontSize: '14px',
                 color: 'var(--ink-on-dark)',
                 opacity: 0.6,
                 marginTop: '6px',
@@ -456,7 +456,7 @@ export default function WaitlistCTA() {
           <span style={{
             fontFamily: 'var(--font-body)',
             fontWeight: 600,
-            fontSize: 'clamp(0.7rem, 2.5vw, 0.82rem)',
+            fontSize: '14px',
             color: 'var(--cream)',
             letterSpacing: '0.06em',
           }}>

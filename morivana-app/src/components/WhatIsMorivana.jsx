@@ -90,7 +90,9 @@ export default function WhatIsMorivana() {
           <div className="mobile-product-img" style={{ display: 'none' }}>
             <img
               src="/packaging_highres.png"
-              alt="Morivana Daily Super Greens"
+              alt="Morivaná Daily Super Greens Powder Premium Packaging"
+              loading="eager"
+              fetchpriority="high"
               style={{
                 width: '100%',
                 maxHeight: '350px',
@@ -144,7 +146,7 @@ export default function WhatIsMorivana() {
                 <div style={{
                   fontFamily: 'var(--font-mono)',
                   fontWeight: 600,
-                  fontSize: '0.72rem',
+                  fontSize: '14px',
                   letterSpacing: '0.18em',
                   color: 'var(--ink-mute)',
                   minWidth: '28px',

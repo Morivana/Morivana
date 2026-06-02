@@ -57,7 +57,7 @@ export default function Footer() {
           <div style={{
             fontFamily: 'var(--font-body)',
             fontWeight: 700,
-            fontSize: '0.78rem',
+            fontSize: '14px',
             color: 'var(--ink-on-dark)',
             opacity: 0.85,
             letterSpacing: '0.22em',
@@ -69,7 +69,7 @@ export default function Footer() {
           <div style={{
             fontFamily: 'var(--font-body)',
             fontWeight: 500,
-            fontSize: '0.72rem',
+            fontSize: '14px',
             color: 'var(--accent-strong)',
             letterSpacing: '0.16em',
             textTransform: 'uppercase',
@@ -133,12 +133,15 @@ export default function Footer() {
           <p style={{
             fontFamily: 'var(--font-body)',
             fontWeight: 400,
-            fontSize: '0.8rem',
+            fontSize: '14px',
             color: 'var(--cream)',
             opacity: 0.55,
             lineHeight: 1.7,
           }}>
-            © 2026 Morivaná. All rights reserved.<br />
+            © 2026 Morivaná. All rights reserved.
+            <a href="/privacy-policy" style={{ color: 'inherit', textDecoration: 'underline', marginLeft: '12px' }}>Privacy Policy</a>
+            <a href="/terms" style={{ color: 'inherit', textDecoration: 'underline', marginLeft: '12px' }}>Terms of Use</a>
+            <br />
             Shipping to India &amp; Canada.
           </p>
         </div>
@@ -161,7 +164,7 @@ export default function Footer() {
           <span key={cert} style={{
             fontFamily: 'var(--font-body)',
             fontWeight: 700,
-            fontSize: '0.66rem',
+            fontSize: '14px',
             letterSpacing: '0.20em',
             textTransform: 'uppercase',
             color: 'var(--accent-strong)',

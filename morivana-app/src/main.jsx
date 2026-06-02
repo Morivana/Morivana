@@ -6,6 +6,7 @@ import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import App from './App.jsx'
 import './styles/globals.css'
+import './index.css'
 
 // Register GSAP plugins ONCE globally - never in individual components
 gsap.registerPlugin(ScrollTrigger)

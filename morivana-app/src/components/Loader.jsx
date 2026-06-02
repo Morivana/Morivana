@@ -295,7 +295,7 @@ export default function Loader({ onDismiss, onLeaveStart }) {
           style={{
             fontFamily: 'var(--font-mono)',
             fontWeight: 500,
-            fontSize: '0.7rem',
+            fontSize: '14px',
             letterSpacing: '0.42em',
             textTransform: 'uppercase',
             color: PALETTE.cream,
@@ -441,7 +441,7 @@ export default function Loader({ onDismiss, onLeaveStart }) {
             style={{
               fontFamily: 'var(--font-mono)',
               fontWeight: 500,
-              fontSize: '0.66rem',
+              fontSize: '14px',
               letterSpacing: '0.36em',
               textTransform: 'uppercase',
               color: PALETTE.cream,
@@ -527,7 +527,7 @@ export default function Loader({ onDismiss, onLeaveStart }) {
 
         .loader-error {
           font-family: var(--font-body);
-          font-size: 0.78rem;
+          font-size: 14px;
           color: #ff8aa6;
           margin: -16px 0 0;
           text-align: left;
@@ -545,7 +545,7 @@ export default function Loader({ onDismiss, onLeaveStart }) {
           color: ${PALETTE.cream};
           font-family: var(--font-mono);
           font-weight: 600;
-          font-size: 0.78rem;
+          font-size: 14px;
           letter-spacing: 0.28em;
           text-transform: uppercase;
           cursor: pointer;
@@ -641,21 +641,21 @@ export default function Loader({ onDismiss, onLeaveStart }) {
             width: 100% !important;
           }
           .loader-field input {
-            font-size: 0.85rem !important;
+            font-size: 16px !important;
             padding: 10px 0 !important;
             width: 100% !important;
           }
           .loader-btn {
             padding: 12px 14px !important;
-            font-size: 0.65rem !important;
+            font-size: 14px !important;
             letter-spacing: 0.18em !important;
             width: 100% !important;
           }
           .loader-skip {
-            font-size: 0.8rem !important;
+            font-size: 14px !important;
           }
           .loader-eyebrow {
-            font-size: 0.56rem !important;
+            font-size: 14px !important;
             letter-spacing: 0.28em !important;
             gap: 8px !important;
           }
@@ -680,16 +680,16 @@ export default function Loader({ onDismiss, onLeaveStart }) {
             gap: 12px !important;
           }
           .loader-field input {
-            font-size: 0.8rem !important;
+            font-size: 16px !important;
             padding: 8px 0 !important;
           }
           .loader-btn {
             padding: 10px 10px !important;
-            font-size: 0.6rem !important;
+            font-size: 14px !important;
             letter-spacing: 0.14em !important;
           }
           .loader-skip {
-            font-size: 0.75rem !important;
+            font-size: 14px !important;
           }
           .loader-meta {
             margin-top: 4px !important;
