@@ -1,5 +1,6 @@
 import { SignUp } from '@clerk/clerk-react'
 import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
 import FloatingLeaves from '../components/FloatingLeaves'
 
 /**
@@ -7,6 +8,20 @@ import FloatingLeaves from '../components/FloatingLeaves'
  * Identical layout to SignInPage — dark forest surface + citrus + leaves.
  */
 export default function SignUpPage() {
+  // Dynamic client-side noindex to ensure search engines do not index the sign-up page
+  useEffect(() => {
+    let meta = document.querySelector('meta[name="robots"]')
+    if (!meta) {
+      meta = document.createElement('meta')
+      meta.setAttribute('name', 'robots')
+      document.head.appendChild(meta)
+    }
+    const originalVal = meta.getAttribute('content') || 'index, follow'
+    meta.setAttribute('content', 'noindex, nofollow')
+    return () => {
+      meta.setAttribute('content', originalVal)
+    }
+  }, [])
   return (
     <div
       style={{

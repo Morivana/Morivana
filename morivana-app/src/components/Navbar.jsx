@@ -3,35 +3,34 @@ import { Link } from 'react-router-dom'
 import { useAuth, UserButton } from '@clerk/clerk-react'
 import gsap from 'gsap'
 
-const leftLinks  = ['Ingredients', 'Benefits', 'How To Use']
-const rightLinks = ['About']
+const navLinks = [
+  { label: 'Ingredients', id: 'ingredients' },
+  { label: 'Benefits', id: 'benefits' },
+  { label: 'How To Use', id: 'how-to-use' },
+  { label: 'About', id: 'what-section' },
+]
 
 export default function Navbar() {
-  const navRef        = useRef()
-  const [scrolled, setScrolled]   = useState(false)
-  const [menuOpen, setMenuOpen]   = useState(false)
+  const navRef = useRef()
+  const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const { isSignedIn } = useAuth()
 
-  // Scroll to section helper
   const scrollTo = (id) => {
-    let targetId = id.toLowerCase().replace(/\s+/g, '-')
-    if (targetId === 'about') targetId = 'what-section'
-    const el = document.getElementById(targetId)
+    const el = document.getElementById(id)
     if (el) el.scrollIntoView({ behavior: 'smooth' })
     setMenuOpen(false)
   }
 
-  // Entrance animation
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(navRef.current, {
-        y: -20, opacity: 0, duration: 0.6, ease: 'power2.out', delay: 0.3,
+        y: -20, opacity: 0, duration: 0.7, ease: 'power2.out', delay: 0.3,
       })
     })
     return () => ctx.revert()
   }, [])
 
-  // Scrolled state
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50)
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -39,208 +38,334 @@ export default function Navbar() {
   }, [])
 
   return (
-    <nav
-      ref={navRef}
-      style={{
-        position:       'fixed',
-        top:            0,
-        left:           0,
-        right:          0,
-        zIndex:         100,
-        background:     scrolled ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.55)',
-        backdropFilter: scrolled ? 'blur(18px) saturate(160%)' : 'blur(10px) saturate(140%)',
-        borderBottom:   scrolled ? '1px solid var(--line-soft)' : '1px solid transparent',
-        boxShadow:      scrolled ? '0 6px 24px rgba(25,65,2,0.06)' : 'none',
-        transition:     'backdrop-filter 0.3s, box-shadow 0.3s',
-        padding:        '0 32px',
-        height:         '64px',
-        display:        'grid',
-        gridTemplateColumns: '1fr auto 1fr',
-        alignItems:     'center',
-      }}
-    >
-      {/* Left pills */}
-      <div className="nav-pills-left" style={{ display: 'flex', gap: 10, justifySelf: 'start' }}>
-        {leftLinks.map(link => (
-          <button key={link} className="nav-pill" onClick={() => scrollTo(link)}>
-            {link}
-          </button>
-        ))}
-      </div>
+    <>
+      <style>{`
+        .nav-link-item {
+          font-family: var(--font-body);
+          font-weight: 600;
+          font-size: 0.78rem;
+          letter-spacing: 0.13em;
+          text-transform: uppercase;
+          color: var(--ink-mute);
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 6px 2px;
+          position: relative;
+          transition: color 0.2s ease;
+          white-space: nowrap;
+        }
+        .nav-link-item::after {
+          content: '';
+          position: absolute;
+          bottom: 2px;
+          left: 0;
+          right: 0;
+          height: 1.5px;
+          background: var(--surface-deep);
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 0.25s ease;
+          border-radius: 2px;
+        }
+        .nav-link-item:hover {
+          color: var(--surface-deep);
+        }
+        .nav-link-item:hover::after {
+          transform: scaleX(1);
+        }
 
-      {/* Center logo — always visible, always truly centered */}
-      <button
-        type="button"
-        className="nav-center-logo"
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        aria-label="Morivana, back to top"
+        .nav-cta {
+          font-family: var(--font-body);
+          font-weight: 700;
+          font-size: 0.73rem;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          background: var(--surface-deep);
+          color: var(--ink-on-dark);
+          border: none;
+          border-radius: 100px;
+          padding: 10px 22px;
+          cursor: pointer;
+          transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+          white-space: nowrap;
+        }
+        .nav-cta:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 6px 20px rgba(25,65,2,0.22);
+        }
+        .nav-cta:active {
+          transform: translateY(0);
+        }
+
+        .nav-login-link {
+          font-family: var(--font-body);
+          font-weight: 600;
+          font-size: 0.78rem;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: var(--ink-mute);
+          text-decoration: none;
+          transition: color 0.2s ease;
+          white-space: nowrap;
+        }
+        .nav-login-link:hover {
+          color: var(--surface-deep);
+        }
+
+        .nav-divider {
+          width: 1px;
+          height: 16px;
+          background: var(--line-soft);
+          flex-shrink: 0;
+        }
+
+        /* Mobile hamburger */
+        .nav-hamburger {
+          display: none;
+          background: none;
+          border: none;
+          color: var(--surface-deep);
+          cursor: pointer;
+          padding: 4px;
+          flex-direction: column;
+          gap: 5px;
+          align-items: center;
+          justify-content: center;
+          width: 36px;
+          height: 36px;
+        }
+        .nav-hamburger span {
+          display: block;
+          width: 22px;
+          height: 1.5px;
+          background: var(--surface-deep);
+          border-radius: 2px;
+          transition: transform 0.25s ease, opacity 0.25s ease;
+          transform-origin: center;
+        }
+        .nav-hamburger.open span:nth-child(1) {
+          transform: translateY(6.5px) rotate(45deg);
+        }
+        .nav-hamburger.open span:nth-child(2) {
+          opacity: 0;
+          transform: scaleX(0);
+        }
+        .nav-hamburger.open span:nth-child(3) {
+          transform: translateY(-6.5px) rotate(-45deg);
+        }
+
+        /* Desktop nav links group */
+        .nav-links-group {
+          display: flex;
+          gap: 32px;
+          align-items: center;
+        }
+
+        /* Desktop right group */
+        .nav-right-group {
+          display: flex;
+          gap: 16px;
+          align-items: center;
+          justify-content: flex-end;
+        }
+
+        /* Mobile drawer */
+        .nav-mobile-drawer {
+          position: absolute;
+          top: 60px;
+          left: 0;
+          right: 0;
+          background: rgba(255,255,255,0.97);
+          backdrop-filter: blur(20px) saturate(160%);
+          border-bottom: 1px solid var(--line-soft);
+          padding: 24px 28px 28px;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          animation: drawerSlideIn 0.22s ease;
+        }
+        @keyframes drawerSlideIn {
+          from { opacity: 0; transform: translateY(-8px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .nav-mobile-link {
+          font-family: var(--font-body);
+          font-weight: 600;
+          font-size: 0.9rem;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: var(--surface-deep);
+          background: none;
+          border: none;
+          text-align: left;
+          cursor: pointer;
+          padding: 13px 0;
+          border-bottom: 1px solid var(--line-soft);
+          transition: opacity 0.15s ease;
+        }
+        .nav-mobile-link:hover { opacity: 0.6; }
+        .nav-mobile-link:last-of-type { border-bottom: none; }
+        .nav-mobile-actions {
+          display: flex;
+          gap: 10px;
+          margin-top: 16px;
+          align-items: center;
+        }
+
+        @media (max-width: 768px) {
+          .nav-links-group { display: none !important; }
+          .nav-right-group { display: none !important; }
+          .nav-hamburger { display: flex !important; }
+        }
+      `}</style>
+
+      <nav
+        ref={navRef}
         style={{
-          textAlign: 'center',
-          cursor: 'pointer',
-          background: 'none',
-          border: 'none',
-          padding: 0,
-          lineHeight: 1,
-          justifySelf: 'center',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 100,
+          background: scrolled ? 'rgba(169, 166, 166, 0.22)' : 'rgba(185, 183, 183, 0.5)',
+          backdropFilter: scrolled ? 'blur(20px) saturate(160%)' : 'blur(8px) saturate(130%)',
+          borderBottom: scrolled ? '1px solid var(--line-soft)' : '1px solid transparent',
+          boxShadow: scrolled ? '0 4px 20px rgba(25,65,2,0.05)' : 'none',
+          transition: 'background 0.35s ease, backdrop-filter 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease',
+          padding: '0 40px',
+          height: '60px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 24,
         }}
       >
-        <div style={{
-          fontFamily: 'var(--font-serif)',
-          fontWeight: 700,
-          fontSize: '24px',
-          color: 'var(--surface-deep)',
-          lineHeight: 1,
-          letterSpacing: '-0.005em',
-        }}>
-          Morivaná
-        </div>
-        <div style={{
-          fontFamily: 'var(--font-body)',
-          fontWeight: 600,
-          fontSize: '10px',
-          color: 'var(--ink-mute)',
-          letterSpacing: '0.24em',
-          textTransform: 'uppercase',
-          marginTop: '4px',
-        }}>
-          Clean Super Greens
-        </div>
-      </button>
-
-      {/* Right: About pill + CTA + Auth controls */}
-      <div className="nav-pills-right" style={{ display: 'flex', gap: 10, alignItems: 'center', justifySelf: 'end' }}>
-        {rightLinks.map(link => (
-          <button key={link} className="nav-pill" onClick={() => scrollTo(link)}>
-            {link}
-          </button>
-        ))}
+        {/* Logo — left */}
         <button
-          className="cta-btn"
-          onClick={() => scrollTo('waitlist-cta')}
-          style={{ padding: '9px 22px', fontSize: '0.74rem', letterSpacing: '0.18em' }}
+          type="button"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          aria-label="Morivana, back to top"
+          style={{
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            cursor: 'pointer',
+            lineHeight: 1,
+            flexShrink: 0,
+          }}
         >
-          Notify Me
+          <span style={{
+            fontFamily: 'var(--font-serif)',
+            fontWeight: 700,
+            fontSize: '22px',
+            color: 'var(--surface-deep)',
+            letterSpacing: '-0.01em',
+          }}>
+            Morivaná
+          </span>
         </button>
 
-        {/* Auth controls — only added to existing right area, no layout change */}
-        {isSignedIn ? (
-          <UserButton afterSignOutUrl="/" />
-        ) : (
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            <Link
-              to="/sign-in"
-              className="nav-pill"
-              style={{ textDecoration: 'none' }}
-            >
-              Login
-            </Link>
-            <Link
-              to="/sign-up"
-              className="nav-pill"
-              style={{
-                textDecoration: 'none',
-                background: 'var(--surface-deep)',
-                color: 'var(--ink-on-dark)',
-                borderColor: 'var(--surface-deep)',
-              }}
-            >
-              Sign Up
-            </Link>
-          </div>
-        )}
-      </div>
-
-      {/* Mobile hamburger — sits in left column on mobile */}
-      <button
-        className="nav-mobile-hamburger"
-        style={{
-          display: 'none',
-          background: 'none',
-          border: 'none',
-          color: 'var(--surface-deep)',
-          fontSize: '1.5rem',
-          cursor: 'pointer',
-          justifySelf: 'start',
-        }}
-        onClick={() => setMenuOpen(v => !v)}
-        aria-label="Menu"
-      >
-        {menuOpen ? '✕' : '☰'}
-      </button>
-
-      {/* Mobile menu drawer */}
-      {menuOpen && (
-        <div style={{
-          position:   'absolute',
-          top:        '64px',
-          left:       0,
-          right:      0,
-          background: 'rgba(255,255,255,0.98)',
-          backdropFilter: 'blur(16px) saturate(160%)',
-          borderBottom: '1px solid var(--line-soft)',
-          padding:    '20px 24px',
-          display:    'flex',
-          flexDirection: 'column',
-          gap:        12,
-        }}>
-          {[...leftLinks, ...rightLinks].map(link => (
+        {/* Center nav links — desktop only */}
+        <div className="nav-links-group">
+          {navLinks.map(link => (
             <button
-              key={link}
-              onClick={() => scrollTo(link)}
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontWeight: 700,
-                fontSize:   '0.95rem',
-                color:      'var(--surface-deep)',
-                background: 'none',
-                border:     'none',
-                textAlign:  'left',
-                cursor:     'pointer',
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                padding: '10px 0',
-                borderBottom: '1px solid var(--line-soft)',
-              }}
+              key={link.id}
+              className="nav-link-item"
+              onClick={() => scrollTo(link.id)}
             >
-              {link}
+              {link.label}
             </button>
           ))}
-          <button
-            className="cta-btn"
-            onClick={() => scrollTo('waitlist-cta')}
-            style={{ marginTop: 8 }}
-          >
-            Notify Me
-          </button>
+        </div>
 
-          {/* Mobile auth controls */}
+        {/* Right — CTA + auth — desktop only */}
+        <div className="nav-right-group">
           {isSignedIn ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 8 }}>
-              <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--ink-mute)' }}>My Account</span>
+            <>
+              <button
+                className="nav-cta"
+                onClick={() => scrollTo('waitlist-cta')}
+              >
+                Notify Me
+              </button>
               <UserButton afterSignOutUrl="/" />
-            </div>
+            </>
           ) : (
-            <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
-              <Link
-                to="/sign-in"
-                className="nav-pill"
-                style={{ textDecoration: 'none', flex: 1, justifyContent: 'center' }}
-                onClick={() => setMenuOpen(false)}
-              >
-                Login
+            <>
+              <Link to="/sign-in" className="nav-login-link">
+                Log in
               </Link>
-              <Link
-                to="/sign-up"
-                className="cta-btn"
-                style={{ textDecoration: 'none', flex: 1, justifyContent: 'center' }}
-                onClick={() => setMenuOpen(false)}
+              <div className="nav-divider" />
+              <button
+                className="nav-cta"
+                onClick={() => scrollTo('waitlist-cta')}
               >
-                Sign Up
-              </Link>
-            </div>
+                Join Waitlist
+              </button>
+            </>
           )}
         </div>
-      )}
-    </nav>
+
+        {/* Mobile hamburger */}
+        <button
+          className={`nav-hamburger${menuOpen ? ' open' : ''}`}
+          onClick={() => setMenuOpen(v => !v)}
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+
+        {/* Mobile drawer */}
+        {menuOpen && (
+          <div className="nav-mobile-drawer">
+            {navLinks.map(link => (
+              <button
+                key={link.id}
+                className="nav-mobile-link"
+                onClick={() => scrollTo(link.id)}
+              >
+                {link.label}
+              </button>
+            ))}
+            <div className="nav-mobile-actions">
+              {isSignedIn ? (
+                <>
+                  <button
+                    className="nav-cta"
+                    style={{ flex: 1 }}
+                    onClick={() => { scrollTo('waitlist-cta'); setMenuOpen(false) }}
+                  >
+                    Notify Me
+                  </button>
+                  <UserButton afterSignOutUrl="/" />
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/sign-in"
+                    className="nav-login-link"
+                    onClick={() => setMenuOpen(false)}
+                    style={{ flex: 1, textAlign: 'center', padding: '10px', border: '1px solid var(--line-soft)', borderRadius: '100px' }}
+                  >
+                    Log in
+                  </Link>
+                  <Link
+                    to="/sign-up"
+                    className="nav-cta"
+                    onClick={() => setMenuOpen(false)}
+                    style={{ flex: 1, textAlign: 'center', textDecoration: 'none', display: 'block' }}
+                  >
+                    Join Waitlist
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+      </nav>
+    </>
   )
 }

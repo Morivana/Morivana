@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useUser, useClerk } from '@clerk/clerk-react'
 import { Link, useNavigate } from 'react-router-dom'
 import LoadingSpinner from '../components/LoadingSpinner'
@@ -267,6 +267,21 @@ export default function AccountPage() {
   const [activeSection, setActiveSection] = useState('personal')
 
   const handleSignOut = () => signOut({ redirectUrl: '/' })
+
+  // Dynamic client-side noindex to ensure search engines do not index the account page
+  useEffect(() => {
+    let meta = document.querySelector('meta[name="robots"]')
+    if (!meta) {
+      meta = document.createElement('meta')
+      meta.setAttribute('name', 'robots')
+      document.head.appendChild(meta)
+    }
+    const originalVal = meta.getAttribute('content') || 'index, follow'
+    meta.setAttribute('content', 'noindex, nofollow')
+    return () => {
+      meta.setAttribute('content', originalVal)
+    }
+  }, [])
 
   if (!isLoaded) {
     return <LoadingSpinner />
