@@ -7,10 +7,12 @@ export function useLenis() {
   const lenisRef = useRef(null)
 
   useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const lenis = new Lenis({
-      duration: 1.4,
+      duration: prefersReducedMotion ? 0 : 1.4,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smooth: true,
+      smoothWheel: !prefersReducedMotion,
+      syncTouch: !prefersReducedMotion,
     })
     lenisRef.current = lenis
 

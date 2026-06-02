@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
+import { ClerkProvider } from '@clerk/clerk-react'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import { useLenis } from './hooks/useLenis'
@@ -26,6 +27,9 @@ import AccountPage from './pages/AccountPage'
 import OrdersPage from './pages/OrdersPage'
 import CheckoutPage from './pages/CheckoutPage'
 import ErrorBoundary from './components/ErrorBoundary'
+import CanvasErrorBoundary from './components/CanvasErrorBoundary'
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
+import TermsPage from './pages/TermsPage'
 
 // ─── Home page (existing scroll-story landing) ───────────────────────────────
 function HomePage() {
@@ -64,6 +68,18 @@ function HomePage() {
   useEffect(() => {
     if (!loaderDone) return
     lenisRef.current?.start?.()
+
+    // Handle hash scroll after loader is finished
+    const hash = window.location.hash
+    if (hash) {
+      const id = hash.replace('#', '')
+      setTimeout(() => {
+        const el = document.getElementById(id)
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 350)
+    }
   }, [loaderDone, lenisRef])
 
   useEffect(() => {
@@ -100,7 +116,9 @@ function HomePage() {
           zIndex: 2,
         }}
       >
-        <ProductScene heroMode={false} style={{ height: '100%', pointerEvents: 'none' }} />
+        <CanvasErrorBoundary>
+          <ProductScene heroMode={false} style={{ height: '100%', pointerEvents: 'none' }} />
+        </CanvasErrorBoundary>
       </div>
 
       <main>
@@ -124,10 +142,27 @@ function HomePage() {
 
 // ─── App shell with routing ───────────────────────────────────────────────────
 function App() {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const isAuthOrAccountPage =
+    location.pathname.startsWith('/sign-in') ||
+    location.pathname.startsWith('/sign-up') ||
+    location.pathname.startsWith('/account')
+
+  const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+
+  if (!PUBLISHABLE_KEY) {
+    throw new Error('Missing VITE_CLERK_PUBLISHABLE_KEY in .env — add it before starting the dev server.')
+  }
+
   return (
-    <>
-      {/* Navbar persists across all routes */}
-      <Navbar />
+    <ClerkProvider
+      publishableKey={PUBLISHABLE_KEY}
+      navigate={(to) => navigate(to)}
+      afterSignOutUrl="/"
+    >
+      {/* Navbar persists across all routes except auth & account */}
+      {!isAuthOrAccountPage && <Navbar />}
 
       <ErrorBoundary>
         <Routes>
@@ -137,6 +172,10 @@ function App() {
           {/* Auth pages */}
           <Route path="/sign-in/*" element={<SignInPage />} />
           <Route path="/sign-up/*" element={<SignUpPage />} />
+
+          {/* Static informational pages */}
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
 
           {/* Protected pages */}
           <Route
@@ -165,7 +204,7 @@ function App() {
           />
         </Routes>
       </ErrorBoundary>
-    </>
+    </ClerkProvider>
   )
 }
 

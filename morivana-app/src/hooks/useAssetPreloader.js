@@ -11,7 +11,7 @@ const CRITICAL_IMAGES = [
   '/packaging_highres.png',
 ]
 
-const CRITICAL_MODELS = ['/models/morivana_pouch_fixed.glb']
+const CRITICAL_MODELS = ['/models/morivana_pouch_fixed_draco.glb']
 
 function preloadImage(src) {
   return new Promise((resolve) => {
@@ -33,25 +33,45 @@ export function useAssetPreloader() {
 
   useEffect(() => {
     let cancelled = false
-    const tasks = [
-      ...CRITICAL_IMAGES.map(preloadImage),
-      ...CRITICAL_MODELS.map(preloadModel),
-      document.fonts?.ready ?? Promise.resolve(),
-    ]
+    
+    const imagePromises = CRITICAL_IMAGES.map((src) => 
+      preloadImage(src).then(() => {
+        if (!cancelled) updateProgress()
+      })
+    )
+
+    const modelPromises = CRITICAL_MODELS.map((src) => 
+      preloadModel(src).then(() => {
+        if (!cancelled) updateProgress()
+      })
+    )
+
+    const fontPromise = (document.fonts?.ready ?? Promise.resolve()).then(() => {
+      if (!cancelled) updateProgress()
+    })
+
+    const tasks = [...imagePromises, ...modelPromises, fontPromise]
     const total = tasks.length
     let done = 0
 
-    tasks.forEach((p) => {
-      p.then(() => {
-        if (cancelled) return
-        done += 1
-        setProgress(Math.round((done / total) * 100))
-        if (done === total) setReady(true)
-      })
+    function updateProgress() {
+      done += 1
+      setProgress(Math.round((done / total) * 100))
+    }
+
+    // Parallel preload using Promise.all
+    Promise.all(tasks).then(() => {
+      if (!cancelled) {
+        setProgress(100)
+        setReady(true)
+      }
     })
 
     const fallback = setTimeout(() => {
-      if (!cancelled) setReady(true)
+      if (!cancelled) {
+        setProgress(100)
+        setReady(true)
+      }
     }, 6000)
 
     return () => {
@@ -62,3 +82,4 @@ export function useAssetPreloader() {
 
   return { ready, progress }
 }
+

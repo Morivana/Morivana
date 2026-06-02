@@ -69,6 +69,24 @@ function InfoCard({ label, value, icon }) {
 function PersonalSection({ user }) {
   const email = user?.primaryEmailAddress?.emailAddress
   const phone = user?.primaryPhoneNumber?.phoneNumber
+  const gender = user?.unsafeMetadata?.gender
+  const [loading, setLoading] = useState(false)
+
+  const handleGenderChange = async (newGender) => {
+    setLoading(true)
+    try {
+      await user.update({
+        unsafeMetadata: {
+          ...user.unsafeMetadata,
+          gender: newGender,
+        },
+      })
+    } catch (err) {
+      console.error('Failed to update gender', err)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <>
@@ -95,8 +113,8 @@ function PersonalSection({ user }) {
             maxWidth: '480px',
           }}
         >
-          Manage your personal information, including phone numbers and email
-          address where you can be contacted.
+          Manage your personal information, including phone numbers, email
+          address, and profile gender avatar settings.
         </p>
       </div>
 
@@ -111,6 +129,101 @@ function PersonalSection({ user }) {
         <InfoCard label="Email"      value={email}              icon="/icon-gear.png" />
         <InfoCard label="Phone"      value={phone || 'Not set'} icon="/icon-pin.png" />
         <InfoCard label="Member Since" value={user?.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : '—'} icon="/icon-gear.png" />
+        
+        {/* Interactive Gender & Profile Avatar selector */}
+        <div
+          style={{
+            background: '#fff',
+            borderRadius: '16px',
+            border: '1px solid rgba(14,39,1,0.09)',
+            padding: '22px 20px 18px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            transition: 'box-shadow 0.2s, border-color 0.2s',
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.boxShadow = '0 6px 24px rgba(25,65,2,0.08)'
+            e.currentTarget.style.borderColor = 'rgba(14,39,1,0.18)'
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.boxShadow = 'none'
+            e.currentTarget.style.borderColor = 'rgba(14,39,1,0.09)'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px' }}>
+            <span
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontWeight: 700,
+                fontSize: '0.95rem',
+                color: 'var(--surface-deep)',
+                letterSpacing: '0.01em',
+              }}
+            >
+              Gender Profile
+            </span>
+            <img
+              src={gender === 'male' ? '/avatar-male.png' : '/avatar-female.png'}
+              alt=""
+              aria-hidden="true"
+              style={{ width: '22px', height: '22px', borderRadius: '50%', objectFit: 'cover', opacity: 0.85 }}
+            />
+          </div>
+          
+          <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+            <button
+              disabled={loading}
+              onClick={() => handleGenderChange('female')}
+              style={{
+                flex: 1,
+                fontFamily: 'var(--font-body)',
+                fontWeight: 600,
+                fontSize: '0.75rem',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                background: gender === 'female' ? 'var(--surface-deep)' : 'transparent',
+                color: gender === 'female' ? 'var(--accent)' : 'var(--ink-mute)',
+                border: gender === 'female' ? '1.5px solid var(--surface-deep)' : '1.5px solid rgba(14, 39, 1, 0.14)',
+                borderRadius: '999px',
+                padding: '6px 10px',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                transition: 'all 0.2s ease',
+                minHeight: '36px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              Female
+            </button>
+            <button
+              disabled={loading}
+              onClick={() => handleGenderChange('male')}
+              style={{
+                flex: 1,
+                fontFamily: 'var(--font-body)',
+                fontWeight: 600,
+                fontSize: '0.75rem',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                background: gender === 'male' ? 'var(--surface-deep)' : 'transparent',
+                color: gender === 'male' ? 'var(--accent)' : 'var(--ink-mute)',
+                border: gender === 'male' ? '1.5px solid var(--surface-deep)' : '1.5px solid rgba(14, 39, 1, 0.14)',
+                borderRadius: '999px',
+                padding: '6px 10px',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                transition: 'all 0.2s ease',
+                minHeight: '36px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              Male
+            </button>
+          </div>
+        </div>
       </div>
     </>
   )
@@ -266,6 +379,9 @@ export default function AccountPage() {
   const navigate = useNavigate()
   const [activeSection, setActiveSection] = useState('personal')
 
+  const gender = user?.unsafeMetadata?.gender
+  const avatarSrc = gender === 'male' ? '/avatar-male.png' : '/avatar-female.png'
+
   const handleSignOut = () => signOut({ redirectUrl: '/' })
 
   // Dynamic client-side noindex to ensure search engines do not index the account page
@@ -398,31 +514,14 @@ export default function AccountPage() {
                 border: '2px solid var(--line-soft)',
                 marginBottom: '14px',
                 flexShrink: 0,
+                boxShadow: '0 4px 14px rgba(25, 65, 2, 0.12)',
               }}
             >
-              {user?.imageUrl ? (
-                <img
-                  src={user.imageUrl}
-                  alt={user.fullName || 'Profile'}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              ) : (
-                <div
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    background: 'var(--surface-soft)',
-                  }}
-                >
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--ink-mute)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <circle cx="12" cy="8" r="4" />
-                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
-                  </svg>
-                </div>
-              )}
+              <img
+                src={avatarSrc}
+                alt={user.fullName || 'Profile'}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
             </div>
 
             {/* Name */}

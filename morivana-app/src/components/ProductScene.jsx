@@ -5,10 +5,10 @@ import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import { animate, createTimeline, utils } from 'animejs'
 
-useGLTF.preload('/models/morivana_pouch_fixed.glb')
+useGLTF.preload('/models/morivana_pouch_fixed_draco.glb', '/draco/')
 
 function PouchModel({ isMobile, isHighPerf }) {
-  const { scene } = useGLTF('/models/morivana_pouch_fixed.glb')
+  const { scene } = useGLTF('/models/morivana_pouch_fixed_draco.glb', '/draco/')
   const outerRef = useRef()   // position + scale (set by master scroll timeline)
   const innerRef = useRef()   // rotation (idle spin + scroll-driven rotation)
   const lifeRef  = useRef()   // empty group between inner + mesh - drives "alive" micro-motion
@@ -353,8 +353,26 @@ function ModelLoader() {
     <div style={{
       position: 'absolute', inset: 0,
       display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: 'transparent',
+      animation: 'skeleton-pulse 1.8s ease-in-out infinite',
     }}>
-      <div className="model-spinner" />
+      <img
+        src="/packaging_highres.png"
+        alt="Loading pouch..."
+        style={{
+          maxHeight: '75%',
+          maxWidth: '85%',
+          objectFit: 'contain',
+          opacity: 0.35,
+          filter: 'grayscale(1) brightness(0.9)',
+        }}
+      />
+      <style>{`
+        @keyframes skeleton-pulse {
+          0%, 100% { opacity: 0.3; transform: scale(0.98); }
+          50% { opacity: 0.65; transform: scale(1.02); }
+        }
+      `}</style>
     </div>
   )
 }

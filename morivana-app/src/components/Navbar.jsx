@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useAuth, UserButton } from '@clerk/clerk-react'
+import { useAuth, useClerk, useUser } from '@clerk/clerk-react'
 import gsap from 'gsap'
 
 const navLinks = [
@@ -12,11 +12,19 @@ const navLinks = [
 
 export default function Navbar() {
   const navRef = useRef()
+  const dropdownRef = useRef(null)
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
   const { isSignedIn } = useAuth()
+  const { signOut } = useClerk()
+  const { user } = useUser()
 
   const scrollTo = (id) => {
+    if (window.location.pathname !== '/') {
+      window.location.href = `/#${id}`
+      return
+    }
     const el = document.getElementById(id)
     if (el) el.scrollIntoView({ behavior: 'smooth' })
     setMenuOpen(false)
@@ -36,6 +44,23 @@ export default function Navbar() {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false)
+      }
+    }
+    if (dropdownOpen) {
+      document.addEventListener('mousedown', handleOutsideClick)
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick)
+    }
+  }, [dropdownOpen])
+
+  const gender = user?.unsafeMetadata?.gender
+  const avatarSrc = gender === 'male' ? '/avatar-male.png' : '/avatar-female.png'
 
   return (
     <>
@@ -290,7 +315,115 @@ export default function Navbar() {
               >
                 Notify Me
               </button>
-              <UserButton afterSignOutUrl="/" />
+              <div style={{ position: 'relative' }} ref={dropdownRef}>
+                <button
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  aria-label="User menu"
+                  style={{
+                    background: 'none',
+                    padding: 0,
+                    cursor: 'pointer',
+                    width: '38px',
+                    height: '38px',
+                    borderRadius: '50%',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 4px 12px rgba(25, 65, 2, 0.15)',
+                    border: '1.5px solid var(--surface-deep)',
+                    transition: 'transform 0.2s, box-shadow 0.2s',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.transform = 'scale(1.05)'
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.transform = 'scale(1)'
+                  }}
+                >
+                  <img
+                    src={avatarSrc}
+                    alt={user?.fullName || 'Profile'}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                </button>
+
+                {dropdownOpen && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '48px',
+                      right: 0,
+                      width: '240px',
+                      background: '#FFFFFF',
+                      borderRadius: '16px',
+                      border: '1px solid rgba(14, 39, 1, 0.09)',
+                      boxShadow: '0 12px 36px rgba(0, 0, 0, 0.15)',
+                      padding: '16px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '12px',
+                      zIndex: 200,
+                    }}
+                  >
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', paddingBottom: '8px', borderBottom: '1px solid rgba(14, 39, 1, 0.09)' }}>
+                      <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.88rem', color: 'var(--surface-deep)' }}>
+                        {user?.fullName || 'Your Profile'}
+                      </div>
+                      <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)', wordBreak: 'break-all' }}>
+                        {user?.primaryEmailAddress?.emailAddress}
+                      </div>
+                    </div>
+
+                    <Link
+                      to="/account"
+                      onClick={() => setDropdownOpen(false)}
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontWeight: 600,
+                        fontSize: '0.8rem',
+                        letterSpacing: '0.08em',
+                        textTransform: 'uppercase',
+                        textDecoration: 'none',
+                        color: 'var(--surface-deep)',
+                        padding: '8px 4px',
+                        display: 'block',
+                        transition: 'opacity 0.15s',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.opacity = 0.7}
+                      onMouseLeave={e => e.currentTarget.style.opacity = 1}
+                    >
+                      Manage Account
+                    </Link>
+
+                    <button
+                      onClick={() => {
+                        setDropdownOpen(false)
+                        signOut({ redirectUrl: '/' })
+                      }}
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontWeight: 700,
+                        fontSize: '0.75rem',
+                        letterSpacing: '0.12em',
+                        textTransform: 'uppercase',
+                        background: 'var(--surface-deep)',
+                        color: 'var(--accent)',
+                        border: 'none',
+                        borderRadius: '999px',
+                        padding: '10px 16px',
+                        cursor: 'pointer',
+                        width: '100%',
+                        transition: 'background 0.2s',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'var(--ink)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'var(--surface-deep)'}
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
             </>
           ) : (
             <>
@@ -341,7 +474,29 @@ export default function Navbar() {
                   >
                     Notify Me
                   </button>
-                  <UserButton afterSignOutUrl="/" />
+                  <Link
+                    to="/account"
+                    onClick={() => setMenuOpen(false)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      textDecoration: 'none',
+                      padding: '6px 12px',
+                      border: '1.5px solid var(--surface-deep)',
+                      borderRadius: '100px',
+                      background: '#fff',
+                    }}
+                  >
+                    <img
+                      src={avatarSrc}
+                      alt="Avatar"
+                      style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover' }}
+                    />
+                    <span style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.78rem', color: 'var(--surface-deep)' }}>
+                      Account
+                    </span>
+                  </Link>
                 </>
               ) : (
                 <>

@@ -13,17 +13,63 @@ p, li {
   line-height: 1.7 !important;
 }
 
-/* Ensure no element has font-size below 14px */
+/* Ensure no element has font-size below 14px (excluding compact footer text) */
 .im-idx, .im-compound, .im-origin, .im-benefit, .im-latin,
 .tr-phase-tag, .tr-phase-when, .tr-tag, .tr-metric-label,
 .rt-kicker, .rt-step-label, .rt-step-body, .rt-pills-label, .rt-pill, .rt-protip p,
-.ing-cert, .footer-link, .kicker, .hero-kicker, .hero-sublabel, .countdown-label,
+.ing-cert, .kicker, .hero-kicker, .hero-sublabel, .countdown-label,
 .waitlist-input, .cta-btn, .success-state p, .nav-pill, .nav-link,
-.logo-text, .brand-text, .nav-center-logo div, .footer-col-item a,
-footer span, footer p, footer a, .hero-body,
+.logo-text, .brand-text, .nav-center-logo div, .hero-body,
 small, sub, sup, caption, figcaption {
   font-size: 14px !important;
 }
+
+/* Compact Footer UI Overrides */
+footer a, footer span, footer p {
+  font-size: 13px;
+}
+
+footer a {
+  min-height: 0 !important;
+  min-width: 0 !important;
+  padding: 4px 8px !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.footer-link {
+  font-size: 12px !important;
+  letter-spacing: 0.08em;
+  padding: 4px 0 !important;
+}
+
+.footer-legal-text {
+  font-size: 11px !important;
+  opacity: 0.65;
+  line-height: 1.5 !important;
+}
+
+.footer-legal-link {
+  font-size: 11px !important;
+  color: inherit !important;
+  text-decoration: underline !important;
+  padding: 0 !important;
+  display: inline !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+  transition: color 0.2s;
+}
+
+.footer-legal-link:hover {
+  color: var(--accent) !important;
+}
+
+.footer-cert-text {
+  font-size: 11px !important;
+}
+
 
 /* Minimum Tap Target Sizes for Accessibility */
 a, button {

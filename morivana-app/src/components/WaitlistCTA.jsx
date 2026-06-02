@@ -1,9 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import gsap from 'gsap'
 import FloatingLeaves from './FloatingLeaves'
 
 export default function WaitlistCTA() {
+  const [csrfToken, setCsrfToken] = useState('')
+  const [turnstileToken, setTurnstileToken] = useState('')
+  const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY
+
   const {
     register,
     handleSubmit,
@@ -11,13 +15,82 @@ export default function WaitlistCTA() {
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm()
 
+  // Fetch CSRF Token on mount
+  useEffect(() => {
+    const apiBase = import.meta.env.VITE_API_URL ?? ''
+    fetch(`${apiBase}/api/csrf`)
+      .then((res) => res.json())
+      .then((data) => setCsrfToken(data.csrfToken))
+      .catch((err) => console.error('Failed to load CSRF token:', err))
+  }, [])
+
+  // Load/Render Turnstile dynamically
+  useEffect(() => {
+    if (!turnstileSiteKey) return
+
+    const scriptId = 'cf-turnstile-script'
+    let script = document.getElementById(scriptId)
+    if (!script) {
+      script = document.createElement('script')
+      script.id = scriptId
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallbackCTA'
+      script.async = true
+      script.defer = true
+      document.body.appendChild(script)
+    }
+
+    window.onloadTurnstileCallbackCTA = () => {
+      if (window.turnstile && document.getElementById('turnstile-container-cta')) {
+        try {
+          window.turnstile.render('#turnstile-container-cta', {
+            sitekey: turnstileSiteKey,
+            callback: (token) => setTurnstileToken(token),
+          })
+        } catch (e) {
+          // ignore
+        }
+      }
+    }
+
+    if (window.turnstile && document.getElementById('turnstile-container-cta')) {
+      try {
+        window.turnstile.render('#turnstile-container-cta', {
+          sitekey: turnstileSiteKey,
+          callback: (token) => setTurnstileToken(token),
+        })
+      } catch (e) {
+        // ignore
+      }
+    }
+  }, [turnstileSiteKey])
+
   const onSubmit = async (data) => {
+    // Honeypot check: Fail silently
+    if (data.confirm_email) {
+      return
+    }
+
+    // Require Turnstile token if site key is configured
+    if (turnstileSiteKey && !turnstileToken) {
+      setError('root', { message: 'Please complete the CAPTCHA.' })
+      return
+    }
+
     try {
       const apiBase = import.meta.env.VITE_API_URL ?? ''
       const res = await fetch(`${apiBase}/api/waitlist`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: data.name, email: data.email }),
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken,
+        },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          confirm_email: data.confirm_email,
+          csrfToken,
+          turnstileToken,
+        }),
       })
       if (!res.ok) {
         const { error } = await res.json().catch(() => ({}))
@@ -356,6 +429,16 @@ export default function WaitlistCTA() {
                 margin: '0 auto',
               }}
             >
+              {/* Honeypot field (hidden from users, filled by bots) */}
+              <div style={{ position: 'absolute', opacity: 0, zIndex: -1, width: 0, height: 0, overflow: 'hidden' }}>
+                <input
+                  type="text"
+                  tabIndex="-1"
+                  autoComplete="off"
+                  placeholder="Do not fill this"
+                  {...register('confirm_email')}
+                />
+              </div>
               {/* Name */}
               <div>
                 <input
@@ -391,6 +474,19 @@ export default function WaitlistCTA() {
                   </p>
                 )}
               </div>
+
+              {turnstileSiteKey && (
+                <div
+                  id="turnstile-container-cta"
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    width: '100%',
+                    marginTop: '4px',
+                    marginBottom: '4px',
+                  }}
+                />
+              )}
 
               {/* Submit */}
               <button

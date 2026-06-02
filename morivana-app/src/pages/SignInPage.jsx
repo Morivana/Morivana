@@ -164,13 +164,24 @@ export default function SignInPage() {
               elements: {
                 rootBox: {
                   width: '100%',
+                  maxWidth: '100%',
+                  minWidth: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 },
                 card: {
                   borderRadius: '20px',
                   boxShadow: '0 24px 80px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(205,216,131,0.12)',
                   border: 'none',
-                  padding: '40px 36px',
+                  padding: 'clamp(24px, 5vw, 40px) clamp(16px, 4vw, 36px)',
                   background: '#fff',
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
+                  width: '100%',
+                  maxWidth: '100%',
+                  minWidth: '100%',
+                  boxSizing: 'border-box',
                 },
                 headerTitle: {
                   display: 'none', // We show our own title above

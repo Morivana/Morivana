@@ -8,15 +8,19 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
   useEffect(() => {
     if (!sectionRef.current) return
 
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
     // Two entrance modes:
     //   default — cold-load, snappy.
     //   bigEntrance — post-loader, slower, more cinematic. Carries the cream/
     //   deep-green memory of the loader via a scrim that lifts as type rises.
     // In bigEntrance the parent column does the rising, so per-child y is 0
     // (otherwise they compound and the headline overshoots past readable).
-    const s = bigEntrance
-      ? { mul: 1.15, lead: 0.0, headlineY: 0, kickerY: 0, ctaScale: 0.9 }
-      : { mul: 1.0, lead: 0.20, headlineY: 60, kickerY: 30, ctaScale: 0.9 }
+    const s = prefersReducedMotion
+      ? { mul: 0, lead: 0, headlineY: 0, kickerY: 0, ctaScale: 1 }
+      : bigEntrance
+        ? { mul: 1.15, lead: 0.0, headlineY: 0, kickerY: 0, ctaScale: 0.9 }
+        : { mul: 1.0, lead: 0.20, headlineY: 60, kickerY: 30, ctaScale: 0.9 }
 
     const ctx = gsap.context(() => {
       if (bigEntrance) {
@@ -24,59 +28,59 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
         // two motions read as a single curtain lifting.
         gsap.fromTo('.hero-bridge-scrim',
           { y: 0, opacity: 1 },
-          { y: '-100%', opacity: 0, duration: 1.1, ease: 'inOutQuart' }
+          { y: '-100%', opacity: 0, duration: prefersReducedMotion ? 0 : 1.1, ease: 'inOutQuart' }
         )
         // Hero column rises a modest 56px from below into place. Kept small
         // so the headline is always within the viewport during the lift —
         // never clipped behind the navbar on short screens.
         gsap.fromTo('.hero-text-col',
-          { y: 56, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1.05, ease: 'power3.out', delay: 0.05 }
+          { y: prefersReducedMotion ? 0 : 56, opacity: 0 },
+          { y: 0, opacity: 1, duration: prefersReducedMotion ? 0 : 1.05, ease: 'power3.out', delay: prefersReducedMotion ? 0 : 0.05 }
         )
         // 3D pouch fades in alongside the headline. No translateY — the
         // pouch position is scroll-controlled elsewhere; translating here
         // fights that and causes a snap when the entrance ends.
         gsap.fromTo('.global-canvas-layer',
           { opacity: 0 },
-          { opacity: 1, duration: 1.4, ease: 'power2.out', delay: 0.2 }
+          { opacity: 1, duration: prefersReducedMotion ? 0 : 1.4, ease: 'power2.out', delay: prefersReducedMotion ? 0 : 0.2 }
         )
       }
 
       gsap.from('.hero-kicker', {
-        opacity: 0, y: s.kickerY,
-        duration: 0.7 * s.mul, ease: 'power3.out',
-        delay: s.lead,
+        opacity: 0, y: prefersReducedMotion ? 0 : s.kickerY,
+        duration: prefersReducedMotion ? 0 : 0.7 * s.mul, ease: 'power3.out',
+        delay: prefersReducedMotion ? 0 : s.lead,
       })
       gsap.from('.hero-word', {
-        y: 60, opacity: 0,
-        duration: 1.4 * s.mul, ease: 'power3.out',
-        stagger: 0.14,
-        delay: 0.35 * s.mul,
+        y: prefersReducedMotion ? 0 : 60, opacity: 0,
+        duration: prefersReducedMotion ? 0 : 1.4 * s.mul, ease: 'power3.out',
+        stagger: prefersReducedMotion ? 0 : 0.14,
+        delay: prefersReducedMotion ? 0 : 0.35 * s.mul,
       })
       gsap.from('.hero-divider', {
-        scaleX: 0, transformOrigin: 'left',
-        duration: 0.6 * s.mul, ease: 'power2.out',
-        delay: 0.8 * s.mul,
+        scaleX: prefersReducedMotion ? 1 : 0, transformOrigin: 'left',
+        duration: prefersReducedMotion ? 0 : 0.6 * s.mul, ease: 'power2.out',
+        delay: prefersReducedMotion ? 0 : 0.8 * s.mul,
       })
       gsap.from('.hero-sublabel', {
-        opacity: 0, y: 20,
-        duration: 0.6 * s.mul, ease: 'power2.out',
-        delay: 0.9 * s.mul,
+        opacity: 0, y: prefersReducedMotion ? 0 : 20,
+        duration: prefersReducedMotion ? 0 : 0.6 * s.mul, ease: 'power2.out',
+        delay: prefersReducedMotion ? 0 : 0.9 * s.mul,
       })
       gsap.from('.hero-body', {
-        opacity: 0, y: 20,
-        duration: 0.6 * s.mul, ease: 'power2.out',
-        delay: 1.0 * s.mul,
+        opacity: 0, y: prefersReducedMotion ? 0 : 20,
+        duration: prefersReducedMotion ? 0 : 0.6 * s.mul, ease: 'power2.out',
+        delay: prefersReducedMotion ? 0 : 1.0 * s.mul,
       })
       gsap.from('.hero-cta', {
-        opacity: 0, scale: s.ctaScale,
-        duration: 0.5 * s.mul, ease: 'back.out(1.4)',
-        delay: 1.2 * s.mul,
+        opacity: 0, scale: prefersReducedMotion ? 1 : s.ctaScale,
+        duration: prefersReducedMotion ? 0 : 0.5 * s.mul, ease: 'back.out(1.4)',
+        delay: prefersReducedMotion ? 0 : 1.2 * s.mul,
       })
       gsap.from('.hero-countdown', {
-        opacity: 0, y: 10,
-        duration: 0.5 * s.mul, ease: 'power2.out',
-        delay: 1.4 * s.mul,
+        opacity: 0, y: prefersReducedMotion ? 0 : 10,
+        duration: prefersReducedMotion ? 0 : 0.5 * s.mul, ease: 'power2.out',
+        delay: prefersReducedMotion ? 0 : 1.4 * s.mul,
       })
     }, sectionRef)
 
@@ -250,7 +254,6 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
           {/* ── Bottom product specs ── */}
           <div
             style={{
-              borderTop: '1px solid rgba(28,58,28,0.12)',
               paddingTop: '18px',
               textAlign: 'center',
             }}
