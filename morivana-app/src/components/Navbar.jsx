@@ -1,13 +1,24 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth, useClerk, useUser } from '@clerk/clerk-react'
 import gsap from 'gsap'
 
-const navLinks = [
+// Pages that use anchor-based scroll (only homepage)
+const HOME_SCROLL_LINKS = [
   { label: 'Ingredients', id: 'ingredients' },
   { label: 'Benefits', id: 'benefits' },
   { label: 'How To Use', id: 'how-to-use' },
   { label: 'About', id: 'what-section' },
+]
+
+// Full site nav links — map to real routes
+const NAV_LINKS = [
+  { label: 'About', href: '/about' },
+  { label: 'Ingredients', href: '/ingredients' },
+  { label: 'Benefits', href: '/benefits' },
+  { label: 'How To Use', href: '/how-to-use' },
+  { label: 'Learn', href: '/learn' },
+  { label: 'Science', href: '/science' },
 ]
 
 export default function Navbar() {
@@ -19,10 +30,14 @@ export default function Navbar() {
   const { isSignedIn } = useAuth()
   const { signOut } = useClerk()
   const { user } = useUser()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const isHome = location.pathname === '/'
 
-  const scrollTo = (id) => {
-    if (window.location.pathname !== '/') {
-      window.location.href = `/#${id}`
+  // Smooth-scroll to section anchor (homepage only)
+  const scrollToSection = (id) => {
+    if (!isHome) {
+      navigate(`/#${id}`)
       return
     }
     const el = document.getElementById(id)
@@ -59,6 +74,12 @@ export default function Navbar() {
     }
   }, [dropdownOpen])
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMenuOpen(false)
+    setDropdownOpen(false)
+  }, [location.pathname])
+
   const gender = user?.unsafeMetadata?.gender
   const avatarSrc = gender === 'male' ? '/avatar-male.png' : '/avatar-female.png'
 
@@ -79,6 +100,11 @@ export default function Navbar() {
           position: relative;
           transition: color 0.2s ease;
           white-space: nowrap;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          min-height: 0;
+          min-width: 0;
         }
         .nav-link-item::after {
           content: '';
@@ -93,9 +119,11 @@ export default function Navbar() {
           transition: transform 0.25s ease;
           border-radius: 2px;
         }
-        .nav-link-item:hover {
+        .nav-link-item:hover,
+        .nav-link-item.active {
           color: var(--surface-deep);
         }
+        .nav-link-item.active::after,
         .nav-link-item:hover::after {
           transform: scaleX(1);
         }
@@ -114,14 +142,19 @@ export default function Navbar() {
           cursor: pointer;
           transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
           white-space: nowrap;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          min-height: 0;
+          min-width: 0;
         }
         .nav-cta:hover {
           transform: translateY(-1px);
           box-shadow: 0 6px 20px rgba(25,65,2,0.22);
+          background: var(--ink);
+          color: var(--accent);
         }
-        .nav-cta:active {
-          transform: translateY(0);
-        }
+        .nav-cta:active { transform: translateY(0); }
 
         .nav-login-link {
           font-family: var(--font-body);
@@ -133,10 +166,12 @@ export default function Navbar() {
           text-decoration: none;
           transition: color 0.2s ease;
           white-space: nowrap;
+          min-height: 0;
+          min-width: 0;
+          padding: 0;
+          display: inline;
         }
-        .nav-login-link:hover {
-          color: var(--surface-deep);
-        }
+        .nav-login-link:hover { color: var(--surface-deep); }
 
         .nav-divider {
           width: 1px;
@@ -159,6 +194,8 @@ export default function Navbar() {
           justify-content: center;
           width: 36px;
           height: 36px;
+          min-height: 0;
+          min-width: 0;
         }
         .nav-hamburger span {
           display: block;
@@ -169,25 +206,16 @@ export default function Navbar() {
           transition: transform 0.25s ease, opacity 0.25s ease;
           transform-origin: center;
         }
-        .nav-hamburger.open span:nth-child(1) {
-          transform: translateY(6.5px) rotate(45deg);
-        }
-        .nav-hamburger.open span:nth-child(2) {
-          opacity: 0;
-          transform: scaleX(0);
-        }
-        .nav-hamburger.open span:nth-child(3) {
-          transform: translateY(-6.5px) rotate(-45deg);
-        }
+        .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+        .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
-        /* Desktop nav links group */
         .nav-links-group {
           display: flex;
-          gap: 32px;
+          gap: 28px;
           align-items: center;
         }
 
-        /* Desktop right group */
         .nav-right-group {
           display: flex;
           gap: 16px;
@@ -204,11 +232,12 @@ export default function Navbar() {
           background: rgba(255,255,255,0.97);
           backdrop-filter: blur(20px) saturate(160%);
           border-bottom: 1px solid var(--line-soft);
-          padding: 24px 28px 28px;
+          padding: 20px 24px 28px;
           display: flex;
           flex-direction: column;
-          gap: 4px;
+          gap: 0;
           animation: drawerSlideIn 0.22s ease;
+          z-index: 99;
         }
         @keyframes drawerSlideIn {
           from { opacity: 0; transform: translateY(-8px); }
@@ -217,7 +246,7 @@ export default function Navbar() {
         .nav-mobile-link {
           font-family: var(--font-body);
           font-weight: 600;
-          font-size: 0.9rem;
+          font-size: 0.88rem;
           letter-spacing: 0.1em;
           text-transform: uppercase;
           color: var(--surface-deep);
@@ -225,9 +254,13 @@ export default function Navbar() {
           border: none;
           text-align: left;
           cursor: pointer;
-          padding: 13px 0;
+          padding: 14px 0;
           border-bottom: 1px solid var(--line-soft);
           transition: opacity 0.15s ease;
+          text-decoration: none;
+          display: block;
+          min-height: 0;
+          min-width: 0;
         }
         .nav-mobile-link:hover { opacity: 0.6; }
         .nav-mobile-link:last-of-type { border-bottom: none; }
@@ -238,7 +271,7 @@ export default function Navbar() {
           align-items: center;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
           .nav-links-group { display: none !important; }
           .nav-right-group { display: none !important; }
           .nav-hamburger { display: flex !important; }
@@ -268,10 +301,9 @@ export default function Navbar() {
         }}
       >
         {/* Logo — left */}
-        <button
-          type="button"
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          aria-label="Morivana, back to top"
+        <Link
+          to="/"
+          aria-label="Morivaná, back to homepage"
           style={{
             background: 'none',
             border: 'none',
@@ -279,6 +311,11 @@ export default function Navbar() {
             cursor: 'pointer',
             lineHeight: 1,
             flexShrink: 0,
+            textDecoration: 'none',
+            display: 'inline-flex',
+            alignItems: 'center',
+            minHeight: 0,
+            minWidth: 0,
           }}
         >
           <span style={{
@@ -290,18 +327,18 @@ export default function Navbar() {
           }}>
             Morivaná
           </span>
-        </button>
+        </Link>
 
         {/* Center nav links — desktop only */}
         <div className="nav-links-group">
-          {navLinks.map(link => (
-            <button
-              key={link.id}
-              className="nav-link-item"
-              onClick={() => scrollTo(link.id)}
+          {NAV_LINKS.map(link => (
+            <NavLink
+              key={link.href}
+              to={link.href}
+              className={({ isActive }) => `nav-link-item${isActive ? ' active' : ''}`}
             >
               {link.label}
-            </button>
+            </NavLink>
           ))}
         </div>
 
@@ -309,12 +346,9 @@ export default function Navbar() {
         <div className="nav-right-group">
           {isSignedIn ? (
             <>
-              <button
-                className="nav-cta"
-                onClick={() => scrollTo('waitlist-cta')}
-              >
-                Notify Me
-              </button>
+              <Link to="/shop" className="nav-cta">
+                Pre-Order
+              </Link>
               <div style={{ position: 'relative' }} ref={dropdownRef}>
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -333,13 +367,11 @@ export default function Navbar() {
                     boxShadow: '0 4px 12px rgba(25, 65, 2, 0.15)',
                     border: '1.5px solid var(--surface-deep)',
                     transition: 'transform 0.2s, box-shadow 0.2s',
+                    minHeight: 0,
+                    minWidth: 0,
                   }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.transform = 'scale(1.05)'
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.transform = 'scale(1)'
-                  }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.05)' }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)' }}
                 >
                   <img
                     src={avatarSrc}
@@ -389,6 +421,8 @@ export default function Navbar() {
                         padding: '8px 4px',
                         display: 'block',
                         transition: 'opacity 0.15s',
+                        minHeight: 0,
+                        minWidth: 0,
                       }}
                       onMouseEnter={e => e.currentTarget.style.opacity = 0.7}
                       onMouseLeave={e => e.currentTarget.style.opacity = 1}
@@ -415,6 +449,8 @@ export default function Navbar() {
                         cursor: 'pointer',
                         width: '100%',
                         transition: 'background 0.2s',
+                        minHeight: 0,
+                        minWidth: 0,
                       }}
                       onMouseEnter={e => e.currentTarget.style.background = 'var(--ink)'}
                       onMouseLeave={e => e.currentTarget.style.background = 'var(--surface-deep)'}
@@ -431,12 +467,9 @@ export default function Navbar() {
                 Log in
               </Link>
               <div className="nav-divider" />
-              <button
-                className="nav-cta"
-                onClick={() => scrollTo('waitlist-cta')}
-              >
-                Join Waitlist
-              </button>
+              <Link to="/shop" className="nav-cta">
+                Pre-Order
+              </Link>
             </>
           )}
         </div>
@@ -446,6 +479,7 @@ export default function Navbar() {
           className={`nav-hamburger${menuOpen ? ' open' : ''}`}
           onClick={() => setMenuOpen(v => !v)}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
         >
           <span />
           <span />
@@ -454,26 +488,28 @@ export default function Navbar() {
 
         {/* Mobile drawer */}
         {menuOpen && (
-          <div className="nav-mobile-drawer">
-            {navLinks.map(link => (
-              <button
-                key={link.id}
+          <div className="nav-mobile-drawer" role="dialog" aria-label="Site navigation">
+            {NAV_LINKS.map(link => (
+              <NavLink
+                key={link.href}
+                to={link.href}
                 className="nav-mobile-link"
-                onClick={() => scrollTo(link.id)}
+                onClick={() => setMenuOpen(false)}
               >
                 {link.label}
-              </button>
+              </NavLink>
             ))}
             <div className="nav-mobile-actions">
               {isSignedIn ? (
                 <>
-                  <button
+                  <Link
+                    to="/shop"
                     className="nav-cta"
-                    style={{ flex: 1 }}
-                    onClick={() => { scrollTo('waitlist-cta'); setMenuOpen(false) }}
+                    style={{ flex: 1, textAlign: 'center' }}
+                    onClick={() => setMenuOpen(false)}
                   >
-                    Notify Me
-                  </button>
+                    Pre-Order
+                  </Link>
                   <Link
                     to="/account"
                     onClick={() => setMenuOpen(false)}
@@ -486,6 +522,8 @@ export default function Navbar() {
                       border: '1.5px solid var(--surface-deep)',
                       borderRadius: '100px',
                       background: '#fff',
+                      minHeight: 0,
+                      minWidth: 0,
                     }}
                   >
                     <img
@@ -504,17 +542,17 @@ export default function Navbar() {
                     to="/sign-in"
                     className="nav-login-link"
                     onClick={() => setMenuOpen(false)}
-                    style={{ flex: 1, textAlign: 'center', padding: '10px', border: '1px solid var(--line-soft)', borderRadius: '100px' }}
+                    style={{ flex: 1, textAlign: 'center', padding: '10px', border: '1px solid var(--line-soft)', borderRadius: '100px', display: 'block', minHeight: 0 }}
                   >
                     Log in
                   </Link>
                   <Link
-                    to="/sign-up"
+                    to="/shop"
                     className="nav-cta"
                     onClick={() => setMenuOpen(false)}
-                    style={{ flex: 1, textAlign: 'center', textDecoration: 'none', display: 'block' }}
+                    style={{ flex: 1, textAlign: 'center' }}
                   >
-                    Join Waitlist
+                    Pre-Order
                   </Link>
                 </>
               )}

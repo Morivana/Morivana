@@ -392,7 +392,7 @@ export default function Loader({ onDismiss, onLeaveStart }) {
         </div>
 
         {/* Wordmark */}
-        <h1
+        <h2
           ref={wordmarkRef}
           style={{
             margin: 0,
@@ -414,7 +414,7 @@ export default function Loader({ onDismiss, onLeaveStart }) {
               {c}
             </span>
           ))}
-        </h1>
+        </h2>
 
         {/* Tagline */}
         <div
@@ -725,7 +725,7 @@ export default function Loader({ onDismiss, onLeaveStart }) {
             gap: 14px !important;
             padding: 0 !important;
           }
-          .loader-stage h1 {
+          .loader-stage h2 {
             letter-spacing: 0.03em !important;
             font-size: clamp(30px, 10vw, 56px) !important;
           }
@@ -770,7 +770,7 @@ export default function Loader({ onDismiss, onLeaveStart }) {
             max-width: calc(100vw - 32px) !important;
             gap: 10px !important;
           }
-          .loader-stage h1 {
+          .loader-stage h2 {
             font-size: clamp(26px, 9vw, 44px) !important;
             letter-spacing: 0.02em !important;
           }

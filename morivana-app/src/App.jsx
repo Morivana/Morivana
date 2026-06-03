@@ -31,6 +31,21 @@ import CanvasErrorBoundary from './components/CanvasErrorBoundary'
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
 import TermsPage from './pages/TermsPage'
 
+// New multi-page routes
+import AboutPage from './pages/AboutPage'
+import IngredientsHubPage from './pages/IngredientsHubPage'
+import IngredientDetailPage from './pages/IngredientDetailPage'
+import BenefitsPage from './pages/BenefitsPage'
+import HowToUsePage from './pages/HowToUsePage'
+import ShopPage from './pages/ShopPage'
+import ProductDetailPage from './pages/ProductDetailPage'
+import SciencePage from './pages/SciencePage'
+import ComparePage from './pages/ComparePage'
+import SustainabilityPage from './pages/SustainabilityPage'
+import LearnHubPage from './pages/LearnHubPage'
+import BlogPostPage from './pages/BlogPostPage'
+import WaitlistPage from './pages/WaitlistPage'
+
 // ─── Home page (existing scroll-story landing) ───────────────────────────────
 function HomePage() {
   const lenisRef = useLenis()
@@ -178,9 +193,24 @@ function App() {
           <Route path="/sign-in/*" element={<SignInPage />} />
           <Route path="/sign-up/*" element={<SignUpPage />} />
 
+          {/* ── New multi-page routes ── */}
+          <Route path="/about" element={<><AboutPage /><Footer /></>} />
+          <Route path="/ingredients" element={<><IngredientsHubPage /><Footer /></>} />
+          <Route path="/ingredients/:slug" element={<><IngredientDetailPage /><Footer /></>} />
+          <Route path="/benefits" element={<><BenefitsPage /><Footer /></>} />
+          <Route path="/how-to-use" element={<><HowToUsePage /><Footer /></>} />
+          <Route path="/shop" element={<><ShopPage /><Footer /></>} />
+          <Route path="/shop/daily-greens" element={<><ProductDetailPage /><Footer /></>} />
+          <Route path="/science" element={<><SciencePage /><Footer /></>} />
+          <Route path="/compare" element={<><ComparePage /><Footer /></>} />
+          <Route path="/sustainability" element={<><SustainabilityPage /><Footer /></>} />
+          <Route path="/learn" element={<><LearnHubPage /><Footer /></>} />
+          <Route path="/learn/:slug" element={<><BlogPostPage /><Footer /></>} />
+          <Route path="/waitlist" element={<><WaitlistPage /><Footer /></>} />
+
           {/* Static informational pages */}
-          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy-policy" element={<><PrivacyPolicyPage /><Footer /></>} />
+          <Route path="/terms" element={<><TermsPage /><Footer /></>} />
 
           {/* Protected pages */}
           <Route

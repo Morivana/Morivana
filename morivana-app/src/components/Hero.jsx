@@ -149,7 +149,7 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
             textAlign: 'left',
           }}
         >
-          <h1 style={{
+          <div style={{
             position: 'absolute',
             width: '1px',
             height: '1px',
@@ -160,9 +160,9 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
             border: '0',
           }}>
             Clean Daily Super Greens Powder — 8 Whole Plants, Nothing Else
-          </h1>
+          </div>
           {/* ── BIG HEADLINE ── */}
-          <div className="hero-headline" style={{ marginBottom: '12px' }}>
+          <h1 className="hero-headline" style={{ marginBottom: '12px' }}>
             <span className="hero-word hero-word-display" style={{
               display: 'block',
               fontFamily: 'var(--font-display)',
@@ -174,7 +174,7 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
               textTransform: 'uppercase',
               whiteSpace: 'nowrap',
             }}>PURE GREENS</span>
-          </div>
+          </h1>
 
           {/* ── TWO-COLUMN META ROW ── */}
           <div className="hero-meta-row" style={{

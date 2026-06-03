@@ -154,6 +154,20 @@ svg {
   color: var(--ink);
 }
 
+/* Footer typography helpers */
+.footer-legal-text {
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+.footer-cert-text {
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+}
+
+
 .surface-mint {
   background-color: var(--surface-mint);
   color: var(--ink);

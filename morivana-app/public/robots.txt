@@ -1,3 +1,11 @@
 User-agent: *
 Allow: /
-Sitemap: https://morivana-web.onrender.com/sitemap.xml
+
+# Block auth and account pages from indexing
+Disallow: /sign-in
+Disallow: /sign-up
+Disallow: /account
+Disallow: /orders
+Disallow: /checkout
+
+Sitemap: https://www.morivana.com/sitemap.xml

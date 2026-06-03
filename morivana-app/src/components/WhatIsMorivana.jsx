@@ -63,7 +63,7 @@ export default function WhatIsMorivana() {
                   display: 'inline-block',
                   fontFamily: 'var(--font-display)',
                   fontWeight: 800,
-                  fontSize: 'clamp(24px, 7.5vw, 112px)',
+                  fontSize: 'clamp(20px, 7.5vw, 80px)',
                   lineHeight: 0.9,
                   color: 'var(--surface-deep)',
                   letterSpacing: '0.01em',
