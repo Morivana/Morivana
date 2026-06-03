@@ -30,7 +30,7 @@ export default function SignUpPage() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 'clamp(80px, 10vw, 120px) clamp(20px, 4vw, 32px) clamp(64px, 8vw, 80px)',
+        padding: 'clamp(40px, 6vw, 80px) clamp(16px, 4vw, 32px)',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -63,7 +63,7 @@ export default function SignUpPage() {
           position: 'relative',
           zIndex: 2,
           width: '100%',
-          maxWidth: '500px',
+          maxWidth: '400px',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -72,7 +72,7 @@ export default function SignUpPage() {
         {/* Kicker */}
         <div
           className="kicker"
-          style={{ color: 'var(--accent)', marginBottom: '16px', textAlign: 'center' }}
+          style={{ color: 'var(--accent)', marginBottom: '8px', textAlign: 'center' }}
         >
           Join the community
         </div>
@@ -91,7 +91,7 @@ export default function SignUpPage() {
             textDecoration: 'none',
             display: 'block',
             textAlign: 'center',
-            marginBottom: '6px',
+            marginBottom: '4px',
           }}
         >
           Morivaná
@@ -106,7 +106,7 @@ export default function SignUpPage() {
             color: 'var(--ink-on-dark)',
             opacity: 0.75,
             textAlign: 'center',
-            marginBottom: '36px',
+            marginBottom: '20px',
             letterSpacing: '-0.005em',
           }}
         >
@@ -131,7 +131,8 @@ export default function SignUpPage() {
                 colorDanger: '#b34a4a',
                 borderRadius: '12px',
                 fontFamily: 'DM Sans, system-ui, -apple-system, sans-serif',
-                fontSize: '15px',
+                fontSize: '14px',
+                spacing: '0.65rem',
               },
               elements: {
                 rootBox: {
@@ -142,11 +143,10 @@ export default function SignUpPage() {
                   justifyContent: 'center',
                   alignItems: 'center',
                 },
-                card: {
-                  borderRadius: '20px',
-                  boxShadow: '0 24px 80px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(205,216,131,0.12)',
+                cardBox: {
+                  borderRadius: '16px',
+                  boxShadow: '0 16px 48px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(205,216,131,0.08)',
                   border: 'none',
-                  padding: 'clamp(24px, 5vw, 40px) clamp(16px, 4vw, 36px)',
                   background: '#fff',
                   marginLeft: 'auto',
                   marginRight: 'auto',
@@ -154,16 +154,28 @@ export default function SignUpPage() {
                   maxWidth: '100%',
                   minWidth: '100%',
                   boxSizing: 'border-box',
+                  overflow: 'hidden',
                 },
-                headerTitle: { display: 'none' },
-                headerSubtitle: { display: 'none' },
+                card: {
+                  background: 'transparent',
+                  boxShadow: 'none',
+                  border: 'none',
+                  padding: '24px 24px 8px',
+                  width: '100%',
+                  maxWidth: '100%',
+                  minWidth: '100%',
+                  boxSizing: 'border-box',
+                },
+                header: {
+                  display: 'none',
+                },
                 socialButtonsBlockButton: {
                   border: '1.5px solid rgba(14, 39, 1, 0.14)',
                   borderRadius: '999px',
                   fontFamily: 'DM Sans, system-ui, sans-serif',
                   fontWeight: 600,
-                  fontSize: '0.88rem',
-                  padding: '11px 20px',
+                  fontSize: '0.82rem',
+                  padding: '8px 16px',
                   transition: 'background 0.2s, border-color 0.2s',
                 },
                 socialButtonsBlockButtonText: {
@@ -177,9 +189,9 @@ export default function SignUpPage() {
                   fontWeight: 700,
                   letterSpacing: '0.14em',
                   textTransform: 'uppercase',
-                  fontSize: '0.78rem',
+                  fontSize: '0.75rem',
                   borderRadius: '999px',
-                  padding: '14px 32px',
+                  padding: '11px 24px',
                   boxShadow: '0 6px 24px rgba(25, 65, 2, 0.22)',
                   transition: 'background 0.2s, transform 0.15s',
                   border: 'none',
@@ -187,7 +199,7 @@ export default function SignUpPage() {
                 formFieldLabel: {
                   fontFamily: 'DM Sans, system-ui, sans-serif',
                   fontWeight: 600,
-                  fontSize: '0.82rem',
+                  fontSize: '0.8rem',
                   color: '#3F5C32',
                   letterSpacing: '0.04em',
                 },
@@ -195,17 +207,34 @@ export default function SignUpPage() {
                   border: '1.5px solid rgba(14, 39, 1, 0.14)',
                   borderRadius: '10px',
                   fontFamily: 'DM Sans, system-ui, sans-serif',
-                  fontSize: '0.95rem',
-                  padding: '12px 16px',
+                  fontSize: '0.9rem',
+                  padding: '10px 14px',
                   transition: 'border-color 0.2s, box-shadow 0.2s',
                 },
                 footerActionLink: {
                   color: '#194102',
                   fontWeight: 700,
+                  minHeight: 'unset',
+                  minWidth: 'unset',
+                  padding: '0',
+                  margin: '0',
                 },
                 footerActionText: {
                   color: '#7A8A6E',
                   fontFamily: 'DM Sans, system-ui, sans-serif',
+                },
+                footerAction: {
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '4px',
+                },
+                footer: {
+                  background: 'transparent',
+                  marginTop: '0px',
+                  borderTop: '1px solid rgba(14, 39, 1, 0.08)',
+                  padding: '12px 24px 16px',
+                  boxSizing: 'border-box',
                 },
                 formResendCodeLink: {
                   color: '#194102',
@@ -220,7 +249,7 @@ export default function SignUpPage() {
           className="dotted-line"
           style={{
             borderTopColor: 'rgba(205,216,131,0.20)',
-            margin: '28px 0 20px',
+            margin: '16px 0 12px',
             width: '100%',
           }}
         />

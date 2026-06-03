@@ -146,6 +146,7 @@ svg {
   background-color: var(--surface-deep);
   color: var(--ink-on-dark);
   position: relative;
+  z-index: 3;
 }
 
 .surface-soft {

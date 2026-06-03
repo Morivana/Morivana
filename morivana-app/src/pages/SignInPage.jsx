@@ -49,7 +49,7 @@ export default function SignInPage() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 'clamp(80px, 10vw, 120px) clamp(20px, 4vw, 32px) clamp(64px, 8vw, 80px)',
+        padding: 'clamp(40px, 6vw, 80px) clamp(16px, 4vw, 32px)',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -85,7 +85,7 @@ export default function SignInPage() {
           position: 'relative',
           zIndex: 2,
           width: '100%',
-          maxWidth: '500px',
+          maxWidth: '400px',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -97,7 +97,7 @@ export default function SignInPage() {
           className="kicker"
           style={{
             color: 'var(--accent)',
-            marginBottom: '16px',
+            marginBottom: '8px',
             textAlign: 'center',
           }}
         >
@@ -118,7 +118,7 @@ export default function SignInPage() {
             textDecoration: 'none',
             display: 'block',
             textAlign: 'center',
-            marginBottom: '6px',
+            marginBottom: '4px',
           }}
         >
           Morivaná
@@ -134,7 +134,7 @@ export default function SignInPage() {
             color: 'var(--ink-on-dark)',
             opacity: 0.75,
             textAlign: 'center',
-            marginBottom: '36px',
+            marginBottom: '20px',
             letterSpacing: '-0.005em',
           }}
         >
@@ -159,7 +159,8 @@ export default function SignInPage() {
                 colorDanger: '#b34a4a',
                 borderRadius: '12px',
                 fontFamily: 'DM Sans, system-ui, -apple-system, sans-serif',
-                fontSize: '15px',
+                fontSize: '14px',
+                spacing: '0.65rem',
               },
               elements: {
                 rootBox: {
@@ -170,11 +171,10 @@ export default function SignInPage() {
                   justifyContent: 'center',
                   alignItems: 'center',
                 },
-                card: {
-                  borderRadius: '20px',
-                  boxShadow: '0 24px 80px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(205,216,131,0.12)',
+                cardBox: {
+                  borderRadius: '16px',
+                  boxShadow: '0 16px 48px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(205,216,131,0.08)',
                   border: 'none',
-                  padding: 'clamp(24px, 5vw, 40px) clamp(16px, 4vw, 36px)',
                   background: '#fff',
                   marginLeft: 'auto',
                   marginRight: 'auto',
@@ -182,11 +182,19 @@ export default function SignInPage() {
                   maxWidth: '100%',
                   minWidth: '100%',
                   boxSizing: 'border-box',
+                  overflow: 'hidden',
                 },
-                headerTitle: {
-                  display: 'none', // We show our own title above
+                card: {
+                  background: 'transparent',
+                  boxShadow: 'none',
+                  border: 'none',
+                  padding: '24px 24px 8px',
+                  width: '100%',
+                  maxWidth: '100%',
+                  minWidth: '100%',
+                  boxSizing: 'border-box',
                 },
-                headerSubtitle: {
+                header: {
                   display: 'none',
                 },
                 dividerRow: {
@@ -197,9 +205,9 @@ export default function SignInPage() {
                   borderRadius: '999px',
                   fontFamily: 'DM Sans, system-ui, sans-serif',
                   fontWeight: 600,
-                  fontSize: '0.88rem',
+                  fontSize: '0.82rem',
                   transition: 'background 0.2s, border-color 0.2s',
-                  padding: '11px 20px',
+                  padding: '8px 16px',
                 },
                 socialButtonsBlockButtonText: {
                   fontFamily: 'DM Sans, system-ui, sans-serif',
@@ -212,9 +220,9 @@ export default function SignInPage() {
                   fontWeight: 700,
                   letterSpacing: '0.14em',
                   textTransform: 'uppercase',
-                  fontSize: '0.78rem',
+                  fontSize: '0.75rem',
                   borderRadius: '999px',
-                  padding: '14px 32px',
+                  padding: '11px 24px',
                   boxShadow: '0 6px 24px rgba(25, 65, 2, 0.22)',
                   transition: 'background 0.2s, transform 0.15s, box-shadow 0.2s',
                   border: 'none',
@@ -222,7 +230,7 @@ export default function SignInPage() {
                 formFieldLabel: {
                   fontFamily: 'DM Sans, system-ui, sans-serif',
                   fontWeight: 600,
-                  fontSize: '0.82rem',
+                  fontSize: '0.8rem',
                   color: '#3F5C32',
                   letterSpacing: '0.04em',
                 },
@@ -230,8 +238,8 @@ export default function SignInPage() {
                   border: '1.5px solid rgba(14, 39, 1, 0.14)',
                   borderRadius: '10px',
                   fontFamily: 'DM Sans, system-ui, sans-serif',
-                  fontSize: '0.95rem',
-                  padding: '12px 16px',
+                  fontSize: '0.9rem',
+                  padding: '10px 14px',
                   transition: 'border-color 0.2s, box-shadow 0.2s',
                   outline: 'none',
                 },
@@ -239,10 +247,27 @@ export default function SignInPage() {
                   color: '#194102',
                   fontWeight: 700,
                   textDecoration: 'none',
+                  minHeight: 'unset',
+                  minWidth: 'unset',
+                  padding: '0',
+                  margin: '0',
                 },
                 footerActionText: {
                   color: '#7A8A6E',
                   fontFamily: 'DM Sans, system-ui, sans-serif',
+                },
+                footerAction: {
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '4px',
+                },
+                footer: {
+                  background: 'transparent',
+                  marginTop: '0px',
+                  borderTop: '1px solid rgba(14, 39, 1, 0.08)',
+                  padding: '12px 24px 16px',
+                  boxSizing: 'border-box',
                 },
                 identityPreviewText: {
                   color: '#3F5C32',
@@ -261,7 +286,7 @@ export default function SignInPage() {
           className="dotted-line"
           style={{
             borderTopColor: 'rgba(205,216,131,0.20)',
-            margin: '28px 0 20px',
+            margin: '16px 0 12px',
             width: '100%',
           }}
         />

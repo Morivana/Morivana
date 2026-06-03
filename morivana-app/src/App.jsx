@@ -40,7 +40,9 @@ function HomePage() {
   //                     while the loader is still fading out (no dead air).
   //   loaderDone      — loader fade finished, unmount it.
   const [loaderRevealing, setLoaderRevealing] = useState(false)
-  const [loaderDone, setLoaderDone] = useState(false)
+  const [loaderDone, setLoaderDone] = useState(() => {
+    return !!sessionStorage.getItem('morivana_loader_done')
+  })
 
   // Lock both native scroll AND Lenis while the loader is up. Lenis owns the
   // scroll loop, so without explicitly stopping it, wheel events accumulate
@@ -98,7 +100,10 @@ function HomePage() {
       {!loaderDone && (
         <Loader
           onLeaveStart={() => setLoaderRevealing(true)}
-          onDismiss={() => setLoaderDone(true)}
+          onDismiss={() => {
+            sessionStorage.setItem('morivana_loader_done', 'true')
+            setLoaderDone(true)
+          }}
         />
       )}
       {/* Single fixed 3D canvas that lives across hero + story sections.

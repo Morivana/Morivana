@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
-import { useUser, useClerk } from '@clerk/clerk-react'
+import { useUser, useClerk, useSession, useSessionList } from '@clerk/clerk-react'
 import { Link, useNavigate } from 'react-router-dom'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 // ─── Sidebar nav items ────────────────────────────────────────────────────────
 const NAV_ITEMS = [
-  { id: 'personal',  label: 'Personal Information', icon: '/icon-bag.png' },
-  { id: 'orders',    label: 'Order History',         icon: '/icon-bag.png',  href: '/orders' },
-  { id: 'addresses', label: 'My Addresses',           icon: '/icon-pin.png' },
-  { id: 'settings',  label: 'Account Settings',       icon: '/icon-gear.png' },
+  { id: 'personal', label: 'Personal Information', icon: '/icon-bag.png' },
+  { id: 'orders', label: 'Order History', icon: '/icon-bag-3d.png', href: '/orders' },
+  { id: 'addresses', label: 'My Addresses', icon: '/icon-pin-3d.png' },
+  { id: 'settings', label: 'Account Settings', icon: '/icon-gear-3d.png' },
 ]
 
 // ─── Info card component ──────────────────────────────────────────────────────
@@ -47,7 +47,19 @@ function InfoCard({ label, value, icon }) {
           {label}
         </span>
         {icon && (
-          <img src={icon} alt="" aria-hidden="true" style={{ width: '22px', height: '22px', objectFit: 'contain', opacity: 0.55, flexShrink: 0 }} />
+          <img
+            src={icon}
+            alt=""
+            aria-hidden="true"
+            style={{
+              width: '22px',
+              height: '22px',
+              objectFit: 'contain',
+              opacity: 0.55,
+              flexShrink: 0,
+              borderRadius: icon.includes('avatar') ? '50%' : '0',
+            }}
+          />
         )}
       </div>
       <span
@@ -68,9 +80,23 @@ function InfoCard({ label, value, icon }) {
 // ─── Section renderers ────────────────────────────────────────────────────────
 function PersonalSection({ user }) {
   const email = user?.primaryEmailAddress?.emailAddress
-  const phone = user?.primaryPhoneNumber?.phoneNumber
+  const phone = user?.unsafeMetadata?.phone || user?.primaryPhoneNumber?.phoneNumber
   const gender = user?.unsafeMetadata?.gender
+  const avatarSrc = gender === 'male' ? '/avatar-male.png' : '/avatar-female.png'
   const [loading, setLoading] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [firstName, setFirstName] = useState(user?.firstName || '')
+  const [lastName, setLastName] = useState(user?.lastName || '')
+  const [phoneInput, setPhoneInput] = useState(phone || '')
+  const [saveError, setSaveError] = useState('')
+
+  useEffect(() => {
+    if (user) {
+      setFirstName(user.firstName || '')
+      setLastName(user.lastName || '')
+      setPhoneInput(user.unsafeMetadata?.phone || user.primaryPhoneNumber?.phoneNumber || '')
+    }
+  }, [user])
 
   const handleGenderChange = async (newGender) => {
     setLoading(true)
@@ -88,34 +114,92 @@ function PersonalSection({ user }) {
     }
   }
 
+  const handleSave = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    setSaveError('')
+    try {
+      await user.update({
+        firstName,
+        lastName,
+        unsafeMetadata: {
+          ...user.unsafeMetadata,
+          phone: phoneInput,
+        }
+      })
+      setIsEditing(false)
+    } catch (err) {
+      console.error('Failed to update personal info', err)
+      setSaveError(err.message || 'Failed to save changes. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <>
-      <div style={{ marginBottom: '24px' }}>
-        <h2
-          style={{
-            fontFamily: 'var(--font-serif)',
-            fontWeight: 700,
-            fontSize: 'clamp(22px, 3.5vw, 30px)',
-            color: 'var(--surface-deep)',
-            letterSpacing: '-0.01em',
-            marginBottom: '8px',
-            lineHeight: 1.1,
-          }}
-        >
-          Personal Information
-        </h2>
-        <p
+      <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '20px' }}>
+        <div>
+          <h2
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontWeight: 700,
+              fontSize: 'clamp(22px, 3.5vw, 30px)',
+              color: 'var(--surface-deep)',
+              letterSpacing: '-0.01em',
+              marginBottom: '8px',
+              lineHeight: 1.1,
+            }}
+          >
+            Personal Information
+          </h2>
+          <p
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: '0.88rem',
+              color: 'var(--ink-mute)',
+              lineHeight: 1.6,
+              maxWidth: '480px',
+            }}
+          >
+            Manage your personal information, including phone numbers, email
+            address, and profile gender avatar settings.
+          </p>
+        </div>
+
+        <button
+          onClick={() => setIsEditing(true)}
           style={{
             fontFamily: 'var(--font-body)',
-            fontSize: '0.88rem',
-            color: 'var(--ink-mute)',
-            lineHeight: 1.6,
-            maxWidth: '480px',
+            fontWeight: 700,
+            fontSize: '0.8rem',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            background: 'transparent',
+            color: 'var(--surface-deep)',
+            border: '1.5px solid rgba(14, 39, 1, 0.18)',
+            borderRadius: '999px',
+            padding: '8px 18px',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            minHeight: '36px',
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.background = 'var(--surface-deep)'
+            e.currentTarget.style.color = 'var(--accent)'
+            e.currentTarget.style.borderColor = 'var(--surface-deep)'
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.background = 'transparent'
+            e.currentTarget.style.color = 'var(--surface-deep)'
+            e.currentTarget.style.borderColor = 'rgba(14, 39, 1, 0.18)'
           }}
         >
-          Manage your personal information, including phone numbers, email
-          address, and profile gender avatar settings.
-        </p>
+          Edit Info
+        </button>
       </div>
 
       <div
@@ -125,11 +209,11 @@ function PersonalSection({ user }) {
           gap: '14px',
         }}
       >
-        <InfoCard label="Name"       value={user?.fullName}    icon="/icon-bag.png" />
-        <InfoCard label="Email"      value={email}              icon="/icon-gear.png" />
-        <InfoCard label="Phone"      value={phone || 'Not set'} icon="/icon-pin.png" />
-        <InfoCard label="Member Since" value={user?.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : '—'} icon="/icon-gear.png" />
-        
+        <InfoCard label="Name" value={user?.fullName} icon={avatarSrc} />
+        <InfoCard label="Email" value={email} icon="/icon-mail-3d.png" />
+        <InfoCard label="Phone" value={phone || 'Not set'} icon="/icon-phone-3d.png" />
+        <InfoCard label="Member Since" value={user?.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : '—'} icon="/icon-shield-3d.png" />
+
         {/* Interactive Gender & Profile Avatar selector */}
         <div
           style={{
@@ -170,7 +254,7 @@ function PersonalSection({ user }) {
               style={{ width: '22px', height: '22px', borderRadius: '50%', objectFit: 'cover', opacity: 0.85 }}
             />
           </div>
-          
+
           <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
             <button
               disabled={loading}
@@ -225,6 +309,231 @@ function PersonalSection({ user }) {
           </div>
         </div>
       </div>
+
+      {/* Edit Information Modal */}
+      {isEditing && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(20, 33, 17, 0.45)',
+            backdropFilter: 'blur(8px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            padding: '20px',
+          }}
+          onClick={() => !loading && setIsEditing(false)}
+        >
+          <div
+            style={{
+              background: '#fff',
+              borderRadius: '24px',
+              border: '1px solid rgba(14,39,1,0.09)',
+              boxShadow: '0 24px 64px rgba(20, 33, 17, 0.25)',
+              width: '100%',
+              maxWidth: '440px',
+              padding: '32px 28px',
+              position: 'relative',
+              animation: 'modalFadeIn 0.3s ease-out',
+            }}
+            onClick={e => e.stopPropagation()}
+          >
+            <h3
+              style={{
+                fontFamily: 'var(--font-serif)',
+                fontWeight: 700,
+                fontSize: '1.4rem',
+                color: 'var(--surface-deep)',
+                marginBottom: '6px',
+              }}
+            >
+              Edit Information
+            </h3>
+            <p
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '0.84rem',
+                color: 'var(--ink-mute)',
+                marginBottom: '20px',
+              }}
+            >
+              Update your name and phone number.
+            </p>
+
+            {saveError && (
+              <div
+                style={{
+                  background: 'rgba(179, 74, 74, 0.1)',
+                  border: '1px solid rgba(179, 74, 74, 0.2)',
+                  borderRadius: '12px',
+                  padding: '10px 14px',
+                  color: '#b34a4a',
+                  fontSize: '0.8rem',
+                  fontFamily: 'var(--font-body)',
+                  marginBottom: '16px',
+                }}
+              >
+                {saveError}
+              </div>
+            )}
+
+            <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontWeight: 600,
+                      fontSize: '0.78rem',
+                      color: 'var(--ink-soft)',
+                      letterSpacing: '0.02em',
+                    }}
+                  >
+                    First Name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={firstName}
+                    onChange={e => setFirstName(e.target.value)}
+                    style={{
+                      border: '1.5px solid rgba(14, 39, 1, 0.14)',
+                      borderRadius: '12px',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '0.9rem',
+                      padding: '10px 14px',
+                      outline: 'none',
+                      color: 'var(--ink)',
+                    }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontWeight: 600,
+                      fontSize: '0.78rem',
+                      color: 'var(--ink-soft)',
+                      letterSpacing: '0.02em',
+                    }}
+                  >
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={lastName}
+                    onChange={e => setLastName(e.target.value)}
+                    style={{
+                      border: '1.5px solid rgba(14, 39, 1, 0.14)',
+                      borderRadius: '12px',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '0.9rem',
+                      padding: '10px 14px',
+                      outline: 'none',
+                      color: 'var(--ink)',
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 600,
+                    fontSize: '0.78rem',
+                    color: 'var(--ink-soft)',
+                    letterSpacing: '0.02em',
+                  }}
+                >
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  placeholder="e.g. +91 99999 99999"
+                  value={phoneInput}
+                  onChange={e => setPhoneInput(e.target.value)}
+                  style={{
+                    border: '1.5px solid rgba(14, 39, 1, 0.14)',
+                    borderRadius: '12px',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '0.9rem',
+                    padding: '10px 14px',
+                    outline: 'none',
+                    color: 'var(--ink)',
+                  }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={() => setIsEditing(false)}
+                  style={{
+                    flex: 1,
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 700,
+                    fontSize: '0.8rem',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    background: 'transparent',
+                    color: 'var(--ink-mute)',
+                    border: '1.5px solid rgba(14, 39, 1, 0.14)',
+                    borderRadius: '999px',
+                    padding: '10px 20px',
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    transition: 'all 0.2s ease',
+                    minHeight: '40px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  style={{
+                    flex: 1,
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 700,
+                    fontSize: '0.8rem',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    background: 'var(--surface-deep)',
+                    color: 'var(--accent)',
+                    border: 'none',
+                    borderRadius: '999px',
+                    padding: '10px 20px',
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    transition: 'all 0.2s ease',
+                    minHeight: '40px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {loading ? 'Saving...' : 'Save Changes'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes modalFadeIn {
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
+        }
+      `}</style>
     </>
   )
 }
@@ -311,7 +620,7 @@ function AddressesSection() {
           alignItems: 'center',
         }}
       >
-        <img src="/icon-pin.png" alt="" aria-hidden="true" style={{ width: '72px', height: '72px', objectFit: 'contain', marginBottom: '20px', opacity: 0.5 }} />
+        <img src="/icon-pin-3d.png" alt="" aria-hidden="true" style={{ width: '72px', height: '72px', objectFit: 'contain', marginBottom: '20px', opacity: 0.5 }} />
         <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '1rem', color: 'var(--surface-deep)', marginBottom: '8px' }}>
           No addresses saved
         </div>
@@ -324,6 +633,61 @@ function AddressesSection() {
 }
 
 function SettingsSection({ user }) {
+  const { session: currentSession } = useSession()
+  const { sessions, isLoaded: sessionsLoaded } = useSessionList()
+  const [newsletter, setNewsletter] = useState(user?.unsafeMetadata?.newsletter ?? false)
+  const [loading, setLoading] = useState(false)
+  const [isChangingPassword, setIsChangingPassword] = useState(false)
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [passwordError, setPasswordError] = useState('')
+  const [passwordSuccess, setPasswordSuccess] = useState('')
+
+  const handleNewsletterToggle = async () => {
+    setLoading(true)
+    const nextVal = !newsletter
+    try {
+      await user.update({
+        unsafeMetadata: {
+          ...user.unsafeMetadata,
+          newsletter: nextVal,
+        },
+      })
+      setNewsletter(nextVal)
+    } catch (err) {
+      console.error('Failed to update email preferences', err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handlePasswordReset = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    setPasswordError('')
+    setPasswordSuccess('')
+    try {
+      await user.update({
+        password: newPassword,
+        currentPassword: currentPassword,
+      })
+      setPasswordSuccess('Password updated successfully!')
+      setCurrentPassword('')
+      setNewPassword('')
+      setTimeout(() => {
+        setIsChangingPassword(false)
+        setPasswordSuccess('')
+      }, 2000)
+    } catch (err) {
+      console.error('Failed to update password', err)
+      setPasswordError(err.message || 'Failed to update password. Verify your current password.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const isGoogleUser = user?.externalAccounts?.length > 0 && !user?.passwordEnabled
+
   return (
     <>
       <div style={{ marginBottom: '24px' }}>
@@ -341,32 +705,345 @@ function SettingsSection({ user }) {
           Account Settings
         </h2>
         <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', color: 'var(--ink-mute)', lineHeight: 1.6, maxWidth: '480px' }}>
-          Manage your profile, password, and connected accounts.
+          Manage your password, email preferences, and view active sessions.
         </p>
       </div>
+
       <div
         style={{
-          background: '#fff',
-          borderRadius: '20px',
-          border: '1px solid rgba(14,39,1,0.09)',
-          padding: '56px 32px',
-          textAlign: 'center',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: '24px',
+          alignItems: 'flex-start',
         }}
       >
-        <img src="/icon-gear.png" alt="" aria-hidden="true" style={{ width: '72px', height: '72px', objectFit: 'contain', marginBottom: '20px', opacity: 0.5 }} />
-        <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '1rem', color: 'var(--surface-deep)', marginBottom: '8px' }}>
-          Profile settings
+        {/* Left Column: Security & Preferences */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          
+          {/* Email Preferences & Newsletter Toggle */}
+          <div
+            style={{
+              background: '#fff',
+              borderRadius: '20px',
+              border: '1px solid rgba(14,39,1,0.09)',
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <img src="/icon-mail-3d.png" alt="" aria-hidden="true" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+              <h3 style={{ fontFamily: 'var(--font-serif)', fontWeight: 700, fontSize: '1.1rem', color: 'var(--surface-deep)', margin: 0 }}>
+                Email Preferences
+              </h3>
+            </div>
+            
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.84rem', color: 'var(--ink-mute)', lineHeight: 1.5, margin: 0 }}>
+              Receive news, recipes, product releases, and exclusive community updates.
+            </p>
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '4px' }}>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', fontWeight: 600, color: 'var(--ink-soft)' }}>
+                Newsletter subscription
+              </span>
+              <button
+                disabled={loading}
+                onClick={handleNewsletterToggle}
+                style={{
+                  background: newsletter ? 'var(--surface-deep)' : 'rgba(14, 39, 1, 0.10)',
+                  border: 'none',
+                  borderRadius: '999px',
+                  width: '50px',
+                  height: '26px',
+                  position: 'relative',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  transition: 'background 0.25s ease',
+                  padding: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  minWidth: '50px',
+                  minHeight: '26px',
+                }}
+              >
+                <div
+                  style={{
+                    background: '#fff',
+                    borderRadius: '50%',
+                    width: '20px',
+                    height: '20px',
+                    position: 'absolute',
+                    left: newsletter ? '26px' : '4px',
+                    transition: 'left 0.25s cubic-bezier(0.2, 0.8, 0.2, 1)',
+                    boxShadow: '0 2px 5px rgba(0,0,0,0.15)',
+                  }}
+                />
+              </button>
+            </div>
+          </div>
+
+          {/* Password Settings */}
+          <div
+            style={{
+              background: '#fff',
+              borderRadius: '20px',
+              border: '1px solid rgba(14,39,1,0.09)',
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <img src="/icon-gear-3d.png" alt="" aria-hidden="true" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+              <h3 style={{ fontFamily: 'var(--font-serif)', fontWeight: 700, fontSize: '1.1rem', color: 'var(--surface-deep)', margin: 0 }}>
+                Security Settings
+              </h3>
+            </div>
+
+            {isGoogleUser ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.84rem', color: 'var(--ink-mute)', lineHeight: 1.5, margin: 0 }}>
+                  You are signed in via Google. Password updates and security are managed by your Google account.
+                </p>
+                <a
+                  href="https://myaccount.google.com/security"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 700,
+                    fontSize: '0.78rem',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    color: 'var(--surface-deep)',
+                    textDecoration: 'underline',
+                    marginTop: '4px',
+                    display: 'inline-block',
+                    minWidth: '0',
+                    minHeight: '0',
+                    padding: '0',
+                  }}
+                >
+                  Manage Google Account
+                </a>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.84rem', color: 'var(--ink-mute)', lineHeight: 1.5, margin: 0 }}>
+                  Ensure your account remains secure by using a strong, unique password.
+                </p>
+                
+                {!isChangingPassword ? (
+                  <button
+                    onClick={() => setIsChangingPassword(true)}
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontWeight: 700,
+                      fontSize: '0.78rem',
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                      background: 'transparent',
+                      color: 'var(--surface-deep)',
+                      border: '1.5px solid rgba(14, 39, 1, 0.18)',
+                      borderRadius: '999px',
+                      padding: '8px 16px',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      width: 'fit-content',
+                      minHeight: '36px',
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.background = 'var(--surface-deep)'
+                      e.currentTarget.style.color = 'var(--accent)'
+                      e.currentTarget.style.borderColor = 'var(--surface-deep)'
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.background = 'transparent'
+                      e.currentTarget.style.color = 'var(--surface-deep)'
+                      e.currentTarget.style.borderColor = 'rgba(14, 39, 1, 0.18)'
+                    }}
+                  >
+                    Reset Password
+                  </button>
+                ) : (
+                  <form onSubmit={handlePasswordReset} style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '4px' }}>
+                    {passwordError && (
+                      <div style={{ color: '#b34a4a', fontSize: '0.78rem', fontFamily: 'var(--font-body)' }}>
+                        {passwordError}
+                      </div>
+                    )}
+                    {passwordSuccess && (
+                      <div style={{ color: 'var(--surface-deep)', fontSize: '0.78rem', fontFamily: 'var(--font-body)', fontWeight: 600 }}>
+                        {passwordSuccess}
+                      </div>
+                    )}
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                      <label style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--ink-soft)' }}>
+                        Current Password
+                      </label>
+                      <input
+                        type="password"
+                        required
+                        value={currentPassword}
+                        onChange={e => setCurrentPassword(e.target.value)}
+                        style={{
+                          border: '1.5px solid rgba(14, 39, 1, 0.14)',
+                          borderRadius: '10px',
+                          fontSize: '0.86rem',
+                          padding: '8px 12px',
+                          outline: 'none',
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                      <label style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--ink-soft)' }}>
+                        New Password
+                      </label>
+                      <input
+                        type="password"
+                        required
+                        value={newPassword}
+                        onChange={e => setNewPassword(e.target.value)}
+                        style={{
+                          border: '1.5px solid rgba(14, 39, 1, 0.14)',
+                          borderRadius: '10px',
+                          fontSize: '0.86rem',
+                          padding: '8px 12px',
+                          outline: 'none',
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '6px' }}>
+                      <button
+                        type="button"
+                        onClick={() => setIsChangingPassword(false)}
+                        style={{
+                          flex: 1,
+                          fontFamily: 'var(--font-body)',
+                          fontWeight: 700,
+                          fontSize: '0.75rem',
+                          textTransform: 'uppercase',
+                          background: 'transparent',
+                          color: 'var(--ink-mute)',
+                          border: '1.5px solid rgba(14, 39, 1, 0.14)',
+                          borderRadius: '999px',
+                          padding: '6px 10px',
+                          cursor: 'pointer',
+                          minHeight: '32px',
+                        }}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        style={{
+                          flex: 1,
+                          fontFamily: 'var(--font-body)',
+                          fontWeight: 700,
+                          fontSize: '0.75rem',
+                          textTransform: 'uppercase',
+                          background: 'var(--surface-deep)',
+                          color: 'var(--accent)',
+                          border: 'none',
+                          borderRadius: '999px',
+                          padding: '6px 10px',
+                          cursor: 'pointer',
+                          minHeight: '32px',
+                        }}
+                      >
+                        {loading ? 'Saving...' : 'Save'}
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </div>
+            )}
+          </div>
         </div>
-        <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.86rem', color: 'var(--ink-mute)', maxWidth: '300px', lineHeight: 1.6, marginBottom: '24px' }}>
-          Update your name, profile photo, password, and connected accounts.
-        </p>
-        {/* Clerk's built-in profile management is triggered via UserButton in the sidebar */}
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--ink-soft)' }}>
-          Use the avatar menu in the sidebar to manage your profile
+
+        {/* Right Column: Active Sessions */}
+        <div
+          style={{
+            background: '#fff',
+            borderRadius: '20px',
+            border: '1px solid rgba(14,39,1,0.09)',
+            padding: '24px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <img src="/icon-shield-3d.png" alt="" aria-hidden="true" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontWeight: 700, fontSize: '1.1rem', color: 'var(--surface-deep)', margin: 0 }}>
+              Active Sessions
+            </h3>
+          </div>
+
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.84rem', color: 'var(--ink-mute)', lineHeight: 1.5, margin: 0 }}>
+            Devices currently logged into your account.
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '4px' }}>
+            {!sessionsLoaded ? (
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.84rem', color: 'var(--ink-mute)' }}>Loading sessions...</span>
+            ) : (
+              sessions?.map(session => {
+                const isCurrent = session.id === currentSession?.id
+                const browser = session.latestActivity?.browser || 'Browser'
+                const os = session.latestActivity?.os || 'OS'
+                const ip = session.latestActivity?.ipAddress || 'IP Unknown'
+
+                return (
+                  <div
+                    key={session.id}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      borderBottom: '1px solid rgba(14,39,1,0.06)',
+                      paddingBottom: '12px',
+                    }}
+                  >
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', fontWeight: 700, color: 'var(--surface-deep)', textTransform: 'capitalize' }}>
+                          {browser} on {os}
+                        </span>
+                        {isCurrent && (
+                          <span
+                            style={{
+                              background: 'var(--surface-soft)',
+                              color: 'var(--surface-deep)',
+                              fontSize: '0.68rem',
+                              fontWeight: 700,
+                              borderRadius: '999px',
+                              padding: '2px 8px',
+                              letterSpacing: '0.04em',
+                              textTransform: 'uppercase',
+                              border: '1px solid rgba(25, 65, 2, 0.18)',
+                            }}
+                          >
+                            Current
+                          </span>
+                        )}
+                      </div>
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)' }}>
+                        IP: {ip} · Last active: {new Date(session.lastActiveAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                    </div>
+                  </div>
+                )
+              })
+            )}
+          </div>
         </div>
+
       </div>
     </>
   )
@@ -409,11 +1086,11 @@ export default function AccountPage() {
 
   const renderSection = () => {
     switch (activeSection) {
-      case 'personal':   return <PersonalSection user={user} />
-      case 'orders':     return <OrdersSection />
-      case 'addresses':  return <AddressesSection />
-      case 'settings':   return <SettingsSection user={user} />
-      default:           return <PersonalSection user={user} />
+      case 'personal': return <PersonalSection user={user} />
+      case 'orders': return <OrdersSection />
+      case 'addresses': return <AddressesSection />
+      case 'settings': return <SettingsSection user={user} />
+      default: return <PersonalSection user={user} />
     }
   }
 
@@ -579,7 +1256,7 @@ export default function AccountPage() {
                 >
                   {/* 3D icon */}
                   <img
-                    src={item.icon}
+                    src={item.id === 'personal' ? avatarSrc : item.icon}
                     alt=""
                     aria-hidden="true"
                     style={{
@@ -589,6 +1266,7 @@ export default function AccountPage() {
                       flexShrink: 0,
                       opacity: isActive ? 1 : 0.45,
                       transition: 'opacity 0.18s',
+                      borderRadius: item.id === 'personal' ? '50%' : '0',
                     }}
                   />
                   <span

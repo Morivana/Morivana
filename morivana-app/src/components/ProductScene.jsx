@@ -290,30 +290,16 @@ function PouchModel({ isMobile, isHighPerf }) {
       })
     }
 
-    // HowToUse (Morning Ritual): pouch fades to invisible as the section enters
-    // view, but remains MOUNTED at full scale and continues its scroll/idle
-    // animations. This keeps state consistent if the user scrolls back up — the
-    // pouch is already in the right pose, ready to fade back in.
+    // HowToUse (Morning Ritual): pouch remains fully opaque as it gets covered by the section.
+    // Once the section's top is past the pouch (e.g. top of section is at 15% of viewport),
+    // we set opacity to 0 to save GPU rendering resources.
     triggers.push(ScrollTrigger.create({
       trigger: '#how-to-use',
-      start: 'top bottom',   // begin fading as HowToUse enters viewport
-      end:   'top 70%',      // fully transparent by the time its top reaches 70% of viewport
-      scrub: 0.6,
-      onUpdate: (self) => {
-        setPouchOpacity(1 - self.progress)
-      },
-    }))
-
-    // Hard lock at opacity 0 while HowToUse / Waitlist / Footer are on screen.
-    // The pouch keeps its scale, position, rotation, and Anime.js idle motion;
-    // only the materials are transparent, so the GPU still draws zero pixels.
-    triggers.push(ScrollTrigger.create({
-      trigger: '#how-to-use',
-      start: 'top 70%',
+      start: 'top 15%',      // when the top of #how-to-use reaches 15% of viewport from top
       endTrigger: 'footer',
       end: 'bottom bottom',
-      onUpdate: () => {
-        setPouchOpacity(0)
+      onToggle: (self) => {
+        setPouchOpacity(self.isActive ? 0 : 1)
       },
     }))
 
