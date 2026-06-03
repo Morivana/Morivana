@@ -45,6 +45,8 @@ import SustainabilityPage from './pages/SustainabilityPage'
 import LearnHubPage from './pages/LearnHubPage'
 import BlogPostPage from './pages/BlogPostPage'
 import WaitlistPage from './pages/WaitlistPage'
+import NotFoundPage from './pages/NotFoundPage'
+
 
 // ─── Home page (existing scroll-story landing) ───────────────────────────────
 function HomePage() {
@@ -237,6 +239,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </ErrorBoundary>
     </ClerkProvider>

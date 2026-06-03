@@ -20,6 +20,7 @@ export default function SEOHead({
   ogImage = DEFAULT_OG_IMAGE,
   ogType = 'website',
   schemas = [],
+  noindex = false,
 }) {
   const canonicalUrl = `${BASE_URL}${canonical}`
 
@@ -29,7 +30,7 @@ export default function SEOHead({
       <title>{title}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={canonicalUrl} />
-      <meta name="robots" content="index, follow" />
+      <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
 
       {/* Open Graph */}
       <meta property="og:type" content={ogType} />
