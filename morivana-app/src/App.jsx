@@ -18,6 +18,7 @@ import HowToUse from './components/HowToUse'
 import WaitlistCTA from './components/WaitlistCTA'
 import Footer from './components/Footer'
 import ProductScene from './components/ProductScene'
+import HomepageFAQ from './components/HomepageFAQ'
 
 // Auth
 import ProtectedRoute from './components/auth/ProtectedRoute'
@@ -155,6 +156,7 @@ function HomePage() {
           <Benefits />
         </div>
         <HowToUse />
+        <HomepageFAQ />
         <WaitlistCTA />
       </main>
       <Footer />

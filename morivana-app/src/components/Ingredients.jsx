@@ -138,7 +138,7 @@ export default function Ingredients() {
                   <div className="im-compound">{ing.compound}</div>
                 </div>
 
-                <div className="im-name">{ing.name}</div>
+                <h3 className="im-name">{ing.name}</h3>
                 <div className="im-latin">{ing.latin}</div>
 
                 <div className="im-body">

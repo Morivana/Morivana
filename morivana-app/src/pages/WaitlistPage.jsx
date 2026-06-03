@@ -42,7 +42,7 @@ export default function WaitlistPage() {
       if (res.ok || res.status === 200 || res.status === 422) {
         setSubmitted(true)
       } else {
-        setError('Something went wrong. Please try emailing us directly at Morivana.daily@gmail.com.')
+        setError('Something went wrong. Please contact our support team.')
       }
     } catch {
       // Even on network failure, mark as submitted to avoid frustrating the user

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
+import ObfuscatedEmail from './ObfuscatedEmail'
 
 const FOOTER_COLUMNS = [
   {
@@ -86,6 +87,18 @@ export default function Footer() {
     }
 
     if (link.external) {
+      if (link.href && link.href.startsWith('mailto:')) {
+        return (
+          <ObfuscatedEmail
+            key={link.label}
+            style={style}
+            onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.opacity = '1' }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'var(--ink-on-dark)'; e.currentTarget.style.opacity = '0.75' }}
+          >
+            {link.label}
+          </ObfuscatedEmail>
+        )
+      }
       return (
         <a
           key={link.label}
@@ -165,8 +178,7 @@ export default function Footer() {
           }}>
             Est. 2026 · India & Canada
           </div>
-          <a
-            href="mailto:Morivana.daily@gmail.com"
+          <ObfuscatedEmail
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -190,8 +202,7 @@ export default function Footer() {
               <rect x="3" y="5" width="18" height="14" rx="2" />
               <path d="m3 7 9 6 9-6" />
             </svg>
-            Morivana.daily@gmail.com
-          </a>
+          </ObfuscatedEmail>
         </div>
 
         {/* Navigation columns */}

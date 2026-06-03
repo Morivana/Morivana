@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useEffect } from 'react'
 import FloatingLeaves from '../components/FloatingLeaves'
+import ObfuscatedEmail from '../components/ObfuscatedEmail'
 
 export default function TermsPage() {
   // Scroll to top on mount
@@ -105,9 +106,7 @@ export default function TermsPage() {
           </h2>
           <p>
             If you have any questions or feedback regarding these terms, please reach out to us at{' '}
-            <a href="mailto:Morivana.daily@gmail.com" style={{ color: 'var(--surface-deep)', fontWeight: 600 }}>
-              Morivana.daily@gmail.com
-            </a>.
+            <ObfuscatedEmail style={{ color: 'var(--surface-deep)', fontWeight: 600 }} />.
           </p>
         </div>
 

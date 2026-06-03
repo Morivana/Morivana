@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useEffect } from 'react'
 import SEOHead from '../components/SEOHead'
 import FloatingLeaves from '../components/FloatingLeaves'
+import ObfuscatedEmail from '../components/ObfuscatedEmail'
 
 export default function NotFoundPage() {
   // Scroll to top on mount
@@ -276,16 +277,13 @@ export default function NotFoundPage() {
           }}
         >
           Need assistance? Reach out at{' '}
-          <a
-            href="mailto:Morivana.daily@gmail.com"
+          <ObfuscatedEmail
             style={{
               color: 'var(--surface-deep)',
               fontWeight: 600,
               textDecoration: 'underline',
             }}
-          >
-            Morivana.daily@gmail.com
-          </a>
+          />
         </p>
       </div>
     </div>

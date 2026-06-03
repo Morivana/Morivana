@@ -1,0 +1,54 @@
+# Morivaná — Daily Super Greens Powder
+
+Morivaná is a premium direct-to-consumer wellness brand selling a clean super greens powder crafted from 8 whole plants, with a focus on Moringa, Spirulina, and Amla. Sourced sustainably from local regions in India and Canada, the formula is cold-dried to preserve nutritional potency, containing zero synthetic fillers, sweeteners, or proprietary blends.
+
+## Canonical URL
+- Website: https://www.morivana.com
+
+---
+
+## 🗺️ Sitemap & Core Directory
+
+### Primary Pages
+- [Home](https://www.morivana.com/) - Main product experience, waitlist capture, and 3D display.
+- [About Us](https://www.morivana.com/about) - Sourcing philosophy, founder story, and regional farming partners.
+- [Ingredients Hub](https://www.morivana.com/ingredients) - Directory of the 8 whole food ingredients.
+- [Daily Benefits](https://www.morivana.com/benefits) - Timeline of health benefits (energy, gut health, immunity, skin) over 30 days.
+- [How to Use](https://www.morivana.com/how-to-use) - Shaker preparation guide, daily timing, and recipe variants.
+- [Science & Studies](https://www.morivana.com/science) - Sourced research tables with direct PubMed citation mapping.
+- [Compare](https://www.morivana.com/compare) - Comparison guide contrasting Morivaná against AG1, Setu, and Oziva.
+- [Sustainability](https://www.morivana.com/sustainability) - Regional sourcing maps, ethical farming details, and cold-dry methods.
+- [Pre-Order Shop](https://www.morivana.com/shop) - Early-bird order details, pricing tables, and guarantees.
+- [Product Detail Page](https://www.morivana.com/shop/daily-greens) - Comprehensive nutrition facts panel and transaction checkout.
+- [Learn Hub](https://www.morivana.com/learn) - Wellness blog index for health and superfood education.
+- [Waitlist Sign-up](https://www.morivana.com/waitlist) - Standalone launch notification and discount registration page.
+
+### Ingredient Deep-Dives
+- [Moringa oleifera](https://www.morivana.com/ingredients/moringa) - Dense leaf superfood sourced from Tamil Nadu.
+- [Spirulina platensis](https://www.morivana.com/ingredients/spirulina) - High-protein blue-green algae.
+- [Amla / Indian Gooseberry](https://www.morivana.com/ingredients/amla) - High-potency Vitamin C source from Uttarakhand.
+- [Ginger Root](https://www.morivana.com/ingredients/ginger) - Anti-inflammatory and digestive comfort root from Kerala.
+- [Lemon Zest](https://www.morivana.com/ingredients/lemon) - Alkalizing organic citrus zest.
+- [Chicory Root Inulin](https://www.morivana.com/ingredients/inulin) - Prebiotic soluble dietary fiber.
+- [Orange Peel](https://www.morivana.com/ingredients/orange-peel) - Flavonoids and essential vitamins.
+- [Monk Fruit](https://www.morivana.com/ingredients/monk-fruit) - Natural Mogroside V zero-calorie sweetener.
+
+---
+
+## 🌿 Ingredient Profile & Nutrition (per 5g serving)
+
+- **Moringa oleifera (Tamil Nadu, India)**: Rich in Iron, Calcium, and 46 distinct antioxidants. Used for metabolic energy and reducing oxidative stress.
+- **Spirulina (Pond-grown)**: Contains complete proteins, essential amino acids, and phycocyanin for immune modulation.
+- **Amla (Uttarakhand, India)**: Supplying 600% of the recommended daily intake of Vitamin C per serving in its natural organic state.
+- **Ginger (Kerala, India)**: Enhances gastric motility and nutrient absorption.
+- **Inulin (Chicory Root)**: Acts as a prebiotic fertilizer for beneficial gut microflora.
+- **Monk Fruit (Guangxi, China)**: Natural sweetness without spiking insulin or blood glucose levels.
+
+---
+
+## 🔬 Scientific Studies (PubMed Reference Summary)
+
+- **Moringa Efficacy**: Proven in trials to support blood glucose management and cellular health (PubMed PMID: 29080065).
+- **Spirulina Energy**: Shown to improve physical output and reduce muscular fatigue (PubMed PMID: 20010119).
+- **Amla Immunity**: Documented to double natural killer cell activity and enhance general immunity (PubMed PMID: 32675717).
+- **Gut Health (Inulin)**: Supports stool frequency, gut transit time, and microbiota diversity (PubMed PMID: 29193188).
