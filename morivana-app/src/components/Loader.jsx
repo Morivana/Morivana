@@ -99,7 +99,6 @@ export default function Loader({ onDismiss, onLeaveStart }) {
   const { ready, progress } = useAssetPreloader()
   const [leaving, setLeaving] = useState(false)
   const [submitted, setSubmitted] = useState(false)
-  const [csrfToken, setCsrfToken] = useState('')
   const [turnstileToken, setTurnstileToken] = useState('')
   const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY
 
@@ -118,15 +117,6 @@ export default function Loader({ onDismiss, onLeaveStart }) {
     setError,
     formState: { errors, isSubmitting },
   } = useForm()
-
-  // Fetch CSRF Token on mount
-  useEffect(() => {
-    const apiBase = import.meta.env.VITE_API_URL ?? ''
-    fetch(`${apiBase}/api/csrf`)
-      .then((res) => res.json())
-      .then((data) => setCsrfToken(data.csrfToken))
-      .catch((err) => console.error('Failed to load CSRF token:', err))
-  }, [])
 
   // Load/Render Turnstile dynamically
   useEffect(() => {
@@ -269,6 +259,10 @@ export default function Loader({ onDismiss, onLeaveStart }) {
 
     try {
       const apiBase = import.meta.env.VITE_API_URL ?? ''
+      // Fetch CSRF Token on demand
+      const csrfRes = await fetch(`${apiBase}/api/csrf`)
+      const { csrfToken } = await csrfRes.json()
+
       const res = await fetch(`${apiBase}/api/waitlist`, {
         method: 'POST',
         headers: {

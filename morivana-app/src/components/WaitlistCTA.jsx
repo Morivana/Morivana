@@ -4,7 +4,6 @@ import gsap from 'gsap'
 import FloatingLeaves from './FloatingLeaves'
 
 export default function WaitlistCTA() {
-  const [csrfToken, setCsrfToken] = useState('')
   const [turnstileToken, setTurnstileToken] = useState('')
   const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY
 
@@ -14,15 +13,6 @@ export default function WaitlistCTA() {
     setError,
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm()
-
-  // Fetch CSRF Token on mount
-  useEffect(() => {
-    const apiBase = import.meta.env.VITE_API_URL ?? ''
-    fetch(`${apiBase}/api/csrf`)
-      .then((res) => res.json())
-      .then((data) => setCsrfToken(data.csrfToken))
-      .catch((err) => console.error('Failed to load CSRF token:', err))
-  }, [])
 
   // Load/Render Turnstile dynamically
   useEffect(() => {
@@ -78,6 +68,11 @@ export default function WaitlistCTA() {
 
     try {
       const apiBase = import.meta.env.VITE_API_URL ?? ''
+      
+      // Fetch CSRF Token on demand
+      const csrfRes = await fetch(`${apiBase}/api/csrf`)
+      const { csrfToken } = await csrfRes.json()
+
       const res = await fetch(`${apiBase}/api/waitlist`, {
         method: 'POST',
         headers: {
