@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import { ClerkProvider } from '@clerk/clerk-react'
+import { RegionProvider } from './context/RegionContext'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import { useLenis } from './hooks/useLenis'
@@ -185,65 +186,67 @@ function App() {
       navigate={(to) => navigate(to)}
       afterSignOutUrl="/"
     >
-      {/* Navbar persists across all routes except auth & account */}
-      {!isAuthOrAccountPage && <Navbar />}
+      <RegionProvider>
+        {/* Navbar persists across all routes except auth & account */}
+        {!isAuthOrAccountPage && <Navbar />}
 
-      <ErrorBoundary>
-        <Routes>
-          {/* Landing page — all existing scroll sections */}
-          <Route path="/" element={<HomePage />} />
+        <ErrorBoundary>
+          <Routes>
+            {/* Landing page — all existing scroll sections */}
+            <Route path="/" element={<HomePage />} />
 
-          {/* Auth pages */}
-          <Route path="/sign-in/*" element={<SignInPage />} />
-          <Route path="/sign-up/*" element={<SignUpPage />} />
+            {/* Auth pages */}
+            <Route path="/sign-in/*" element={<SignInPage />} />
+            <Route path="/sign-up/*" element={<SignUpPage />} />
 
-          {/* ── New multi-page routes ── */}
-          <Route path="/about" element={<><AboutPage /><Footer /></>} />
-          <Route path="/ingredients" element={<><IngredientsHubPage /><Footer /></>} />
-          <Route path="/ingredients/:slug" element={<><IngredientDetailPage /><Footer /></>} />
-          <Route path="/benefits" element={<><BenefitsPage /><Footer /></>} />
-          <Route path="/how-to-use" element={<><HowToUsePage /><Footer /></>} />
-          <Route path="/shop" element={<><ShopPage /><Footer /></>} />
-          <Route path="/shop/daily-greens" element={<><ProductDetailPage /><Footer /></>} />
-          <Route path="/science" element={<><SciencePage /><Footer /></>} />
-          <Route path="/compare" element={<><ComparePage /><Footer /></>} />
-          <Route path="/sustainability" element={<><SustainabilityPage /><Footer /></>} />
-          <Route path="/learn" element={<><LearnHubPage /><Footer /></>} />
-          <Route path="/learn/:slug" element={<><BlogPostPage /><Footer /></>} />
-          <Route path="/waitlist" element={<><WaitlistPage /><Footer /></>} />
+            {/* ── New multi-page routes ── */}
+            <Route path="/about" element={<><AboutPage /><Footer /></>} />
+            <Route path="/ingredients" element={<><IngredientsHubPage /><Footer /></>} />
+            <Route path="/ingredients/:slug" element={<><IngredientDetailPage /><Footer /></>} />
+            <Route path="/benefits" element={<><BenefitsPage /><Footer /></>} />
+            <Route path="/how-to-use" element={<><HowToUsePage /><Footer /></>} />
+            <Route path="/shop" element={<><ShopPage /><Footer /></>} />
+            <Route path="/shop/daily-greens" element={<><ProductDetailPage /><Footer /></>} />
+            <Route path="/science" element={<><SciencePage /><Footer /></>} />
+            <Route path="/compare" element={<><ComparePage /><Footer /></>} />
+            <Route path="/sustainability" element={<><SustainabilityPage /><Footer /></>} />
+            <Route path="/learn" element={<><LearnHubPage /><Footer /></>} />
+            <Route path="/learn/:slug" element={<><BlogPostPage /><Footer /></>} />
+            <Route path="/waitlist" element={<><WaitlistPage /><Footer /></>} />
 
-          {/* Static informational pages */}
-          <Route path="/privacy-policy" element={<><PrivacyPolicyPage /><Footer /></>} />
-          <Route path="/terms" element={<><TermsPage /><Footer /></>} />
+            {/* Static informational pages */}
+            <Route path="/privacy-policy" element={<><PrivacyPolicyPage /><Footer /></>} />
+            <Route path="/terms" element={<><TermsPage /><Footer /></>} />
 
-          {/* Protected pages */}
-          <Route
-            path="/account"
-            element={
-              <ProtectedRoute>
-                <AccountPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/orders"
-            element={
-              <ProtectedRoute>
-                <OrdersPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/checkout"
-            element={
-              <ProtectedRoute>
-                <CheckoutPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </ErrorBoundary>
+            {/* Protected pages */}
+            <Route
+              path="/account"
+              element={
+                <ProtectedRoute>
+                  <AccountPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders"
+              element={
+                <ProtectedRoute>
+                  <OrdersPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/checkout"
+              element={
+                <ProtectedRoute>
+                  <CheckoutPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </ErrorBoundary>
+      </RegionProvider>
     </ClerkProvider>
   )
 }

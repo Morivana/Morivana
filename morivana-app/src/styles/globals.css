@@ -712,7 +712,7 @@ main section {
 
   /* Footer breathing room */
   footer {
-    padding: 48px 24px !important;
+    padding: 32px 24px !important;
   }
 
   footer .footer-cols {

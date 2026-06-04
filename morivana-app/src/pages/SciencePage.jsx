@@ -4,6 +4,7 @@ import Breadcrumb, { buildBreadcrumbSchema } from '../components/Breadcrumb'
 import RelatedPages from '../components/RelatedPages'
 import PageLayout from '../components/PageLayout'
 import { INGREDIENTS } from '../data/ingredients'
+import FAQAccordion from '../components/FAQAccordion'
 
 const breadcrumbs = [
   { label: 'Home', href: '/' },
@@ -213,31 +214,7 @@ export default function SciencePage() {
 
           {/* FAQ */}
           <section style={{ marginBottom: '56px', borderTop: '1px solid var(--line-soft)', paddingTop: '48px' }}>
-            <div className="kicker" style={{ marginBottom: '20px', color: 'var(--ink-mute)' }}>Common Questions</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '640px' }}>
-              {faqs.map((faq, i) => (
-                <details key={i} style={{ borderBottom: '1px solid var(--line-soft)', paddingBottom: '16px' }}>
-                  <summary style={{
-                    fontFamily: 'var(--font-body)',
-                    fontWeight: 700,
-                    fontSize: '0.95rem',
-                    color: 'var(--surface-deep)',
-                    cursor: 'pointer',
-                    paddingBottom: '8px',
-                    listStyle: 'none',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}>
-                    {faq.q}
-                    <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>+</span>
-                  </summary>
-                  <p style={{ color: 'var(--ink-soft)', lineHeight: 1.7, margin: '12px 0 0', fontSize: '0.9rem' }}>
-                    {faq.a}
-                  </p>
-                </details>
-              ))}
-            </div>
+            <FAQAccordion items={faqs} title="Common Questions" />
           </section>
 
           {/* CTA */}

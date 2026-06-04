@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import SEOHead from '../components/SEOHead'
+import { useUserRegion } from '../context/RegionContext'
 import Breadcrumb, { buildBreadcrumbSchema } from '../components/Breadcrumb'
 import RelatedPages from '../components/RelatedPages'
 import PageLayout from '../components/PageLayout'
@@ -59,6 +60,7 @@ const schemas = [
 ]
 
 export default function ProductDetailPage() {
+  const { region, setRegion } = useUserRegion()
   return (
     <>
       <SEOHead
@@ -187,19 +189,67 @@ export default function ProductDetailPage() {
                 padding: '20px',
                 border: '1px solid var(--line-soft)',
               }}>
-                <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
-                  <div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-mute)', marginBottom: '4px' }}>India</div>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                      <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '2rem', color: 'var(--surface-deep)', lineHeight: 1 }}>₹1,299</span>
-                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)', textDecoration: 'line-through' }}>₹1,499</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+                  {region === 'CA' ? (
+                    <div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-mute)', marginBottom: '4px' }}>Canada</div>
+                      <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                        <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '2rem', color: 'var(--surface-deep)', lineHeight: 1 }}>CA$19.99</span>
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)', textDecoration: 'line-through' }}>CA$23.99</span>
+                      </div>
+                      <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--ink-mute)' }}>CA$0.67/day</div>
                     </div>
-                  </div>
-                  <div style={{ width: '1px', background: 'var(--line-soft)', flexShrink: 0 }} />
-                  <div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-mute)', marginBottom: '4px' }}>Canada</div>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                      <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '2rem', color: 'var(--surface-deep)', lineHeight: 1 }}>CA$19.99</span>
+                  ) : (
+                    <div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-mute)', marginBottom: '4px' }}>India</div>
+                      <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                        <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '2rem', color: 'var(--surface-deep)', lineHeight: 1 }}>₹1,299</span>
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)', textDecoration: 'line-through' }}>₹1,499</span>
+                      </div>
+                      <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--ink-mute)' }}>₹43/day</div>
+                    </div>
+                  )}
+
+                  {/* Region Switcher */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-end' }}>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-mute)' }}>Shipping To</span>
+                    <div style={{ display: 'flex', gap: '4px', background: 'rgba(0,0,0,0.03)', padding: '2px', borderRadius: '24px', border: '1px solid var(--line-soft)' }}>
+                      <button
+                        onClick={() => setRegion('IN')}
+                        style={{
+                          background: region === 'IN' ? 'var(--surface-deep)' : 'none',
+                          color: region === 'IN' ? 'var(--ink-on-dark)' : 'var(--ink-soft)',
+                          border: 'none',
+                          borderRadius: '20px',
+                          padding: '4px 10px',
+                          fontSize: '11px',
+                          cursor: 'pointer',
+                          fontWeight: 600,
+                          transition: 'all 0.2s',
+                          minHeight: 0,
+                          minWidth: 0,
+                        }}
+                      >
+                        IN
+                      </button>
+                      <button
+                        onClick={() => setRegion('CA')}
+                        style={{
+                          background: region === 'CA' ? 'var(--surface-deep)' : 'none',
+                          color: region === 'CA' ? 'var(--ink-on-dark)' : 'var(--ink-soft)',
+                          border: 'none',
+                          borderRadius: '20px',
+                          padding: '4px 10px',
+                          fontSize: '11px',
+                          cursor: 'pointer',
+                          fontWeight: 600,
+                          transition: 'all 0.2s',
+                          minHeight: 0,
+                          minWidth: 0,
+                        }}
+                      >
+                        CA
+                      </button>
                     </div>
                   </div>
                 </div>

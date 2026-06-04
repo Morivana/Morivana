@@ -71,8 +71,7 @@ export default function WaitlistPage() {
                 padding: 'clamp(32px, 5vw, 56px)',
                 textAlign: 'center',
               }}>
-                <div style={{ fontSize: '3rem', marginBottom: '20px' }}>🌿</div>
-                <div className="kicker" style={{ color: 'var(--accent)', marginBottom: '12px' }}>You're In</div>
+                <div className="kicker" style={{ color: 'var(--accent)', marginBottom: '12px', marginTop: '12px' }}>You're In</div>
                 <h1 style={{
                   fontFamily: 'var(--font-display)',
                   fontWeight: 800,
@@ -213,8 +212,8 @@ export default function WaitlistPage() {
                       onBlur={e => e.currentTarget.style.borderColor = 'var(--line-soft)'}
                     >
                       <option value="">Select region...</option>
-                      <option value="india">India 🇮🇳</option>
-                      <option value="canada">Canada 🇨🇦</option>
+                      <option value="india">India</option>
+                      <option value="canada">Canada</option>
                     </select>
                   </div>
 
@@ -242,12 +241,12 @@ export default function WaitlistPage() {
                   <div className="kicker" style={{ marginBottom: '16px', color: 'var(--ink-mute)' }}>Early Bird Benefits</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     {[
-                      { icon: '🏷️', text: '15% off your first order — reserved for waitlist members only.' },
-                      { icon: '🚚', text: 'Priority shipping — waitlist orders fulfilled before public launch.' },
-                      { icon: '📖', text: 'Launch kit — 30-day guide, recipes, and nutrient timeline.' },
+                      { text: '15% off your first order — reserved for waitlist members only.' },
+                      { text: 'Priority shipping — waitlist orders fulfilled before public launch.' },
+                      { text: 'Launch kit — 30-day guide, recipes, and nutrient timeline.' },
                     ].map((item, i) => (
                       <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                        <span style={{ fontSize: '1.1rem', flexShrink: 0, marginTop: '2px' }}>{item.icon}</span>
+                        <span style={{ fontSize: '1.1rem', flexShrink: 0, color: 'var(--accent)', marginTop: '2px' }}>•</span>
                         <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', color: 'var(--ink-soft)', lineHeight: 1.55, margin: 0 }}>
                           {item.text}
                         </p>

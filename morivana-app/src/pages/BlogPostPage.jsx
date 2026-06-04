@@ -4,6 +4,7 @@ import Breadcrumb, { buildBreadcrumbSchema } from '../components/Breadcrumb'
 import RelatedPages from '../components/RelatedPages'
 import PageLayout from '../components/PageLayout'
 import { getBlogPostBySlug, getRelatedPosts } from '../data/blogPosts'
+import FAQAccordion from '../components/FAQAccordion'
 
 export default function BlogPostPage() {
   const { slug } = useParams()
@@ -207,30 +208,7 @@ export default function BlogPostPage() {
                 }}>
                   Frequently Asked Questions
                 </h2>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  {post.faqs.map((faq, i) => (
-                    <details key={i} style={{ borderBottom: '1px solid var(--line-soft)', paddingBottom: '16px' }}>
-                      <summary style={{
-                        fontFamily: 'var(--font-body)',
-                        fontWeight: 700,
-                        fontSize: '0.95rem',
-                        color: 'var(--surface-deep)',
-                        cursor: 'pointer',
-                        paddingBottom: '8px',
-                        listStyle: 'none',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                      }}>
-                        {faq.q}
-                        <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>+</span>
-                      </summary>
-                      <p style={{ color: 'var(--ink-soft)', lineHeight: 1.7, margin: '12px 0 0', fontSize: '0.9rem' }}>
-                        {faq.a}
-                      </p>
-                    </details>
-                  ))}
-                </div>
+                <FAQAccordion items={post.faqs} />
               </section>
             )}
 

@@ -41,16 +41,6 @@ const FOOTER_COLUMNS = [
   },
 ]
 
-const ingredientLinks = [
-  { label: 'Moringa', href: '/ingredients/moringa' },
-  { label: 'Spirulina', href: '/ingredients/spirulina' },
-  { label: 'Amla', href: '/ingredients/amla' },
-  { label: 'Ginger', href: '/ingredients/ginger' },
-  { label: 'Lemon Zest', href: '/ingredients/lemon' },
-  { label: 'Inulin', href: '/ingredients/inulin' },
-  { label: 'Orange Peel', href: '/ingredients/orange-peel' },
-  { label: 'Monk Fruit', href: '/ingredients/monk-fruit' },
-]
 
 export default function Footer() {
   useEffect(() => {
@@ -130,7 +120,7 @@ export default function Footer() {
   return (
     <footer className="surface-deep" style={{
       borderTop: '1px solid var(--line-on-dark)',
-      padding: 'clamp(40px, 5vw, 64px) clamp(16px, 5vw, 64px)',
+      padding: 'clamp(24px, 4vw, 40px) clamp(16px, 5vw, 64px)',
     }}>
       {/* Top section: brand + nav columns */}
       <div
@@ -140,7 +130,7 @@ export default function Footer() {
           justifyContent: 'space-between',
           gap: '40px',
           flexWrap: 'wrap',
-          marginBottom: '40px',
+          marginBottom: '24px',
         }}
       >
         {/* Column 1 — Brand */}
@@ -233,51 +223,6 @@ export default function Footer() {
         ))}
       </div>
 
-      {/* Ingredients micro-nav */}
-      <div style={{
-        borderTop: '1px solid var(--line-on-dark)',
-        paddingTop: '24px',
-        marginBottom: '24px',
-      }}>
-        <div style={{
-          fontFamily: 'var(--font-mono)',
-          fontWeight: 600,
-          fontSize: '10px',
-          letterSpacing: '0.18em',
-          textTransform: 'uppercase',
-          color: 'var(--accent)',
-          opacity: 0.7,
-          marginBottom: '12px',
-        }}>
-          Ingredients
-        </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 20px' }}>
-          {ingredientLinks.map(link => (
-            <Link
-              key={link.label}
-              to={link.href}
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontWeight: 400,
-                fontSize: '0.72rem',
-                color: 'var(--ink-on-dark)',
-                opacity: 0.6,
-                textDecoration: 'none',
-                transition: 'opacity 0.15s',
-                display: 'inline',
-                padding: 0,
-                minHeight: 0,
-                minWidth: 0,
-              }}
-              onMouseEnter={e => e.currentTarget.style.opacity = '1'}
-              onMouseLeave={e => e.currentTarget.style.opacity = '0.6'}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-      </div>
-
       {/* Bottom bar */}
       <div
         style={{
@@ -293,24 +238,6 @@ export default function Footer() {
         <p className="footer-legal-text" style={{ margin: 0, color: 'var(--ink-on-dark)', opacity: 0.5 }}>
           © 2026 Morivaná. All rights reserved. Shipping to India & Canada.
         </p>
-        <div style={{ display: 'flex', gap: '8px 16px', flexWrap: 'wrap' }}>
-          {['Vegan', 'Soy-Free', 'No Added Sugar', 'No Artificial Sweeteners'].map(cert => (
-            <span key={cert} className="footer-cert-text" style={{
-              fontFamily: 'var(--font-body)',
-              fontWeight: 700,
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              color: 'var(--accent-strong)',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '5px',
-              fontSize: '10px',
-            }}>
-              <span aria-hidden="true" style={{ color: 'var(--accent)' }}>✓</span>
-              {cert}
-            </span>
-          ))}
-        </div>
       </div>
     </footer>
   )

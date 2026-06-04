@@ -124,7 +124,6 @@ export default function SustainabilityPage() {
                       padding: '16px',
                     }}
                   >
-                    <div style={{ fontSize: '1.2rem', marginBottom: '8px' }}>{ing.emoji}</div>
                     <div style={{
                       fontFamily: 'var(--font-display)',
                       fontWeight: 700,
@@ -224,7 +223,7 @@ export default function SustainabilityPage() {
                               minWidth: 0,
                             }}
                           >
-                            {ing.emoji} {ing.name}
+                            {ing.name}
                           </Link>
                         ) : null
                       })}

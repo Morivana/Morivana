@@ -101,7 +101,6 @@ export default function IngredientsHubPage() {
                       }}>
                         {idx}
                       </span>
-                      <span style={{ fontSize: '1.4rem' }}>{ing.emoji}</span>
                     </div>
 
                     <div style={{

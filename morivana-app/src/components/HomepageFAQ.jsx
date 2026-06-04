@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import FAQAccordion from './FAQAccordion'
 
 const FAQ_ITEMS = [
   {
@@ -24,15 +26,62 @@ const FAQ_ITEMS = [
 ]
 
 export default function HomepageFAQ() {
-  const [openIndex, setOpenIndex] = useState(null)
+  const sectionRef = useRef(null)
 
-  const toggleFAQ = (index) => {
-    setOpenIndex(openIndex === index ? null : index)
-  }
+  useEffect(() => {
+    if (!sectionRef.current) return
+
+    const ctx = gsap.context(() => {
+      // Kicker reveal
+      gsap.from('.faq-kicker', {
+        y: 20,
+        opacity: 0,
+        duration: 0.7,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '#homepage-faq',
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      })
+
+      // Heading word reveal
+      gsap.from('.faq-heading', {
+        y: 50,
+        opacity: 0,
+        duration: 1.0,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '#homepage-faq',
+          start: 'top 75%',
+          toggleActions: 'play none none none',
+        },
+      })
+
+      // FAQ items stagger reveal
+      gsap.utils.toArray('.faq-accordion-wrapper > div > div').forEach((el, i) => {
+        gsap.from(el, {
+          y: 24,
+          opacity: 0,
+          duration: 0.6,
+          ease: 'power3.out',
+          delay: i * 0.08,
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 92%',
+            toggleActions: 'play none none none',
+          },
+        })
+      })
+    }, sectionRef)
+
+    return () => ctx.revert()
+  }, [])
 
   return (
     <section
       id="homepage-faq"
+      ref={sectionRef}
       style={{
         background: 'var(--surface-soft, #F4FBEC)',
         color: 'var(--ink, #0E2701)',
@@ -41,10 +90,11 @@ export default function HomepageFAQ() {
       }}
     >
       <div style={{ maxWidth: '800px', margin: '0 auto', position: 'relative', zIndex: 2 }}>
-        <div className="kicker" style={{ marginBottom: '16px', textAlign: 'center' }}>
+        <div className="kicker faq-kicker" style={{ marginBottom: '16px', textAlign: 'center' }}>
           Questions & Answers
         </div>
         <h2
+          className="faq-heading"
           style={{
             fontFamily: 'var(--font-display)',
             fontWeight: 800,
@@ -58,78 +108,8 @@ export default function HomepageFAQ() {
           Frequently Asked Questions
         </h2>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {FAQ_ITEMS.map((item, index) => {
-            const isOpen = openIndex === index
-            return (
-              <div
-                key={index}
-                style={{
-                  background: 'var(--surface-base, #FFFFFF)',
-                  border: '1.5px solid var(--line-soft)',
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  transition: 'all 0.3s ease',
-                }}
-              >
-                <button
-                  onClick={() => toggleFAQ(index)}
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    background: 'transparent',
-                    border: 'none',
-                    padding: '20px 24px',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    fontFamily: 'var(--font-body)',
-                    fontWeight: 600,
-                    fontSize: '1.02rem',
-                    color: 'var(--surface-deep)',
-                    minHeight: 0,
-                    minWidth: 0,
-                  }}
-                >
-                  <span>{item.question}</span>
-                  <span
-                    style={{
-                      fontSize: '1.5rem',
-                      lineHeight: 1,
-                      transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)',
-                      transition: 'transform 0.25s ease',
-                      color: 'var(--ink-soft)',
-                    }}
-                  >
-                    +
-                  </span>
-                </button>
-
-                <div
-                  style={{
-                    maxHeight: isOpen ? '300px' : '0px',
-                    opacity: isOpen ? 1 : 0,
-                    overflow: 'hidden',
-                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  }}
-                >
-                  <p
-                    style={{
-                      padding: '0 24px 24px',
-                      margin: 0,
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '0.98rem',
-                      lineHeight: 1.7,
-                      color: 'var(--ink-soft)',
-                    }}
-                  >
-                    {item.answer}
-                  </p>
-                </div>
-              </div>
-            )
-          })}
+        <div className="faq-accordion-wrapper">
+          <FAQAccordion items={FAQ_ITEMS} maxWidth="800px" />
         </div>
       </div>
     </section>

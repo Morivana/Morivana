@@ -3,6 +3,7 @@ import SEOHead from '../components/SEOHead'
 import Breadcrumb, { buildBreadcrumbSchema } from '../components/Breadcrumb'
 import RelatedPages from '../components/RelatedPages'
 import PageLayout from '../components/PageLayout'
+import FAQAccordion from '../components/FAQAccordion'
 
 const breadcrumbs = [
   { label: 'Home', href: '/' },
@@ -133,17 +134,20 @@ export default function BenefitsPage() {
                   <div style={{
                     flexShrink: 0,
                     width: '56px',
-                    height: '56px',
-                    borderRadius: '50%',
-                    background: 'var(--surface-deep)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '1.4rem',
                     position: 'relative',
                     zIndex: 1,
+                    paddingTop: '8px',
                   }}>
-                    {item.icon}
+                    <div style={{
+                      width: '12px',
+                      height: '12px',
+                      borderRadius: '50%',
+                      background: 'var(--accent)',
+                      border: '2px solid var(--surface-deep)',
+                    }} />
                   </div>
                   <div style={{ flex: 1, paddingTop: '8px' }}>
                     <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap' }}>
@@ -192,7 +196,6 @@ export default function BenefitsPage() {
                   border: '1px solid var(--line-soft)',
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                    <span style={{ fontSize: '1.5rem' }}>{item.icon}</span>
                     <h3 style={{
                       fontFamily: 'var(--font-display)',
                       fontWeight: 800,
@@ -257,31 +260,7 @@ export default function BenefitsPage() {
 
           {/* FAQ */}
           <section style={{ marginBottom: '56px', borderTop: '1px solid var(--line-soft)', paddingTop: '48px' }}>
-            <div className="kicker" style={{ marginBottom: '24px', color: 'var(--ink-mute)' }}>Common Questions</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '640px' }}>
-              {faqs.map((faq, i) => (
-                <details key={i} style={{ borderBottom: '1px solid var(--line-soft)', paddingBottom: '16px' }}>
-                  <summary style={{
-                    fontFamily: 'var(--font-body)',
-                    fontWeight: 700,
-                    fontSize: '0.95rem',
-                    color: 'var(--surface-deep)',
-                    cursor: 'pointer',
-                    paddingBottom: '8px',
-                    listStyle: 'none',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}>
-                    {faq.q}
-                    <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>+</span>
-                  </summary>
-                  <p style={{ color: 'var(--ink-soft)', lineHeight: 1.7, margin: '12px 0 0', fontSize: '0.9rem' }}>
-                    {faq.a}
-                  </p>
-                </details>
-              ))}
-            </div>
+            <FAQAccordion items={faqs} title="Common Questions" />
           </section>
 
           {/* CTA */}

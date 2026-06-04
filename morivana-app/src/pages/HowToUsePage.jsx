@@ -1,9 +1,9 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import SEOHead from '../components/SEOHead'
 import Breadcrumb, { buildBreadcrumbSchema } from '../components/Breadcrumb'
 import RelatedPages from '../components/RelatedPages'
 import PageLayout from '../components/PageLayout'
+import FAQAccordion from '../components/FAQAccordion'
 
 const breadcrumbs = [
   { label: 'Home', href: '/' },
@@ -80,7 +80,6 @@ const faqSchema = {
 }
 
 export default function HowToUsePage() {
-  const [openFaq, setOpenFaq] = useState(null)
 
   const schemas = [howToSchema, faqSchema, buildBreadcrumbSchema(breadcrumbs)]
 
@@ -210,7 +209,6 @@ export default function HowToUsePage() {
                   borderRadius: '14px',
                   padding: '20px',
                 }}>
-                  <div style={{ fontSize: '1.8rem', marginBottom: '10px' }}>{r.emoji}</div>
                   <div style={{
                     fontFamily: 'var(--font-display)',
                     fontWeight: 700,
@@ -288,42 +286,7 @@ export default function HowToUsePage() {
 
           {/* FAQ */}
           <section style={{ marginBottom: '56px', borderTop: '1px solid var(--line-soft)', paddingTop: '48px' }}>
-            <div className="kicker" style={{ marginBottom: '20px', color: 'var(--ink-mute)' }}>FAQ</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0', maxWidth: '640px' }}>
-              {faqs.map((faq, i) => (
-                <div key={i} style={{ borderBottom: '1px solid var(--line-soft)' }}>
-                  <button
-                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                    style={{
-                      width: '100%',
-                      background: 'none',
-                      border: 'none',
-                      padding: '18px 0',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      gap: '16px',
-                      cursor: 'pointer',
-                      fontFamily: 'var(--font-body)',
-                      fontWeight: 700,
-                      fontSize: '0.95rem',
-                      color: 'var(--surface-deep)',
-                      textAlign: 'left',
-                      minHeight: 0,
-                      minWidth: 0,
-                    }}
-                  >
-                    {faq.q}
-                    <span style={{ fontSize: '1.2rem', flexShrink: 0, transform: openFaq === i ? 'rotate(45deg)' : 'none', transition: 'transform 0.2s' }}>+</span>
-                  </button>
-                  {openFaq === i && (
-                    <p style={{ color: 'var(--ink-soft)', lineHeight: 1.7, padding: '0 0 18px', margin: 0, fontSize: '0.9rem' }}>
-                      {faq.a}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
+            <FAQAccordion items={faqs} title="FAQ" />
           </section>
 
           {/* CTA */}

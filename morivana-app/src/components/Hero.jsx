@@ -46,42 +46,34 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
         )
       }
 
-      gsap.from('.hero-kicker', {
-        opacity: 0, y: prefersReducedMotion ? 0 : s.kickerY,
-        duration: prefersReducedMotion ? 0 : 0.7 * s.mul, ease: 'power3.out',
-        delay: prefersReducedMotion ? 0 : s.lead,
-      })
-      gsap.from('.hero-word', {
-        y: prefersReducedMotion ? 0 : 60, opacity: 0,
-        duration: prefersReducedMotion ? 0 : 1.4 * s.mul, ease: 'power3.out',
-        stagger: prefersReducedMotion ? 0 : 0.14,
-        delay: prefersReducedMotion ? 0 : 0.35 * s.mul,
-      })
-      gsap.from('.hero-divider', {
-        scaleX: prefersReducedMotion ? 1 : 0, transformOrigin: 'left',
-        duration: prefersReducedMotion ? 0 : 0.6 * s.mul, ease: 'power2.out',
-        delay: prefersReducedMotion ? 0 : 0.8 * s.mul,
-      })
-      gsap.from('.hero-sublabel', {
-        opacity: 0, y: prefersReducedMotion ? 0 : 20,
-        duration: prefersReducedMotion ? 0 : 0.6 * s.mul, ease: 'power2.out',
-        delay: prefersReducedMotion ? 0 : 0.9 * s.mul,
-      })
-      gsap.from('.hero-body', {
-        opacity: 0, y: prefersReducedMotion ? 0 : 20,
-        duration: prefersReducedMotion ? 0 : 0.6 * s.mul, ease: 'power2.out',
-        delay: prefersReducedMotion ? 0 : 1.0 * s.mul,
-      })
-      gsap.from('.hero-cta', {
-        opacity: 0, scale: prefersReducedMotion ? 1 : s.ctaScale,
-        duration: prefersReducedMotion ? 0 : 0.5 * s.mul, ease: 'back.out(1.4)',
-        delay: prefersReducedMotion ? 0 : 1.2 * s.mul,
-      })
-      gsap.from('.hero-countdown', {
-        opacity: 0, y: prefersReducedMotion ? 0 : 10,
-        duration: prefersReducedMotion ? 0 : 0.5 * s.mul, ease: 'power2.out',
-        delay: prefersReducedMotion ? 0 : 1.4 * s.mul,
-      })
+      gsap.fromTo('.hero-kicker',
+        { opacity: 0, y: prefersReducedMotion ? 0 : s.kickerY },
+        { opacity: 1, y: 0, duration: prefersReducedMotion ? 0 : 0.7 * s.mul, ease: 'power3.out', delay: prefersReducedMotion ? 0 : s.lead }
+      )
+      gsap.fromTo('.hero-word',
+        { y: prefersReducedMotion ? 0 : 60, opacity: 0 },
+        { y: 0, opacity: 1, duration: prefersReducedMotion ? 0 : 1.4 * s.mul, ease: 'power3.out', stagger: prefersReducedMotion ? 0 : 0.14, delay: prefersReducedMotion ? 0 : 0.35 * s.mul }
+      )
+      gsap.fromTo('.hero-divider',
+        { scaleX: prefersReducedMotion ? 1 : 0 },
+        { scaleX: 1, transformOrigin: 'left', duration: prefersReducedMotion ? 0 : 0.6 * s.mul, ease: 'power2.out', delay: prefersReducedMotion ? 0 : 0.8 * s.mul }
+      )
+      gsap.fromTo('.hero-sublabel',
+        { opacity: 0, y: prefersReducedMotion ? 0 : 20 },
+        { opacity: 1, y: 0, duration: prefersReducedMotion ? 0 : 0.6 * s.mul, ease: 'power2.out', delay: prefersReducedMotion ? 0 : 0.9 * s.mul }
+      )
+      gsap.fromTo('.hero-body',
+        { opacity: 0, y: prefersReducedMotion ? 0 : 20 },
+        { opacity: 1, y: 0, duration: prefersReducedMotion ? 0 : 0.6 * s.mul, ease: 'power2.out', delay: prefersReducedMotion ? 0 : 1.0 * s.mul }
+      )
+      gsap.fromTo('.hero-cta',
+        { opacity: 0, scale: prefersReducedMotion ? 1 : s.ctaScale },
+        { opacity: 1, scale: 1, duration: prefersReducedMotion ? 0 : 0.5 * s.mul, ease: 'back.out(1.4)', delay: prefersReducedMotion ? 0 : 1.2 * s.mul }
+      )
+      gsap.fromTo('.hero-countdown',
+        { opacity: 0, y: prefersReducedMotion ? 0 : 10 },
+        { opacity: 1, y: 0, duration: prefersReducedMotion ? 0 : 0.5 * s.mul, ease: 'power2.out', delay: prefersReducedMotion ? 0 : 1.4 * s.mul }
+      )
     }, sectionRef)
 
     return () => ctx.revert()

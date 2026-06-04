@@ -1,9 +1,10 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import SEOHead from '../components/SEOHead'
+import { useUserRegion } from '../context/RegionContext'
 import Breadcrumb, { buildBreadcrumbSchema } from '../components/Breadcrumb'
 import RelatedPages from '../components/RelatedPages'
 import PageLayout from '../components/PageLayout'
+import FAQAccordion from '../components/FAQAccordion'
 
 const breadcrumbs = [
   { label: 'Home', href: '/' },
@@ -52,7 +53,7 @@ const schemas = [
 ]
 
 export default function ShopPage() {
-  const [openFaq, setOpenFaq] = useState(null)
+  const { region, setRegion } = useUserRegion()
 
   return (
     <>
@@ -138,23 +139,68 @@ export default function ShopPage() {
                 padding: '20px',
                 border: '1px solid var(--line-soft)',
               }}>
-                <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
-                  <div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-mute)', marginBottom: '4px' }}>India</div>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                      <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '2rem', color: 'var(--surface-deep)', lineHeight: 1 }}>₹1,299</span>
-                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)', textDecoration: 'line-through' }}>₹1,499</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+                  {region === 'CA' ? (
+                    <div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-mute)', marginBottom: '4px' }}>Canada</div>
+                      <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                        <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '2rem', color: 'var(--surface-deep)', lineHeight: 1 }}>CA$19.99</span>
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)', textDecoration: 'line-through' }}>CA$23.99</span>
+                      </div>
+                      <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--ink-mute)' }}>CA$0.67/day</div>
                     </div>
-                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--ink-mute)' }}>₹43/day</div>
-                  </div>
-                  <div style={{ width: '1px', background: 'var(--line-soft)', flexShrink: 0 }} />
-                  <div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-mute)', marginBottom: '4px' }}>Canada</div>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                      <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '2rem', color: 'var(--surface-deep)', lineHeight: 1 }}>CA$19.99</span>
-                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)', textDecoration: 'line-through' }}>CA$23.99</span>
+                  ) : (
+                    <div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-mute)', marginBottom: '4px' }}>India</div>
+                      <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                        <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '2rem', color: 'var(--surface-deep)', lineHeight: 1 }}>₹1,299</span>
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)', textDecoration: 'line-through' }}>₹1,499</span>
+                      </div>
+                      <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--ink-mute)' }}>₹43/day</div>
                     </div>
-                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--ink-mute)' }}>CA$0.67/day</div>
+                  )}
+
+                  {/* Region Switcher */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-end' }}>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-mute)' }}>Shipping To</span>
+                    <div style={{ display: 'flex', gap: '4px', background: 'rgba(0,0,0,0.03)', padding: '2px', borderRadius: '24px', border: '1px solid var(--line-soft)' }}>
+                      <button
+                        onClick={() => setRegion('IN')}
+                        style={{
+                          background: region === 'IN' ? 'var(--surface-deep)' : 'none',
+                          color: region === 'IN' ? 'var(--ink-on-dark)' : 'var(--ink-soft)',
+                          border: 'none',
+                          borderRadius: '20px',
+                          padding: '4px 10px',
+                          fontSize: '11px',
+                          cursor: 'pointer',
+                          fontWeight: 600,
+                          transition: 'all 0.2s',
+                          minHeight: 0,
+                          minWidth: 0,
+                        }}
+                      >
+                        IN
+                      </button>
+                      <button
+                        onClick={() => setRegion('CA')}
+                        style={{
+                          background: region === 'CA' ? 'var(--surface-deep)' : 'none',
+                          color: region === 'CA' ? 'var(--ink-on-dark)' : 'var(--ink-soft)',
+                          border: 'none',
+                          borderRadius: '20px',
+                          padding: '4px 10px',
+                          fontSize: '11px',
+                          cursor: 'pointer',
+                          fontWeight: 600,
+                          transition: 'all 0.2s',
+                          minHeight: 0,
+                          minWidth: 0,
+                        }}
+                      >
+                        CA
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -162,18 +208,18 @@ export default function ShopPage() {
               {/* Ingredients badge list */}
               <div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-mute)', marginBottom: '10px' }}>
-                  What's Inside
+                  What&apos;s Inside
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                   {[
-                    { name: 'Moringa', emoji: '🌿' },
-                    { name: 'Spirulina', emoji: '💧' },
-                    { name: 'Amla', emoji: '🟢' },
-                    { name: 'Ginger', emoji: '🫚' },
-                    { name: 'Lemon Zest', emoji: '🍋' },
-                    { name: 'Inulin', emoji: '🌾' },
-                    { name: 'Orange Peel', emoji: '🍊' },
-                    { name: 'Monk Fruit', emoji: '🫐' },
+                    { name: 'Moringa' },
+                    { name: 'Spirulina' },
+                    { name: 'Amla' },
+                    { name: 'Ginger' },
+                    { name: 'Lemon Zest' },
+                    { name: 'Inulin' },
+                    { name: 'Orange Peel' },
+                    { name: 'Monk Fruit' },
                   ].map(ing => (
                     <Link
                       key={ing.name}
@@ -199,7 +245,7 @@ export default function ShopPage() {
                       onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--surface-deep)'; e.currentTarget.style.background = 'var(--surface-base)' }}
                       onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--line-soft)'; e.currentTarget.style.background = 'var(--surface-soft)' }}
                     >
-                      {ing.emoji} {ing.name}
+                      {ing.name}
                     </Link>
                   ))}
                 </div>
@@ -258,10 +304,10 @@ export default function ShopPage() {
             marginBottom: '64px',
           }}>
             {[
-              { icon: '🔒', title: '30-Day Guarantee', body: 'Not satisfied? Full refund, no questions.' },
-              { icon: '🚚', title: 'India & Canada', body: 'Shipping to both markets at launch.' },
-              { icon: '🌱', title: 'Transparent Sourcing', body: 'Full supply chain disclosed.' },
-              { icon: '📧', title: 'Priority Access', body: 'Waitlist members ship first.' },
+                    { title: '30-Day Guarantee', body: 'Not satisfied? Full refund, no questions.' },
+                    { title: 'India & Canada', body: 'Shipping to both markets at launch.' },
+                    { title: 'Transparent Sourcing', body: 'Full supply chain disclosed.' },
+                    { title: 'Priority Access', body: 'Waitlist members ship first.' },
             ].map(t => (
               <div key={t.title} style={{
                 background: 'var(--surface-soft)',
@@ -269,7 +315,6 @@ export default function ShopPage() {
                 padding: '20px',
                 border: '1px solid var(--line-soft)',
               }}>
-                <div style={{ fontSize: '1.4rem', marginBottom: '8px' }}>{t.icon}</div>
                 <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.82rem', textTransform: 'uppercase', color: 'var(--surface-deep)', marginBottom: '4px' }}>{t.title}</div>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)', lineHeight: 1.5, margin: 0 }}>{t.body}</p>
               </div>
@@ -278,42 +323,7 @@ export default function ShopPage() {
 
           {/* FAQ */}
           <section style={{ marginBottom: '56px', borderTop: '1px solid var(--line-soft)', paddingTop: '48px' }}>
-            <div className="kicker" style={{ marginBottom: '20px', color: 'var(--ink-mute)' }}>Product FAQ</div>
-            <div style={{ maxWidth: '640px', display: 'flex', flexDirection: 'column', gap: '0' }}>
-              {faqs.map((faq, i) => (
-                <div key={i} style={{ borderBottom: '1px solid var(--line-soft)' }}>
-                  <button
-                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                    style={{
-                      width: '100%',
-                      background: 'none',
-                      border: 'none',
-                      padding: '18px 0',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      gap: '16px',
-                      cursor: 'pointer',
-                      fontFamily: 'var(--font-body)',
-                      fontWeight: 700,
-                      fontSize: '0.95rem',
-                      color: 'var(--surface-deep)',
-                      textAlign: 'left',
-                      minHeight: 0,
-                      minWidth: 0,
-                    }}
-                  >
-                    {faq.q}
-                    <span style={{ fontSize: '1.2rem', flexShrink: 0, transform: openFaq === i ? 'rotate(45deg)' : 'none', transition: 'transform 0.2s' }}>+</span>
-                  </button>
-                  {openFaq === i && (
-                    <p style={{ color: 'var(--ink-soft)', lineHeight: 1.7, padding: '0 0 18px', margin: 0, fontSize: '0.9rem' }}>
-                      {faq.a}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
+            <FAQAccordion items={faqs} title="Product FAQ" />
           </section>
 
           {/* Why Morivaná callout */}

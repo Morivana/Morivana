@@ -66,8 +66,7 @@ export default function IngredientDetailPage() {
 
           {/* Hero */}
           <div style={{ marginTop: '40px', marginBottom: '56px' }}>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '16px', marginBottom: '12px', flexWrap: 'wrap' }}>
-              <span style={{ fontSize: '2.4rem' }}>{ing.emoji}</span>
+            <div style={{ marginBottom: '12px' }}>
               <div className="kicker" style={{ color: 'var(--ink-mute)' }}>{ing.origin}</div>
             </div>
             <h1 style={{

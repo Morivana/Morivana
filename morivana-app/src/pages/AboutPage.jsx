@@ -156,7 +156,6 @@ export default function AboutPage() {
                     gap: '6px',
                   }}
                 >
-                  <div style={{ fontSize: '1.4rem' }}>{item.icon}</div>
                   <div style={{
                     fontFamily: 'var(--font-display)',
                     fontWeight: 700,
