@@ -50,25 +50,29 @@ services:
       - path: /assets/*
         name: Cache-Control
         value: "public, max-age=31536000, immutable"
-      # No-cache and security headers for index.html
+      # No-cache for index.html
       - path: /index.html
         name: Cache-Control
         value: "no-cache, no-store, must-revalidate"
-      - path: /index.html
+      # Security headers applied globally to all paths
+      - path: /*
         name: Content-Security-Policy
-        value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://clerk.com https://*.clerk.accounts.dev https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://img.clerk.com; connect-src 'self' https://clerk.com https://*.clerk.accounts.dev https://challenges.cloudflare.com ws://localhost:* http://localhost:* wss://localhost:*; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://challenges.cloudflare.com; object-src 'none';"
-      - path: /index.html
+        value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://clerk.com https://*.clerk.accounts.dev https://challenges.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://img.clerk.com https://www.google-analytics.com https://www.googletagmanager.com; connect-src 'self' https://clerk.com https://*.clerk.accounts.dev https://challenges.cloudflare.com https://www.google-analytics.com https://analytics.google.com ws://localhost:* http://localhost:* wss://localhost:*; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://challenges.cloudflare.com; object-src 'none'; require-trusted-types-for 'script'; trusted-types default;"
+      - path: /*
         name: X-Frame-Options
         value: "DENY"
-      - path: /index.html
+      - path: /*
         name: X-Content-Type-Options
         value: "nosniff"
-      - path: /index.html
+      - path: /*
         name: Referrer-Policy
         value: "strict-origin-when-cross-origin"
-      - path: /index.html
+      - path: /*
         name: Strict-Transport-Security
         value: "max-age=31536000; includeSubDomains; preload"
+      - path: /*
+        name: Cross-Origin-Opener-Policy
+        value: "same-origin"
     routes:
       # SPA fallback: any path that doesn't match a real file serves index.html
       # This is what makes React Router work on page refresh / direct URL access

@@ -1,3 +1,16 @@
+// Register a default Trusted Types policy to prevent DOM-based XSS violations from third-party scripts.
+if (typeof window !== 'undefined' && window.trustedTypes && window.trustedTypes.createPolicy) {
+  try {
+    window.trustedTypes.createPolicy('default', {
+      createHTML: (string) => string,
+      createScript: (string) => string,
+      createScriptURL: (string) => string,
+    })
+  } catch (e) {
+    console.warn('[TrustedTypes] default policy creation failed:', e)
+  }
+}
+
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
