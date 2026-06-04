@@ -198,11 +198,7 @@ app.post('/api/vitals', (req, res) => {
 app.get('/api/health', (_req, res) => res.json({ ok: true, env: NODE_ENV }))
 
 // ── Start ────────────────────────────────────────────────────────────────────
-if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
-  app.listen(PORT, () => {
-    console.log(`Morivana API listening on http://localhost:${PORT} (${NODE_ENV || 'development'})`)
-  })
-}
-
-export default app
+app.listen(PORT, () => {
+  console.log(`Morivana API listening on http://localhost:${PORT} (${NODE_ENV || 'development'})`)
+})
 
