@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useEffect } from 'react'
 import FloatingLeaves from '../components/FloatingLeaves'
 import ObfuscatedEmail from '../components/ObfuscatedEmail'
+import SEOHead from '../components/SEOHead'
 
 export default function TermsPage() {
   // Scroll to top on mount
@@ -21,6 +22,11 @@ export default function TermsPage() {
         fontFamily: 'var(--font-body, "DM Sans", system-ui, sans-serif)',
       }}
     >
+      <SEOHead
+        title="Terms of Use & Conditions | Morivaná Daily Super Greens"
+        description="Read the Terms of Use for Morivaná. Learn about our pre-launch waitlist, intellectual property, and guidelines for using our super greens website."
+        canonical="/terms"
+      />
       <FloatingLeaves variant="light" density="sparse" />
 
       <div

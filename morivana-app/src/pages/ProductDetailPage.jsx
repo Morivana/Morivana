@@ -64,7 +64,7 @@ export default function ProductDetailPage() {
   return (
     <>
       <SEOHead
-        title="Morivaná Daily Super Greens 30-Day Supply | Buy Online India & Canada"
+        title="Morivaná Daily Super Greens | Buy Online India & Canada"
         description="Buy Morivaná Daily Super Greens — 150g, 30 servings. 8 whole plants, cold-dried, full transparency. Pre-order ₹1,299 India / CA$19.99 Canada."
         canonical="/shop/daily-greens"
         ogType="product"

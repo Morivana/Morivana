@@ -7,7 +7,7 @@
     "dev": "vite",
     "server": "node server/index.js",
     "server:prod": "NODE_ENV=production node server/index.js",
-    "build": "npx vite build",
+    "build": "npx vite build && node scripts/prerender.js",
     "start": "NODE_ENV=production node server/index.js",
     "render-build": "npm install --include=dev && npm run build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",

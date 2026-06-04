@@ -53,7 +53,7 @@ export default function IngredientDetailPage() {
   return (
     <>
       <SEOHead
-        title={`${ing.name} (${ing.latin}) Benefits, Nutrition & Uses | Morivaná`}
+        title={`${ing.name} (${ing.latin}) | Sourcing & Benefits`}
         description={`${ing.benefit} Learn about the science, nutrition, and sourcing of ${ing.name} in Morivaná's super greens powder.`}
         canonical={`/ingredients/${ing.slug}`}
         ogType="article"

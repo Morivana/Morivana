@@ -36,7 +36,7 @@ export default function AboutPage() {
   return (
     <>
       <SEOHead
-        title="About Morivaná | Our Story, Mission & Sourcing"
+        title="About Morivaná | Pure Moringa Super Greens Sourcing & Mission"
         description="Learn why we built Morivaná — a clean super greens powder from 8 sourced plants. Our story, philosophy, and sourcing transparency for India & Canada."
         canonical="/about"
         schemas={schemas}

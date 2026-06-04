@@ -71,7 +71,7 @@ export default function SustainabilityPage() {
   return (
     <>
       <SEOHead
-        title="How We Source | Morivaná Sustainability & Sourcing Transparency"
+        title="How We Source | Morivaná Sourcing & Sustainability"
         description="Full supply chain transparency for Morivaná's 8 ingredients — where each plant comes from, how it's processed, and our commitment to no hidden sourcing."
         canonical="/sustainability"
         schemas={schemas}

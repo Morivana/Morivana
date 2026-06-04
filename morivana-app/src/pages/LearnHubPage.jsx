@@ -39,7 +39,7 @@ export default function LearnHubPage() {
   return (
     <>
       <SEOHead
-        title="Learn Hub | Super Greens & Plant Nutrition Guides"
+        title="Learn Hub | Moringa Super Greens & Plant Nutrition Guides"
         description="Evidence-based guides on super greens, moringa, spirulina, amla, and more. Written by the Morivaná team. No ads, no affiliate links — just the research."
         canonical="/learn"
         schemas={schemas}

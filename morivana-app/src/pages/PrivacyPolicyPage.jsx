@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useEffect } from 'react'
 import FloatingLeaves from '../components/FloatingLeaves'
 import ObfuscatedEmail from '../components/ObfuscatedEmail'
+import SEOHead from '../components/SEOHead'
 
 export default function PrivacyPolicyPage() {
   // Scroll to top on mount
@@ -21,6 +22,11 @@ export default function PrivacyPolicyPage() {
         fontFamily: 'var(--font-body, "DM Sans", system-ui, sans-serif)',
       }}
     >
+      <SEOHead
+        title="Privacy Policy | Morivaná Daily Super Greens Powder"
+        description="Read the Privacy Policy for Morivaná. Learn how we handle your waitlist and contact data for our daily super greens powder in India and Canada."
+        canonical="/privacy-policy"
+      />
       <FloatingLeaves variant="light" density="sparse" />
 
       <div

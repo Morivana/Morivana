@@ -78,7 +78,7 @@ export default function BenefitsPage() {
   return (
     <>
       <SEOHead
-        title="Health Benefits | What Morivaná Does for Your Body"
+        title="Moringa & Spirulina Health Benefits | Morivaná Greens"
         description="A day-by-day look at what Morivaná super greens does — energy, digestion, immunity, skin clarity, and mental focus. Backed by ingredient research."
         canonical="/benefits"
         schemas={schemas}
