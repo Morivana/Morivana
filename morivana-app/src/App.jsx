@@ -48,6 +48,8 @@ import LearnHubPage from './pages/LearnHubPage'
 import BlogPostPage from './pages/BlogPostPage'
 import WaitlistPage from './pages/WaitlistPage'
 import NotFoundPage from './pages/NotFoundPage'
+import SEOHead from './components/SEOHead'
+
 
 
 // ─── Home page (existing scroll-story landing) ───────────────────────────────
@@ -116,6 +118,11 @@ function HomePage() {
 
   return (
     <div className="app-root">
+      <SEOHead
+        title="Morivaná | Daily Moringa Super Greens Powder for Energy"
+        description="Daily scoop of Morivaná Super Greens Powder for your morning. Organic moringa, spirulina, vitamin C, lemon & monk fruit. Ships to India & Canada."
+        canonical="/"
+      />
       {!loaderDone && (
         <Loader
           onLeaveStart={() => setLoaderRevealing(true)}
