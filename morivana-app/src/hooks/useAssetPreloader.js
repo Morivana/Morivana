@@ -2,16 +2,11 @@ import { useEffect, useState } from 'react'
 
 const CRITICAL_IMAGES = [
   '/morivana-sip.jpeg',
-  '/Moringa%20Leaves%20Overhead.png',
-  '/morivana-scoop.png',
   '/morivana-jar.jpeg',
-  '/Morning%20Light%20.png',
-  '/morivana-ingredients.png',
   '/morivana-powder.jpeg',
-  '/packaging_highres.png',
 ]
 
-const CRITICAL_MODELS = ['/models/morivana_pouch_fixed_draco.glb']
+const CRITICAL_MODELS = []
 
 function preloadImage(src) {
   return new Promise((resolve) => {

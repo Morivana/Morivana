@@ -86,21 +86,7 @@ export default function WhatIsMorivana() {
             </h2>
           </div>
 
-          {/* Mobile product image (hidden on desktop, visible on mobile) */}
-          <div className="mobile-product-img" style={{ display: 'none' }}>
-            <img
-              src="/packaging_highres.png"
-              alt="Morivaná Daily Super Greens Powder Premium Packaging"
-              loading="eager"
-              fetchpriority="high"
-              style={{
-                width: '100%',
-                maxHeight: '350px',
-                objectFit: 'contain',
-                margin: '20px 0',
-              }}
-            />
-          </div>
+
 
           <div className="what-text-block">
             <p style={{
@@ -110,7 +96,7 @@ export default function WhatIsMorivana() {
               color: 'var(--ink-soft)',
               maxWidth: '460px',
             }}>
-              Morivana Daily Super Greens blends 8 of nature's most powerful superfoods:
+              {"Morivana Daily Super Greens blends 8 of nature's most powerful superfoods:"}
               moringa, spirulina, amla, ginger, lemon, inulin, orange peel and monk fruit,
               into one easy daily scoop.
             </p>
@@ -124,7 +110,7 @@ export default function WhatIsMorivana() {
               color: 'var(--ink-soft)',
               maxWidth: '460px',
             }}>
-              Made for busy people who don't always get enough nutrients from food.
+              {"Made for busy people who don't always get enough nutrients from food."}
               One scoop in water. 30 seconds. Done.
             </p>
           </div>

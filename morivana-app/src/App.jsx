@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, lazy, Suspense } from 'react'
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import { ClerkProvider } from '@clerk/clerk-react'
 import { RegionProvider } from './context/RegionContext'
@@ -18,37 +18,39 @@ import Benefits from './components/Benefits'
 import HowToUse from './components/HowToUse'
 import WaitlistCTA from './components/WaitlistCTA'
 import Footer from './components/Footer'
-import ProductScene from './components/ProductScene'
 import HomepageFAQ from './components/HomepageFAQ'
 
 // Auth
 import ProtectedRoute from './components/auth/ProtectedRoute'
-import SignInPage from './pages/SignInPage'
-import SignUpPage from './pages/SignUpPage'
-import AccountPage from './pages/AccountPage'
-import OrdersPage from './pages/OrdersPage'
-import CheckoutPage from './pages/CheckoutPage'
 import ErrorBoundary from './components/ErrorBoundary'
 import CanvasErrorBoundary from './components/CanvasErrorBoundary'
-import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
-import TermsPage from './pages/TermsPage'
+import SEOHead from './components/SEOHead'
+
+const ProductScene = lazy(() => import('./components/ProductScene'))
+
+const SignInPage = lazy(() => import('./pages/SignInPage'))
+const SignUpPage = lazy(() => import('./pages/SignUpPage'))
+const AccountPage = lazy(() => import('./pages/AccountPage'))
+const OrdersPage = lazy(() => import('./pages/OrdersPage'))
+const CheckoutPage = lazy(() => import('./pages/CheckoutPage'))
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'))
+const TermsPage = lazy(() => import('./pages/TermsPage'))
 
 // New multi-page routes
-import AboutPage from './pages/AboutPage'
-import IngredientsHubPage from './pages/IngredientsHubPage'
-import IngredientDetailPage from './pages/IngredientDetailPage'
-import BenefitsPage from './pages/BenefitsPage'
-import HowToUsePage from './pages/HowToUsePage'
-import ShopPage from './pages/ShopPage'
-import ProductDetailPage from './pages/ProductDetailPage'
-import SciencePage from './pages/SciencePage'
-import ComparePage from './pages/ComparePage'
-import SustainabilityPage from './pages/SustainabilityPage'
-import LearnHubPage from './pages/LearnHubPage'
-import BlogPostPage from './pages/BlogPostPage'
-import WaitlistPage from './pages/WaitlistPage'
-import NotFoundPage from './pages/NotFoundPage'
-import SEOHead from './components/SEOHead'
+const AboutPage = lazy(() => import('./pages/AboutPage'))
+const IngredientsHubPage = lazy(() => import('./pages/IngredientsHubPage'))
+const IngredientDetailPage = lazy(() => import('./pages/IngredientDetailPage'))
+const BenefitsPage = lazy(() => import('./pages/BenefitsPage'))
+const HowToUsePage = lazy(() => import('./pages/HowToUsePage'))
+const ShopPage = lazy(() => import('./pages/ShopPage'))
+const ProductDetailPage = lazy(() => import('./pages/ProductDetailPage'))
+const SciencePage = lazy(() => import('./pages/SciencePage'))
+const ComparePage = lazy(() => import('./pages/ComparePage'))
+const SustainabilityPage = lazy(() => import('./pages/SustainabilityPage'))
+const LearnHubPage = lazy(() => import('./pages/LearnHubPage'))
+const BlogPostPage = lazy(() => import('./pages/BlogPostPage'))
+const WaitlistPage = lazy(() => import('./pages/WaitlistPage'))
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 
 
 
@@ -148,7 +150,11 @@ function HomePage() {
         }}
       >
         <CanvasErrorBoundary>
-          <ProductScene heroMode={false} style={{ height: '100%', pointerEvents: 'none' }} />
+          <Suspense fallback={null}>
+            {(loaderRevealing || loaderDone) && (
+              <ProductScene heroMode={false} style={{ height: '100%', pointerEvents: 'none' }} />
+            )}
+          </Suspense>
         </CanvasErrorBoundary>
       </div>
 
@@ -198,60 +204,62 @@ function App() {
         {!isAuthOrAccountPage && <Navbar />}
 
         <ErrorBoundary>
-          <Routes>
-            {/* Landing page — all existing scroll sections */}
-            <Route path="/" element={<HomePage />} />
+          <Suspense fallback={null}>
+            <Routes>
+              {/* Landing page — all existing scroll sections */}
+              <Route path="/" element={<HomePage />} />
 
-            {/* Auth pages */}
-            <Route path="/sign-in/*" element={<SignInPage />} />
-            <Route path="/sign-up/*" element={<SignUpPage />} />
+              {/* Auth pages */}
+              <Route path="/sign-in/*" element={<SignInPage />} />
+              <Route path="/sign-up/*" element={<SignUpPage />} />
 
-            {/* ── New multi-page routes ── */}
-            <Route path="/about" element={<><AboutPage /><Footer /></>} />
-            <Route path="/ingredients" element={<><IngredientsHubPage /><Footer /></>} />
-            <Route path="/ingredients/:slug" element={<><IngredientDetailPage /><Footer /></>} />
-            <Route path="/benefits" element={<><BenefitsPage /><Footer /></>} />
-            <Route path="/how-to-use" element={<><HowToUsePage /><Footer /></>} />
-            <Route path="/shop" element={<><ShopPage /><Footer /></>} />
-            <Route path="/shop/daily-greens" element={<><ProductDetailPage /><Footer /></>} />
-            <Route path="/science" element={<><SciencePage /><Footer /></>} />
-            <Route path="/compare" element={<><ComparePage /><Footer /></>} />
-            <Route path="/sustainability" element={<><SustainabilityPage /><Footer /></>} />
-            <Route path="/learn" element={<><LearnHubPage /><Footer /></>} />
-            <Route path="/learn/:slug" element={<><BlogPostPage /><Footer /></>} />
-            <Route path="/waitlist" element={<><WaitlistPage /><Footer /></>} />
+              {/* ── New multi-page routes ── */}
+              <Route path="/about" element={<><AboutPage /><Footer /></>} />
+              <Route path="/ingredients" element={<><IngredientsHubPage /><Footer /></>} />
+              <Route path="/ingredients/:slug" element={<><IngredientDetailPage /><Footer /></>} />
+              <Route path="/benefits" element={<><BenefitsPage /><Footer /></>} />
+              <Route path="/how-to-use" element={<><HowToUsePage /><Footer /></>} />
+              <Route path="/shop" element={<><ShopPage /><Footer /></>} />
+              <Route path="/shop/daily-greens" element={<><ProductDetailPage /><Footer /></>} />
+              <Route path="/science" element={<><SciencePage /><Footer /></>} />
+              <Route path="/compare" element={<><ComparePage /><Footer /></>} />
+              <Route path="/sustainability" element={<><SustainabilityPage /><Footer /></>} />
+              <Route path="/learn" element={<><LearnHubPage /><Footer /></>} />
+              <Route path="/learn/:slug" element={<><BlogPostPage /><Footer /></>} />
+              <Route path="/waitlist" element={<><WaitlistPage /><Footer /></>} />
 
-            {/* Static informational pages */}
-            <Route path="/privacy-policy" element={<><PrivacyPolicyPage /><Footer /></>} />
-            <Route path="/terms" element={<><TermsPage /><Footer /></>} />
+              {/* Static informational pages */}
+              <Route path="/privacy-policy" element={<><PrivacyPolicyPage /><Footer /></>} />
+              <Route path="/terms" element={<><TermsPage /><Footer /></>} />
 
-            {/* Protected pages */}
-            <Route
-              path="/account"
-              element={
-                <ProtectedRoute>
-                  <AccountPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/orders"
-              element={
-                <ProtectedRoute>
-                  <OrdersPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/checkout"
-              element={
-                <ProtectedRoute>
-                  <CheckoutPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
+              {/* Protected pages */}
+              <Route
+                path="/account"
+                element={
+                  <ProtectedRoute>
+                    <AccountPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/orders"
+                element={
+                  <ProtectedRoute>
+                    <OrdersPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/checkout"
+                element={
+                  <ProtectedRoute>
+                    <CheckoutPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </Suspense>
         </ErrorBoundary>
       </RegionProvider>
     </ClerkProvider>

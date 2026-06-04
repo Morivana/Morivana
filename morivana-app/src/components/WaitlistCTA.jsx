@@ -5,6 +5,7 @@ import FloatingLeaves from './FloatingLeaves'
 
 export default function WaitlistCTA() {
   const [turnstileToken, setTurnstileToken] = useState('')
+  const [loadCollage, setLoadCollage] = useState(false)
   const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY
 
   const {
@@ -13,6 +14,27 @@ export default function WaitlistCTA() {
     setError,
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm()
+
+  useEffect(() => {
+    const triggerLoad = () => {
+      setLoadCollage(true)
+      cleanup()
+    }
+    const cleanup = () => {
+      window.removeEventListener('scroll', triggerLoad)
+      window.removeEventListener('touchmove', triggerLoad)
+      window.removeEventListener('mousemove', triggerLoad)
+    }
+    window.addEventListener('scroll', triggerLoad, { passive: true })
+    window.addEventListener('touchmove', triggerLoad, { passive: true })
+    window.addEventListener('mousemove', triggerLoad, { passive: true })
+
+    const timeout = setTimeout(triggerLoad, 3500)
+    return () => {
+      cleanup()
+      clearTimeout(timeout)
+    }
+  }, [])
 
   // Load/Render Turnstile dynamically
   useEffect(() => {
@@ -169,15 +191,17 @@ export default function WaitlistCTA() {
 
       {/* Photo collage background - irregular grid of brand lifestyle stills.
           Sits behind the radial glow and an overlay scrim for legibility. */}
-      <div className="cta-collage" aria-hidden="true">
-        <div className="cta-tile cta-tile--1" style={{ backgroundImage: 'url(/morivana-sip.jpeg)' }} />
-        <div className="cta-tile cta-tile--2" style={{ backgroundImage: 'url(/Moringa%20Leaves%20Overhead.png)' }} />
-        <div className="cta-tile cta-tile--3" style={{ backgroundImage: 'url(/morivana-scoop.png)' }} />
-        <div className="cta-tile cta-tile--4" style={{ backgroundImage: 'url(/morivana-jar.jpeg)' }} />
-        <div className="cta-tile cta-tile--5" style={{ backgroundImage: 'url(/Morning%20Light%20.png)' }} />
-        <div className="cta-tile cta-tile--6" style={{ backgroundImage: 'url(/morivana-ingredients.png)' }} />
-        <div className="cta-tile cta-tile--7" style={{ backgroundImage: 'url(/morivana-powder.jpeg)' }} />
-      </div>
+      {loadCollage && (
+        <div className="cta-collage" aria-hidden="true">
+          <div className="cta-tile cta-tile--1" style={{ backgroundImage: 'url(/morivana-sip.jpeg)' }} />
+          <div className="cta-tile cta-tile--2" style={{ backgroundImage: 'url(/Moringa%20Leaves%20Overhead.png)' }} />
+          <div className="cta-tile cta-tile--3" style={{ backgroundImage: 'url(/morivana-scoop.png)' }} />
+          <div className="cta-tile cta-tile--4" style={{ backgroundImage: 'url(/morivana-jar.jpeg)' }} />
+          <div className="cta-tile cta-tile--5" style={{ backgroundImage: 'url(/Morning%20Light%20.png)' }} />
+          <div className="cta-tile cta-tile--6" style={{ backgroundImage: 'url(/morivana-ingredients.png)' }} />
+          <div className="cta-tile cta-tile--7" style={{ backgroundImage: 'url(/morivana-powder.jpeg)' }} />
+        </div>
+      )}
 
       {/* Dark green scrim for legibility */}
       <div className="cta-scrim" aria-hidden="true" />
@@ -401,7 +425,7 @@ export default function WaitlistCTA() {
               textTransform: 'uppercase',
               marginBottom: '12px',
             }}>
-              You're on the list!
+              {"You're on the list!"}
             </div>
             <p style={{
               fontFamily: 'var(--font-body)',
@@ -409,7 +433,7 @@ export default function WaitlistCTA() {
               opacity: 0.85,
               lineHeight: 1.65,
             }}>
-              We'll notify you at launch with your exclusive discount.
+              {"We'll notify you at launch with your exclusive discount."}
             </p>
           </div>
         ) : (

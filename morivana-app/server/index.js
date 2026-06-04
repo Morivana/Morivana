@@ -35,8 +35,9 @@ const corsOptions = NODE_ENV === 'production' && ALLOWED_ORIGIN
       origin: ALLOWED_ORIGIN.split(',').map(o => o.trim()),
       methods: ['GET', 'POST', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
+      credentials: true,
     }
-  : { origin: true }  // dev: permissive
+  : { origin: true, credentials: true }  // dev: permissive
 
 const app = express()
 app.use(cors(corsOptions))
