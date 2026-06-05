@@ -32,6 +32,7 @@
     "react-helmet-async": "^3.0.0",
     "react-hook-form": "^7.77.0",
     "react-router-dom": "^7.16.0",
+    "serverless-http": "^4.0.0",
     "three": "^0.184.0",
     "zod": "^4.4.3"
   },
