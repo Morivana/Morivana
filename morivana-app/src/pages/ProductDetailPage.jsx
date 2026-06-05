@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import SEOHead from '../components/SEOHead'
 import { useUserRegion } from '../context/RegionContext'
@@ -8,12 +9,12 @@ import PageLayout from '../components/PageLayout'
 const breadcrumbs = [
   { label: 'Home', href: '/' },
   { label: 'Shop', href: '/shop' },
-  { label: 'Daily Greens 30-Day Supply', href: null },
+  { label: 'Daily Greens', href: null },
 ]
 
-const nutritionFacts = [
+const getNutritionFacts = (pack) => [
   { item: 'Serving Size', value: '5g (1 scoop)', bold: true },
-  { item: 'Servings Per Container', value: '30', bold: false },
+  { item: 'Servings Per Container', value: pack === '50g' ? '10' : '20', bold: false },
   { item: 'Calories', value: '18 kcal', bold: true },
   { item: 'Total Fat', value: '0.2g', bold: false },
   { item: 'Total Carbohydrate', value: '2.8g', bold: false },
@@ -30,16 +31,17 @@ const schemas = [
   {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: 'Morivaná Daily Super Greens 30-Day Supply',
-    description: '150g pouch (30 servings) of Morivaná super greens powder. 8 whole plants, cold-dried, all amounts disclosed. No proprietary blends.',
+    name: 'Morivaná Daily Super Greens Powder',
+    description: 'Morivaná clean super greens powder. 8 whole plants, cold-dried, all amounts disclosed. No proprietary blends.',
     image: 'https://morivana.pages.dev/packaging_highres.webp',
     brand: { '@type': 'Brand', name: 'Morivaná' },
     offers: [
       {
         '@type': 'Offer',
+        name: '50g Trial Pack - India',
         availability: 'https://schema.org/PreOrder',
         priceCurrency: 'INR',
-        price: '1299',
+        price: '499',
         priceValidUntil: '2027-12-31',
         url: 'https://morivana.pages.dev/shop/daily-greens',
         eligibleRegion: { '@type': 'Country', name: 'India' },
@@ -81,9 +83,100 @@ const schemas = [
       },
       {
         '@type': 'Offer',
+        name: '100g Daily Ritual Pack - India',
+        availability: 'https://schema.org/PreOrder',
+        priceCurrency: 'INR',
+        price: '799',
+        priceValidUntil: '2027-12-31',
+        url: 'https://morivana.pages.dev/shop/daily-greens',
+        eligibleRegion: { '@type': 'Country', name: 'India' },
+        shippingDetails: {
+          '@type': 'OfferShippingDetails',
+          shippingRate: {
+            '@type': 'MonetaryAmount',
+            value: '0',
+            currency: 'INR',
+          },
+          shippingDestination: {
+            '@type': 'DefinedRegion',
+            addressCountry: 'IN',
+          },
+          deliveryTime: {
+            '@type': 'ShippingDeliveryTime',
+            handlingTime: {
+              '@type': 'QuantitativeValue',
+              minValue: 0,
+              maxValue: 1,
+              unitCode: 'DAY',
+            },
+            transitTime: {
+              '@type': 'QuantitativeValue',
+              minValue: 2,
+              maxValue: 5,
+              unitCode: 'DAY',
+            },
+          },
+        },
+        hasMerchantReturnPolicy: {
+          '@type': 'MerchantReturnPolicy',
+          applicableCountry: 'IN',
+          returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnPeriod',
+          merchantReturnDays: 30,
+          returnMethod: 'https://schema.org/ReturnByMail',
+          returnFees: 'https://schema.org/FreeReturn',
+        },
+      },
+      {
+        '@type': 'Offer',
+        name: '50g Trial Pack - Canada',
         availability: 'https://schema.org/PreOrder',
         priceCurrency: 'CAD',
-        price: '19.99',
+        price: '21',
+        priceValidUntil: '2027-12-31',
+        url: 'https://morivana.pages.dev/shop/daily-greens',
+        eligibleRegion: { '@type': 'Country', name: 'Canada' },
+        shippingDetails: {
+          '@type': 'OfferShippingDetails',
+          shippingRate: {
+            '@type': 'MonetaryAmount',
+            value: '0',
+            currency: 'CAD',
+          },
+          shippingDestination: {
+            '@type': 'DefinedRegion',
+            addressCountry: 'CA',
+          },
+          deliveryTime: {
+            '@type': 'ShippingDeliveryTime',
+            handlingTime: {
+              '@type': 'QuantitativeValue',
+              minValue: 0,
+              maxValue: 1,
+              unitCode: 'DAY',
+            },
+            transitTime: {
+              '@type': 'QuantitativeValue',
+              minValue: 3,
+              maxValue: 7,
+              unitCode: 'DAY',
+            },
+          },
+        },
+        hasMerchantReturnPolicy: {
+          '@type': 'MerchantReturnPolicy',
+          applicableCountry: 'CA',
+          returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnPeriod',
+          merchantReturnDays: 30,
+          returnMethod: 'https://schema.org/ReturnByMail',
+          returnFees: 'https://schema.org/FreeReturn',
+        },
+      },
+      {
+        '@type': 'Offer',
+        name: '100g Daily Ritual Pack - Canada',
+        availability: 'https://schema.org/PreOrder',
+        priceCurrency: 'CAD',
+        price: '39',
         priceValidUntil: '2027-12-31',
         url: 'https://morivana.pages.dev/shop/daily-greens',
         eligibleRegion: { '@type': 'Country', name: 'Canada' },
@@ -135,11 +228,14 @@ const schemas = [
 
 export default function ProductDetailPage() {
   const { region, setRegion } = useUserRegion()
+  const [selectedPack, setSelectedPack] = useState('100g')
+  const nutritionFacts = getNutritionFacts(selectedPack)
+
   return (
     <>
       <SEOHead
         title="Morivaná Daily Super Greens | Buy Online India & Canada"
-        description="Buy Morivaná Daily Super Greens — 150g, 30 servings. 8 whole plants, cold-dried, full transparency. Pre-order ₹1,299 India / CA$19.99 Canada."
+        description="Buy Morivaná Daily Super Greens — clean greens powder made from 8 whole plants. Sizing from 50g trial pack to 100g daily ritual pack. Pre-order ₹499/₹799 India or CA$21/CA$39 Canada."
         canonical="/shop/daily-greens"
         ogType="product"
         schemas={schemas}
@@ -163,7 +259,7 @@ export default function ProductDetailPage() {
             }}>
               Morivaná Daily Super Greens<br />
               <span style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontWeight: 500, textTransform: 'none', fontSize: '0.6em', color: 'var(--ink-soft)' }}>
-                30-Day Supply · 150g
+                {selectedPack === '50g' ? 'Trial Pack · 50g (10 Servings)' : 'Daily Ritual Pack · 100g (20 Servings)'}
               </span>
             </h1>
           </div>
@@ -183,7 +279,7 @@ export default function ProductDetailPage() {
               }}>
                 <img
                   src="/packaging_highres.webp"
-                  alt="Morivaná Daily Super Greens 150g pouch — front"
+                  alt="Morivaná Daily Super Greens pouch — front"
                   style={{ width: '80%', height: '80%', objectFit: 'contain' }}
                   loading="eager"
                   width="664"
@@ -201,7 +297,7 @@ export default function ProductDetailPage() {
               }}>
                 <img
                   src="/packaging_highres_back.webp"
-                  alt="Morivaná Daily Super Greens 150g pouch — back with ingredient label"
+                  alt="Morivaná Daily Super Greens pouch — back with ingredient label"
                   style={{ width: '80%', height: '80%', objectFit: 'contain' }}
                   loading="lazy"
                   width="665"
@@ -260,6 +356,40 @@ export default function ProductDetailPage() {
                 </div>
               </div>
 
+              {/* Pack Size Selector */}
+              <div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-mute)', marginBottom: '8px' }}>
+                  Select Size
+                </div>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  {[
+                    { id: '50g', label: '50g Trial Pack', servings: '10 servings' },
+                    { id: '100g', label: '100g Daily Ritual', servings: '20 servings' },
+                  ].map(pack => (
+                    <button
+                      key={pack.id}
+                      onClick={() => setSelectedPack(pack.id)}
+                      style={{
+                        flex: 1,
+                        background: selectedPack === pack.id ? 'var(--surface-deep)' : 'var(--surface-soft)',
+                        color: selectedPack === pack.id ? 'var(--ink-on-dark)' : 'var(--surface-deep)',
+                        border: selectedPack === pack.id ? '1px solid var(--surface-deep)' : '1px solid var(--line-soft)',
+                        borderRadius: '12px',
+                        padding: '10px 14px',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        transition: 'all 0.2s',
+                        minHeight: 0,
+                        minWidth: 0,
+                      }}
+                    >
+                      <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.85rem' }}>{pack.label}</div>
+                      <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.68rem', opacity: 0.8 }}>{pack.servings}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* Pricing */}
               <div style={{
                 background: 'var(--surface-soft)',
@@ -272,19 +402,31 @@ export default function ProductDetailPage() {
                     <div>
                       <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-mute)', marginBottom: '4px' }}>Canada</div>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                        <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '2rem', color: 'var(--surface-deep)', lineHeight: 1 }}>CA$19.99</span>
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)', textDecoration: 'line-through' }}>CA$23.99</span>
+                        <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '2rem', color: 'var(--surface-deep)', lineHeight: 1 }}>
+                          {selectedPack === '50g' ? 'CA$21' : 'CA$39'}
+                        </span>
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)', textDecoration: 'line-through' }}>
+                          {selectedPack === '50g' ? 'CA$25' : 'CA$47'}
+                        </span>
                       </div>
-                      <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--ink-mute)' }}>CA$0.67/day</div>
+                      <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--ink-mute)' }}>
+                        {selectedPack === '50g' ? 'CA$2.10/day' : 'CA$1.95/day'}
+                      </div>
                     </div>
                   ) : (
                     <div>
                       <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-mute)', marginBottom: '4px' }}>India</div>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                        <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '2rem', color: 'var(--surface-deep)', lineHeight: 1 }}>₹1,299</span>
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)', textDecoration: 'line-through' }}>₹1,499</span>
+                        <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '2rem', color: 'var(--surface-deep)', lineHeight: 1 }}>
+                          {selectedPack === '50g' ? '₹499' : '₹799'}
+                        </span>
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)', textDecoration: 'line-through' }}>
+                          {selectedPack === '50g' ? '₹599' : '₹999'}
+                        </span>
                       </div>
-                      <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--ink-mute)' }}>₹43/day</div>
+                      <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--ink-mute)' }}>
+                        {selectedPack === '50g' ? '₹50/day' : '₹40/day'}
+                      </div>
                     </div>
                   )}
 
