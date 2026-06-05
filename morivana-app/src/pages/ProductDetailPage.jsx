@@ -112,6 +112,8 @@ export default function ProductDetailPage() {
                   alt="Morivaná Daily Super Greens 150g pouch — front"
                   style={{ width: '80%', height: '80%', objectFit: 'contain' }}
                   loading="eager"
+                  width="664"
+                  height="1000"
                 />
               </div>
               <div style={{
@@ -128,6 +130,8 @@ export default function ProductDetailPage() {
                   alt="Morivaná Daily Super Greens 150g pouch — back with ingredient label"
                   style={{ width: '80%', height: '80%', objectFit: 'contain' }}
                   loading="lazy"
+                  width="665"
+                  height="1000"
                 />
               </div>
             </div>

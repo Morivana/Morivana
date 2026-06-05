@@ -110,6 +110,8 @@ export default function ShopPage() {
                 alt="Morivaná Daily Super Greens Powder 150g packaging"
                 style={{ width: '80%', height: '80%', objectFit: 'contain' }}
                 loading="eager"
+                width="664"
+                height="1000"
               />
             </div>
 

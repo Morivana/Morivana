@@ -4,9 +4,9 @@ import ScrollTrigger from 'gsap/ScrollTrigger'
 import FloatingLeaves from './FloatingLeaves'
 
 const steps = [
-  { num: '01', title: 'ADD',   body: '1 scoop · 5 grams of cool-dried daily greens.',                  image: '/add.webp', alt: 'Step 1: Add 1 scoop of Morivaná Super Greens Powder' },
-  { num: '02', title: 'MIX',   body: 'With 200ml water, milk, or your morning smoothie.', highlighted: true, image: '/mix.webp', alt: 'Step 2: Mix Morivaná Greens with water or smoothie' },
-  { num: '03', title: 'DRINK', body: 'Start your day calm, clear, and quietly fueled.',                image: '/drink.webp', alt: 'Step 3: Drink Morivaná and start your day energized' },
+  { num: '01', title: 'ADD',   body: '1 scoop · 5 grams of cool-dried daily greens.',                  image: '/add.webp', alt: 'Step 1: Add 1 scoop of Morivaná Super Greens Powder', width: 600, height: 400 },
+  { num: '02', title: 'MIX',   body: 'With 200ml water, milk, or your morning smoothie.', highlighted: true, image: '/mix.webp', alt: 'Step 2: Mix Morivaná Greens with water or smoothie', width: 600, height: 400 },
+  { num: '03', title: 'DRINK', body: 'Start your day calm, clear, and quietly fueled.',                image: '/drink.webp', alt: 'Step 3: Drink Morivaná and start your day energized', width: 600, height: 480 },
 ]
 
 const mixOptions = [
@@ -85,7 +85,7 @@ function StepCard({ step, index, mixBody }) {
       <div ref={innerRef} className="rt-card-inner">
         {step.image && (
           <div className="rt-step-media">
-            <img src={step.image} alt={step.alt} loading="lazy" />
+            <img src={step.image} alt={step.alt} loading="lazy" width={step.width} height={step.height} />
           </div>
         )}
         <div className="rt-step-label">STEP {step.num}</div>
