@@ -32,7 +32,7 @@ const schemas = [
     '@type': 'Product',
     name: 'Morivaná Daily Super Greens 30-Day Supply',
     description: '150g pouch (30 servings) of Morivaná super greens powder. 8 whole plants, cold-dried, all amounts disclosed. No proprietary blends.',
-    image: 'https://www.morivana.com/packaging_highres.webp',
+    image: 'https://morivana.pages.dev/packaging_highres.webp',
     brand: { '@type': 'Brand', name: 'Morivaná' },
     offers: [
       {
@@ -40,14 +40,88 @@ const schemas = [
         availability: 'https://schema.org/PreOrder',
         priceCurrency: 'INR',
         price: '1299',
+        priceValidUntil: '2027-12-31',
+        url: 'https://morivana.pages.dev/shop/daily-greens',
         eligibleRegion: { '@type': 'Country', name: 'India' },
+        shippingDetails: {
+          '@type': 'OfferShippingDetails',
+          shippingRate: {
+            '@type': 'MonetaryAmount',
+            value: '0',
+            currency: 'INR',
+          },
+          shippingDestination: {
+            '@type': 'DefinedRegion',
+            addressCountry: 'IN',
+          },
+          deliveryTime: {
+            '@type': 'ShippingDeliveryTime',
+            handlingTime: {
+              '@type': 'QuantitativeValue',
+              minValue: 0,
+              maxValue: 1,
+              unitCode: 'DAY',
+            },
+            transitTime: {
+              '@type': 'QuantitativeValue',
+              minValue: 2,
+              maxValue: 5,
+              unitCode: 'DAY',
+            },
+          },
+        },
+        hasMerchantReturnPolicy: {
+          '@type': 'MerchantReturnPolicy',
+          applicableCountry: 'IN',
+          returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnPeriod',
+          merchantReturnDays: 30,
+          returnMethod: 'https://schema.org/ReturnByMail',
+          returnFees: 'https://schema.org/FreeReturn',
+        },
       },
       {
         '@type': 'Offer',
         availability: 'https://schema.org/PreOrder',
         priceCurrency: 'CAD',
         price: '19.99',
+        priceValidUntil: '2027-12-31',
+        url: 'https://morivana.pages.dev/shop/daily-greens',
         eligibleRegion: { '@type': 'Country', name: 'Canada' },
+        shippingDetails: {
+          '@type': 'OfferShippingDetails',
+          shippingRate: {
+            '@type': 'MonetaryAmount',
+            value: '0',
+            currency: 'CAD',
+          },
+          shippingDestination: {
+            '@type': 'DefinedRegion',
+            addressCountry: 'CA',
+          },
+          deliveryTime: {
+            '@type': 'ShippingDeliveryTime',
+            handlingTime: {
+              '@type': 'QuantitativeValue',
+              minValue: 0,
+              maxValue: 1,
+              unitCode: 'DAY',
+            },
+            transitTime: {
+              '@type': 'QuantitativeValue',
+              minValue: 3,
+              maxValue: 7,
+              unitCode: 'DAY',
+            },
+          },
+        },
+        hasMerchantReturnPolicy: {
+          '@type': 'MerchantReturnPolicy',
+          applicableCountry: 'CA',
+          returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnPeriod',
+          merchantReturnDays: 30,
+          returnMethod: 'https://schema.org/ReturnByMail',
+          returnFees: 'https://schema.org/FreeReturn',
+        },
       },
     ],
     aggregateRating: {

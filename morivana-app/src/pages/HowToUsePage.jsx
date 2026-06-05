@@ -65,7 +65,7 @@ const howToSchema = {
     '@type': 'HowToStep',
     name: s.title,
     text: s.body,
-    image: `https://www.morivana.com${s.image}`,
+    image: `https://morivana.pages.dev${s.image}`,
   })),
 }
 

@@ -26,7 +26,7 @@ const schemas = [
       '@type': 'Article',
       headline: p.title,
       description: p.description,
-      url: `https://www.morivana.com/learn/${p.slug}`,
+      url: `https://morivana.pages.dev/learn/${p.slug}`,
     })),
   },
   buildBreadcrumbSchema(breadcrumbs),

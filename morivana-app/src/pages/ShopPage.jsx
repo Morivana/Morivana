@@ -25,14 +25,50 @@ const schemas = [
     '@type': 'Product',
     name: 'Morivaná Daily Super Greens Powder',
     description: '8-plant clean super greens powder — moringa, spirulina, amla, ginger, lemon, inulin, orange peel & monk fruit. Cold-dried, no proprietary blends.',
-    image: 'https://www.morivana.com/packaging_highres.webp',
+    image: 'https://morivana.pages.dev/packaging_highres.webp',
     brand: { '@type': 'Brand', name: 'Morivaná' },
     offers: {
       '@type': 'Offer',
       availability: 'https://schema.org/PreOrder',
       priceCurrency: 'INR',
       price: '1299',
-      url: 'https://www.morivana.com/shop',
+      priceValidUntil: '2027-12-31',
+      url: 'https://morivana.pages.dev/shop',
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingRate: {
+          '@type': 'MonetaryAmount',
+          value: '0',
+          currency: 'INR',
+        },
+        shippingDestination: {
+          '@type': 'DefinedRegion',
+          addressCountry: 'IN',
+        },
+        deliveryTime: {
+          '@type': 'ShippingDeliveryTime',
+          handlingTime: {
+            '@type': 'QuantitativeValue',
+            minValue: 0,
+            maxValue: 1,
+            unitCode: 'DAY',
+          },
+          transitTime: {
+            '@type': 'QuantitativeValue',
+            minValue: 2,
+            maxValue: 5,
+            unitCode: 'DAY',
+          },
+        },
+      },
+      hasMerchantReturnPolicy: {
+        '@type': 'MerchantReturnPolicy',
+        applicableCountry: 'IN',
+        returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnPeriod',
+        merchantReturnDays: 30,
+        returnMethod: 'https://schema.org/ReturnByMail',
+        returnFees: 'https://schema.org/FreeReturn',
+      },
     },
     aggregateRating: {
       '@type': 'AggregateRating',
