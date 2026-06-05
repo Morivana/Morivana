@@ -303,7 +303,7 @@ export default function NavbarInner() {
         {/* Logo — left */}
         <Link
           to="/"
-          aria-label="Morivaná, back to homepage"
+          aria-label="Morivaná Daily, back to homepage"
           style={{
             background: 'none',
             border: 'none',
@@ -325,7 +325,7 @@ export default function NavbarInner() {
             color: 'var(--surface-deep)',
             letterSpacing: '-0.01em',
           }}>
-            Morivaná
+            Morivaná Daily
           </span>
         </Link>
 

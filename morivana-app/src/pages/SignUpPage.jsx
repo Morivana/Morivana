@@ -94,7 +94,7 @@ export default function SignUpPage() {
             marginBottom: '4px',
           }}
         >
-          Morivaná
+          Morivaná Daily
         </Link>
 
         <div
@@ -273,7 +273,7 @@ export default function SignUpPage() {
           onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
           onMouseLeave={e => (e.currentTarget.style.opacity = '0.55')}
         >
-          ← Back to Morivaná
+          ← Back to Morivaná Daily
         </Link>
       </div>
 

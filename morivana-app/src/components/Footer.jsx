@@ -144,7 +144,7 @@ export default function Footer() {
             lineHeight: 0.95,
             letterSpacing: '-0.01em',
           }}>
-            Morivaná
+            Morivaná Daily
           </div>
           <div style={{
             fontFamily: 'var(--font-body)',
@@ -241,7 +241,7 @@ export default function Footer() {
         }}
       >
         <p className="footer-legal-text" style={{ margin: 0, color: 'var(--ink-on-dark)', opacity: 0.5 }}>
-          © 2026 Morivaná. All rights reserved. Shipping to India & Canada.
+          © 2026 Morivaná Daily. All rights reserved. Shipping to India & Canada.
         </p>
       </div>
     </footer>

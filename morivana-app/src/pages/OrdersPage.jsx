@@ -173,7 +173,7 @@ export default function OrdersPage() {
             </p>
 
             <Link to="/" className="cta-btn" style={{ textDecoration: 'none', display: 'inline-flex' }}>
-              Shop Morivaná
+              Shop Morivaná Daily
             </Link>
 
             {/* Specs strip */}

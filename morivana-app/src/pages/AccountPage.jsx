@@ -581,7 +581,7 @@ function OrdersSection() {
         <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.86rem', color: 'var(--ink-mute)', maxWidth: '300px', lineHeight: 1.6, marginBottom: '24px' }}>
           Once your first order ships, you'll find it here with full tracking.
         </p>
-        <Link to="/" className="cta-btn" style={{ textDecoration: 'none' }}>Shop Morivaná</Link>
+        <Link to="/" className="cta-btn" style={{ textDecoration: 'none' }}>Shop Morivaná Daily</Link>
       </div>
     </>
   )
@@ -1129,7 +1129,7 @@ export default function AccountPage() {
             letterSpacing: '-0.01em',
           }}
         >
-          Morivaná Account
+          Morivaná Daily Account
         </Link>
 
         <button

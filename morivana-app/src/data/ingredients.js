@@ -22,7 +22,7 @@ export const INGREDIENTS = [
       { nutrient: 'Quercetin (antioxidant)', per5g: '~12mg', dv: '—' },
     ],
     sourcing: `Our moringa is cold-dried in Tamil Nadu by partner farms using shade-drying methods that preserve chlorophyll and heat-sensitive vitamins. The leaves are harvested at peak growth (6–8 weeks after planting), when nutrient concentration is highest, and processed within 4 hours of harvest.`,
-    howItWorks: `In Morivaná's blend, moringa serves as the nutritional anchor — providing the iron, calcium, and vitamin A that make this more than a greens supplement. It's the reason one scoop covers meaningful percentages of daily micronutrient needs without any synthetic fortification.`,
+    howItWorks: `In Morivaná Daily's blend, moringa serves as the nutritional anchor — providing the iron, calcium, and vitamin A that make this more than a greens supplement. It's the reason one scoop covers meaningful percentages of daily micronutrient needs without any synthetic fortification.`,
     studies: [
       {
         title: 'Moringa oleifera: A review on nutritional composition',
@@ -61,7 +61,7 @@ export const INGREDIENTS = [
       { nutrient: 'GLA (Omega-6)', per5g: '~30mg', dv: '—' },
     ],
     sourcing: `Spirulina requires specific pH, temperature, and light conditions to produce its highest phycocyanin content. We use pond-grown spirulina from certified facilities where water quality is monitored continuously, ensuring heavy metal levels remain well below European food safety limits.`,
-    howItWorks: `Spirulina is Morivaná's protein and energy partner. While moringa provides micronutrients, spirulina delivers macronutrient depth — enough protein to matter, enough phycocyanin to provide antioxidant coverage, and B-vitamins that support sustained energy metabolism.`,
+    howItWorks: `Spirulina is Morivaná Daily's protein and energy partner. While moringa provides micronutrients, spirulina delivers macronutrient depth — enough protein to matter, enough phycocyanin to provide antioxidant coverage, and B-vitamins that support sustained energy metabolism.`,
     studies: [
       {
         title: 'Spirulina in Human Nutrition and Health',
@@ -100,7 +100,7 @@ export const INGREDIENTS = [
       { nutrient: 'Fiber', per5g: '0.5g', dv: '2%' },
     ],
     sourcing: `Amla grows in the sub-Himalayan foothills of Uttarakhand, where cooler temperatures during fruit development produce higher vitamin C concentrations. We source from farms at 600–1,200m elevation where the fruit is hand-picked at peak ripeness in November–December and cold-dried within 24 hours.`,
-    howItWorks: `Amla is Morivaná's immunity engine. The 300–400mg of natural vitamin C per serving — equivalent to 4–5 oranges — supports immune cell production, collagen synthesis, and iron absorption (amplifying the moringa and spirulina iron content). The tannin matrix makes this vitamin C significantly more bioavailable than the ascorbic acid in most supplements.`,
+    howItWorks: `Amla is Morivaná Daily's immunity engine. The 300–400mg of natural vitamin C per serving — equivalent to 4–5 oranges — supports immune cell production, collagen synthesis, and iron absorption (amplifying the moringa and spirulina iron content). The tannin matrix makes this vitamin C significantly more bioavailable than the ascorbic acid in most supplements.`,
     studies: [
       {
         title: 'Vitamin C bioavailability from Phyllanthus emblica',
@@ -130,7 +130,7 @@ export const INGREDIENTS = [
     tagline: 'Digestion, Inflammation, and a Quiet Warmth',
     benefit: 'Calms digestion, eases inflammation, and adds a quiet warmth to every sip.',
     potency: 82,
-    description: `Zingiber officinale — ginger — is one of the most studied natural anti-inflammatory foods. The bioactive compound gingerol (and its dried form shogaol) has demonstrated consistent efficacy in reducing pro-inflammatory cytokines, particularly COX-2 pathways, comparable in mechanism to common NSAIDs but without gastrointestinal side effects at food doses. For digestion, ginger accelerates gastric emptying, reduces nausea, and increases production of digestive enzymes. In Morivaná's blend, ginger serves dual roles: active therapeutic and flavor modulator, providing the subtle warm note that balances the grassiness of moringa and spirulina.`,
+    description: `Zingiber officinale — ginger — is one of the most studied natural anti-inflammatory foods. The bioactive compound gingerol (and its dried form shogaol) has demonstrated consistent efficacy in reducing pro-inflammatory cytokines, particularly COX-2 pathways, comparable in mechanism to common NSAIDs but without gastrointestinal side effects at food doses. For digestion, ginger accelerates gastric emptying, reduces nausea, and increases production of digestive enzymes. In Morivaná Daily's blend, ginger serves dual roles: active therapeutic and flavor modulator, providing the subtle warm note that balances the grassiness of moringa and spirulina.`,
     nutritionTable: [
       { nutrient: 'Gingerol (6-gingerol)', per5g: '~8mg', dv: '—' },
       { nutrient: 'Shogaol', per5g: '~4mg', dv: '—' },
@@ -138,7 +138,7 @@ export const INGREDIENTS = [
       { nutrient: 'Potassium', per5g: '32mg', dv: '1%' },
     ],
     sourcing: `Kerala's monsoon climate and volcanic soil create ginger with higher gingerol content than ginger grown in drier climates. Our Kerala ginger is harvested after 8–9 months (optimal gingerol concentration), peeled, thinly sliced, and cold-dried to preserve the volatile oils that account for its aroma and therapeutic activity.`,
-    howItWorks: `Ginger is Morivaná's digestive ally. Each scoop delivers enough gingerol to support morning gastric motility — helping you feel settled rather than bloated — while reducing the systemic inflammation that accumulates from stress, processed food, and poor sleep. The warmth it adds to the flavor profile is a natural side effect of its bioactivity.`,
+    howItWorks: `Ginger is Morivaná Daily's digestive ally. Each scoop delivers enough gingerol to support morning gastric motility — helping you feel settled rather than bloated — while reducing the systemic inflammation that accumulates from stress, processed food, and poor sleep. The warmth it adds to the flavor profile is a natural side effect of its bioactivity.`,
     studies: [
       {
         title: 'Ginger in gastrointestinal disorders: A systematic review',
@@ -176,7 +176,7 @@ export const INGREDIENTS = [
       { nutrient: 'Calcium', per5g: '15mg', dv: '1%' },
     ],
     sourcing: `The zest is separated from conventionally-grown lemons before cold-drying — we use the peel only, which concentrates the essential oils and flavonoids. The peel is cold-dried at ≤40°C to prevent limonene volatilization.`,
-    howItWorks: `Lemon zest in Morivaná does three things: it contributes to the alkalizing effect of the blend, adds a bright citrus note that makes the powder pleasant to drink plain in water, and provides hesperidin and limonene that support liver detoxification pathways — a natural complement to the antioxidant load from moringa and amla.`,
+    howItWorks: `Lemon zest in Morivaná Daily does three things: it contributes to the alkalizing effect of the blend, adds a bright citrus note that makes the powder pleasant to drink plain in water, and provides hesperidin and limonene that support liver detoxification pathways — a natural complement to the antioxidant load from moringa and amla.`,
     studies: [
       {
         title: 'Citrus limonoids: biological activity and prospects as drugs',
@@ -208,7 +208,7 @@ export const INGREDIENTS = [
       { nutrient: 'Calories', per5g: '10 kcal', dv: '—' },
     ],
     sourcing: `Chicory root is cultivated in Europe's temperate climates (Belgium, France) and the inulin is extracted via hot water diffusion and subsequent cold-chain processing. Our inulin is standardized to ≥90% purity with a defined chain length (DP 10–60) that optimizes fermentation in the distal colon where Bifidobacterium populations are highest.`,
-    howItWorks: `Inulin serves as Morivaná's silent gut-health layer. While the moringa and spirulina work on the nutritional surface, inulin works deeper — restructuring your microbiome composition over weeks of daily use. Most people don't feel it immediately, but after 2–3 weeks of consistent use, regularity, bloating reduction, and improved gut comfort are common.`,
+    howItWorks: `Inulin serves as Morivaná Daily's silent gut-health layer. While the moringa and spirulina work on the nutritional surface, inulin works deeper — restructuring your microbiome composition over weeks of daily use. Most people don't feel it immediately, but after 2–3 weeks of consistent use, regularity, bloating reduction, and improved gut comfort are common.`,
     studies: [
       {
         title: 'Dietary inulin-type fructans modulate intestinal microbiota',
@@ -247,7 +247,7 @@ export const INGREDIENTS = [
       { nutrient: 'Dietary fiber', per5g: '1.0g', dv: '4%' },
     ],
     sourcing: `We use whole dried orange peel (flavedo + albedo) from conventionally-grown Valencia oranges. The peel is cold-dried within 6 hours of peeling to preserve volatile oils and flavonoids. The white pith — which most would discard for taste — is retained because it contains most of the hesperidin and fiber.`,
-    howItWorks: `Orange peel complements lemon zest in Morivaná's citrus layer, but with a different bioactive profile. Where lemon delivers limonene and alkalizing citrate, orange peel delivers hesperidin (cardiovascular and capillary support), nobiletin (metabolic support), and additional soluble fiber that works alongside inulin for gut health.`,
+    howItWorks: `Orange peel complements lemon zest in Morivaná Daily's citrus layer, but with a different bioactive profile. Where lemon delivers limonene and alkalizing citrate, orange peel delivers hesperidin (cardiovascular and capillary support), nobiletin (metabolic support), and additional soluble fiber that works alongside inulin for gut health.`,
     studies: [
       {
         title: 'Hesperidin: a review of its anti-inflammatory properties',
@@ -280,7 +280,7 @@ export const INGREDIENTS = [
       { nutrient: 'Glycemic Index', per5g: '0', dv: '—' },
     ],
     sourcing: `Guangxi province in southern China is the only region in the world where monk fruit grows at commercial scale, due to specific soil composition and humidity requirements. Our extract is standardized to 25% Mogroside V content — higher than most commercial monk fruit extracts — ensuring consistent sweetness with the minimal quantity needed.`,
-    howItWorks: `Monk fruit is Morivaná's finishing touch — the reason the powder tastes clean and pleasant enough to drink in plain water without any added sweetener. We use the minimum effective amount to create natural sweetness without masking the character of the other ingredients. Zero calories, zero blood sugar impact, and no compromise on the "clean" philosophy.`,
+    howItWorks: `Monk fruit is Morivaná Daily's finishing touch — the reason the powder tastes clean and pleasant enough to drink in plain water without any added sweetener. We use the minimum effective amount to create natural sweetness without masking the character of the other ingredients. Zero calories, zero blood sugar impact, and no compromise on the "clean" philosophy.`,
     studies: [
       {
         title: 'Biological activities of luo han guo (Siraitia grosvenorii)',

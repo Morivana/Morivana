@@ -121,7 +121,7 @@ export default function SignInPage() {
             marginBottom: '4px',
           }}
         >
-          Morivaná
+          Morivaná Daily
         </Link>
 
         {/* Subtitle */}
@@ -311,7 +311,7 @@ export default function SignInPage() {
           onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
           onMouseLeave={e => (e.currentTarget.style.opacity = '0.55')}
         >
-          ← Back to Morivaná
+          ← Back to Morivaná Daily
         </Link>
       </div>
 

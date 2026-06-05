@@ -13,8 +13,8 @@ const breadcrumbs = [
 ]
 
 const faqs = [
-  { q: 'When will Morivaná ship?', a: 'We are currently in pre-launch. Early bird customers will receive priority shipping when we launch. We will notify all waitlist members 7 days before orders ship.' },
-  { q: 'What packaging sizes are available?', a: 'Morivaná is available in two sizes: a 50g Trial Pack (10 servings) and a 100g Daily Ritual Pack (20 servings). Each order includes a measuring scoop.' },
+  { q: 'When will Morivaná Daily ship?', a: 'We are currently in pre-launch. Early bird customers will receive priority shipping when we launch. We will notify all waitlist members 7 days before orders ship.' },
+  { q: 'What packaging sizes are available?', a: 'Morivaná Daily is available in two sizes: a 50g Trial Pack (10 servings) and a 100g Daily Ritual Pack (20 servings). Each order includes a measuring scoop.' },
   { q: 'What are the return terms?', a: 'We offer a 30-day satisfaction guarantee. If you\'re not satisfied after trying the product consistently for at least 7 days, contact us and we\'ll process a full refund.' },
   { q: 'What does it taste like?', a: 'Grassy and light with a natural citrus finish and clean sweetness from monk fruit. Most people find it mild enough to drink in plain water without additional sweetener.' },
   { q: 'Is it available for subscription?', a: 'Subscription options will be available at launch. Early bird customers will have access to discounted subscription pricing.' },
@@ -27,7 +27,7 @@ const schemas = [
     name: 'Morivaná Daily Super Greens Powder',
     description: '8-plant clean super greens powder — moringa, spirulina, amla, ginger, lemon, inulin, orange peel & monk fruit. Cold-dried, no proprietary blends.',
     image: 'https://morivana.pages.dev/packaging_highres.webp',
-    brand: { '@type': 'Brand', name: 'Morivaná' },
+    brand: { '@type': 'Brand', name: 'Morivaná Daily' },
     offers: [
       {
         '@type': 'Offer',
@@ -231,8 +231,8 @@ export default function ShopPage() {
   return (
     <>
       <SEOHead
-        title="Pre-Order Morivaná | Super Greens Powder India & Canada"
-        description="Pre-order Morivaná super greens powder. 8 whole plants, cold-dried, fully transparent. Sizing from 50g trial to 100g daily packs. Shipping to India & Canada."
+        title="Pre-Order Morivaná Daily | Super Greens Powder India & Canada"
+        description="Pre-order Morivaná Daily super greens powder. 8 whole plants, cold-dried, fully transparent. Sizing from 50g trial to 100g daily packs. Shipping to India & Canada."
         canonical="/shop"
         schemas={schemas}
       />
@@ -253,7 +253,7 @@ export default function ShopPage() {
               color: 'var(--surface-deep)',
               marginBottom: '20px',
             }}>
-              Pre-Order Morivaná<br />
+              Pre-Order Morivaná Daily<br />
               <span style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontWeight: 500, textTransform: 'none', fontSize: '0.55em', color: 'var(--ink-soft)' }}>
                 15% Early Bird Discount
               </span>
@@ -547,10 +547,10 @@ export default function ShopPage() {
             <FAQAccordion items={faqs} title="Product FAQ" />
           </section>
 
-          {/* Why Morivaná callout */}
+          {/* Why Morivaná Daily callout */}
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
             <p style={{ color: 'var(--ink-mute)', fontSize: '0.88rem', margin: 0 }}>
-              How does Morivaná compare?
+              How does Morivaná Daily compare?
             </p>
             <Link to="/compare" style={{
               fontFamily: 'var(--font-body)',

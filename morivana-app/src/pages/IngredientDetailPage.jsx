@@ -24,8 +24,8 @@ export default function IngredientDetailPage() {
       '@type': 'Article',
       headline: `${ing.name} — ${ing.tagline}`,
       description: ing.benefit,
-      author: { '@type': 'Organization', name: 'Morivaná' },
-      publisher: { '@type': 'Organization', name: 'Morivaná' },
+      author: { '@type': 'Organization', name: 'Morivaná Daily' },
+      publisher: { '@type': 'Organization', name: 'Morivaná Daily' },
       about: {
         '@type': 'Thing',
         name: ing.name,
@@ -36,7 +36,7 @@ export default function IngredientDetailPage() {
   ]
 
   const relatedPages = [
-    { title: 'All Ingredients', description: 'Explore all 8 plants in the Morivaná blend.', href: '/ingredients', tag: 'Ingredients' },
+    { title: 'All Ingredients', description: 'Explore all 8 plants in the Morivaná Daily blend.', href: '/ingredients', tag: 'Ingredients' },
     { title: 'Health Benefits', description: 'See how every ingredient contributes to daily wellness.', href: '/benefits', tag: 'Benefits' },
     { title: 'The Science', description: 'Full research citations for every ingredient.', href: '/science', tag: 'Research' },
   ]
@@ -54,7 +54,7 @@ export default function IngredientDetailPage() {
     <>
       <SEOHead
         title={`${ing.name} (${ing.latin}) | Sourcing & Benefits`}
-        description={`${ing.benefit} Learn about the science, nutrition, and sourcing of ${ing.name} in Morivaná's super greens powder.`}
+        description={`${ing.benefit} Learn about the science, nutrition, and sourcing of ${ing.name} in Morivaná Daily's super greens powder.`}
         canonical={`/ingredients/${ing.slug}`}
         ogType="article"
         schemas={schemas}
@@ -224,7 +224,7 @@ export default function IngredientDetailPage() {
             </Link>
           </section>
 
-          {/* Section 4 — How it works in Morivaná */}
+          {/* Section 4 — How it works in Morivaná Daily */}
           <section style={{ marginBottom: '56px', borderTop: '1px solid var(--line-soft)', paddingTop: '40px' }}>
             <h2 style={{
               fontFamily: 'var(--font-display)',
@@ -235,7 +235,7 @@ export default function IngredientDetailPage() {
               letterSpacing: '-0.01em',
               marginBottom: '16px',
             }}>
-              How {ing.name} Works in Morivaná
+              How {ing.name} Works in Morivaná Daily
             </h2>
             <p style={{ color: 'var(--ink-soft)', lineHeight: 1.75, maxWidth: '580px', marginBottom: '20px' }}>
               {ing.howItWorks}
@@ -323,13 +323,13 @@ export default function IngredientDetailPage() {
               letterSpacing: '-0.01em',
               margin: 0,
             }}>
-              Get {ing.name} + 7 More Plants in Morivaná
+              Get {ing.name} + 7 More Plants in Morivaná Daily
             </h2>
             <p style={{ color: 'var(--ink-on-dark-mute)', lineHeight: 1.65, margin: 0, fontSize: '0.92rem' }}>
               One scoop delivers {ing.name} alongside spirulina, amla, ginger, lemon, inulin, orange peel, and monk fruit — all at meaningful doses, all amounts disclosed.
             </p>
             <Link to="/shop" className="cta-btn" style={{ display: 'inline-flex', width: 'fit-content' }}>
-              Pre-Order Morivaná →
+              Pre-Order Morivaná Daily →
             </Link>
           </div>
         </div>

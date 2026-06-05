@@ -22,7 +22,7 @@ const deepDives = [
   {
     icon: '⚡',
     title: 'Energy',
-    detail: `Morivaná's energy is different from caffeine. Moringa provides iron (critical for oxygen transport) and B vitamins (B1, B2, B6) that support mitochondrial energy production at a cellular level. Spirulina adds complete protein for sustained fuel. The result is energy that doesn't spike and crash — it sustains.
+    detail: `Morivaná Daily's energy is different from caffeine. Moringa provides iron (critical for oxygen transport) and B vitamins (B1, B2, B6) that support mitochondrial energy production at a cellular level. Spirulina adds complete protein for sustained fuel. The result is energy that doesn't spike and crash — it sustains.
 
 The mechanism: iron deficiency is the most common nutritional deficiency globally, and even mild deficiency causes persistent fatigue. Moringa delivers highly bioavailable non-heme iron, amplified by amla's vitamin C which increases non-heme iron absorption by up to 300%.`,
   },
@@ -39,7 +39,7 @@ The mechanism: iron deficiency is the most common nutritional deficiency globall
   {
     icon: '✨',
     title: 'Skin',
-    detail: `Skin health is downstream of oxidative stress, inflammation, and collagen production — all three are addressed by Morivaná's formulation. Moringa's 90+ antioxidants neutralize free radicals that accelerate skin aging. Amla's vitamin C is the rate-limiting cofactor for collagen synthesis — without adequate vitamin C, collagen production stalls regardless of other factors. Lemon zest and orange peel add hesperidin, which supports capillary integrity (reducing redness and fragile vessels).`,
+    detail: `Skin health is downstream of oxidative stress, inflammation, and collagen production — all three are addressed by Morivaná Daily's formulation. Moringa's 90+ antioxidants neutralize free radicals that accelerate skin aging. Amla's vitamin C is the rate-limiting cofactor for collagen synthesis — without adequate vitamin C, collagen production stalls regardless of other factors. Lemon zest and orange peel add hesperidin, which supports capillary integrity (reducing redness and fragile vessels).`,
   },
   {
     icon: '🧠',
@@ -50,7 +50,7 @@ The mechanism: iron deficiency is the most common nutritional deficiency globall
 
 const faqs = [
   { q: 'How quickly will I feel results?', a: 'Energy and digestive improvements often appear within 3–7 days of daily use. Skin changes and immune improvements take 2–4 weeks. Microbiome-level changes from inulin take 4–8 weeks to become measurable.' },
-  { q: 'Is Morivaná a replacement for my multivitamin?', a: 'It depends on your multivitamin. Morivaná covers vitamin A, C, iron, calcium, B vitamins, and antioxidants from natural whole-plant sources. If your multivitamin primarily provides these, you may not need both. If you need specific minerals not in plants (zinc, iodine), keep your multivitamin.' },
+  { q: 'Is Morivaná Daily a replacement for my multivitamin?', a: 'It depends on your multivitamin. Morivaná Daily covers vitamin A, C, iron, calcium, B vitamins, and antioxidants from natural whole-plant sources. If your multivitamin primarily provides these, you may not need both. If you need specific minerals not in plants (zinc, iodine), keep your multivitamin.' },
   { q: 'Will it interact with my medications?', a: 'Consult your doctor, especially if you are on blood thinners (ginger has mild anticoagulant properties at high doses) or immunosuppressants. At one-scoop food doses, interactions are uncommon but individual variation exists.' },
 ]
 
@@ -58,9 +58,9 @@ const schemas = [
   {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'What Happens When You Take Morivaná Every Day',
-    description: 'A detailed look at the health benefits of Morivaná super greens — energy, digestion, immunity, skin, and mental clarity with scientific context.',
-    author: { '@type': 'Organization', name: 'Morivaná' },
+    headline: 'What Happens When You Take Morivaná Daily Every Day',
+    description: 'A detailed look at the health benefits of Morivaná Daily super greens — energy, digestion, immunity, skin, and mental clarity with scientific context.',
+    author: { '@type': 'Organization', name: 'Morivaná Daily' },
   },
   {
     '@context': 'https://schema.org',
@@ -78,8 +78,8 @@ export default function BenefitsPage() {
   return (
     <>
       <SEOHead
-        title="Moringa & Spirulina Health Benefits | Morivaná Greens"
-        description="A day-by-day look at what Morivaná super greens does — energy, digestion, immunity, skin clarity, and mental focus. Backed by ingredient research."
+        title="Moringa & Spirulina Health Benefits | Morivaná Daily Greens"
+        description="A day-by-day look at what Morivaná Daily super greens does — energy, digestion, immunity, skin clarity, and mental focus. Backed by ingredient research."
         canonical="/benefits"
         schemas={schemas}
       />
@@ -100,7 +100,7 @@ export default function BenefitsPage() {
               color: 'var(--surface-deep)',
               marginBottom: '20px',
             }}>
-              What Happens When You Take Morivaná Every Day
+              What Happens When You Take Morivaná Daily Every Day
             </h1>
             <p style={{ fontSize: '1rem', lineHeight: 1.75, color: 'var(--ink-soft)' }}>
               These benefits are not based on marketing claims. They're based on what the{' '}
@@ -235,7 +235,7 @@ export default function BenefitsPage() {
               How Do We Know This?
             </h2>
             <p style={{ color: 'var(--ink-on-dark-mute)', lineHeight: 1.75, maxWidth: '580px', marginBottom: '24px', fontSize: '0.92rem' }}>
-              We cite the research. Every health claim about Morivaná's ingredients is backed by peer-reviewed studies that you can read yourself — not internal testing we never published.
+              We cite the research. Every health claim about Morivaná Daily's ingredients is backed by peer-reviewed studies that you can read yourself — not internal testing we never published.
             </p>
             <Link to="/science" style={{
               display: 'inline-flex',

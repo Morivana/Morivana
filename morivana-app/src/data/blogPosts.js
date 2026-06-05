@@ -4,7 +4,7 @@ export const BLOG_POSTS = [
   {
     slug: 'best-greens-powder-india',
     title: 'Best Greens Powder in India 2026 — An Honest Review',
-    description: 'Looking for the best greens powder in India? We compared the top options — Morivaná, Setu, Oziva, and AG1 — on ingredients, price, and transparency.',
+    description: 'Looking for the best greens powder in India? We compared the top options — Morivaná Daily, Setu, Oziva, and AG1 — on ingredients, price, and transparency.',
     targetKeyword: 'best greens powder India',
     readingTime: '8 min',
     publishDate: '2026-05-15',
@@ -32,7 +32,7 @@ The good news: that's starting to change. Here's how the current options stack u
       },
       {
         heading: 'Comparison: Top Greens Powders Available in India',
-        content: `**Morivaná** — ₹1,299 / 30 servings (₹43/day)
+        content: `**Morivaná Daily** — ₹1,299 / 30 servings (₹43/day)
 8 transparent whole-plant ingredients: moringa, spirulina, amla, ginger, lemon, inulin, orange peel, monk fruit. Cold-dried. No proprietary blend. India-first sourcing (moringa from Tamil Nadu, amla from Uttarakhand, ginger from Kerala). Currently in pre-order.
 
 **Setu Superfood Greens** — ~₹1,199 / 30 servings
@@ -44,11 +44,11 @@ Oziva's greens products are decent but heavily marketed. The ingredient list is 
 **Athletic Greens AG1** — ~₹6,500–9,000 / 30 servings (imported)
 The international gold standard, with 75 ingredients and third-party testing. But at 5-7x the cost of Indian alternatives and not locally available, it's impractical for most Indian consumers. AG1 is designed for the US market.
 
-**Verdict:** For most Indians who want clean, transparent, affordable greens, Morivaná offers the best ingredient quality-per-rupee. Setu is the best widely-available alternative. AG1 is for those who specifically need its comprehensive formulation and budget isn't a concern.`,
+**Verdict:** For most Indians who want clean, transparent, affordable greens, Morivaná Daily offers the best ingredient quality-per-rupee. Setu is the best widely-available alternative. AG1 is for those who specifically need its comprehensive formulation and budget isn't a concern.`,
       },
       {
         heading: 'Final Recommendation',
-        content: `The best greens powder in India depends on your priorities. If you want **maximum ingredient transparency**, **India-sourced ingredients**, and the **cleanest label** possible, Morivaná is the answer. If you need something widely available right now, Setu is the most reliable choice. If budget is unlimited and you want the most comprehensive formula globally, AG1 — despite its price — is the benchmark.
+        content: `The best greens powder in India depends on your priorities. If you want **maximum ingredient transparency**, **India-sourced ingredients**, and the **cleanest label** possible, Morivaná Daily is the answer. If you need something widely available right now, Setu is the most reliable choice. If budget is unlimited and you want the most comprehensive formula globally, AG1 — despite its price — is the benchmark.
 
 What we'd avoid: any greens powder with a proprietary blend that doesn't disclose individual ingredient amounts, or products with artificial sweeteners like sucralose when natural alternatives are available.`,
       },
@@ -60,7 +60,7 @@ What we'd avoid: any greens powder with a proprietary blend that doesn't disclos
       },
       {
         q: 'Which greens powder is best for Indian vegetarians?',
-        a: 'Morivaná and Setu are both fully vegan and suited to Indian vegetarian diets. AG1 is also vegan but expensive. Avoid products with whey or collagen if you are vegetarian.',
+        a: 'Morivaná Daily and Setu are both fully vegan and suited to Indian vegetarian diets. AG1 is also vegan but expensive. Avoid products with whey or collagen if you are vegetarian.',
       },
     ],
   },
@@ -99,7 +99,7 @@ Moringa's ORAC (Oxygen Radical Absorbance Capacity) score places it among the hi
         heading: 'How to Get the Most from Moringa',
         content: `The form matters significantly. Fresh moringa leaves are nutritious but impractical for daily use. Moringa powder made from cold-dried leaves preserves most nutritional integrity. Moringa extracts concentrate some compounds but may not preserve the full phytochemical matrix.
 
-The evidence suggests 2–5g of dried leaf powder daily is the range where most benefits have been studied. In Morivaná, moringa is one of 8 ingredients — with other plants complementing its activity rather than competing with it.`,
+The evidence suggests 2–5g of dried leaf powder daily is the range where most benefits have been studied. In Morivaná Daily, moringa is one of 8 ingredients — with other plants complementing its activity rather than competing with it.`,
       },
     ],
     faqs: [
@@ -140,7 +140,7 @@ Any genuine alternative needs to match at least some of these: ingredient transp
       },
       {
         heading: 'Best AG1 Alternatives in India',
-        content: `**Morivaná (Pre-Order)** — ₹1,299/month
+        content: `**Morivaná Daily (Pre-Order)** — ₹1,299/month
 8 whole-plant ingredients, all amounts disclosed. India-sourced moringa, amla, and ginger. Cold-dried. No proprietary blend. The cleanest, most transparent option.
 
 **Setu Superfood Greens** — ~₹1,199/month
@@ -156,7 +156,7 @@ Good brand trust, available across India. Ingredient amounts partially disclosed
         heading: 'Our Verdict',
         content: `No product at ₹1,000–1,500 perfectly replicates AG1's 75-ingredient comprehensiveness. That's not a reasonable comparison. The better question is: which option delivers real, measurable nutritional benefit from clean, well-sourced ingredients at a price you'll actually sustain?
 
-On that metric, Morivaná wins for ingredient transparency and sourcing story. Setu wins for availability. Neither is AG1 — but for most Indian consumers optimizing within a real budget, they don't need to be.`,
+On that metric, Morivaná Daily wins for ingredient transparency and sourcing story. Setu wins for availability. Neither is AG1 — but for most Indian consumers optimizing within a real budget, they don't need to be.`,
       },
     ],
     faqs: [
@@ -165,8 +165,8 @@ On that metric, Morivaná wins for ingredient transparency and sourcing story. S
         a: 'Not officially. You can order through forwarding services but this adds significant cost and complexity. Indian alternatives are a more practical choice.',
       },
       {
-        q: 'Is Morivaná as good as AG1?',
-        a: 'Morivaná has 8 ingredients vs AG1\'s 75, so they serve different purposes. Morivaná is optimized for whole-plant nutrition from 8 carefully chosen plants. AG1 is a comprehensive nutrition stack. Both are transparent and clean — just different scopes.',
+        q: 'Is Morivaná Daily as good as AG1?',
+        a: 'Morivaná Daily has 8 ingredients vs AG1\'s 75, so they serve different purposes. Morivaná Daily is optimized for whole-plant nutrition from 8 carefully chosen plants. AG1 is a comprehensive nutrition stack. Both are transparent and clean — just different scopes.',
       },
     ],
   },
@@ -240,17 +240,17 @@ Multiple small RCTs have found that spirulina (1–8g/day) reduces LDL cholester
 
 Moringa and spirulina contain B vitamins that support energy metabolism. Taking them in the morning means those nutrients are available during the part of the day when your body needs them most. Ginger consumed in the morning supports gastric motility — helping your digestive system start the day settled and efficient.
 
-The prebiotic inulin in Morivaná works throughout the day regardless of when you take it, but morning dosing establishes a habit anchor: it's easier to remember with coffee, breakfast, or your morning water than as a standalone supplement later in the day.`,
+The prebiotic inulin in Morivaná Daily works throughout the day regardless of when you take it, but morning dosing establishes a habit anchor: it's easier to remember with coffee, breakfast, or your morning water than as a standalone supplement later in the day.`,
       },
       {
-        heading: 'The 30-Second Ritual: How to Take Morivaná',
+        heading: 'The 30-Second Ritual: How to Take Morivaná Daily',
         content: `The goal is to remove all friction from the habit.
 
 **Step 1 — Prep your glass.** A 300ml glass of room-temperature or cool water is the simplest. Cold water is fine but very cold water can cause minor mixing lumps.
 
 **Step 2 — Add one scoop (5g).** A level scoop. Don't pack it.
 
-**Step 3 — Mix.** Shake vigorously for 10–15 seconds in a shaker bottle, or stir briskly for 30 seconds in a glass. Morivaná mixes more completely than most greens powders due to fine cold-drying, but some settling is normal.
+**Step 3 — Mix.** Shake vigorously for 10–15 seconds in a shaker bottle, or stir briskly for 30 seconds in a glass. Morivaná Daily mixes more completely than most greens powders due to fine cold-drying, but some settling is normal.
 
 **Step 4 — Drink immediately.** Don't let it sit — the phycocyanin and chlorophyll begin degrading with prolonged exposure to light and oxygen.`,
       },
@@ -282,7 +282,7 @@ The prebiotic inulin in Morivaná works throughout the day regardless of when yo
     faqs: [
       {
         q: 'Can I take greens powder on an empty stomach?',
-        a: 'Yes. Morivaná is designed to be taken fasted — it supports rather than disrupts gastric function. Some people find ginger-containing supplements energizing on an empty stomach.',
+        a: 'Yes. Morivaná Daily is designed to be taken fasted — it supports rather than disrupts gastric function. Some people find ginger-containing supplements energizing on an empty stomach.',
       },
       {
         q: 'Can I take my greens powder at night instead?',
@@ -309,7 +309,7 @@ Moringa provides a broad micronutrient spectrum: vitamins A, C, E, K, and B-comp
 
 Spirulina provides high concentrations of a narrower set of nutrients: complete protein (60–70% by weight), phycocyanin (a potent antioxidant-anti-inflammatory), and chlorophyll. It's a concentrated functional food.
 
-They don't compete — they complement. The antioxidant coverage of moringa is broad-spectrum. Spirulina's phycocyanin acts on specific inflammatory pathways. The iron from moringa is absorbed more efficiently alongside spirulina's chlorophyll and Morivaná's amla vitamin C.`,
+They don't compete — they complement. The antioxidant coverage of moringa is broad-spectrum. Spirulina's phycocyanin acts on specific inflammatory pathways. The iron from moringa is absorbed more efficiently alongside spirulina's chlorophyll and Morivaná Daily's amla vitamin C.`,
       },
       {
         heading: 'Head-to-Head: Specific Benefits',
@@ -332,7 +332,7 @@ They don't compete — they complement. The antioxidant coverage of moringa is b
 
 **Take both if:** You want genuinely comprehensive plant nutrition. The two are remarkably non-overlapping in their primary bioactive compounds — moringa's quercetin and spirulina's phycocyanin work through different mechanisms. Combined, they provide coverage that neither gives alone.
 
-This is exactly why Morivaná includes both — and why they're the two anchor ingredients of the blend, rather than either being used alone.`,
+This is exactly why Morivaná Daily includes both — and why they're the two anchor ingredients of the blend, rather than either being used alone.`,
       },
     ],
     faqs: [
@@ -342,7 +342,7 @@ This is exactly why Morivaná includes both — and why they're the two anchor i
       },
       {
         q: 'Can I take moringa and spirulina together safely?',
-        a: 'Yes. They are safe to combine and work synergistically. Morivaná combines them at researched ratios alongside 6 other plants.',
+        a: 'Yes. They are safe to combine and work synergistically. Morivaná Daily combines them at researched ratios alongside 6 other plants.',
       },
     ],
   },

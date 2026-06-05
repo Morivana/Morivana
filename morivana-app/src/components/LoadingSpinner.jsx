@@ -41,7 +41,7 @@ export default function LoadingSpinner() {
             lineHeight: 0.95,
           }}
         >
-          Morivaná
+          Morivaná Daily
         </div>
         <div
           style={{

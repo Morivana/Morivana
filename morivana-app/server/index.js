@@ -36,7 +36,7 @@ await waitlist.createIndex({ email: 1 }, { unique: true })
 // ── CORS ─────────────────────────────────────────────────────────────────────
 const allowedOrigins = ALLOWED_ORIGIN
   ? ALLOWED_ORIGIN.split(',').map(o => o.trim())
-  : ['https://www.morivana.com', 'https://morivana.com']
+  : ['https://www.morivana.com', 'https://morivana.com', 'https://morivana.pages.dev']
 
 const corsOptions = {
   origin: NODE_ENV === 'production'
@@ -56,8 +56,8 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", 'https://js.stripe.com', 'https://checkout.razorpay.com', 'https://challenges.cloudflare.com'],
       frameSrc: ["'self'", 'https://js.stripe.com', 'https://api.razorpay.com', 'https://challenges.cloudflare.com'],
-      imgSrc: ["'self'", 'data:', 'https://www.morivana.com', 'https://morivana.com'],
-      connectSrc: ["'self'", 'https://api.clerk.com', 'https://ipapi.co', 'https://challenges.cloudflare.com'],
+      imgSrc: ["'self'", 'data:', 'https://www.morivana.com', 'https://morivana.com', 'https://morivana.pages.dev'],
+      connectSrc: ["'self'", 'https://api.clerk.com', 'https://ipapi.co', 'https://challenges.cloudflare.com', 'https://morivana.pages.dev'],
     },
   },
   hsts: {

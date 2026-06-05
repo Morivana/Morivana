@@ -14,9 +14,9 @@ const schemas = [
   {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'Where Every Ingredient Comes From | Morivaná Sourcing Transparency',
-    description: 'Complete sourcing transparency for all 8 Morivaná ingredients — origin farms, harvest methods, cold-drying process, and sustainability commitments.',
-    author: { '@type': 'Organization', name: 'Morivaná' },
+    headline: 'Where Every Ingredient Comes From | Morivaná Daily Sourcing Transparency',
+    description: 'Complete sourcing transparency for all 8 Morivaná Daily ingredients — origin farms, harvest methods, cold-drying process, and sustainability commitments.',
+    author: { '@type': 'Organization', name: 'Morivaná Daily' },
   },
   buildBreadcrumbSchema(breadcrumbs),
 ]
@@ -71,8 +71,8 @@ export default function SustainabilityPage() {
   return (
     <>
       <SEOHead
-        title="How We Source | Morivaná Sourcing & Sustainability"
-        description="Full supply chain transparency for Morivaná's 8 ingredients — where each plant comes from, how it's processed, and our commitment to no hidden sourcing."
+        title="How We Source | Morivaná Daily Sourcing & Sustainability"
+        description="Full supply chain transparency for Morivaná Daily's 8 ingredients — where each plant comes from, how it's processed, and our commitment to no hidden sourcing."
         canonical="/sustainability"
         schemas={schemas}
       />
@@ -252,7 +252,7 @@ export default function SustainabilityPage() {
               Cold-Drying: No Heat, No Nutrient Loss
             </h2>
             <p style={{ color: 'var(--ink-on-dark-mute)', lineHeight: 1.75, maxWidth: '580px', marginBottom: '16px', fontSize: '0.92rem' }}>
-              Every ingredient in Morivaná is dried at low temperatures (≤40–50°C) — never spray-dried or oven-dried at the 120–200°C temperatures that degrade water-soluble vitamins by up to 80%.
+              Every ingredient in Morivaná Daily is dried at low temperatures (≤40–50°C) — never spray-dried or oven-dried at the 120–200°C temperatures that degrade water-soluble vitamins by up to 80%.
             </p>
             <p style={{ color: 'var(--ink-on-dark-mute)', lineHeight: 1.75, maxWidth: '580px', fontSize: '0.92rem' }}>
               Cold-drying costs more and takes longer than conventional processing. It's a choice we make because the nutritional integrity of the whole plant is the entire point.{' '}
@@ -328,7 +328,7 @@ export default function SustainabilityPage() {
       </PageLayout>
 
       <RelatedPages items={[
-        { title: 'Our Story', description: 'Why we started Morivaná and our founding philosophy.', href: '/about', tag: 'Brand' },
+        { title: 'Our Story', description: 'Why we started Morivaná Daily and our founding philosophy.', href: '/about', tag: 'Brand' },
         { title: 'All Ingredients', description: 'Full nutritional profiles for each of the 8 plants.', href: '/ingredients', tag: 'Ingredients' },
         { title: 'Nutrient Preservation Research', description: 'The science behind cold-drying and nutrient retention.', href: '/science', tag: 'Research' },
       ]} />

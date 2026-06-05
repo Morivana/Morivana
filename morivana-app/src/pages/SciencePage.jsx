@@ -12,8 +12,8 @@ const breadcrumbs = [
 ]
 
 const faqs = [
-  { q: 'Is Morivaná FDA approved?', a: 'Morivaná is a dietary supplement, not a drug. Dietary supplements in India fall under FSSAI regulation, not FDA (US) approval. All ingredients are GRAS (Generally Recognized as Safe) in the US and are approved food ingredients in India and Canada. We are not claiming to diagnose, treat, cure, or prevent any disease.' },
-  { q: 'Are there clinical trials on Morivaná?', a: 'There are no clinical trials on Morivaná as a proprietary blend — we are a pre-launch brand. All health claims are based on published clinical research on the individual ingredients at equivalent doses. We\'ve linked to each study on this page.' },
+  { q: 'Is Morivaná Daily FDA approved?', a: 'Morivaná Daily is a dietary supplement, not a drug. Dietary supplements in India fall under FSSAI regulation, not FDA (US) approval. All ingredients are GRAS (Generally Recognized as Safe) in the US and are approved food ingredients in India and Canada. We are not claiming to diagnose, treat, cure, or prevent any disease.' },
+  { q: 'Are there clinical trials on Morivaná Daily?', a: 'There are no clinical trials on Morivaná Daily as a proprietary blend — we are a pre-launch brand. All health claims are based on published clinical research on the individual ingredients at equivalent doses. We\'ve linked to each study on this page.' },
   { q: 'What does "cold-dried" mean exactly?', a: 'Cold-drying refers to low-temperature drying (typically ≤40–50°C) as opposed to spray-drying or oven-drying (≥120°C). At high temperatures, water-soluble vitamins (especially vitamin C and B vitamins) degrade significantly. Cold-drying preserves 80–95% of heat-sensitive nutrients, depending on the specific compound and processing time.' },
 ]
 
@@ -27,9 +27,9 @@ const schemas = [
   {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'The Research Behind Every Ingredient in Morivaná',
-    description: 'Peer-reviewed scientific citations for every health claim Morivaná makes about its 8 ingredients. Links to PubMed studies included.',
-    author: { '@type': 'Organization', name: 'Morivaná' },
+    headline: 'The Research Behind Every Ingredient in Morivaná Daily',
+    description: 'Peer-reviewed scientific citations for every health claim Morivaná Daily makes about its 8 ingredients. Links to PubMed studies included.',
+    author: { '@type': 'Organization', name: 'Morivaná Daily' },
   },
   {
     '@context': 'https://schema.org',
@@ -47,8 +47,8 @@ export default function SciencePage() {
   return (
     <>
       <SEOHead
-        title="The Science Behind Morivaná | Research & Sourcing"
-        description="Peer-reviewed research citations for every ingredient in Morivaná. PubMed links to moringa, spirulina, amla, ginger, inulin, and monk fruit studies."
+        title="The Science Behind Morivaná Daily | Research & Sourcing"
+        description="Peer-reviewed research citations for every ingredient in Morivaná Daily. PubMed links to moringa, spirulina, amla, ginger, inulin, and monk fruit studies."
         canonical="/science"
         schemas={schemas}
       />
@@ -72,7 +72,7 @@ export default function SciencePage() {
               The Research Behind Every Ingredient
             </h1>
             <p style={{ fontSize: '1rem', lineHeight: 1.75, color: 'var(--ink-soft)' }}>
-              Every health claim we make about Morivaná is traceable to peer-reviewed research. We've listed the primary studies for each{' '}
+              Every health claim we make about Morivaná Daily is traceable to peer-reviewed research. We've listed the primary studies for each{' '}
               <Link to="/ingredients" style={{ color: 'var(--surface-deep)', fontWeight: 600 }}>ingredient</Link>{' '}
               with direct links to PubMed so you can read them yourself.
             </p>
@@ -219,7 +219,7 @@ export default function SciencePage() {
 
           {/* CTA */}
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-            <Link to="/shop" className="cta-btn">Pre-Order Morivaná →</Link>
+            <Link to="/shop" className="cta-btn">Pre-Order Morivaná Daily →</Link>
             <Link to="/about" style={{
               fontFamily: 'var(--font-body)',
               fontWeight: 700,
@@ -242,7 +242,7 @@ export default function SciencePage() {
 
       <RelatedPages items={[
         { title: 'All 8 Ingredients', description: 'Individual ingredient pages with full nutritional profiles.', href: '/ingredients', tag: 'Ingredients' },
-        { title: 'Our Story', description: 'Why we built Morivaná and our sourcing philosophy.', href: '/about', tag: 'Brand' },
+        { title: 'Our Story', description: 'Why we built Morivaná Daily and our sourcing philosophy.', href: '/about', tag: 'Brand' },
         { title: 'Health Benefits', description: 'What the research means for your daily wellness.', href: '/benefits', tag: 'Benefits' },
       ]} />
     </>

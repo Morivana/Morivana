@@ -14,8 +14,8 @@ const schemas = [
   {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    name: 'Morivaná Waitlist | Get 15% Early Bird Discount',
-    description: 'Join the Morivaná waitlist. Be first to know when we launch and get 15% off your first order. Shipping to India and Canada.',
+    name: 'Morivaná Daily Waitlist | Get 15% Early Bird Discount',
+    description: 'Join the Morivaná Daily waitlist. Be first to know when we launch and get 15% off your first order. Shipping to India and Canada.',
   },
   buildBreadcrumbSchema(breadcrumbs),
 ]
@@ -53,8 +53,8 @@ export default function WaitlistPage() {
   return (
     <>
       <SEOHead
-        title="Join the Waitlist | Morivaná Super Greens Pre-Launch"
-        description="Join the Morivaná waitlist and get 15% off your first order when we launch. Shipping to India and Canada. Be the first to get our super greens powder."
+        title="Join the Waitlist | Morivaná Daily Super Greens Pre-Launch"
+        description="Join the Morivaná Daily waitlist and get 15% off your first order when we launch. Shipping to India and Canada. Be the first to get our super greens powder."
         canonical="/waitlist"
         schemas={schemas}
       />
@@ -84,7 +84,7 @@ export default function WaitlistPage() {
                   Welcome to the List
                 </h1>
                 <p style={{ color: 'var(--ink-on-dark-mute)', lineHeight: 1.7, marginBottom: '24px', fontSize: '0.95rem' }}>
-                  You'll be the first to know when Morivaná launches — and your 15% early bird discount will be waiting. Check your inbox for confirmation.
+                  You'll be the first to know when Morivaná Daily launches — and your 15% early bird discount will be waiting. Check your inbox for confirmation.
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center' }}>
                   <Link to="/ingredients" style={{
@@ -139,7 +139,7 @@ export default function WaitlistPage() {
                   </span>
                 </h1>
                 <p style={{ fontSize: '1rem', lineHeight: 1.75, color: 'var(--ink-soft)', marginBottom: '32px' }}>
-                  Join the Morivaná waitlist. When we launch, you'll be the first to know — and your early bird discount will be waiting. No spam, just one email when we go live.
+                  Join the Morivaná Daily waitlist. When we launch, you'll be the first to know — and your early bird discount will be waiting. No spam, just one email when we go live.
                 </p>
 
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -261,7 +261,7 @@ export default function WaitlistPage() {
       </PageLayout>
 
       <RelatedPages items={[
-        { title: 'What\'s in Morivaná', description: 'Meet all 8 whole-plant ingredients in the blend.', href: '/ingredients', tag: 'Ingredients' },
+        { title: 'What\'s in Morivaná Daily', description: 'Meet all 8 whole-plant ingredients in the blend.', href: '/ingredients', tag: 'Ingredients' },
         { title: 'Health Benefits', description: 'What happens when you take it every day.', href: '/benefits', tag: 'Benefits' },
         { title: 'How to Use', description: 'Your 30-second morning ritual.', href: '/how-to-use', tag: 'Guide' },
       ]} />

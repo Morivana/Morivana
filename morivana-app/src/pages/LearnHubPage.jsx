@@ -20,8 +20,8 @@ const schemas = [
   {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Morivaná Learn Hub | Super Greens & Plant Nutrition',
-    description: 'Evidence-based guides on super greens, moringa, spirulina, amla, and plant-based wellness from the Morivaná team.',
+    name: 'Morivaná Daily Learn Hub | Super Greens & Plant Nutrition',
+    description: 'Evidence-based guides on super greens, moringa, spirulina, amla, and plant-based wellness from the Morivaná Daily team.',
     hasPart: BLOG_POSTS.map(p => ({
       '@type': 'Article',
       headline: p.title,
@@ -40,7 +40,7 @@ export default function LearnHubPage() {
     <>
       <SEOHead
         title="Learn Hub | Moringa Super Greens & Plant Nutrition Guides"
-        description="Evidence-based guides on super greens, moringa, spirulina, amla, and more. Written by the Morivaná team. No ads, no affiliate links — just the research."
+        description="Evidence-based guides on super greens, moringa, spirulina, amla, and more. Written by the Morivaná Daily team. No ads, no affiliate links — just the research."
         canonical="/learn"
         schemas={schemas}
       />
@@ -275,7 +275,7 @@ export default function LearnHubPage() {
       </PageLayout>
 
       <RelatedPages items={[
-        { title: 'Health Benefits', description: 'What Morivaná does for your body — timeline and science.', href: '/benefits', tag: 'Benefits' },
+        { title: 'Health Benefits', description: 'What Morivaná Daily does for your body — timeline and science.', href: '/benefits', tag: 'Benefits' },
         { title: 'All Ingredients', description: 'Full profiles for all 8 plants in the blend.', href: '/ingredients', tag: 'Ingredients' },
         { title: 'Pre-Order', description: 'Early bird pricing — 15% off at launch.', href: '/shop', tag: 'Shop' },
       ]} />

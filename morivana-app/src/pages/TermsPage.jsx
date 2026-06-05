@@ -24,7 +24,7 @@ export default function TermsPage() {
     >
       <SEOHead
         title="Terms of Use & Conditions | Morivaná Daily Super Greens"
-        description="Read the Terms of Use for Morivaná. Learn about our pre-launch waitlist, intellectual property, and guidelines for using our super greens website."
+        description="Read the Terms of Use for Morivaná Daily. Learn about our pre-launch waitlist, intellectual property, and guidelines for using our super greens website."
         canonical="/terms"
       />
       <FloatingLeaves variant="light" density="sparse" />
@@ -58,7 +58,7 @@ export default function TermsPage() {
               display: 'inline-block',
             }}
           >
-            Morivaná
+            Morivaná Daily
           </Link>
         </div>
 
@@ -83,7 +83,7 @@ export default function TermsPage() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', lineHeight: 1.7, fontSize: '0.98rem' }}>
           <p>
-            Welcome to Morivaná. By accessing or using our website at <strong>morivana.com</strong>, you agree to comply with and be bound by these Terms of Use.
+            Welcome to Morivaná Daily. By accessing or using our website at <strong>morivana.com</strong>, you agree to comply with and be bound by these Terms of Use.
           </p>
           
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', marginTop: '12px', color: 'var(--surface-deep)' }}>
@@ -104,7 +104,7 @@ export default function TermsPage() {
             Intellectual Property
           </h2>
           <p>
-            All material, graphics, layout, photography, copywriting, and 3D models contained on this site are the intellectual property of Morivaná and may not be reproduced, copied, or modified without express written authorization.
+            All material, graphics, layout, photography, copywriting, and 3D models contained on this site are the intellectual property of Morivaná Daily and may not be reproduced, copied, or modified without express written authorization.
           </p>
 
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', marginTop: '12px', color: 'var(--surface-deep)' }}>

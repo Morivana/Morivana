@@ -16,9 +16,9 @@ const steps = [
     label: 'ADD',
     num: '01',
     title: 'Add One Scoop',
-    body: 'Add 1 level scoop (5g) of Morivaná to your glass or shaker bottle. The scoop is included in every pouch.',
+    body: 'Add 1 level scoop (5g) of Morivaná Daily to your glass or shaker bottle. The scoop is included in every pouch.',
     image: '/add.webp',
-    alt: 'Step 1: Add one scoop of Morivaná super greens powder to your glass',
+    alt: 'Step 1: Add one scoop of Morivaná Daily super greens powder to your glass',
   },
   {
     id: 'mix',
@@ -27,7 +27,7 @@ const steps = [
     title: 'Mix Thoroughly',
     body: 'Add 250–350ml of water (room temperature or cool). Shake in a shaker bottle for 10–15 seconds, or stir briskly for 30 seconds in a glass.',
     image: '/mix.webp',
-    alt: 'Step 2: Mix Morivaná greens with water or your preferred liquid',
+    alt: 'Step 2: Mix Morivaná Daily greens with water or your preferred liquid',
   },
   {
     id: 'drink',
@@ -36,7 +36,7 @@ const steps = [
     title: 'Drink Immediately',
     body: 'Drink right after mixing. Chlorophyll and phycocyanin degrade with prolonged exposure to light and air — fresh is best.',
     image: '/drink.webp',
-    alt: 'Step 3: Drink Morivaná and start your day energized and clear',
+    alt: 'Step 3: Drink Morivaná Daily and start your day energized and clear',
   },
 ]
 
@@ -49,18 +49,18 @@ const recipes = [
 ]
 
 const faqs = [
-  { q: 'Can I take it with coffee?', a: 'Yes, but separately. Coffee can inhibit iron absorption (from moringa and spirulina) if consumed simultaneously. Take Morivaná first, then wait 30 minutes before coffee for optimal iron uptake.' },
+  { q: 'Can I take it with coffee?', a: 'Yes, but separately. Coffee can inhibit iron absorption (from moringa and spirulina) if consumed simultaneously. Take Morivaná Daily first, then wait 30 minutes before coffee for optimal iron uptake.' },
   { q: 'Can I double scoop?', a: 'One scoop (5g) is the intended serving and is where the research-backed doses are calibrated. You can safely take 2 scoops, but it\'s not necessary for most people. More is not always better with whole-plant nutrition.' },
   { q: 'Is it safe during pregnancy?', a: 'Consult your OB/GYN before use during pregnancy or breastfeeding. While the individual ingredients are generally considered food-safe, high doses of ginger and spirulina during pregnancy have not been extensively studied.' },
-  { q: 'Can children take Morivaná?', a: 'Not recommended for children under 12 without medical guidance. Spirulina and moringa at these doses are designed for adult nutritional needs.' },
-  { q: 'What if I miss a day?', a: 'No issue. The benefits of Morivaná are cumulative — one missed day won\'t reset your progress. Just resume the next morning.' },
+  { q: 'Can children take Morivaná Daily?', a: 'Not recommended for children under 12 without medical guidance. Spirulina and moringa at these doses are designed for adult nutritional needs.' },
+  { q: 'What if I miss a day?', a: 'No issue. The benefits of Morivaná Daily are cumulative — one missed day won\'t reset your progress. Just resume the next morning.' },
 ]
 
 const howToSchema = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
-  name: 'How to Use Morivaná Super Greens — Your 30-Second Morning Ritual',
-  description: 'How to prepare and drink Morivaná super greens powder in under 30 seconds.',
+  name: 'How to Use Morivaná Daily Super Greens — Your 30-Second Morning Ritual',
+  description: 'How to prepare and drink Morivaná Daily super greens powder in under 30 seconds.',
   step: steps.map(s => ({
     '@type': 'HowToStep',
     name: s.title,
@@ -86,8 +86,8 @@ export default function HowToUsePage() {
   return (
     <>
       <SEOHead
-        title="How to Use Morivaná | Your 30-Second Morning Ritual"
-        description="Mix one scoop of Morivaná in 300ml water, shake, and drink. Three steps, 30 seconds. Plus mixing recipes and everything you need to know about timing."
+        title="How to Use Morivaná Daily | Your 30-Second Morning Ritual"
+        description="Mix one scoop of Morivaná Daily in 300ml water, shake, and drink. Three steps, 30 seconds. Plus mixing recipes and everything you need to know about timing."
         canonical="/how-to-use"
         schemas={schemas}
       />
@@ -111,7 +111,7 @@ export default function HowToUsePage() {
               Your 30-Second Morning Ritual
             </h1>
             <p style={{ fontSize: '1rem', lineHeight: 1.75, color: 'var(--ink-soft)' }}>
-              We designed Morivaná to be the simplest part of your morning. Three steps. No blender required.
+              We designed Morivaná Daily to be the simplest part of your morning. Three steps. No blender required.
               What you're mixing:{' '}
               <Link to="/ingredients" style={{ color: 'var(--surface-deep)', fontWeight: 600 }}>
                 8 whole plants, nothing else
@@ -199,7 +199,7 @@ export default function HowToUsePage() {
               color: 'var(--surface-deep)',
               marginBottom: '28px',
             }}>
-              5 Ways to Take Morivaná
+              5 Ways to Take Morivaná Daily
             </h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '12px' }}>
               {recipes.map((r) => (
@@ -243,7 +243,7 @@ export default function HowToUsePage() {
             </h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
               {[
-                { title: 'Morning (Recommended)', body: 'B vitamins and iron are most useful when your body is active. Taking Morivaná fasted or alongside a light breakfast gives nutrients a clear metabolic pathway.', best: true },
+                { title: 'Morning (Recommended)', body: 'B vitamins and iron are most useful when your body is active. Taking Morivaná Daily fasted or alongside a light breakfast gives nutrients a clear metabolic pathway.', best: true },
                 { title: 'Pre-Workout', body: 'Spirulina has demonstrated benefits for exercise performance and reduced oxidative stress after training. 30 minutes before exercise is effective.', best: false },
                 { title: 'Evening (Possible)', body: 'You can take it in the evening, but you\'ll lose the circadian benefit of B vitamins in the morning. The energizing compounds may also affect sensitive sleepers.', best: false },
               ].map(t => (

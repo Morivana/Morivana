@@ -72,7 +72,7 @@ export default class ErrorBoundary extends React.Component {
                   lineHeight: 1,
                 }}
               >
-                Morivaná
+                Morivaná Daily
               </div>
             </div>
 

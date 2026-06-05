@@ -26,7 +26,7 @@ export default function NotFoundPage() {
       }}
     >
       <SEOHead
-        title="Page Not Found | Morivaná"
+        title="Page Not Found | Morivaná Daily"
         description="The page you are looking for does not exist. Explore our daily super greens, check out our 8 organic ingredients, or view health benefits."
         canonical="/404"
         noindex={true}
@@ -79,7 +79,7 @@ export default function NotFoundPage() {
               display: 'inline-block',
             }}
           >
-            Morivaná
+            Morivaná Daily
           </Link>
         </div>
 

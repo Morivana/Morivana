@@ -32,9 +32,9 @@ const schemas = [
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: 'Morivaná Daily Super Greens Powder',
-    description: 'Morivaná clean super greens powder. 8 whole plants, cold-dried, all amounts disclosed. No proprietary blends.',
+    description: 'Morivaná Daily clean super greens powder. 8 whole plants, cold-dried, all amounts disclosed. No proprietary blends.',
     image: 'https://morivana.pages.dev/packaging_highres.webp',
-    brand: { '@type': 'Brand', name: 'Morivaná' },
+    brand: { '@type': 'Brand', name: 'Morivaná Daily' },
     offers: [
       {
         '@type': 'Offer',
@@ -544,7 +544,7 @@ export default function ProductDetailPage() {
       <RelatedPages items={[
         { title: 'All Ingredients', description: 'Full profiles for all 8 plants with nutrition data and citations.', href: '/ingredients', tag: 'Ingredients' },
         { title: 'The Science', description: 'Research citations behind every ingredient.', href: '/science', tag: 'Research' },
-        { title: 'Compare to Competitors', description: 'Morivaná vs AG1, Setu, Oziva.', href: '/compare', tag: 'Compare' },
+        { title: 'Compare to Competitors', description: 'Morivaná Daily vs AG1, Setu, Oziva.', href: '/compare', tag: 'Compare' },
       ]} />
     </>
   )

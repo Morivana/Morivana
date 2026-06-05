@@ -24,7 +24,7 @@ export default function PrivacyPolicyPage() {
     >
       <SEOHead
         title="Privacy Policy | Morivaná Daily Super Greens Powder"
-        description="Read the Privacy Policy for Morivaná. Learn how we handle your waitlist and contact data for our daily super greens powder in India and Canada."
+        description="Read the Privacy Policy for Morivaná Daily. Learn how we handle your waitlist and contact data for our daily super greens powder in India and Canada."
         canonical="/privacy-policy"
       />
       <FloatingLeaves variant="light" density="sparse" />
@@ -58,7 +58,7 @@ export default function PrivacyPolicyPage() {
               display: 'inline-block',
             }}
           >
-            Morivaná
+            Morivaná Daily
           </Link>
         </div>
 
@@ -83,7 +83,7 @@ export default function PrivacyPolicyPage() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', lineHeight: 1.7, fontSize: '0.98rem' }}>
           <p>
-            Morivaná values your privacy. This privacy policy describes how we collect, use, and share your personal information when you visit and join the waitlist at <strong>morivana.com</strong>.
+            Morivaná Daily values your privacy. This privacy policy describes how we collect, use, and share your personal information when you visit and join the waitlist at <strong>morivana.com</strong>.
           </p>
           
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', marginTop: '12px', color: 'var(--surface-deep)' }}>
@@ -97,7 +97,7 @@ export default function PrivacyPolicyPage() {
             How We Use Your Data
           </h2>
           <p>
-            We use your data solely for communications regarding the launch of Morivaná. We do not sell, rent, or share your personal information with third parties. Your data is stored securely using encrypted cloud databases.
+            We use your data solely for communications regarding the launch of Morivaná Daily. We do not sell, rent, or share your personal information with third parties. Your data is stored securely using encrypted cloud databases.
           </p>
 
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', marginTop: '12px', color: 'var(--surface-deep)' }}>

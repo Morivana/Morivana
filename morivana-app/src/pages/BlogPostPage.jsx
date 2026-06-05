@@ -32,8 +32,8 @@ export default function BlogPostPage() {
       headline: post.title,
       description: post.description,
       datePublished: post.publishDate,
-      author: { '@type': 'Organization', name: 'Morivaná' },
-      publisher: { '@type': 'Organization', name: 'Morivaná', logo: { '@type': 'ImageObject', url: 'https://morivana.pages.dev/packaging_highres.webp' } },
+      author: { '@type': 'Organization', name: 'Morivaná Daily' },
+      publisher: { '@type': 'Organization', name: 'Morivaná Daily', logo: { '@type': 'ImageObject', url: 'https://morivana.pages.dev/packaging_highres.webp' } },
       mainEntityOfPage: { '@type': 'WebPage', '@id': `https://morivana.pages.dev/learn/${post.slug}` },
       keywords: post.targetKeyword,
       articleSection: post.category,
@@ -60,7 +60,7 @@ export default function BlogPostPage() {
   return (
     <>
       <SEOHead
-        title={`${post.title} | Morivaná`}
+        title={`${post.title} | Morivaná Daily`}
         description={post.description}
         canonical={`/learn/${post.slug}`}
         ogType="article"
@@ -219,7 +219,7 @@ export default function BlogPostPage() {
               borderRadius: '16px',
               padding: 'clamp(24px, 4vw, 40px)',
             }}>
-              <div className="kicker" style={{ color: 'var(--accent)', marginBottom: '10px' }}>Try Morivaná</div>
+              <div className="kicker" style={{ color: 'var(--accent)', marginBottom: '10px' }}>Try Morivaná Daily</div>
               <p style={{ color: 'var(--ink-on-dark-mute)', lineHeight: 1.65, marginBottom: '20px', fontSize: '0.92rem', maxWidth: '480px' }}>
                 All 8 ingredients. Full transparency. Pre-order now and get 15% off at launch.
               </p>

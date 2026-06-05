@@ -24,10 +24,10 @@ const schemas = [
   {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'The Story Behind Morivaná',
-    description: 'The founding story, philosophy, and sourcing transparency of Morivaná — a clean super greens powder from India.',
-    author: { '@type': 'Organization', name: 'Morivaná' },
-    publisher: { '@type': 'Organization', name: 'Morivaná' },
+    headline: 'The Story Behind Morivaná Daily',
+    description: 'The founding story, philosophy, and sourcing transparency of Morivaná Daily — a clean super greens powder from India.',
+    author: { '@type': 'Organization', name: 'Morivaná Daily' },
+    publisher: { '@type': 'Organization', name: 'Morivaná Daily' },
   },
   buildBreadcrumbSchema(breadcrumbs),
 ]
@@ -36,8 +36,8 @@ export default function AboutPage() {
   return (
     <>
       <SEOHead
-        title="About Morivaná | Pure Moringa Super Greens Sourcing & Mission"
-        description="Learn why we built Morivaná — a clean super greens powder from 8 sourced plants. Our story, philosophy, and sourcing transparency for India & Canada."
+        title="About Morivaná Daily | Pure Moringa Super Greens Sourcing & Mission"
+        description="Learn why we built Morivaná Daily — a clean super greens powder from 8 sourced plants. Our story, philosophy, and sourcing transparency for India & Canada."
         canonical="/about"
         schemas={schemas}
       />
@@ -61,11 +61,11 @@ export default function AboutPage() {
             }}>
               The Story Behind<br />
               <span style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontWeight: 500, textTransform: 'none', fontSize: '0.7em' }}>
-                Morivaná
+                Morivaná Daily
               </span>
             </h1>
             <p style={{ fontSize: '1.1rem', lineHeight: 1.7, color: 'var(--ink-soft)', maxWidth: '560px' }}>
-              We started Morivaná because we were frustrated — not with wellness, but with the wellness industry. Too many products, too many promises, too little transparency.
+              We started Morivaná Daily because we were frustrated — not with wellness, but with the wellness industry. Too many products, too many promises, too little transparency.
             </p>
           </div>
 
@@ -265,7 +265,7 @@ export default function AboutPage() {
       </PageLayout>
 
       <RelatedPages items={[
-        { title: 'All 8 Ingredients', description: 'Explore every plant in the Morivaná blend with full nutritional profiles.', href: '/ingredients', tag: 'Ingredients' },
+        { title: 'All 8 Ingredients', description: 'Explore every plant in the Morivaná Daily blend with full nutritional profiles.', href: '/ingredients', tag: 'Ingredients' },
         { title: 'Sourcing & Sustainability', description: 'Complete supply chain transparency — where every ingredient comes from.', href: '/sustainability', tag: 'Brand' },
         { title: 'The Science', description: 'Research citations behind every health claim we make.', href: '/science', tag: 'Research' },
       ]} />
