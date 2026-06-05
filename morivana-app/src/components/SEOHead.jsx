@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async'
 
 const BASE_URL = 'https://www.morivana.com'
-const DEFAULT_OG_IMAGE = `${BASE_URL}/packaging_highres.png`
+const DEFAULT_OG_IMAGE = `${BASE_URL}/packaging_highres.webp`
 
 /**
  * SEOHead — inject per-route <title>, meta tags, canonical, OG, and JSON-LD schemas.

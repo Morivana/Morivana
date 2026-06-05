@@ -259,21 +259,15 @@ export default function Loader({ onDismiss, onLeaveStart }) {
 
     try {
       const apiBase = import.meta.env.VITE_API_URL ?? ''
-      // Fetch CSRF Token on demand
-      const csrfRes = await fetch(`${apiBase}/api/csrf`)
-      const { csrfToken } = await csrfRes.json()
-
       const res = await fetch(`${apiBase}/api/waitlist`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRF-Token': csrfToken,
         },
         body: JSON.stringify({
           name: data.name,
           email: data.email,
           confirm_email: data.confirm_email,
-          csrfToken,
           turnstileToken,
         }),
       })

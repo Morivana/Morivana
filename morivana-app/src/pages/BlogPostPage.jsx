@@ -33,7 +33,7 @@ export default function BlogPostPage() {
       description: post.description,
       datePublished: post.publishDate,
       author: { '@type': 'Organization', name: 'Morivaná' },
-      publisher: { '@type': 'Organization', name: 'Morivaná', logo: { '@type': 'ImageObject', url: 'https://www.morivana.com/packaging_highres.png' } },
+      publisher: { '@type': 'Organization', name: 'Morivaná', logo: { '@type': 'ImageObject', url: 'https://www.morivana.com/packaging_highres.webp' } },
       mainEntityOfPage: { '@type': 'WebPage', '@id': `https://www.morivana.com/learn/${post.slug}` },
       keywords: post.targetKeyword,
       articleSection: post.category,

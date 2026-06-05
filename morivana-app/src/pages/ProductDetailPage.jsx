@@ -32,7 +32,7 @@ const schemas = [
     '@type': 'Product',
     name: 'Morivaná Daily Super Greens 30-Day Supply',
     description: '150g pouch (30 servings) of Morivaná super greens powder. 8 whole plants, cold-dried, all amounts disclosed. No proprietary blends.',
-    image: 'https://www.morivana.com/packaging_highres.png',
+    image: 'https://www.morivana.com/packaging_highres.webp',
     brand: { '@type': 'Brand', name: 'Morivaná' },
     offers: [
       {
@@ -108,7 +108,7 @@ export default function ProductDetailPage() {
                 marginBottom: '16px',
               }}>
                 <img
-                  src="/packaging_highres.png"
+                  src="/packaging_highres.webp"
                   alt="Morivaná Daily Super Greens 150g pouch — front"
                   style={{ width: '80%', height: '80%', objectFit: 'contain' }}
                   loading="eager"
@@ -124,7 +124,7 @@ export default function ProductDetailPage() {
                 justifyContent: 'center',
               }}>
                 <img
-                  src="/packaging_highres_back.png"
+                  src="/packaging_highres_back.webp"
                   alt="Morivaná Daily Super Greens 150g pouch — back with ingredient label"
                   style={{ width: '80%', height: '80%', objectFit: 'contain' }}
                   loading="lazy"

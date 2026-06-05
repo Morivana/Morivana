@@ -34,7 +34,7 @@ export default class CanvasErrorBoundary extends React.Component {
           }}
         >
           <img
-            src="/packaging_highres.png"
+            src="/packaging_highres.webp"
             alt="Morivana Pouch (Fallback Preview)"
             style={{
               maxHeight: '75%',

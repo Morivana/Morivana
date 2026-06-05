@@ -343,7 +343,7 @@ function ModelLoader() {
       animation: 'skeleton-pulse 1.8s ease-in-out infinite',
     }}>
       <img
-        src="/packaging_highres.png"
+        src="/packaging_highres.webp"
         alt="Loading pouch..."
         style={{
           maxHeight: '75%',

@@ -25,7 +25,7 @@ const schemas = [
     '@type': 'Product',
     name: 'Morivaná Daily Super Greens Powder',
     description: '8-plant clean super greens powder — moringa, spirulina, amla, ginger, lemon, inulin, orange peel & monk fruit. Cold-dried, no proprietary blends.',
-    image: 'https://www.morivana.com/packaging_highres.png',
+    image: 'https://www.morivana.com/packaging_highres.webp',
     brand: { '@type': 'Brand', name: 'Morivaná' },
     offers: {
       '@type': 'Offer',
@@ -106,7 +106,7 @@ export default function ShopPage() {
               justifyContent: 'center',
             }}>
               <img
-                src="/packaging_highres.png"
+                src="/packaging_highres.webp"
                 alt="Morivaná Daily Super Greens Powder 150g packaging"
                 style={{ width: '80%', height: '80%', objectFit: 'contain' }}
                 loading="eager"

@@ -91,21 +91,15 @@ export default function WaitlistCTA() {
     try {
       const apiBase = import.meta.env.VITE_API_URL ?? ''
       
-      // Fetch CSRF Token on demand
-      const csrfRes = await fetch(`${apiBase}/api/csrf`)
-      const { csrfToken } = await csrfRes.json()
-
       const res = await fetch(`${apiBase}/api/waitlist`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRF-Token': csrfToken,
         },
         body: JSON.stringify({
           name: data.name,
           email: data.email,
           confirm_email: data.confirm_email,
-          csrfToken,
           turnstileToken,
         }),
       })
@@ -194,11 +188,11 @@ export default function WaitlistCTA() {
       {loadCollage && (
         <div className="cta-collage" aria-hidden="true">
           <div className="cta-tile cta-tile--1" style={{ backgroundImage: 'url(/morivana-sip.jpeg)' }} />
-          <div className="cta-tile cta-tile--2" style={{ backgroundImage: 'url(/Moringa%20Leaves%20Overhead.png)' }} />
-          <div className="cta-tile cta-tile--3" style={{ backgroundImage: 'url(/morivana-scoop.png)' }} />
+          <div className="cta-tile cta-tile--2" style={{ backgroundImage: 'url(/Moringa%20Leaves%20Overhead.webp)' }} />
+          <div className="cta-tile cta-tile--3" style={{ backgroundImage: 'url(/morivana-scoop.webp)' }} />
           <div className="cta-tile cta-tile--4" style={{ backgroundImage: 'url(/morivana-jar.jpeg)' }} />
-          <div className="cta-tile cta-tile--5" style={{ backgroundImage: 'url(/Morning%20Light%20.png)' }} />
-          <div className="cta-tile cta-tile--6" style={{ backgroundImage: 'url(/morivana-ingredients.png)' }} />
+          <div className="cta-tile cta-tile--5" style={{ backgroundImage: 'url(/Morning%20Light%20.webp)' }} />
+          <div className="cta-tile cta-tile--6" style={{ backgroundImage: 'url(/morivana-ingredients.webp)' }} />
           <div className="cta-tile cta-tile--7" style={{ backgroundImage: 'url(/morivana-powder.jpeg)' }} />
         </div>
       )}

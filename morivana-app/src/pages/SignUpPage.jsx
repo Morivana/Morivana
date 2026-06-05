@@ -40,9 +40,9 @@ export default function SignUpPage() {
       {/* Photo collage */}
       <div className="auth-collage" aria-hidden="true">
         <div className="auth-tile auth-tile--1" style={{ backgroundImage: 'url(/morivana-sip.jpeg)' }} />
-        <div className="auth-tile auth-tile--2" style={{ backgroundImage: 'url(/morivana-ingredients.png)' }} />
-        <div className="auth-tile auth-tile--3" style={{ backgroundImage: 'url(/Morning%20Light%20.png)' }} />
-        <div className="auth-tile auth-tile--4" style={{ backgroundImage: 'url(/morivana-scoop.png)' }} />
+        <div className="auth-tile auth-tile--2" style={{ backgroundImage: 'url(/morivana-ingredients.webp)' }} />
+        <div className="auth-tile auth-tile--3" style={{ backgroundImage: 'url(/Morning%20Light%20.webp)' }} />
+        <div className="auth-tile auth-tile--4" style={{ backgroundImage: 'url(/morivana-scoop.webp)' }} />
       </div>
       <div className="auth-scrim" aria-hidden="true" />
 

@@ -59,8 +59,8 @@ export default function SignInPage() {
 
       {/* Photo collage background — same tiles as WaitlistCTA */}
       <div className="auth-collage" aria-hidden="true">
-        <div className="auth-tile auth-tile--1" style={{ backgroundImage: 'url(/Moringa%20Leaves%20Overhead.png)' }} />
-        <div className="auth-tile auth-tile--2" style={{ backgroundImage: 'url(/morivana-scoop.png)' }} />
+        <div className="auth-tile auth-tile--1" style={{ backgroundImage: 'url(/Moringa%20Leaves%20Overhead.webp)' }} />
+        <div className="auth-tile auth-tile--2" style={{ backgroundImage: 'url(/morivana-scoop.webp)' }} />
         <div className="auth-tile auth-tile--3" style={{ backgroundImage: 'url(/morivana-powder.jpeg)' }} />
         <div className="auth-tile auth-tile--4" style={{ backgroundImage: 'url(/morivana-jar.jpeg)' }} />
       </div>
