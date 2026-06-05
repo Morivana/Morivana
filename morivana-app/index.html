@@ -4,20 +4,36 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EYYKWWTHNQ"></script>
+    <!-- Google tag (gtag.js) - Deferred -->
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+      window.addEventListener('load', function() {
+        var loadGTag = function() {
+          var script = document.createElement('script');
+          script.async = true;
+          script.src = "https://www.googletagmanager.com/gtag/js?id=G-EYYKWWTHNQ";
+          document.head.appendChild(script);
 
-      gtag('config', 'G-EYYKWWTHNQ');
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = function(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-EYYKWWTHNQ');
+        };
+
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(function() {
+            setTimeout(loadGTag, 1000);
+          });
+        } else {
+          setTimeout(loadGTag, 2000);
+        }
+      });
     </script>
 
     <!-- ── Performance: Preconnect & Preload ───────────────────────────── -->
     <link rel="dns-prefetch" href="//fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" href="/packaging_highres.webp" as="image" type="image/webp" fetchpriority="high" />
 
     <!-- ── Primary SEO ─────────────────────────────────────────────────── -->
     <title>Morivaná | Daily Moringa Super Greens Powder for Energy</title>
@@ -141,7 +157,7 @@
           <section id="hero">
             <h1>Morivaná Daily Super Greens Powder — Premium Organic Moringa & Spirulina</h1>
             <p>Morivaná is a pure daily super greens powder crafted from 8 whole plants — moringa, spirulina, amla, ginger, lemon, inulin, orange peel, and monk fruit. No fillers, no proprietary blends. Sourced sustainably and packaged for your morning routine. Launching soon in India and Canada.</p>
-            <img src="/packaging_highres.webp" alt="Morivaná Daily Super Greens Powder Premium Packaging" loading="lazy" width="664" height="1000" />
+            <img src="/packaging_highres.webp" alt="Morivaná Daily Super Greens Powder Premium Packaging" fetchpriority="high" loading="eager" width="664" height="1000" />
             <a href="/waitlist">Join the Waitlist</a>
           </section>
 

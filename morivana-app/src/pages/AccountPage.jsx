@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useUser, useClerk, useSession, useSessionList } from '@clerk/clerk-react'
+import { useUser, useClerk, useSession, useSessionList } from '@clerk/react'
 import { Link, useNavigate } from 'react-router-dom'
 import LoadingSpinner from '../components/LoadingSpinner'
 

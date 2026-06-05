@@ -1,6 +1,24 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+
+@theme {
+  --color-green-dark: #1a3a1a;
+  --color-green-mid: #2d6b2d;
+  --color-green-bright: #4caf50;
+  --color-green-light: #8bc34a;
+  --color-citrus: #c8e630;
+  --color-citrus-dim: #a8c020;
+  --color-cream: #f5f0dc;
+  --color-warm-white: #faf8f0;
+  --color-brand-orange: #e87c20;
+  --color-brand-yellow: #f5c842;
+  --color-pink-accent: #e8507a;
+  --color-brand-dark: #0d1f0d;
+
+  --font-display: "Montserrat", sans-serif;
+  --font-condensed: "Montserrat", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+}
 
 /* ─── Design tokens ─── */
 :root {

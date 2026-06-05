@@ -1,4 +1,4 @@
-import Lenis from '@studio-freight/lenis'
+import Lenis from 'lenis'
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
@@ -9,10 +9,11 @@ export function useLenis() {
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const lenis = new Lenis({
-      duration: prefersReducedMotion ? 0 : 1.4,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: !prefersReducedMotion,
-      syncTouch: !prefersReducedMotion,
+      duration: prefersReducedMotion ? 0 : 1.2,
+      autoRaf: false,         // false because GSAP ticker drives it
+      anchors: true,          // native anchor scroll support
+      allowNestedScroll: true,
+      stopInertiaOnNavigate: true,
     })
     lenisRef.current = lenis
 

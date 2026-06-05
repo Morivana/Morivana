@@ -1,7 +1,7 @@
-import { SignIn } from '@clerk/clerk-react'
+import { SignIn } from '@clerk/react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useEffect } from 'react'
-import { useAuth } from '@clerk/clerk-react'
+import { useAuth } from '@clerk/react'
 import FloatingLeaves from '../components/FloatingLeaves'
 
 /**

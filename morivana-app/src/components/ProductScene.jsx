@@ -5,6 +5,7 @@ import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import { animate, createTimeline, utils } from 'animejs'
 
+useGLTF.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/')
 useGLTF.preload('/models/morivana_pouch_fixed_draco.glb', '/draco/')
 
 function PouchModel({ isMobile, isHighPerf }) {
@@ -405,6 +406,7 @@ export default function ProductScene({ style = {} }) {
             powerPreference: isHighPerf ? 'high-performance' : 'low-power',
           }}
           dpr={isHighPerf ? [1, 2] : [1, 1.5]}
+          performance={{ min: 0.5 }}
           style={{ background: 'transparent', width: '100%', height: '100%', pointerEvents: 'none' }}
         >
           <ambientLight intensity={0.6} />

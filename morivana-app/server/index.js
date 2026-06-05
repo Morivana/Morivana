@@ -3,6 +3,10 @@ import express from 'express'
 import cors from 'cors'
 import crypto from 'crypto'
 import { MongoClient, ServerApiVersion } from 'mongodb'
+import helmet from 'helmet'
+import rateLimit from 'express-rate-limit'
+import mongoSanitize from 'express-mongo-sanitize'
+import { z } from 'zod'
 
 const {
   MONGODB_URI,
@@ -30,18 +34,78 @@ const waitlist = db.collection('waitlist')
 await waitlist.createIndex({ email: 1 }, { unique: true })
 
 // ── CORS ─────────────────────────────────────────────────────────────────────
-const corsOptions = NODE_ENV === 'production' && ALLOWED_ORIGIN
-  ? {
-      origin: ALLOWED_ORIGIN.split(',').map(o => o.trim()),
-      methods: ['GET', 'POST', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
-      credentials: true,
-    }
-  : { origin: true, credentials: true }  // dev: permissive
+const allowedOrigins = ALLOWED_ORIGIN
+  ? ALLOWED_ORIGIN.split(',').map(o => o.trim())
+  : ['https://www.morivana.com', 'https://morivana.com']
+
+const corsOptions = {
+  origin: NODE_ENV === 'production'
+    ? allowedOrigins
+    : ['http://localhost:5173', 'http://localhost:5174', true],
+  credentials: true,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
+}
 
 const app = express()
+
+// 1. HELMET — HTTP Security Headers
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", 'https://js.stripe.com', 'https://checkout.razorpay.com', 'https://challenges.cloudflare.com'],
+      frameSrc: ["'self'", 'https://js.stripe.com', 'https://api.razorpay.com', 'https://challenges.cloudflare.com'],
+      imgSrc: ["'self'", 'data:', 'https://www.morivana.com', 'https://morivana.com'],
+      connectSrc: ["'self'", 'https://api.clerk.com', 'https://ipapi.co', 'https://challenges.cloudflare.com'],
+    },
+  },
+  hsts: {
+    maxAge: 31536000,        // 1 year
+    includeSubDomains: true,
+    preload: true,
+  },
+}))
+
+// 2. RATE LIMITING
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,  // 15 minutes
+  max: 100,                   // 100 req per IP per window
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests. Please try again later.' },
+})
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,                     // 5 attempts per window (auth routes)
+  message: { error: 'Too many attempts. Please try again in 15 minutes.' },
+})
+
+const checkoutLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,  // 1 hour
+  max: 10,                    // 10 checkout attempts per hour per IP
+  message: { error: 'Too many checkout attempts. Please try again later.' },
+})
+
+app.use('/api/', globalLimiter)
+app.use('/api/auth/', authLimiter)
+app.use('/api/checkout/', checkoutLimiter)
+
+// 3. BODY PARSING (with payload size limit)
+app.use(express.json({ limit: '10kb' }))
+app.use(express.urlencoded({ extended: true, limit: '10kb' }))
+
+// 4. MONGO SANITIZE — NoSQL Injection Protection
+app.use(mongoSanitize({
+  replaceWith: '_',
+  onSanitizeError: (req, res) => {
+    res.status(400).json({ error: 'Invalid characters in request.' })
+  },
+}))
+
+// 5. CORS
 app.use(cors(corsOptions))
-app.use(express.json())
 
 // ── Security Helpers ─────────────────────────────────────────────────────────
 
@@ -98,48 +162,26 @@ async function verifyTurnstile(token, ip) {
   }
 }
 
-// In-memory rate limiting
-const rateLimitWindow = 15 * 60 * 1000 // 15 minutes
-const maxRequests = 100 // max 100 requests per IP per window
-const ipRequests = new Map()
-
-setInterval(() => {
-  const now = Date.now()
-  for (const [ip, data] of ipRequests.entries()) {
-    if (now - data.resetTime > 0) {
-      ipRequests.delete(ip)
-    }
-  }
-}, rateLimitWindow)
-
-const rateLimiter = (req, res, next) => {
-  const ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress
-  const now = Date.now()
-
-  if (!ipRequests.has(ip)) {
-    ipRequests.set(ip, { count: 1, resetTime: now + rateLimitWindow })
-    return next()
-  }
-
-  const data = ipRequests.get(ip)
-  if (now > data.resetTime) {
-    data.count = 1
-    data.resetTime = now + rateLimitWindow
-    return next()
-  }
-
-  data.count++
-  if (data.count > maxRequests) {
-    return res.status(429).json({ error: 'Too many requests. Please try again later.' })
-  }
-  next()
-}
+const rateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  message: { error: 'Too many requests. Please try again later.' },
+})
 
 // ── Routes ───────────────────────────────────────────────────────────────────
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 app.get('/api/csrf', (req, res) => {
   return res.json({ csrfToken: 'static_csrf_token' })
+})
+
+const waitlistSchema = z.object({
+  name: z.string().trim().min(1, 'Name is required'),
+  email: z.string().trim().toLowerCase().email('Valid email is required'),
+  confirm_email: z.string().optional(),
+  turnstileToken: z.string().optional()
 })
 
 app.post('/api/waitlist', rateLimiter, async (req, res) => {
@@ -149,19 +191,21 @@ app.post('/api/waitlist', rateLimiter, async (req, res) => {
     return res.status(201).json({ ok: true, note: 'silenced' })
   }
 
+  // 2. Validate input schema using Zod
+  const validationResult = waitlistSchema.safeParse(req.body)
+  if (!validationResult.success) {
+    const errorMsg = validationResult.error.errors[0]?.message || 'Invalid input'
+    return res.status(400).json({ error: errorMsg })
+  }
+
+  const { name, email, turnstileToken } = validationResult.data
+
   // 3. Turnstile verification
-  const turnstileToken = req.body?.turnstileToken
   const ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress
   const turnstileOk = await verifyTurnstile(turnstileToken, ip)
   if (!turnstileOk) {
     return res.status(400).json({ error: 'Turnstile verification failed' })
   }
-
-  const name  = String(req.body?.name  ?? '').trim()
-  const email = String(req.body?.email ?? '').trim().toLowerCase()
-
-  if (!name)              return res.status(400).json({ error: 'Name is required' })
-  if (!EMAIL_RE.test(email)) return res.status(400).json({ error: 'Valid email is required' })
 
   try {
     await waitlist.insertOne({

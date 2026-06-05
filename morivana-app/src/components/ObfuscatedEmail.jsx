@@ -28,7 +28,9 @@ export default function ObfuscatedEmail({ style, className, children, ...props }
       className={className}
       {...props}
     >
-      {children || email || 'Contact Support'}
+      {typeof children === 'function'
+        ? children(email)
+        : (children || email || 'Contact Support')}
     </a>
   )
 }
