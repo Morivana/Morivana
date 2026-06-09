@@ -31,7 +31,7 @@ export function RegionProvider({ children }) {
           const data = await response.json()
           const country = data.country_code
           if (country) {
-            detectedRegion = country === 'CA' ? 'CA' : 'IN'
+            detectedRegion = country === 'IN' ? 'IN' : 'CA'
             console.log('Detected region via ipapi.co:', detectedRegion)
           }
         }
@@ -47,7 +47,7 @@ export function RegionProvider({ children }) {
             const data = await response.json()
             const country = data.country
             if (country) {
-              detectedRegion = country === 'CA' ? 'CA' : 'IN'
+              detectedRegion = country === 'IN' ? 'IN' : 'CA'
               console.log('Detected region via ipinfo.io:', detectedRegion)
             }
           }
