@@ -65,7 +65,7 @@ const howToSchema = {
     '@type': 'HowToStep',
     name: s.title,
     text: s.body,
-    image: `https://morivandaily.com${s.image}`,
+    image: `https://morivanadaily.com${s.image}`,
   })),
 }
 

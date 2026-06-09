@@ -23,7 +23,7 @@ const PRECACHE_ASSETS = [
   '/icon-shield-3d.png',
   '/avatar-male.png',
   '/avatar-female.png',
-  '/vite.svg',
+  '/logo.svg',
 ]
 
 self.addEventListener('install', (event) => {
