@@ -348,10 +348,9 @@ export default function ShopPage() {
                 padding: '20px',
                 border: '1px solid var(--line-soft)',
               }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+                <div>
                   {region === 'CA' ? (
                     <div>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-mute)', marginBottom: '4px' }}>Canada</div>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
                         <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '2rem', color: 'var(--surface-deep)', lineHeight: 1 }}>
                           {selectedPack === '50g' ? 'CA$21' : 'CA$39'}
@@ -360,13 +359,12 @@ export default function ShopPage() {
                           {selectedPack === '50g' ? 'CA$25' : 'CA$47'}
                         </span>
                       </div>
-                      <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--ink-mute)' }}>
+                      <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--ink-mute)', marginTop: '4px' }}>
                         {selectedPack === '50g' ? 'CA$2.10/day' : 'CA$1.95/day'}
                       </div>
                     </div>
                   ) : (
                     <div>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-mute)', marginBottom: '4px' }}>India</div>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
                         <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '2rem', color: 'var(--surface-deep)', lineHeight: 1 }}>
                           {selectedPack === '50g' ? '₹499' : '₹799'}
@@ -375,54 +373,11 @@ export default function ShopPage() {
                           {selectedPack === '50g' ? '₹599' : '₹999'}
                         </span>
                       </div>
-                      <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--ink-mute)' }}>
+                      <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--ink-mute)', marginTop: '4px' }}>
                         {selectedPack === '50g' ? '₹50/day' : '₹40/day'}
                       </div>
                     </div>
                   )}
-
-                  {/* Region Switcher */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-end' }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-mute)' }}>Shipping To</span>
-                    <div style={{ display: 'flex', gap: '4px', background: 'rgba(0,0,0,0.03)', padding: '2px', borderRadius: '24px', border: '1px solid var(--line-soft)' }}>
-                      <button
-                        onClick={() => setRegion('IN')}
-                        style={{
-                          background: region === 'IN' ? 'var(--surface-deep)' : 'none',
-                          color: region === 'IN' ? 'var(--ink-on-dark)' : 'var(--ink-soft)',
-                          border: 'none',
-                          borderRadius: '20px',
-                          padding: '4px 10px',
-                          fontSize: '11px',
-                          cursor: 'pointer',
-                          fontWeight: 600,
-                          transition: 'all 0.2s',
-                          minHeight: 0,
-                          minWidth: 0,
-                        }}
-                      >
-                        IN
-                      </button>
-                      <button
-                        onClick={() => setRegion('CA')}
-                        style={{
-                          background: region === 'CA' ? 'var(--surface-deep)' : 'none',
-                          color: region === 'CA' ? 'var(--ink-on-dark)' : 'var(--ink-soft)',
-                          border: 'none',
-                          borderRadius: '20px',
-                          padding: '4px 10px',
-                          fontSize: '11px',
-                          cursor: 'pointer',
-                          fontWeight: 600,
-                          transition: 'all 0.2s',
-                          minHeight: 0,
-                          minWidth: 0,
-                        }}
-                      >
-                        CA
-                      </button>
-                    </div>
-                  </div>
                 </div>
               </div>
 

@@ -25,12 +25,12 @@ export default function ComparePage() {
   const { region } = useUserRegion()
 
   const columns = [
-    { key: 'price', label: region === 'CA' ? 'Price (Canada)' : 'Price (India)' },
+    { key: 'price', label: 'Price' },
     { key: 'pricePerDay', label: 'Per Day' },
     { key: 'ingredients', label: '# Ingredients' },
     { key: 'proprietary', label: 'Proprietary Blend?' },
     { key: 'sourcing', label: 'Sourcing Transparency' },
-    { key: 'avail', label: region === 'CA' ? 'Canada Availability' : 'India Availability' },
+    { key: 'avail', label: 'Availability' },
     { key: 'vegan', label: 'Vegan' },
     { key: 'sweetener', label: 'Sweetener' },
   ]
