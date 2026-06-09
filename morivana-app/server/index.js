@@ -49,6 +49,13 @@ const corsOptions = {
 
 const app = express()
 
+// Trust proxy (required when running behind a reverse proxy like Render or Cloudflare)
+app.set('trust proxy', 1)
+
+// Enable CORS early to handle preflight OPTIONS requests before rate limiting/body parsing
+app.use(cors(corsOptions))
+
+
 // 1. HELMET — HTTP Security Headers
 app.use(helmet({
   contentSecurityPolicy: {
@@ -104,8 +111,7 @@ app.use(mongoSanitize({
   },
 }))
 
-// 5. CORS
-app.use(cors(corsOptions))
+
 
 // ── Security Helpers ─────────────────────────────────────────────────────────
 

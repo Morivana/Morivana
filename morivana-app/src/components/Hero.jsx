@@ -70,10 +70,12 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
         { opacity: 0, scale: prefersReducedMotion ? 1 : s.ctaScale },
         { opacity: 1, scale: 1, duration: prefersReducedMotion ? 0 : 0.5 * s.mul, ease: 'back.out(1.4)', delay: prefersReducedMotion ? 0 : 1.2 * s.mul }
       )
-      gsap.fromTo('.hero-countdown',
-        { opacity: 0, y: prefersReducedMotion ? 0 : 10 },
-        { opacity: 1, y: 0, duration: prefersReducedMotion ? 0 : 0.5 * s.mul, ease: 'power2.out', delay: prefersReducedMotion ? 0 : 1.4 * s.mul }
-      )
+      if (sectionRef.current.querySelector('.hero-countdown')) {
+        gsap.fromTo('.hero-countdown',
+          { opacity: 0, y: prefersReducedMotion ? 0 : 10 },
+          { opacity: 1, y: 0, duration: prefersReducedMotion ? 0 : 0.5 * s.mul, ease: 'power2.out', delay: prefersReducedMotion ? 0 : 1.4 * s.mul }
+        )
+      }
     }, sectionRef)
 
     return () => ctx.revert()

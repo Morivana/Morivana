@@ -23,11 +23,11 @@ export function RegionProvider({ children }) {
 
     async function detectRegion() {
       try {
-        const response = await fetch('https://freeipapi.com/api/json')
+        const response = await fetch('https://ipapi.co/json/')
         if (!response.ok) throw new Error('Geolocation request failed')
         const data = await response.json()
         if (isMounted) {
-          const country = data.countryCode || 'IN'
+          const country = data.country_code || 'IN'
           const detectedRegion = country === 'CA' ? 'CA' : 'IN'
           setRegionState(detectedRegion)
           try {

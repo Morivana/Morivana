@@ -39,7 +39,7 @@ export default function HomepageFAQ() {
         duration: 0.7,
         ease: 'power3.out',
         scrollTrigger: {
-          trigger: '#homepage-faq',
+          trigger: sectionRef.current,
           start: 'top 80%',
           toggleActions: 'play none none none',
         },
@@ -52,7 +52,7 @@ export default function HomepageFAQ() {
         duration: 1.0,
         ease: 'power3.out',
         scrollTrigger: {
-          trigger: '#homepage-faq',
+          trigger: sectionRef.current,
           start: 'top 75%',
           toggleActions: 'play none none none',
         },
