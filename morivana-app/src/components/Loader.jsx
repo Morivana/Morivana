@@ -282,8 +282,6 @@ export default function Loader({ onDismiss, onLeaveStart }) {
     }
   }
 
-  const onSkip = () => setSubmitted(true)
-
   return (
     <div
       ref={rootRef}
@@ -504,10 +502,6 @@ export default function Loader({ onDismiss, onLeaveStart }) {
           </button>
 
           {errors.root && <p className="loader-error" style={{ textAlign: 'center' }}>{errors.root.message}</p>}
-
-          <button type="button" onClick={onSkip} disabled={isSubmitting || submitted} className="loader-skip">
-            Skip for now →
-          </button>
         </form>
 
         {/* Breath rule + ready */}

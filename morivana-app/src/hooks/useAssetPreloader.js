@@ -6,7 +6,9 @@ const CRITICAL_IMAGES = [
   '/morivana-powder.jpeg',
 ]
 
-const CRITICAL_MODELS = []
+const CRITICAL_MODELS = [
+  '/models/morivana_pouch_fixed_draco.glb'
+]
 
 function preloadImage(src) {
   return new Promise((resolve) => {
