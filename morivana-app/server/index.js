@@ -231,6 +231,7 @@ app.post('/api/vitals', (req, res) => {
   return res.json({ ok: true })
 })
 
+app.get('/', (_req, res) => res.json({ ok: true, message: 'Morivaná API is running', env: NODE_ENV }))
 app.get('/api/health', (_req, res) => res.json({ ok: true, env: NODE_ENV }))
 
 // ── Start ────────────────────────────────────────────────────────────────────
