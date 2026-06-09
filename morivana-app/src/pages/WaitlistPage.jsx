@@ -34,7 +34,8 @@ export default function WaitlistPage() {
       return
     }
     try {
-      const res = await fetch('https://formspree.io/f/morivana', {
+      const apiBase = import.meta.env.VITE_API_URL ?? ''
+      const res = await fetch(`${apiBase}/api/waitlist`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, region, source: 'waitlist-page' }),
@@ -42,7 +43,8 @@ export default function WaitlistPage() {
       if (res.ok || res.status === 200 || res.status === 422) {
         setSubmitted(true)
       } else {
-        setError('Something went wrong. Please contact our support team.')
+        const data = await res.json().catch(() => ({}))
+        setError(data.error || 'Something went wrong. Please contact our support team.')
       }
     } catch {
       // Even on network failure, mark as submitted to avoid frustrating the user

@@ -5,6 +5,7 @@ import crypto from 'crypto'
 import { MongoClient, ServerApiVersion } from 'mongodb'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
+import nodemailer from 'nodemailer'
 
 import { z } from 'zod'
 
@@ -16,11 +17,89 @@ const {
   ALLOWED_ORIGIN,
   CSRF_SECRET = crypto.randomBytes(32).toString('hex'),
   TURNSTILE_SECRET_KEY,
+  SMTP_HOST,
+  SMTP_PORT = 587,
+  SMTP_USER,
+  SMTP_PASS,
+  EMAIL_FROM = 'Morivaná Daily <no-reply@morivanadaily.com>',
 } = process.env
 
 if (!MONGODB_URI) {
   console.error('Missing MONGODB_URI in environment. Set it in morivana-app/.env')
   process.exit(1)
+}
+
+// ── Nodemailer Transporter ───────────────────────────────────────────────────
+let transporter = null
+if (SMTP_HOST && SMTP_USER && SMTP_PASS) {
+  transporter = nodemailer.createTransport({
+    host: SMTP_HOST,
+    port: parseInt(SMTP_PORT, 10),
+    secure: parseInt(SMTP_PORT, 10) === 465,
+    auth: {
+      user: SMTP_USER,
+      pass: SMTP_PASS,
+    },
+  })
+} else {
+  console.log('SMTP environment variables are not fully configured. Email sending will be logged to console.')
+}
+
+async function sendWaitlistEmail({ name, email, region, source }) {
+  const mailOptions = {
+    from: EMAIL_FROM,
+    to: 'morivana.daily@gmail.com',
+    subject: `New Form Submission - Morivaná Daily Waitlist`,
+    text: `New signup on Morivaná Daily!
+
+Name: ${name || 'N/A'}
+Email: ${email}
+Region: ${region || 'N/A'}
+Source: ${source || 'waitlist'}
+Date: ${new Date().toLocaleString()}
+`,
+    html: `
+      <div style="font-family: sans-serif; padding: 20px; line-height: 1.6; max-width: 600px; border: 1px solid #eee; border-radius: 8px;">
+        <h2 style="color: #1C3A1C; margin-bottom: 20px; border-bottom: 2px solid #C8D96A; padding-bottom: 10px;">New Waitlist Submission</h2>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="padding: 8px 0; font-weight: bold; width: 120px;">Name:</td>
+            <td style="padding: 8px 0;">${name || 'N/A'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-weight: bold;">Email:</td>
+            <td style="padding: 8px 0;"><a href="mailto:${email}">${email}</a></td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-weight: bold;">Region:</td>
+            <td style="padding: 8px 0; text-transform: capitalize;">${region || 'N/A'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-weight: bold;">Source:</td>
+            <td style="padding: 8px 0;">${source || 'waitlist'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-weight: bold;">Submitted At:</td>
+            <td style="padding: 8px 0;">${new Date().toLocaleString()}</td>
+          </tr>
+        </table>
+      </div>
+    `
+  }
+
+  if (transporter) {
+    try {
+      await transporter.sendMail(mailOptions)
+      console.log(`Email successfully sent to morivana.daily@gmail.com for ${email}`)
+    } catch (error) {
+      console.error('Error sending waitlist email:', error)
+    }
+  } else {
+    console.log('--- MOCK EMAIL TO morivana.daily@gmail.com ---')
+    console.log('Subject:', mailOptions.subject)
+    console.log('Body:', mailOptions.text)
+    console.log('----------------------------------------------')
+  }
 }
 
 // ── MongoDB ─────────────────────────────────────────────────────────────────
@@ -178,10 +257,12 @@ app.get('/api/csrf', (req, res) => {
 })
 
 const waitlistSchema = z.object({
-  name: z.string().trim().min(1, 'Name is required'),
+  name: z.string().trim().optional(),
   email: z.string().trim().toLowerCase().email('Valid email is required'),
   confirm_email: z.string().optional(),
-  turnstileToken: z.string().optional()
+  turnstileToken: z.string().optional(),
+  region: z.string().trim().optional(),
+  source: z.string().trim().optional()
 })
 
 app.post('/api/waitlist', rateLimiter, async (req, res) => {
@@ -198,7 +279,7 @@ app.post('/api/waitlist', rateLimiter, async (req, res) => {
     return res.status(400).json({ error: errorMsg })
   }
 
-  const { name, email, turnstileToken } = validationResult.data
+  const { name, email, turnstileToken, region, source } = validationResult.data
 
   // 3. Turnstile verification
   const ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress
@@ -209,15 +290,27 @@ app.post('/api/waitlist', rateLimiter, async (req, res) => {
 
   try {
     await waitlist.insertOne({
-      name,
+      name: name || null,
       email,
+      region: region || null,
+      source: source || 'waitlist',
       createdAt: new Date(),
       userAgent: req.get('user-agent') ?? null,
       ip: req.ip,
     })
+
+    // Send email notification asynchronously (non-blocking)
+    sendWaitlistEmail({ name, email, region, source }).catch(err => {
+      console.error('Background waitlist email error:', err)
+    })
+
     return res.status(201).json({ ok: true })
   } catch (err) {
     if (err?.code === 11000) {
+      // Send email even if duplicate to satisfy "whenever user fills form, email should be sent"
+      sendWaitlistEmail({ name, email, region, source: (source || 'waitlist') + ' (duplicate)' }).catch(err => {
+        console.error('Background duplicate waitlist email error:', err)
+      })
       return res.status(200).json({ ok: true, duplicate: true })
     }
     console.error('waitlist insert error:', err)
