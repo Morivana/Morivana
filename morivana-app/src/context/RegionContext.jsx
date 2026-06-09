@@ -1,7 +1,12 @@
-
 import { createContext, useContext, useState, useEffect } from 'react'
 
-const RegionContext = createContext()
+const REGION_CONTEXT_KEY = Symbol.for('morivana_region_context')
+const globalObj = typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : {})
+let RegionContext = globalObj[REGION_CONTEXT_KEY]
+if (!RegionContext) {
+  RegionContext = createContext()
+  globalObj[REGION_CONTEXT_KEY] = RegionContext
+}
 
 export function RegionProvider({ children }) {
   const [region, setRegionState] = useState(() => {
