@@ -6,7 +6,7 @@ const RegionContext = createContext()
 export function RegionProvider({ children }) {
   const [region, setRegionState] = useState(() => {
     try {
-      return localStorage.getItem('morivana_region') || null
+      return sessionStorage.getItem('morivana_region') || null
     } catch {
       return null
     }
@@ -65,7 +65,7 @@ export function RegionProvider({ children }) {
       if (isMounted) {
         setRegionState(detectedRegion)
         try {
-          localStorage.setItem('morivana_region', detectedRegion)
+          sessionStorage.setItem('morivana_region', detectedRegion)
         } catch (e) {
           // ignore
         }
@@ -83,7 +83,7 @@ export function RegionProvider({ children }) {
   const setRegion = (newRegion) => {
     setRegionState(newRegion)
     try {
-      localStorage.setItem('morivana_region', newRegion)
+      sessionStorage.setItem('morivana_region', newRegion)
     } catch (e) {
       // ignore
     }
