@@ -5,7 +5,7 @@ import crypto from 'crypto'
 import { MongoClient, ServerApiVersion } from 'mongodb'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
-import mongoSanitize from 'express-mongo-sanitize'
+
 import { z } from 'zod'
 
 const {
@@ -103,13 +103,7 @@ app.use('/api/checkout/', checkoutLimiter)
 app.use(express.json({ limit: '10kb' }))
 app.use(express.urlencoded({ extended: true, limit: '10kb' }))
 
-// 4. MONGO SANITIZE — NoSQL Injection Protection
-app.use(mongoSanitize({
-  replaceWith: '_',
-  onSanitizeError: (req, res) => {
-    res.status(400).json({ error: 'Invalid characters in request.' })
-  },
-}))
+
 
 
 
