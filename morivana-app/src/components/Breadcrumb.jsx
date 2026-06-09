@@ -88,7 +88,7 @@ export default function Breadcrumb({ items = [] }) {
  * Build BreadcrumbList JSON-LD schema from items array.
  * Usage: pass result into SEOHead schemas prop.
  */
-export function buildBreadcrumbSchema(items, baseUrl = 'https://moriavandaily.com') {
+export function buildBreadcrumbSchema(items, baseUrl = 'https://morivandaily.com') {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',

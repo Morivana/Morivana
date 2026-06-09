@@ -26,7 +26,7 @@ const schemas = [
     '@type': 'Product',
     name: 'Morivaná Daily Super Greens Powder',
     description: '8-plant clean super greens powder moringa, spirulina, amla, ginger, lemon, inulin, orange peel & monk fruit. Cold-dried, no proprietary blends.',
-    image: 'https://moriavandaily.com/packaging_highres.webp',
+    image: 'https://morivandaily.com/packaging_highres.webp',
     brand: { '@type': 'Brand', name: 'Morivaná Daily' },
     offers: [
       {
@@ -36,7 +36,7 @@ const schemas = [
         priceCurrency: 'INR',
         price: '499',
         priceValidUntil: '2027-12-31',
-        url: 'https://moriavandaily.com/shop',
+        url: 'https://morivandaily.com/shop',
         shippingDetails: {
           '@type': 'OfferShippingDetails',
           shippingRate: {
@@ -80,7 +80,7 @@ const schemas = [
         priceCurrency: 'INR',
         price: '799',
         priceValidUntil: '2027-12-31',
-        url: 'https://moriavandaily.com/shop',
+        url: 'https://morivandaily.com/shop',
         shippingDetails: {
           '@type': 'OfferShippingDetails',
           shippingRate: {
@@ -124,7 +124,7 @@ const schemas = [
         priceCurrency: 'CAD',
         price: '21',
         priceValidUntil: '2027-12-31',
-        url: 'https://moriavandaily.com/shop',
+        url: 'https://morivandaily.com/shop',
         shippingDetails: {
           '@type': 'OfferShippingDetails',
           shippingRate: {
@@ -168,7 +168,7 @@ const schemas = [
         priceCurrency: 'CAD',
         price: '39',
         priceValidUntil: '2027-12-31',
-        url: 'https://moriavandaily.com/shop',
+        url: 'https://morivandaily.com/shop',
         shippingDetails: {
           '@type': 'OfferShippingDetails',
           shippingRate: {

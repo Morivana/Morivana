@@ -83,7 +83,7 @@ export default function TermsPage() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', lineHeight: 1.7, fontSize: '0.98rem' }}>
           <p>
-            Welcome to Morivaná Daily. By accessing or using our website at <strong>moriavandaily.com</strong>, you agree to comply with and be bound by these Terms of Use.
+            Welcome to Morivaná Daily. By accessing or using our website at <strong>morivandaily.com</strong>, you agree to comply with and be bound by these Terms of Use.
           </p>
           
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', marginTop: '12px', color: 'var(--surface-deep)' }}>

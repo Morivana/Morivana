@@ -260,7 +260,7 @@ const staticRoutes = [
     content: `
       <section>
         <h2>Terms of Website Use</h2>
-        <p>Welcome to Morivaná Daily. By accessing or using our website at <b>moriavandaily.com</b>, you agree to comply with and be bound by these Terms of Use and our Privacy Policy. If you do not agree with any part of these terms, please do not use our website. Our site is designed to provide information about our clean super greens powder, manage waitlist subscriptions, and facilitate secure product pre-orders. You must be at least 18 years of age, or have the consent of a parent or guardian, to submit personal information or place pre-orders on our website.</p>
+        <p>Welcome to Morivaná Daily. By accessing or using our website at <b>morivandaily.com</b>, you agree to comply with and be bound by these Terms of Use and our Privacy Policy. If you do not agree with any part of these terms, please do not use our website. Our site is designed to provide information about our clean super greens powder, manage waitlist subscriptions, and facilitate secure product pre-orders. You must be at least 18 years of age, or have the consent of a parent or guardian, to submit personal information or place pre-orders on our website.</p>
         <p>We reserve the right to modify, suspend, or terminate the operation of this website or any portion of its content at any time without notice. We also reserve the right to update these terms as our services evolve, and your continued use of the website constitutes acceptance of the modified terms.</p>
       </section>
       <section style="margin-top: 24px;">

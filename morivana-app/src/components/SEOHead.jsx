@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async'
 
-const BASE_URL = 'https://moriavandaily.com'
+const BASE_URL = 'https://morivandaily.com'
 const DEFAULT_OG_IMAGE = `${BASE_URL}/packaging_highres.webp`
 
 /**

@@ -33,7 +33,7 @@ const schemas = [
     '@type': 'Product',
     name: 'Morivaná Daily Super Greens Powder',
     description: 'Morivaná Daily clean super greens powder. 8 whole plants, cold-dried, all amounts disclosed. No proprietary blends.',
-    image: 'https://moriavandaily.com/packaging_highres.webp',
+    image: 'https://morivandaily.com/packaging_highres.webp',
     brand: { '@type': 'Brand', name: 'Morivaná Daily' },
     offers: [
       {
@@ -43,7 +43,7 @@ const schemas = [
         priceCurrency: 'INR',
         price: '499',
         priceValidUntil: '2027-12-31',
-        url: 'https://moriavandaily.com/shop/daily-greens',
+        url: 'https://morivandaily.com/shop/daily-greens',
         eligibleRegion: { '@type': 'Country', name: 'India' },
         shippingDetails: {
           '@type': 'OfferShippingDetails',
@@ -88,7 +88,7 @@ const schemas = [
         priceCurrency: 'INR',
         price: '799',
         priceValidUntil: '2027-12-31',
-        url: 'https://moriavandaily.com/shop/daily-greens',
+        url: 'https://morivandaily.com/shop/daily-greens',
         eligibleRegion: { '@type': 'Country', name: 'India' },
         shippingDetails: {
           '@type': 'OfferShippingDetails',
@@ -133,7 +133,7 @@ const schemas = [
         priceCurrency: 'CAD',
         price: '21',
         priceValidUntil: '2027-12-31',
-        url: 'https://moriavandaily.com/shop/daily-greens',
+        url: 'https://morivandaily.com/shop/daily-greens',
         eligibleRegion: { '@type': 'Country', name: 'Canada' },
         shippingDetails: {
           '@type': 'OfferShippingDetails',
@@ -178,7 +178,7 @@ const schemas = [
         priceCurrency: 'CAD',
         price: '39',
         priceValidUntil: '2027-12-31',
-        url: 'https://moriavandaily.com/shop/daily-greens',
+        url: 'https://morivandaily.com/shop/daily-greens',
         eligibleRegion: { '@type': 'Country', name: 'Canada' },
         shippingDetails: {
           '@type': 'OfferShippingDetails',
