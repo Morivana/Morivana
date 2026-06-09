@@ -1,5 +1,6 @@
 import { useParams, Navigate, Link } from 'react-router-dom'
 import SEOHead from '../components/SEOHead'
+import { useUserRegion } from '../context/RegionContext'
 import Breadcrumb, { buildBreadcrumbSchema } from '../components/Breadcrumb'
 import RelatedPages from '../components/RelatedPages'
 import PageLayout from '../components/PageLayout'
@@ -8,7 +9,8 @@ import FAQAccordion from '../components/FAQAccordion'
 
 export default function BlogPostPage() {
   const { slug } = useParams()
-  const post = getBlogPostBySlug(slug)
+  const { region } = useUserRegion()
+  const post = getBlogPostBySlug(slug, region)
 
   if (!post) return <Navigate to="/learn" replace />
 
@@ -18,7 +20,7 @@ export default function BlogPostPage() {
     { label: post.title, href: null },
   ]
 
-  const relatedPosts = getRelatedPosts(slug).map(p => ({
+  const relatedPosts = getRelatedPosts(slug, region).map(p => ({
     title: p.title,
     description: p.excerpt,
     href: `/learn/${p.slug}`,

@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom'
 import SEOHead from '../components/SEOHead'
+import { useUserRegion } from '../context/RegionContext'
 import Breadcrumb, { buildBreadcrumbSchema } from '../components/Breadcrumb'
 import RelatedPages from '../components/RelatedPages'
 import PageLayout from '../components/PageLayout'
-import { BLOG_POSTS } from '../data/blogPosts'
+import { BLOG_POSTS, getRegionalizedPosts } from '../data/blogPosts'
 
 const breadcrumbs = [
   { label: 'Home', href: '/' },
@@ -33,8 +34,10 @@ const schemas = [
 ]
 
 export default function LearnHubPage() {
-  const featured = BLOG_POSTS[0]
-  const rest = BLOG_POSTS.slice(1)
+  const { region } = useUserRegion()
+  const posts = getRegionalizedPosts(region)
+  const featured = posts[0]
+  const rest = posts.slice(1)
 
   return (
     <>

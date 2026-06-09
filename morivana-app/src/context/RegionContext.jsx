@@ -22,34 +22,54 @@ export function RegionProvider({ children }) {
     let isMounted = true
 
     async function detectRegion() {
+      let detectedRegion = null
+
+      // Attempt Geolocation API 1: ipapi.co
       try {
         const response = await fetch('https://ipapi.co/json/')
-        if (!response.ok) throw new Error('Geolocation request failed')
-        const data = await response.json()
-        if (isMounted) {
-          const country = data.country_code || 'IN'
-          const detectedRegion = country === 'CA' ? 'CA' : 'IN'
-          setRegionState(detectedRegion)
-          try {
-            localStorage.setItem('morivana_region', detectedRegion)
-          } catch (e) {
-            // localStorage not available (e.g. private browsing)
+        if (response.ok) {
+          const data = await response.json()
+          const country = data.country_code
+          if (country) {
+            detectedRegion = country === 'CA' ? 'CA' : 'IN'
+            console.log('Detected region via ipapi.co:', detectedRegion)
           }
         }
       } catch (err) {
-        console.error('Error detecting location, defaulting to IN:', err)
-        if (isMounted) {
-          setRegionState('IN')
-          try {
-            localStorage.setItem('morivana_region', 'IN')
-          } catch (e) {
-            // ignore
+        console.warn('Failed to detect region via ipapi.co, trying fallback...', err)
+      }
+
+      // Attempt Geolocation API 2: ipinfo.io (Fallback)
+      if (!detectedRegion) {
+        try {
+          const response = await fetch('https://ipinfo.io/json')
+          if (response.ok) {
+            const data = await response.json()
+            const country = data.country
+            if (country) {
+              detectedRegion = country === 'CA' ? 'CA' : 'IN'
+              console.log('Detected region via ipinfo.io:', detectedRegion)
+            }
           }
+        } catch (err) {
+          console.warn('Failed to detect region via ipinfo.io:', err)
         }
-      } finally {
-        if (isMounted) {
-          setLoading(false)
+      }
+
+      // Final default fallback
+      if (!detectedRegion) {
+        detectedRegion = 'IN'
+        console.log('All geolocation APIs failed. Defaulting region to IN.')
+      }
+
+      if (isMounted) {
+        setRegionState(detectedRegion)
+        try {
+          localStorage.setItem('morivana_region', detectedRegion)
+        } catch (e) {
+          // ignore
         }
+        setLoading(false)
       }
     }
 

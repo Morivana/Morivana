@@ -348,14 +348,63 @@ This is exactly why Morivaná Daily includes both and why they're the two anchor
   },
 ]
 
-export const getBlogPostBySlug = (slug) =>
-  BLOG_POSTS.find((post) => post.slug === slug) || null
+export const getRegionalizedPosts = (region) => {
+  return BLOG_POSTS.map(post => {
+    const regionalizeText = (text) => {
+      if (!text) return text
+      if (region === 'CA') {
+        return text
+          .replaceAll('₹1,299 / 30 servings (₹43/day)', 'CA$39 / 20 servings (CA$1.95/day)')
+          .replaceAll('₹1,299/month', 'CA$39 / 20 servings (CA$1.95/day)')
+          .replaceAll('~₹1,199 / 30 servings', '~CA$20 / 30 servings')
+          .replaceAll('~₹999–1,299 / 30 servings', '~CA$16–21 / 30 servings')
+          .replaceAll('~₹6,500–9,000 / 30 servings (imported)', 'CA$140 / 30 servings')
+          .replaceAll('~₹6,500–9,000 / 30 servings', 'CA$140 / 30 servings')
+          .replaceAll('~₹7,000/month', 'CA$140/month')
+          .replaceAll('ships to India', 'ships to Canada')
+          .replaceAll('roughly ₹8,200–9,000 at current exchange rates', 'roughly CA$140')
+          .replaceAll('unrealistic at ₹1,000–1,500', 'unrealistic at CA$16–21')
+          .replaceAll('No product at ₹1,000–1,500', 'No product at CA$16–21')
+          .replaceAll('~₹1,199/month', '~CA$20/month')
+          .replaceAll('~₹999/month', '~CA$16–21/month')
+          .replaceAll('~₹1,099/month', '~CA$18/month')
+          .replaceAll('~₹7,500–9,000', '~CA$140')
+      } else {
+        return text
+          .replaceAll('₹1,299 / 30 servings (₹43/day)', '₹799 / 20 servings (₹40/day)')
+          .replaceAll('₹1,299/month', '₹799 / 20 servings (₹40/day)')
+          .replaceAll('~₹7,000/month', '~₹7,500–9,000/month')
+          .replaceAll('~₹6,500–9,000', '~₹7,500–9,000')
+      }
+    }
 
-export const getRelatedPosts = (currentSlug) => {
-  const current = getBlogPostBySlug(currentSlug)
+    return {
+      ...post,
+      title: regionalizeText(post.title),
+      description: regionalizeText(post.description),
+      excerpt: regionalizeText(post.excerpt),
+      sections: post.sections.map(sec => ({
+        ...sec,
+        heading: regionalizeText(sec.heading),
+        content: regionalizeText(sec.content),
+      })),
+      faqs: post.faqs?.map(faq => ({
+        ...faq,
+        q: regionalizeText(faq.q),
+        a: regionalizeText(faq.a),
+      })),
+    }
+  })
+}
+
+export const getBlogPostBySlug = (slug, region = 'IN') =>
+  getRegionalizedPosts(region).find((post) => post.slug === slug) || null
+
+export const getRelatedPosts = (currentSlug, region = 'IN') => {
+  const current = getBlogPostBySlug(currentSlug, region)
   if (!current) return []
   return current.relatedSlugs
-    .map((s) => getBlogPostBySlug(s))
+    .map((s) => getBlogPostBySlug(s, region))
     .filter(Boolean)
     .slice(0, 3)
 }

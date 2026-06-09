@@ -77,7 +77,7 @@ const staticRoutes = [
       <section>
         <h2>Side-by-Side Super Greens Comparison</h2>
         <p>The daily greens supplement market has grown rapidly, offering consumers a wide variety of choices. However, finding a clean, transparent, and affordable option can be challenging. Many popular brands hide their ingredient amounts behind "proprietary blends," making it impossible to know how much of each superfood you are actually consuming. We believe that consumers deserve better. When comparing greens powders, you should evaluate four key criteria: ingredient transparency, processing method, sweetener type, and price per serving.</p>
-        <p>Morivaná Daily stands out by offering complete transparency. Our label lists the exact gram and milligram amounts of all 8 whole-plant ingredients. We use low-temperature cold-drying to preserve delicate nutrients, sweeten our blend naturally with monk fruit, and price our 30-day supply at an affordable rate (₹1,299 in India, CA$19.99 in Canada). Here is how we compare to the top options available on the market today.</p>
+        <p>Morivaná Daily stands out by offering complete transparency. Our label lists the exact gram and milligram amounts of all 8 whole-plant ingredients. We use low-temperature cold-drying to preserve delicate nutrients, sweeten our blend naturally with monk fruit, and price our daily greens blend at an affordable rate (starting at ₹499/₹799 in India, and CA$21/CA$39 in Canada). Here is how we compare to the top options available on the market today.</p>
       </section>
       <section style="margin-top: 24px;">
         <h2>Morivaná Daily vs AG1 (Athletic Greens)</h2>

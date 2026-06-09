@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import SEOHead from '../components/SEOHead'
+import { useUserRegion } from '../context/RegionContext'
 import Breadcrumb, { buildBreadcrumbSchema } from '../components/Breadcrumb'
 import RelatedPages from '../components/RelatedPages'
 import PageLayout from '../components/PageLayout'
@@ -7,68 +8,6 @@ import PageLayout from '../components/PageLayout'
 const breadcrumbs = [
   { label: 'Home', href: '/' },
   { label: 'Compare', href: null },
-]
-
-const comparisonData = [
-  {
-    brand: 'Morivaná Daily',
-    priceIndia: '₹1,299 / 30 servings',
-    pricePerDay: '₹43/day',
-    ingredients: '8',
-    proprietary: 'No all amounts disclosed',
-    sourcing: '✓ Full transparency',
-    indiaAvail: '✓ India-made',
-    vegan: '✓ Yes',
-    sweetener: 'Monk fruit (natural)',
-    highlight: true,
-  },
-  {
-    brand: 'AG1 (Athletic Greens)',
-    priceIndia: '~₹7,500–9,000 (imported)',
-    pricePerDay: '~₹250–300/day',
-    ingredients: '75',
-    proprietary: 'Partial some undisclosed',
-    sourcing: '✓ Third-party tested',
-    indiaAvail: '✗ Not officially',
-    vegan: '✓ Yes',
-    sweetener: 'Stevia, pineapple powder',
-    highlight: false,
-  },
-  {
-    brand: 'Setu Superfood Greens',
-    priceIndia: '~₹1,199 / 30 servings',
-    pricePerDay: '~₹40/day',
-    ingredients: '39',
-    proprietary: 'Partial blend',
-    sourcing: '~ Limited info',
-    indiaAvail: '✓ Widely available',
-    vegan: '✓ Yes',
-    sweetener: 'Stevia',
-    highlight: false,
-  },
-  {
-    brand: 'Oziva Daily Greens',
-    priceIndia: '~₹999–1,299 / 30 servings',
-    pricePerDay: '~₹33–43/day',
-    ingredients: '30+',
-    proprietary: 'Partial blend',
-    sourcing: '~ Limited info',
-    indiaAvail: '✓ Widely available',
-    vegan: '~ Some variants have whey',
-    sweetener: 'Stevia / sucralose',
-    highlight: false,
-  },
-]
-
-const columns = [
-  { key: 'priceIndia', label: 'Price (India)' },
-  { key: 'pricePerDay', label: 'Per Day' },
-  { key: 'ingredients', label: '# Ingredients' },
-  { key: 'proprietary', label: 'Proprietary Blend?' },
-  { key: 'sourcing', label: 'Sourcing Transparency' },
-  { key: 'indiaAvail', label: 'India Availability' },
-  { key: 'vegan', label: 'Vegan' },
-  { key: 'sweetener', label: 'Sweetener' },
 ]
 
 const schemas = [
@@ -83,6 +22,69 @@ const schemas = [
 ]
 
 export default function ComparePage() {
+  const { region } = useUserRegion()
+
+  const columns = [
+    { key: 'price', label: region === 'CA' ? 'Price (Canada)' : 'Price (India)' },
+    { key: 'pricePerDay', label: 'Per Day' },
+    { key: 'ingredients', label: '# Ingredients' },
+    { key: 'proprietary', label: 'Proprietary Blend?' },
+    { key: 'sourcing', label: 'Sourcing Transparency' },
+    { key: 'avail', label: region === 'CA' ? 'Canada Availability' : 'India Availability' },
+    { key: 'vegan', label: 'Vegan' },
+    { key: 'sweetener', label: 'Sweetener' },
+  ]
+
+  const comparisonData = [
+    {
+      brand: 'Morivaná Daily',
+      price: region === 'CA' ? 'CA$39 / 20 servings' : '₹799 / 20 servings',
+      pricePerDay: region === 'CA' ? 'CA$1.95/day' : '₹40/day',
+      ingredients: '8',
+      proprietary: 'No all amounts disclosed',
+      sourcing: '✓ Full transparency',
+      avail: region === 'CA' ? '✓ Ships to Canada' : '✓ India-made',
+      vegan: '✓ Yes',
+      sweetener: 'Monk fruit (natural)',
+      highlight: true,
+    },
+    {
+      brand: 'AG1 (Athletic Greens)',
+      price: region === 'CA' ? 'CA$140 / 30 servings' : '~₹7,500–9,000 (imported)',
+      pricePerDay: region === 'CA' ? 'CA$4.66/day' : '~₹250–300/day',
+      ingredients: '75',
+      proprietary: 'Partial some undisclosed',
+      sourcing: '✓ Third-party tested',
+      avail: region === 'CA' ? '✓ Available online' : '✗ Not officially',
+      vegan: '✓ Yes',
+      sweetener: 'Stevia, pineapple powder',
+      highlight: false,
+    },
+    {
+      brand: 'Setu Superfood Greens',
+      price: region === 'CA' ? '~CA$20 / 30 servings' : '~₹1,199 / 30 servings',
+      pricePerDay: region === 'CA' ? '~CA$0.66/day' : '~₹40/day',
+      ingredients: '39',
+      proprietary: 'Partial blend',
+      sourcing: '~ Limited info',
+      avail: region === 'CA' ? '✗ Not officially' : '✓ Widely available',
+      vegan: '✓ Yes',
+      sweetener: 'Stevia',
+      highlight: false,
+    },
+    {
+      brand: 'Oziva Daily Greens',
+      price: region === 'CA' ? '~CA$16–21 / 30 servings' : '~₹999–1,299 / 30 servings',
+      pricePerDay: region === 'CA' ? '~CA$0.55–0.70/day' : '~₹33–43/day',
+      ingredients: '30+',
+      proprietary: 'Partial blend',
+      sourcing: '~ Limited info',
+      avail: region === 'CA' ? '✗ Not officially' : '✓ Widely available',
+      vegan: '~ Some variants have whey',
+      sweetener: 'Stevia / sucralose',
+      highlight: false,
+    },
+  ]
   return (
     <>
       <SEOHead
@@ -193,7 +195,11 @@ export default function ComparePage() {
             </h2>
             <div style={{ maxWidth: '640px' }}>
               <p style={{ color: 'var(--ink-soft)', lineHeight: 1.75, marginBottom: '16px' }}>
-                We use AG1 ourselves. It's excellent. But at ₹7,500–9,000/month (when you factor in importing), it's not a realistic daily staple for most Indians. Setu and Oziva are more accessible but use proprietary blends you can't verify if the 39th ingredient is present at a meaningful dose or just enough to make the label look comprehensive.
+                {region === 'CA' ? (
+                  "We use AG1 ourselves. It's excellent. But at CA$140/month, it's not a realistic daily staple for most people. We built Morivaná Daily around a different question: what's the minimum number of carefully chosen, precisely dosed, fully transparent whole plants that deliver real nutritional impact? Our answer is 8."
+                ) : (
+                  "We use AG1 ourselves. It's excellent. But at ₹7,500–9,000/month (when you factor in importing), it's not a realistic daily staple for most Indians. Setu and Oziva are more accessible but use proprietary blends you can't verify if the 39th ingredient is present at a meaningful dose or just enough to make the label look comprehensive."
+                )}
               </p>
               <p style={{ color: 'var(--ink-soft)', lineHeight: 1.75, marginBottom: '16px' }}>
                 We built Morivaná Daily around a different question: what's the minimum number of carefully chosen, precisely dosed, fully transparent whole plants that deliver real nutritional impact? Our answer is 8. Your answer might be different and that's fine. But you should know what you're taking and why.
@@ -210,7 +216,7 @@ export default function ComparePage() {
 
           {/* AG1 callout */}
           <section style={{ marginBottom: '56px', background: 'var(--surface-soft)', borderRadius: '20px', padding: 'clamp(24px, 4vw, 40px)', border: '1px solid var(--line-soft)' }}>
-            <div className="kicker" style={{ color: 'var(--ink-mute)', marginBottom: '12px' }}>For International Customers</div>
+            <div className="kicker" style={{ color: 'var(--ink-mute)', marginBottom: '12px' }}>{region === 'CA' ? 'For Premium Wellness Shoppers' : 'For International Customers'}</div>
             <h2 style={{
               fontFamily: 'var(--font-display)',
               fontWeight: 800,
@@ -223,10 +229,14 @@ export default function ComparePage() {
               Switching from AG1?
             </h2>
             <p style={{ color: 'var(--ink-soft)', lineHeight: 1.7, maxWidth: '580px', fontSize: '0.9rem', marginBottom: '12px' }}>
-              If you've been ordering AG1 internationally and the cost or shipping complexity is becoming unsustainable, Morivaná Daily offers a transparent, India-sourced alternative. We don't match AG1's 75-ingredient scope we're 8 carefully chosen plants. Different philosophy, different price point, same commitment to ingredient honesty.
+              {region === 'CA' ? (
+                "If you've been ordering AG1 and the cost is becoming unsustainable, Morivaná Daily offers a transparent, premium alternative. We don't match AG1's 75-ingredient scope we're 8 carefully chosen plants. Different philosophy, different price point, same commitment to ingredient honesty."
+              ) : (
+                "If you've been ordering AG1 internationally and the cost or shipping complexity is becoming unsustainable, Morivaná Daily offers a transparent, India-sourced alternative. We don't match AG1's 75-ingredient scope we're 8 carefully chosen plants. Different philosophy, different price point, same commitment to ingredient honesty."
+              )}
             </p>
             <Link
-              to="/learn/ag1-alternative-india"
+              to={region === 'CA' ? '/learn/ag1-alternative-india' : '/learn/ag1-alternative-india'}
               style={{
                 fontFamily: 'var(--font-body)',
                 fontWeight: 700,
@@ -240,7 +250,7 @@ export default function ComparePage() {
                 display: 'inline',
               }}
             >
-              Read: Best AG1 Alternatives in India →
+              {region === 'CA' ? 'Read: Best AG1 Alternatives →' : 'Read: Best AG1 Alternatives in India →'}
             </Link>
           </section>
 
