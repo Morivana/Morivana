@@ -2,8 +2,10 @@
 <html lang="en">
   <head>
     <script>
-      // Redirect default Cloudflare Pages domain to the custom domain
-      if (window.location.hostname === 'morivana.pages.dev') {
+      // Enforce primary domain https://morivanadaily.com/ (ignoring localhost for development)
+      if (window.location.hostname !== 'localhost' && 
+          window.location.hostname !== '127.0.0.1' && 
+          window.location.hostname !== 'morivanadaily.com') {
         window.location.replace('https://morivanadaily.com' + window.location.pathname + window.location.search + window.location.hash);
       }
     </script>
