@@ -268,7 +268,7 @@ export default function WaitlistCTA() {
             linear-gradient(180deg, rgba(20,33,17,0.55) 0%, rgba(20,33,17,0.35) 50%, rgba(20,33,17,0.75) 100%);
         }
 
-        /* TABLET (≤992px) — 6-column / 6-row grid covers the full section
+        /* TABLET (≤992px) 6-column / 6-row grid covers the full section
            with 5 tiles. Two least-essential tiles are hidden so each remaining
            image is large enough to read as a photo, not a thumbnail. */
         @media (max-width: 992px) {
@@ -288,7 +288,7 @@ export default function WaitlistCTA() {
           .cta-tile--4, .cta-tile--5 { display: none; }
         }
 
-        /* PHONE (≤640px) — 2 col × 3 row grid. Four tiles, each big enough to
+        /* PHONE (≤640px) 2 col × 3 row grid. Four tiles, each big enough to
            clearly show the product. Tiles tile the full section height. */
         @media (max-width: 640px) {
           .cta-collage {
@@ -307,7 +307,7 @@ export default function WaitlistCTA() {
           .cta-tile--4, .cta-tile--5 { display: none; }
         }
 
-        /* SMALL PHONE (≤380px) — Stack to a single column so each photo gets a
+        /* SMALL PHONE (≤380px) Stack to a single column so each photo gets a
            full-width band; tighter ken-burns so motion doesn't look excessive. */
         @media (max-width: 380px) {
           .cta-collage {

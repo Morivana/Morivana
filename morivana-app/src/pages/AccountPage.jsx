@@ -71,7 +71,7 @@ function InfoCard({ label, value, icon }) {
           wordBreak: 'break-word',
         }}
       >
-        {value || '—'}
+        {value || 'N/A'}
       </span>
     </div>
   )
@@ -212,7 +212,7 @@ function PersonalSection({ user }) {
         <InfoCard label="Name" value={user?.fullName} icon={avatarSrc} />
         <InfoCard label="Email" value={email} icon="/icon-mail-3d.png" />
         <InfoCard label="Phone" value={phone || 'Not set'} icon="/icon-phone-3d.png" />
-        <InfoCard label="Member Since" value={user?.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : '—'} icon="/icon-shield-3d.png" />
+        <InfoCard label="Member Since" value={user?.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'N/A'} icon="/icon-shield-3d.png" />
 
         {/* Interactive Gender & Profile Avatar selector */}
         <div

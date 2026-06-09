@@ -133,7 +133,7 @@ export default function Footer() {
           marginBottom: '24px',
         }}
       >
-        {/* Column 1 — Brand */}
+        {/* Column 1 Brand */}
         <div className="footer-col-item" style={{ flex: '1 1 200px', minWidth: '180px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
           <div style={{
             fontFamily: 'var(--font-serif)',

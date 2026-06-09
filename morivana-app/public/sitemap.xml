@@ -2,146 +2,146 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Core pages -->
   <url>
-    <loc>https://morivana.pages.dev/</loc>
+    <loc>https://moriavandaily.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/about</loc>
+    <loc>https://moriavandaily.com/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/ingredients</loc>
+    <loc>https://moriavandaily.com/ingredients</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/benefits</loc>
+    <loc>https://moriavandaily.com/benefits</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/how-to-use</loc>
+    <loc>https://moriavandaily.com/how-to-use</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/science</loc>
+    <loc>https://moriavandaily.com/science</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/compare</loc>
+    <loc>https://moriavandaily.com/compare</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/sustainability</loc>
+    <loc>https://moriavandaily.com/sustainability</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <!-- Shop -->
   <url>
-    <loc>https://morivana.pages.dev/shop</loc>
+    <loc>https://moriavandaily.com/shop</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/shop/daily-greens</loc>
+    <loc>https://moriavandaily.com/shop/daily-greens</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/waitlist</loc>
+    <loc>https://moriavandaily.com/waitlist</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <!-- Ingredient detail pages -->
   <url>
-    <loc>https://morivana.pages.dev/ingredients/moringa</loc>
+    <loc>https://moriavandaily.com/ingredients/moringa</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/ingredients/spirulina</loc>
+    <loc>https://moriavandaily.com/ingredients/spirulina</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/ingredients/amla</loc>
+    <loc>https://moriavandaily.com/ingredients/amla</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/ingredients/ginger</loc>
+    <loc>https://moriavandaily.com/ingredients/ginger</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/ingredients/lemon</loc>
+    <loc>https://moriavandaily.com/ingredients/lemon</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/ingredients/inulin</loc>
+    <loc>https://moriavandaily.com/ingredients/inulin</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/ingredients/orange-peel</loc>
+    <loc>https://moriavandaily.com/ingredients/orange-peel</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/ingredients/monk-fruit</loc>
+    <loc>https://moriavandaily.com/ingredients/monk-fruit</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <!-- Learn hub -->
   <url>
-    <loc>https://morivana.pages.dev/learn</loc>
+    <loc>https://moriavandaily.com/learn</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/learn/best-greens-powder-india</loc>
+    <loc>https://moriavandaily.com/learn/best-greens-powder-india</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/learn/moringa-benefits</loc>
+    <loc>https://moriavandaily.com/learn/moringa-benefits</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/learn/ag1-alternative-india</loc>
+    <loc>https://moriavandaily.com/learn/ag1-alternative-india</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/learn/spirulina-benefits</loc>
+    <loc>https://moriavandaily.com/learn/spirulina-benefits</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/learn/super-greens-morning-routine</loc>
+    <loc>https://moriavandaily.com/learn/super-greens-morning-routine</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/learn/moringa-vs-spirulina</loc>
+    <loc>https://moriavandaily.com/learn/moringa-vs-spirulina</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <!-- Legal -->
   <url>
-    <loc>https://morivana.pages.dev/privacy-policy</loc>
+    <loc>https://moriavandaily.com/privacy-policy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://morivana.pages.dev/terms</loc>
+    <loc>https://moriavandaily.com/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

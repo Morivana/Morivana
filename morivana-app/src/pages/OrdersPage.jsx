@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import FloatingLeaves from '../components/FloatingLeaves'
 
 /**
- * OrdersPage — Protected order history page.
+ * OrdersPage Protected order history page.
  * Light-surface variant matching the AccountPage / Hero / Benefits sections.
  */
 export default function OrdersPage() {

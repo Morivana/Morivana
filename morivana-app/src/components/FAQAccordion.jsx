@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 /**
  * Single FAQ item with pure-CSS grid-row animation.
- * No JS height measurement — uses grid-template-rows: 0fr → 1fr
+ * No JS height measurement uses grid-template-rows: 0fr → 1fr
  * for perfectly smooth, jank-free expand/collapse.
  */
 function FAQItem({ question, answer, isOpen, onToggle }) {
@@ -60,7 +60,7 @@ function FAQItem({ question, answer, isOpen, onToggle }) {
         </span>
       </button>
 
-      {/* Animated answer — CSS grid-row trick for smooth expand/collapse */}
+      {/* Animated answer CSS grid-row trick for smooth expand/collapse */}
       <div
         style={{
           display: 'grid',

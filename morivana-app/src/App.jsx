@@ -59,9 +59,9 @@ function HomePage() {
   const lenisRef = useLenis()
 
   // Two-phase loader handoff:
-  //   loaderRevealing — user submitted/skipped; hero starts its entrance NOW
+  //   loaderRevealing user submitted/skipped; hero starts its entrance NOW
   //                     while the loader is still fading out (no dead air).
-  //   loaderDone      — loader fade finished, unmount it.
+  //   loaderDone      loader fade finished, unmount it.
   const [loaderRevealing, setLoaderRevealing] = useState(false)
   const [loaderDone, setLoaderDone] = useState(() => {
     return !!sessionStorage.getItem('morivana_loader_done')
@@ -136,7 +136,7 @@ function HomePage() {
       )}
       {/* Single fixed 3D canvas that lives across hero + story sections.
           The pouch position/scale/rotation inside is scroll-driven.
-          Leaves are NOT a root-level layer anymore — each section embeds its
+          Leaves are NOT a root-level layer anymore each section embeds its
           own <FloatingLeaves /> so they always sit between section bg and
           section content regardless of page-level stacking. */}
       <div
@@ -190,7 +190,7 @@ function App() {
   const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
   if (!PUBLISHABLE_KEY) {
-    throw new Error('Missing VITE_CLERK_PUBLISHABLE_KEY in .env — add it before starting the dev server.')
+    throw new Error('Missing VITE_CLERK_PUBLISHABLE_KEY in .env add it before starting the dev server.')
   }
 
   return (
@@ -201,7 +201,7 @@ function App() {
       <ErrorBoundary>
         <Suspense fallback={null}>
           <Routes>
-            {/* Landing page — all existing scroll sections */}
+            {/* Landing page all existing scroll sections */}
             <Route path="/" element={<HomePage />} />
 
             {/* Auth pages */}

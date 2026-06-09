@@ -10,7 +10,7 @@ const HOME_SCROLL_LINKS = [
   { label: 'About', id: 'what-section' },
 ]
 
-// Full site nav links — map to real routes
+// Full site nav links map to real routes
 const NAV_LINKS = [
   { label: 'About', href: '/about' },
   { label: 'Ingredients', href: '/ingredients' },
@@ -276,7 +276,7 @@ export default function NavbarPublic() {
           gap: 24,
         }}
       >
-        {/* Logo — left */}
+        {/* Logo left */}
         <Link
           to="/"
           aria-label="Morivaná Daily, back to homepage"
@@ -305,7 +305,7 @@ export default function NavbarPublic() {
           </span>
         </Link>
 
-        {/* Center nav links — desktop only */}
+        {/* Center nav links desktop only */}
         <div className="nav-links-group">
           {NAV_LINKS.map(link => (
             <NavLink
@@ -318,7 +318,7 @@ export default function NavbarPublic() {
           ))}
         </div>
 
-        {/* Right — CTA + auth — desktop only */}
+        {/* Right CTA + auth desktop only */}
         <div className="nav-right-group">
           <Link to="/sign-in" className="nav-login-link">
             Log in

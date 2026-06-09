@@ -3,35 +3,35 @@
 Morivaná Daily is a premium direct-to-consumer wellness brand selling a clean super greens powder crafted from 8 whole plants, with a focus on Moringa, Spirulina, and Amla. Sourced sustainably from local regions in India and Canada, the formula is cold-dried to preserve nutritional potency, containing zero synthetic fillers, sweeteners, or proprietary blends.
 
 ## Canonical URL
-- Website: https://morivana.pages.dev
+- Website: https://moriavandaily.com
 
 ---
 
 ## 🗺️ Sitemap & Core Directory
 
 ### Primary Pages
-- [Home](https://morivana.pages.dev/) - Main product experience, waitlist capture, and 3D display.
-- [About Us](https://morivana.pages.dev/about) - Sourcing philosophy, founder story, and regional farming partners.
-- [Ingredients Hub](https://morivana.pages.dev/ingredients) - Directory of the 8 whole food ingredients.
-- [Daily Benefits](https://morivana.pages.dev/benefits) - Timeline of health benefits (energy, gut health, immunity, skin) over 30 days.
-- [How to Use](https://morivana.pages.dev/how-to-use) - Shaker preparation guide, daily timing, and recipe variants.
-- [Science & Studies](https://morivana.pages.dev/science) - Sourced research tables with direct PubMed citation mapping.
-- [Compare](https://morivana.pages.dev/compare) - Comparison guide contrasting Morivaná Daily against AG1, Setu, and Oziva.
-- [Sustainability](https://morivana.pages.dev/sustainability) - Regional sourcing maps, ethical farming details, and cold-dry methods.
-- [Pre-Order Shop](https://morivana.pages.dev/shop) - Early-bird order details, pricing tables, and guarantees.
-- [Product Detail Page](https://morivana.pages.dev/shop/daily-greens) - Comprehensive nutrition facts panel and transaction checkout.
-- [Learn Hub](https://morivana.pages.dev/learn) - Wellness blog index for health and superfood education.
-- [Waitlist Sign-up](https://morivana.pages.dev/waitlist) - Standalone launch notification and discount registration page.
+- [Home](https://moriavandaily.com/) - Main product experience, waitlist capture, and 3D display.
+- [About Us](https://moriavandaily.com/about) - Sourcing philosophy, founder story, and regional farming partners.
+- [Ingredients Hub](https://moriavandaily.com/ingredients) - Directory of the 8 whole food ingredients.
+- [Daily Benefits](https://moriavandaily.com/benefits) - Timeline of health benefits (energy, gut health, immunity, skin) over 30 days.
+- [How to Use](https://moriavandaily.com/how-to-use) - Shaker preparation guide, daily timing, and recipe variants.
+- [Science & Studies](https://moriavandaily.com/science) - Sourced research tables with direct PubMed citation mapping.
+- [Compare](https://moriavandaily.com/compare) - Comparison guide contrasting Morivaná Daily against AG1, Setu, and Oziva.
+- [Sustainability](https://moriavandaily.com/sustainability) - Regional sourcing maps, ethical farming details, and cold-dry methods.
+- [Pre-Order Shop](https://moriavandaily.com/shop) - Early-bird order details, pricing tables, and guarantees.
+- [Product Detail Page](https://moriavandaily.com/shop/daily-greens) - Comprehensive nutrition facts panel and transaction checkout.
+- [Learn Hub](https://moriavandaily.com/learn) - Wellness blog index for health and superfood education.
+- [Waitlist Sign-up](https://moriavandaily.com/waitlist) - Standalone launch notification and discount registration page.
 
 ### Ingredient Deep-Dives
-- [Moringa oleifera](https://morivana.pages.dev/ingredients/moringa) - Dense leaf superfood sourced from Tamil Nadu.
-- [Spirulina platensis](https://morivana.pages.dev/ingredients/spirulina) - High-protein blue-green algae.
-- [Amla / Indian Gooseberry](https://morivana.pages.dev/ingredients/amla) - High-potency Vitamin C source from Uttarakhand.
-- [Ginger Root](https://morivana.pages.dev/ingredients/ginger) - Anti-inflammatory and digestive comfort root from Kerala.
-- [Lemon Zest](https://morivana.pages.dev/ingredients/lemon) - Alkalizing organic citrus zest.
-- [Chicory Root Inulin](https://morivana.pages.dev/ingredients/inulin) - Prebiotic soluble dietary fiber.
-- [Orange Peel](https://morivana.pages.dev/ingredients/orange-peel) - Flavonoids and essential vitamins.
-- [Monk Fruit](https://morivana.pages.dev/ingredients/monk-fruit) - Natural Mogroside V zero-calorie sweetener.
+- [Moringa oleifera](https://moriavandaily.com/ingredients/moringa) - Dense leaf superfood sourced from Tamil Nadu.
+- [Spirulina platensis](https://moriavandaily.com/ingredients/spirulina) - High-protein blue-green algae.
+- [Amla / Indian Gooseberry](https://moriavandaily.com/ingredients/amla) - High-potency Vitamin C source from Uttarakhand.
+- [Ginger Root](https://moriavandaily.com/ingredients/ginger) - Anti-inflammatory and digestive comfort root from Kerala.
+- [Lemon Zest](https://moriavandaily.com/ingredients/lemon) - Alkalizing organic citrus zest.
+- [Chicory Root Inulin](https://moriavandaily.com/ingredients/inulin) - Prebiotic soluble dietary fiber.
+- [Orange Peel](https://moriavandaily.com/ingredients/orange-peel) - Flavonoids and essential vitamins.
+- [Monk Fruit](https://moriavandaily.com/ingredients/monk-fruit) - Natural Mogroside V zero-calorie sweetener.
 
 ---
 

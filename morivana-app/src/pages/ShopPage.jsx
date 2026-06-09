@@ -25,8 +25,8 @@ const schemas = [
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: 'Morivaná Daily Super Greens Powder',
-    description: '8-plant clean super greens powder — moringa, spirulina, amla, ginger, lemon, inulin, orange peel & monk fruit. Cold-dried, no proprietary blends.',
-    image: 'https://morivana.pages.dev/packaging_highres.webp',
+    description: '8-plant clean super greens powder moringa, spirulina, amla, ginger, lemon, inulin, orange peel & monk fruit. Cold-dried, no proprietary blends.',
+    image: 'https://moriavandaily.com/packaging_highres.webp',
     brand: { '@type': 'Brand', name: 'Morivaná Daily' },
     offers: [
       {
@@ -36,7 +36,7 @@ const schemas = [
         priceCurrency: 'INR',
         price: '499',
         priceValidUntil: '2027-12-31',
-        url: 'https://morivana.pages.dev/shop',
+        url: 'https://moriavandaily.com/shop',
         shippingDetails: {
           '@type': 'OfferShippingDetails',
           shippingRate: {
@@ -80,7 +80,7 @@ const schemas = [
         priceCurrency: 'INR',
         price: '799',
         priceValidUntil: '2027-12-31',
-        url: 'https://morivana.pages.dev/shop',
+        url: 'https://moriavandaily.com/shop',
         shippingDetails: {
           '@type': 'OfferShippingDetails',
           shippingRate: {
@@ -124,7 +124,7 @@ const schemas = [
         priceCurrency: 'CAD',
         price: '21',
         priceValidUntil: '2027-12-31',
-        url: 'https://morivana.pages.dev/shop',
+        url: 'https://moriavandaily.com/shop',
         shippingDetails: {
           '@type': 'OfferShippingDetails',
           shippingRate: {
@@ -168,7 +168,7 @@ const schemas = [
         priceCurrency: 'CAD',
         price: '39',
         priceValidUntil: '2027-12-31',
-        url: 'https://morivana.pages.dev/shop',
+        url: 'https://moriavandaily.com/shop',
         shippingDetails: {
           '@type': 'OfferShippingDetails',
           shippingRate: {
@@ -497,7 +497,7 @@ export default function ShopPage() {
               {/* CTA */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <Link to="/waitlist" className="cta-btn" style={{ textAlign: 'center' }}>
-                  Join Waitlist — Get 15% Off →
+                  Join Waitlist Get 15% Off →
                 </Link>
                 <Link to="/shop/daily-greens" style={{
                   fontFamily: 'var(--font-body)',

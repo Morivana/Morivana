@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 
 /**
- * Breadcrumb — semantic breadcrumb nav with JSON-LD injected via SEOHead externally.
+ * Breadcrumb semantic breadcrumb nav with JSON-LD injected via SEOHead externally.
  *
  * @param {Array} items - [{label: string, href: string|null}]
  *                        Last item should have href: null (current page)
@@ -88,7 +88,7 @@ export default function Breadcrumb({ items = [] }) {
  * Build BreadcrumbList JSON-LD schema from items array.
  * Usage: pass result into SEOHead schemas prop.
  */
-export function buildBreadcrumbSchema(items, baseUrl = 'https://morivana.pages.dev') {
+export function buildBreadcrumbSchema(items, baseUrl = 'https://moriavandaily.com') {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',

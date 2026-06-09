@@ -3,13 +3,13 @@ import { useState, useEffect } from 'react'
 const CART_STORAGE_KEY = 'morivana_cart'
 
 /**
- * useCart — localStorage-backed cart state hook.
+ * useCart localStorage-backed cart state hook.
  *
  * Rules (per spec):
  *   - Cart state is saved to localStorage on every change
  *   - On app mount, cart is rehydrated from localStorage
  *   - Cart is NOT cleared on sign-out (guest & auth share the same cart)
- *   - Auth tokens are never stored here — Clerk handles those
+ *   - Auth tokens are never stored here Clerk handles those
  *
  * Usage:
  *   const { cart, addItem, removeItem, updateQty, clearCart, cartCount, cartTotal } = useCart()
@@ -31,7 +31,7 @@ export function useCart() {
     try {
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart))
     } catch {
-      // Storage quota exceeded or private mode — fail silently
+      // Storage quota exceeded or private mode fail silently
     }
   }, [cart])
 

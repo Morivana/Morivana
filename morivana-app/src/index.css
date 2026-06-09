@@ -6,6 +6,7 @@ html, body {
 
 body {
   font-size: 16px;
+  text-align: left;
 }
 
 p, li {
@@ -32,10 +33,8 @@ footer a, footer span, footer p {
 footer a {
   min-height: 0 !important;
   min-width: 0 !important;
-  padding: 4px 8px !important;
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
+  padding: 0 !important;
+  display: inline !important;
   text-decoration: none;
 }
 
@@ -72,23 +71,36 @@ footer a {
 
 
 /* Minimum Tap Target Sizes for Accessibility */
-a, button {
-  min-height: 48px;
-  min-width: 48px;
-  padding: 12px 20px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+/* Applied only to button elements and nav/CTA anchor links — NOT all anchors.
+   Inline text links in paragraphs are excluded to prevent layout shifts. */
+button {
+  min-height: 44px;
+  min-width: 44px;
   box-sizing: border-box;
   touch-action: manipulation; /* Remove 300ms tap delay */
 }
 
-/* Exclude inline paragraph and list links from block tap-target sizing to prevent text breaks */
-p a, li a, span a, td a, th a {
+/* Nav & standalone CTA anchors get tap-target sizing */
+nav a,
+a.cta-btn,
+a.nav-pill,
+a[role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  touch-action: manipulation;
+}
+
+/* Inline paragraph and list links stay truly inline */
+p a, li a, span a, td a, th a, footer a {
   display: inline;
   min-height: 0;
   min-width: 0;
   padding: 0;
+  touch-action: manipulation;
 }
 
 /* Responsive Image Rules */

@@ -1,4 +1,4 @@
-// Canonical ingredient data — single source of truth for
+// Canonical ingredient data single source of truth for
 // IngredientsHubPage, IngredientDetailPage, schema markup, etc.
 
 export const INGREDIENTS = [
@@ -10,19 +10,19 @@ export const INGREDIENTS = [
     origin: 'Tamil Nadu, India',
     emoji: '',
     tagline: 'The Most Nutrient-Dense Leaf on Earth',
-    benefit: 'The most nutrient-dense leaf on earth — iron, calcium, and 92 antioxidants in a single scoop.',
+    benefit: 'The most nutrient-dense leaf on earth iron, calcium, and 92 antioxidants in a single scoop.',
     potency: 92,
-    description: `Moringa oleifera, native to northern India and now grown across Tamil Nadu, is considered by nutritionists to be one of the most complete plant foods ever documented. A single gram of dried moringa leaf contains more iron than spinach, more calcium than milk, and over 90 identified antioxidants — including quercetin and chlorogenic acid. What makes moringa exceptional is not any single nutrient but the sheer density: complete amino acid profile, fat-soluble vitamins (A, E, K), and water-soluble vitamins (B-complex, C) all coexisting in a stable dried form. Cold-drying at low temperatures preserves 85–92% of this nutritional integrity, unlike conventional high-heat processing which degrades water-soluble vitamins significantly.`,
+    description: `Moringa oleifera, native to northern India and now grown across Tamil Nadu, is considered by nutritionists to be one of the most complete plant foods ever documented. A single gram of dried moringa leaf contains more iron than spinach, more calcium than milk, and over 90 identified antioxidants including quercetin and chlorogenic acid. What makes moringa exceptional is not any single nutrient but the sheer density: complete amino acid profile, fat-soluble vitamins (A, E, K), and water-soluble vitamins (B-complex, C) all coexisting in a stable dried form. Cold-drying at low temperatures preserves 85–92% of this nutritional integrity, unlike conventional high-heat processing which degrades water-soluble vitamins significantly.`,
     nutritionTable: [
       { nutrient: 'Protein', per5g: '1.3g', dv: '3%' },
       { nutrient: 'Vitamin A (β-carotene)', per5g: '370μg', dv: '41%' },
       { nutrient: 'Vitamin C', per5g: '9mg', dv: '10%' },
       { nutrient: 'Iron', per5g: '1.4mg', dv: '8%' },
       { nutrient: 'Calcium', per5g: '70mg', dv: '5%' },
-      { nutrient: 'Quercetin (antioxidant)', per5g: '~12mg', dv: '—' },
+      { nutrient: 'Quercetin (antioxidant)', per5g: '~12mg', dv: 'N/A' },
     ],
     sourcing: `Our moringa is cold-dried in Tamil Nadu by partner farms using shade-drying methods that preserve chlorophyll and heat-sensitive vitamins. The leaves are harvested at peak growth (6–8 weeks after planting), when nutrient concentration is highest, and processed within 4 hours of harvest.`,
-    howItWorks: `In Morivaná Daily's blend, moringa serves as the nutritional anchor — providing the iron, calcium, and vitamin A that make this more than a greens supplement. It's the reason one scoop covers meaningful percentages of daily micronutrient needs without any synthetic fortification.`,
+    howItWorks: `In Morivaná Daily's blend, moringa serves as the nutritional anchor providing the iron, calcium, and vitamin A that make this more than a greens supplement. It's the reason one scoop covers meaningful percentages of daily micronutrient needs without any synthetic fortification.`,
     studies: [
       {
         title: 'Moringa oleifera: A review on nutritional composition',
@@ -50,18 +50,18 @@ export const INGREDIENTS = [
     origin: 'Controlled Pond-Grown',
     emoji: '',
     tagline: 'Complete Protein from the Ancient Blue-Green Algae',
-    benefit: 'Blue-green algae packed with complete protein and natural energy — 60% protein by dry weight.',
+    benefit: 'Blue-green algae packed with complete protein and natural energy 60% protein by dry weight.',
     potency: 88,
-    description: `Spirulina (Arthrospira platensis) is a cyanobacterium — not technically an algae — that has been consumed by humans since the Aztec empire. It's one of the only plant sources of a complete amino acid profile, making it particularly valuable in plant-based nutrition. At 60–70% protein by dry weight, a single 5g serving contributes more bioavailable protein than most plant supplements. Its signature compound, phycocyanin — responsible for its vivid blue-green hue — is a potent antioxidant and anti-inflammatory agent. Studies show phycocyanin reduces oxidative stress markers and supports natural killer cell activity, contributing to immune function.`,
+    description: `Spirulina (Arthrospira platensis) is a cyanobacterium not technically an algae that has been consumed by humans since the Aztec empire. It's one of the only plant sources of a complete amino acid profile, making it particularly valuable in plant-based nutrition. At 60–70% protein by dry weight, a single 5g serving contributes more bioavailable protein than most plant supplements. Its signature compound, phycocyanin responsible for its vivid blue-green hue is a potent antioxidant and anti-inflammatory agent. Studies show phycocyanin reduces oxidative stress markers and supports natural killer cell activity, contributing to immune function.`,
     nutritionTable: [
       { nutrient: 'Protein (complete)', per5g: '3.1g', dv: '6%' },
-      { nutrient: 'Phycocyanin', per5g: '~250mg', dv: '—' },
+      { nutrient: 'Phycocyanin', per5g: '~250mg', dv: 'N/A' },
       { nutrient: 'Iron', per5g: '1.6mg', dv: '9%' },
-      { nutrient: 'Vitamin B12 (analogues)', per5g: 'trace', dv: '—' },
-      { nutrient: 'GLA (Omega-6)', per5g: '~30mg', dv: '—' },
+      { nutrient: 'Vitamin B12 (analogues)', per5g: 'trace', dv: 'N/A' },
+      { nutrient: 'GLA (Omega-6)', per5g: '~30mg', dv: 'N/A' },
     ],
     sourcing: `Spirulina requires specific pH, temperature, and light conditions to produce its highest phycocyanin content. We use pond-grown spirulina from certified facilities where water quality is monitored continuously, ensuring heavy metal levels remain well below European food safety limits.`,
-    howItWorks: `Spirulina is Morivaná Daily's protein and energy partner. While moringa provides micronutrients, spirulina delivers macronutrient depth — enough protein to matter, enough phycocyanin to provide antioxidant coverage, and B-vitamins that support sustained energy metabolism.`,
+    howItWorks: `Spirulina is Morivaná Daily's protein and energy partner. While moringa provides micronutrients, spirulina delivers macronutrient depth enough protein to matter, enough phycocyanin to provide antioxidant coverage, and B-vitamins that support sustained energy metabolism.`,
     studies: [
       {
         title: 'Spirulina in Human Nutrition and Health',
@@ -89,18 +89,18 @@ export const INGREDIENTS = [
     origin: 'Uttarakhand, India',
     emoji: '',
     tagline: "Nature's Richest Vitamin C Superfood",
-    benefit: "The Indian gooseberry. One of the richest natural sources of vitamin C — 20x more bioavailable than synthetic ascorbic acid.",
+    benefit: "The Indian gooseberry. One of the richest natural sources of vitamin C 20x more bioavailable than synthetic ascorbic acid.",
     potency: 96,
-    description: `Amla (Phyllanthus emblica), or the Indian Gooseberry, holds a unique place in Ayurvedic medicine — it is one of the three fruits in Triphala, and used for over 3,000 years as a rejuvenating tonic. Modern nutrition science has confirmed what traditional healers knew: amla contains one of the highest concentrations of natural vitamin C of any food. But what makes it superior to synthetic ascorbic acid supplements is the synergistic matrix — tannins, polyphenols, and bioflavonoids that dramatically increase bioavailability and stability. The vitamin C in amla is heat-stable due to tannin binding, meaning it survives processing better than isolated ascorbic acid.`,
+    description: `Amla (Phyllanthus emblica), or the Indian Gooseberry, holds a unique place in Ayurvedic medicine it is one of the three fruits in Triphala, and used for over 3,000 years as a rejuvenating tonic. Modern nutrition science has confirmed what traditional healers knew: amla contains one of the highest concentrations of natural vitamin C of any food. But what makes it superior to synthetic ascorbic acid supplements is the synergistic matrix tannins, polyphenols, and bioflavonoids that dramatically increase bioavailability and stability. The vitamin C in amla is heat-stable due to tannin binding, meaning it survives processing better than isolated ascorbic acid.`,
     nutritionTable: [
       { nutrient: 'Vitamin C (natural)', per5g: '~350mg', dv: '389%' },
-      { nutrient: 'Ellagic acid', per5g: 'significant', dv: '—' },
-      { nutrient: 'Tannins', per5g: '~85mg', dv: '—' },
-      { nutrient: 'Gallic acid', per5g: '~20mg', dv: '—' },
+      { nutrient: 'Ellagic acid', per5g: 'significant', dv: 'N/A' },
+      { nutrient: 'Tannins', per5g: '~85mg', dv: 'N/A' },
+      { nutrient: 'Gallic acid', per5g: '~20mg', dv: 'N/A' },
       { nutrient: 'Fiber', per5g: '0.5g', dv: '2%' },
     ],
     sourcing: `Amla grows in the sub-Himalayan foothills of Uttarakhand, where cooler temperatures during fruit development produce higher vitamin C concentrations. We source from farms at 600–1,200m elevation where the fruit is hand-picked at peak ripeness in November–December and cold-dried within 24 hours.`,
-    howItWorks: `Amla is Morivaná Daily's immunity engine. The 300–400mg of natural vitamin C per serving — equivalent to 4–5 oranges — supports immune cell production, collagen synthesis, and iron absorption (amplifying the moringa and spirulina iron content). The tannin matrix makes this vitamin C significantly more bioavailable than the ascorbic acid in most supplements.`,
+    howItWorks: `Amla is Morivaná Daily's immunity engine. The 300–400mg of natural vitamin C per serving equivalent to 4–5 oranges supports immune cell production, collagen synthesis, and iron absorption (amplifying the moringa and spirulina iron content). The tannin matrix makes this vitamin C significantly more bioavailable than the ascorbic acid in most supplements.`,
     studies: [
       {
         title: 'Vitamin C bioavailability from Phyllanthus emblica',
@@ -130,15 +130,15 @@ export const INGREDIENTS = [
     tagline: 'Digestion, Inflammation, and a Quiet Warmth',
     benefit: 'Calms digestion, eases inflammation, and adds a quiet warmth to every sip.',
     potency: 82,
-    description: `Zingiber officinale — ginger — is one of the most studied natural anti-inflammatory foods. The bioactive compound gingerol (and its dried form shogaol) has demonstrated consistent efficacy in reducing pro-inflammatory cytokines, particularly COX-2 pathways, comparable in mechanism to common NSAIDs but without gastrointestinal side effects at food doses. For digestion, ginger accelerates gastric emptying, reduces nausea, and increases production of digestive enzymes. In Morivaná Daily's blend, ginger serves dual roles: active therapeutic and flavor modulator, providing the subtle warm note that balances the grassiness of moringa and spirulina.`,
+    description: `Zingiber officinale ginger is one of the most studied natural anti-inflammatory foods. The bioactive compound gingerol (and its dried form shogaol) has demonstrated consistent efficacy in reducing pro-inflammatory cytokines, particularly COX-2 pathways, comparable in mechanism to common NSAIDs but without gastrointestinal side effects at food doses. For digestion, ginger accelerates gastric emptying, reduces nausea, and increases production of digestive enzymes. In Morivaná Daily's blend, ginger serves dual roles: active therapeutic and flavor modulator, providing the subtle warm note that balances the grassiness of moringa and spirulina.`,
     nutritionTable: [
-      { nutrient: 'Gingerol (6-gingerol)', per5g: '~8mg', dv: '—' },
-      { nutrient: 'Shogaol', per5g: '~4mg', dv: '—' },
+      { nutrient: 'Gingerol (6-gingerol)', per5g: '~8mg', dv: 'N/A' },
+      { nutrient: 'Shogaol', per5g: '~4mg', dv: 'N/A' },
       { nutrient: 'Manganese', per5g: '0.2mg', dv: '9%' },
       { nutrient: 'Potassium', per5g: '32mg', dv: '1%' },
     ],
     sourcing: `Kerala's monsoon climate and volcanic soil create ginger with higher gingerol content than ginger grown in drier climates. Our Kerala ginger is harvested after 8–9 months (optimal gingerol concentration), peeled, thinly sliced, and cold-dried to preserve the volatile oils that account for its aroma and therapeutic activity.`,
-    howItWorks: `Ginger is Morivaná Daily's digestive ally. Each scoop delivers enough gingerol to support morning gastric motility — helping you feel settled rather than bloated — while reducing the systemic inflammation that accumulates from stress, processed food, and poor sleep. The warmth it adds to the flavor profile is a natural side effect of its bioactivity.`,
+    howItWorks: `Ginger is Morivaná Daily's digestive ally. Each scoop delivers enough gingerol to support morning gastric motility helping you feel settled rather than bloated while reducing the systemic inflammation that accumulates from stress, processed food, and poor sleep. The warmth it adds to the flavor profile is a natural side effect of its bioactivity.`,
     studies: [
       {
         title: 'Ginger in gastrointestinal disorders: A systematic review',
@@ -166,17 +166,17 @@ export const INGREDIENTS = [
     origin: 'Sun-Dried Zest',
     emoji: '',
     tagline: 'Alkalizing, Brightening, and Naturally Refreshing',
-    benefit: 'Cold-dried lemon zest for an alkalizing, brightening lift — without the acidity of juice.',
+    benefit: 'Cold-dried lemon zest for an alkalizing, brightening lift without the acidity of juice.',
     potency: 78,
-    description: `Despite its acidic taste, lemon juice and zest have an alkalizing effect on the body once metabolized — the citric acid is broken down to bicarbonate, raising urinary pH and supporting kidney stone prevention. The zest, specifically, contains concentrated flavonoids (hesperidin, naringenin, limonene) that the juice largely lacks. Limonene in particular has demonstrated liver-protective and anti-carcinogenic properties in animal models. Cold-dried lemon zest retains these volatile compounds much better than juice or conventional dried powder, making it a more nutritionally dense ingredient than the fruit's more popular inner portion.`,
+    description: `Despite its acidic taste, lemon juice and zest have an alkalizing effect on the body once metabolized the citric acid is broken down to bicarbonate, raising urinary pH and supporting kidney stone prevention. The zest, specifically, contains concentrated flavonoids (hesperidin, naringenin, limonene) that the juice largely lacks. Limonene in particular has demonstrated liver-protective and anti-carcinogenic properties in animal models. Cold-dried lemon zest retains these volatile compounds much better than juice or conventional dried powder, making it a more nutritionally dense ingredient than the fruit's more popular inner portion.`,
     nutritionTable: [
       { nutrient: 'Vitamin C', per5g: '15mg', dv: '17%' },
-      { nutrient: 'Limonene', per5g: '~30mg', dv: '—' },
-      { nutrient: 'Hesperidin', per5g: '~20mg', dv: '—' },
+      { nutrient: 'Limonene', per5g: '~30mg', dv: 'N/A' },
+      { nutrient: 'Hesperidin', per5g: '~20mg', dv: 'N/A' },
       { nutrient: 'Calcium', per5g: '15mg', dv: '1%' },
     ],
-    sourcing: `The zest is separated from conventionally-grown lemons before cold-drying — we use the peel only, which concentrates the essential oils and flavonoids. The peel is cold-dried at ≤40°C to prevent limonene volatilization.`,
-    howItWorks: `Lemon zest in Morivaná Daily does three things: it contributes to the alkalizing effect of the blend, adds a bright citrus note that makes the powder pleasant to drink plain in water, and provides hesperidin and limonene that support liver detoxification pathways — a natural complement to the antioxidant load from moringa and amla.`,
+    sourcing: `The zest is separated from conventionally-grown lemons before cold-drying we use the peel only, which concentrates the essential oils and flavonoids. The peel is cold-dried at ≤40°C to prevent limonene volatilization.`,
+    howItWorks: `Lemon zest in Morivaná Daily does three things: it contributes to the alkalizing effect of the blend, adds a bright citrus note that makes the powder pleasant to drink plain in water, and provides hesperidin and limonene that support liver detoxification pathways a natural complement to the antioxidant load from moringa and amla.`,
     studies: [
       {
         title: 'Citrus limonoids: biological activity and prospects as drugs',
@@ -199,16 +199,16 @@ export const INGREDIENTS = [
     origin: 'Chicory Root',
     emoji: '',
     tagline: 'Gut Health from the Ground Up',
-    benefit: 'Soluble fiber that feeds the good bacteria in your gut — quiet, daily microbiome repair.',
+    benefit: 'Soluble fiber that feeds the good bacteria in your gut quiet, daily microbiome repair.',
     potency: 84,
-    description: `Inulin is a naturally-occurring fructan — a type of soluble dietary fiber extracted primarily from chicory root. Unlike most fibers that simply add bulk, inulin is a true prebiotic: it selectively feeds Bifidobacterium and Lactobacillus species in the colon without feeding harmful bacteria. The fermentation of inulin produces short-chain fatty acids (acetate, propionate, butyrate) which are the primary fuel source for colonocytes (cells lining the colon), reducing intestinal permeability and "leaky gut." Butyrate specifically has been studied extensively for its role in colorectal cancer prevention, inflammatory bowel disease management, and blood sugar regulation.`,
+    description: `Inulin is a naturally-occurring fructan a type of soluble dietary fiber extracted primarily from chicory root. Unlike most fibers that simply add bulk, inulin is a true prebiotic: it selectively feeds Bifidobacterium and Lactobacillus species in the colon without feeding harmful bacteria. The fermentation of inulin produces short-chain fatty acids (acetate, propionate, butyrate) which are the primary fuel source for colonocytes (cells lining the colon), reducing intestinal permeability and "leaky gut." Butyrate specifically has been studied extensively for its role in colorectal cancer prevention, inflammatory bowel disease management, and blood sugar regulation.`,
     nutritionTable: [
       { nutrient: 'Dietary Fiber (inulin)', per5g: '2.5g', dv: '9%' },
-      { nutrient: 'Fructooligosaccharides (FOS)', per5g: 'included', dv: '—' },
-      { nutrient: 'Calories', per5g: '10 kcal', dv: '—' },
+      { nutrient: 'Fructooligosaccharides (FOS)', per5g: 'included', dv: 'N/A' },
+      { nutrient: 'Calories', per5g: '10 kcal', dv: 'N/A' },
     ],
     sourcing: `Chicory root is cultivated in Europe's temperate climates (Belgium, France) and the inulin is extracted via hot water diffusion and subsequent cold-chain processing. Our inulin is standardized to ≥90% purity with a defined chain length (DP 10–60) that optimizes fermentation in the distal colon where Bifidobacterium populations are highest.`,
-    howItWorks: `Inulin serves as Morivaná Daily's silent gut-health layer. While the moringa and spirulina work on the nutritional surface, inulin works deeper — restructuring your microbiome composition over weeks of daily use. Most people don't feel it immediately, but after 2–3 weeks of consistent use, regularity, bloating reduction, and improved gut comfort are common.`,
+    howItWorks: `Inulin serves as Morivaná Daily's silent gut-health layer. While the moringa and spirulina work on the nutritional surface, inulin works deeper restructuring your microbiome composition over weeks of daily use. Most people don't feel it immediately, but after 2–3 weeks of consistent use, regularity, bloating reduction, and improved gut comfort are common.`,
     studies: [
       {
         title: 'Dietary inulin-type fructans modulate intestinal microbiota',
@@ -238,15 +238,15 @@ export const INGREDIENTS = [
     tagline: 'Flavonoids & Enzymes from the Part Nobody Uses',
     benefit: 'Flavonoids and digestive enzymes from the part of the orange most people discard.',
     potency: 74,
-    description: `Orange peel is nutritionally richer than orange juice — a fact that's nutritionally counterintuitive but well-supported by phytochemical analysis. The flavedo (colored outer layer) and albedo (white pith) together contain hesperidin, nobiletin, and tangeretin — polymethoxylated flavones that are nearly absent in the juice. Hesperidin has been studied for its role in supporting capillary integrity, reducing inflammation, and improving cardiovascular markers including LDL oxidation. Nobiletin is particularly interesting for metabolic health — it's been shown in both in vitro and animal studies to activate AMP-kinase pathways similar to exercise. The peel also contains digestive enzymes (d-limonene activates bile production) that support fat digestion.`,
+    description: `Orange peel is nutritionally richer than orange juice a fact that's nutritionally counterintuitive but well-supported by phytochemical analysis. The flavedo (colored outer layer) and albedo (white pith) together contain hesperidin, nobiletin, and tangeretin polymethoxylated flavones that are nearly absent in the juice. Hesperidin has been studied for its role in supporting capillary integrity, reducing inflammation, and improving cardiovascular markers including LDL oxidation. Nobiletin is particularly interesting for metabolic health it's been shown in both in vitro and animal studies to activate AMP-kinase pathways similar to exercise. The peel also contains digestive enzymes (d-limonene activates bile production) that support fat digestion.`,
     nutritionTable: [
-      { nutrient: 'Hesperidin', per5g: '~80mg', dv: '—' },
-      { nutrient: 'Nobiletin', per5g: '~12mg', dv: '—' },
+      { nutrient: 'Hesperidin', per5g: '~80mg', dv: 'N/A' },
+      { nutrient: 'Nobiletin', per5g: '~12mg', dv: 'N/A' },
       { nutrient: 'Vitamin C', per5g: '12mg', dv: '13%' },
       { nutrient: 'Calcium', per5g: '18mg', dv: '1.4%' },
       { nutrient: 'Dietary fiber', per5g: '1.0g', dv: '4%' },
     ],
-    sourcing: `We use whole dried orange peel (flavedo + albedo) from conventionally-grown Valencia oranges. The peel is cold-dried within 6 hours of peeling to preserve volatile oils and flavonoids. The white pith — which most would discard for taste — is retained because it contains most of the hesperidin and fiber.`,
+    sourcing: `We use whole dried orange peel (flavedo + albedo) from conventionally-grown Valencia oranges. The peel is cold-dried within 6 hours of peeling to preserve volatile oils and flavonoids. The white pith which most would discard for taste is retained because it contains most of the hesperidin and fiber.`,
     howItWorks: `Orange peel complements lemon zest in Morivaná Daily's citrus layer, but with a different bioactive profile. Where lemon delivers limonene and alkalizing citrate, orange peel delivers hesperidin (cardiovascular and capillary support), nobiletin (metabolic support), and additional soluble fiber that works alongside inulin for gut health.`,
     studies: [
       {
@@ -270,17 +270,17 @@ export const INGREDIENTS = [
     origin: 'Guangxi, China',
     emoji: '',
     tagline: 'Natural Sweetness. Zero Calories. No Compromise.',
-    benefit: 'A natural sweetness with zero sugar, zero calories, and no aftertaste — 150–250x sweeter than sugar.',
+    benefit: 'A natural sweetness with zero sugar, zero calories, and no aftertaste 150–250x sweeter than sugar.',
     potency: 90,
-    description: `Monk fruit (Siraitia grosvenorii) has been cultivated in the Guangxi mountains of southern China for centuries, traditionally used as a "longevity fruit." Its sweetness comes not from sugar but from a family of triterpenoid glycosides called mogrosides — specifically Mogroside V, which is 150–250 times sweeter than sucrose at equivalent sweetness levels. Unlike stevia (which often carries a licorice-like aftertaste), monk fruit's sweetness profile is clean and rounded, with no bitter finish. It has zero effect on blood glucose or insulin levels, zero calories, and preliminary research suggests anti-inflammatory and antioxidant properties from the mogrosides themselves — an unusual bonus for a sweetener.`,
+    description: `Monk fruit (Siraitia grosvenorii) has been cultivated in the Guangxi mountains of southern China for centuries, traditionally used as a "longevity fruit." Its sweetness comes not from sugar but from a family of triterpenoid glycosides called mogrosides specifically Mogroside V, which is 150–250 times sweeter than sucrose at equivalent sweetness levels. Unlike stevia (which often carries a licorice-like aftertaste), monk fruit's sweetness profile is clean and rounded, with no bitter finish. It has zero effect on blood glucose or insulin levels, zero calories, and preliminary research suggests anti-inflammatory and antioxidant properties from the mogrosides themselves an unusual bonus for a sweetener.`,
     nutritionTable: [
-      { nutrient: 'Mogroside V', per5g: '~2mg', dv: '—' },
+      { nutrient: 'Mogroside V', per5g: '~2mg', dv: 'N/A' },
       { nutrient: 'Calories', per5g: '0 kcal', dv: '0%' },
       { nutrient: 'Sugar', per5g: '0g', dv: '0%' },
-      { nutrient: 'Glycemic Index', per5g: '0', dv: '—' },
+      { nutrient: 'Glycemic Index', per5g: '0', dv: 'N/A' },
     ],
-    sourcing: `Guangxi province in southern China is the only region in the world where monk fruit grows at commercial scale, due to specific soil composition and humidity requirements. Our extract is standardized to 25% Mogroside V content — higher than most commercial monk fruit extracts — ensuring consistent sweetness with the minimal quantity needed.`,
-    howItWorks: `Monk fruit is Morivaná Daily's finishing touch — the reason the powder tastes clean and pleasant enough to drink in plain water without any added sweetener. We use the minimum effective amount to create natural sweetness without masking the character of the other ingredients. Zero calories, zero blood sugar impact, and no compromise on the "clean" philosophy.`,
+    sourcing: `Guangxi province in southern China is the only region in the world where monk fruit grows at commercial scale, due to specific soil composition and humidity requirements. Our extract is standardized to 25% Mogroside V content higher than most commercial monk fruit extracts ensuring consistent sweetness with the minimal quantity needed.`,
+    howItWorks: `Monk fruit is Morivaná Daily's finishing touch the reason the powder tastes clean and pleasant enough to drink in plain water without any added sweetener. We use the minimum effective amount to create natural sweetness without masking the character of the other ingredients. Zero calories, zero blood sugar impact, and no compromise on the "clean" philosophy.`,
     studies: [
       {
         title: 'Biological activities of luo han guo (Siraitia grosvenorii)',

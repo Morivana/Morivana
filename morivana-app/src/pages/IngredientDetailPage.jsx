@@ -22,7 +22,7 @@ export default function IngredientDetailPage() {
     {
       '@context': 'https://schema.org',
       '@type': 'Article',
-      headline: `${ing.name} — ${ing.tagline}`,
+      headline: `${ing.name} ${ing.tagline}`,
       description: ing.benefit,
       author: { '@type': 'Organization', name: 'Morivaná Daily' },
       publisher: { '@type': 'Organization', name: 'Morivaná Daily' },
@@ -102,7 +102,7 @@ export default function IngredientDetailPage() {
             </p>
           </div>
 
-          {/* Section 1 — What is it */}
+          {/* Section 1 What is it */}
           <section style={{ marginBottom: '56px', borderTop: '1px solid var(--line-soft)', paddingTop: '40px' }}>
             <h2 style={{
               fontFamily: 'var(--font-display)',
@@ -124,7 +124,7 @@ export default function IngredientDetailPage() {
             </div>
           </section>
 
-          {/* Section 2 — Nutrition Table */}
+          {/* Section 2 Nutrition Table */}
           <section style={{ marginBottom: '56px', borderTop: '1px solid var(--line-soft)', paddingTop: '40px' }}>
             <h2 style={{
               fontFamily: 'var(--font-display)',
@@ -191,7 +191,7 @@ export default function IngredientDetailPage() {
             </p>
           </section>
 
-          {/* Section 3 — Sourcing */}
+          {/* Section 3 Sourcing */}
           <section style={{ marginBottom: '56px', background: 'var(--surface-soft)', borderRadius: '20px', padding: 'clamp(24px, 4vw, 40px)' }}>
             <div className="kicker" style={{ marginBottom: '12px', color: 'var(--ink-mute)' }}>Why We Source From {ing.origin}</div>
             <h2 style={{
@@ -224,7 +224,7 @@ export default function IngredientDetailPage() {
             </Link>
           </section>
 
-          {/* Section 4 — How it works in Morivaná Daily */}
+          {/* Section 4 How it works in Morivaná Daily */}
           <section style={{ marginBottom: '56px', borderTop: '1px solid var(--line-soft)', paddingTop: '40px' }}>
             <h2 style={{
               fontFamily: 'var(--font-display)',
@@ -252,7 +252,7 @@ export default function IngredientDetailPage() {
             </p>
           </section>
 
-          {/* Section 5 — Studies */}
+          {/* Section 5 Studies */}
           <section style={{ marginBottom: '56px', borderTop: '1px solid var(--line-soft)', paddingTop: '40px' }}>
             <h2 style={{
               fontFamily: 'var(--font-display)',
@@ -326,7 +326,7 @@ export default function IngredientDetailPage() {
               Get {ing.name} + 7 More Plants in Morivaná Daily
             </h2>
             <p style={{ color: 'var(--ink-on-dark-mute)', lineHeight: 1.65, margin: 0, fontSize: '0.92rem' }}>
-              One scoop delivers {ing.name} alongside spirulina, amla, ginger, lemon, inulin, orange peel, and monk fruit — all at meaningful doses, all amounts disclosed.
+              One scoop delivers {ing.name} alongside spirulina, amla, ginger, lemon, inulin, orange peel, and monk fruit all at meaningful doses, all amounts disclosed.
             </p>
             <Link to="/shop" className="cta-btn" style={{ display: 'inline-flex', width: 'fit-content' }}>
               Pre-Order Morivaná Daily →

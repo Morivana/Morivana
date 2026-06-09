@@ -79,7 +79,7 @@ function PouchModel({ isMobile, isHighPerf }) {
       alternate: true,
     }))
 
-    // Idle yaw drift removed — pouch only rotates on scroll, not on its own.
+    // Idle yaw drift removed pouch only rotates on scroll, not on its own.
 
     // 3) Breathing scale
     animations.push(animate(life, {
@@ -196,7 +196,7 @@ function PouchModel({ isMobile, isHighPerf }) {
     // playhead is at time=0, which happens on every ScrollTrigger.refresh()
     // including on initial load at scrollY=0. Even with `immediateRender:
     // false` that suppresses the write at *creation*, the first refresh tick
-    // still clamps progress to 0 and renders the from-state — so the pouch
+    // still clamps progress to 0 and renders the from-state so the pouch
     // flashed to the right (storyPosX) on initial reveal before the hero
     // trigger could overwrite it. Direct writes gated by `self.isActive`
     // never run at scroll=0, so the initial hero-state pose is preserved.
@@ -285,7 +285,7 @@ function PouchModel({ isMobile, isHighPerf }) {
           // to the depth buffer (no contact shadow under an "invisible" pouch).
           m.depthWrite = a > 0.01
         }
-        // Skip rendering entirely once fully invisible — saves draw calls and
+        // Skip rendering entirely once fully invisible saves draw calls and
         // ensures ContactShadows below doesn't pick up a phantom outline.
         child.visible = a > 0.001
       })
@@ -365,12 +365,12 @@ function ModelLoader() {
 }
 
 // Three viewport tiers:
-//   isMobile   — width < 992. Layout switch: pouch shifts to top-center.
-//   isHighPerf — width >= 1280. Unlocks Environment HDRI, extra lights,
+//   isMobile   width < 992. Layout switch: pouch shifts to top-center.
+//   isHighPerf width >= 1280. Unlocks Environment HDRI, extra lights,
 //                contact shadows, and idle micro-animations.
 //   tablet (992..1279) sits in the middle: desktop layout but lighter
 //   rendering (no HDRI, no contact shadows, no idle micro-loops). This is
-//   what was driving the iPad lag — the old code branched only on isMobile,
+//   what was driving the iPad lag the old code branched only on isMobile,
 //   so iPad got the full desktop rendering load.
 function getTier() {
   if (typeof window === 'undefined') return { isMobile: false, isHighPerf: true }

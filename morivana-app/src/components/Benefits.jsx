@@ -325,7 +325,7 @@ export default function Benefits() {
           color: var(--ink-mute);
         }
 
-        /* Tablet landscape — tighten metric column */
+        /* Tablet landscape tighten metric column */
         @media (max-width: 1080px) {
           .timeline-row {
             grid-template-columns: 100px 24px 1fr 170px;
@@ -336,7 +336,7 @@ export default function Benefits() {
           .tr-metric-num { font-size: 1.7rem; }
         }
 
-        /* iPad portrait — drop the metric to bottom */
+        /* iPad portrait drop the metric to bottom */
         @media (max-width: 900px) {
           #benefits { padding: 72px 0 !important; }
           .ben-header { margin-bottom: 44px; gap: 24px; }
@@ -358,7 +358,7 @@ export default function Benefits() {
           .tr-metric-num { font-size: 1.6rem; margin-bottom: 0; }
         }
 
-        /* Large phone — collapse phase to a single row above content */
+        /* Large phone collapse phase to a single row above content */
         @media (max-width: 640px) {
           .timeline-wrap { padding-left: 20px; padding-right: 20px; }
           .timeline-spine { left: 26px; top: 36px; bottom: 36px; }

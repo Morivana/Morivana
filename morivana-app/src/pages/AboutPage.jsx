@@ -25,7 +25,7 @@ const schemas = [
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'The Story Behind Morivaná Daily',
-    description: 'The founding story, philosophy, and sourcing transparency of Morivaná Daily — a clean super greens powder from India.',
+    description: 'The founding story, philosophy, and sourcing transparency of Morivaná Daily a clean super greens powder from India.',
     author: { '@type': 'Organization', name: 'Morivaná Daily' },
     publisher: { '@type': 'Organization', name: 'Morivaná Daily' },
   },
@@ -37,17 +37,17 @@ export default function AboutPage() {
     <>
       <SEOHead
         title="About Morivaná Daily | Pure Moringa Super Greens Sourcing & Mission"
-        description="Learn why we built Morivaná Daily — a clean super greens powder from 8 sourced plants. Our story, philosophy, and sourcing transparency for India & Canada."
+        description="Learn why we built Morivaná Daily a clean super greens powder from 8 sourced plants. Our story, philosophy, and sourcing transparency for India & Canada."
         canonical="/about"
         schemas={schemas}
       />
 
-      <PageLayout background="var(--surface-base)">
+      <PageLayout background="var(--surface-base)" centered>
         <div style={{ paddingTop: '48px', paddingBottom: '80px' }}>
           <Breadcrumb items={breadcrumbs} />
 
           {/* Hero */}
-          <div style={{ marginTop: '40px', marginBottom: '64px', maxWidth: '680px' }}>
+          <div style={{ marginTop: '40px', marginBottom: '64px', maxWidth: '680px', margin: '40px auto 64px' }}>
             <div className="kicker" style={{ marginBottom: '16px' }}>Our Story</div>
             <h1 style={{
               fontFamily: 'var(--font-display)',
@@ -65,11 +65,11 @@ export default function AboutPage() {
               </span>
             </h1>
             <p style={{ fontSize: '1.1rem', lineHeight: 1.7, color: 'var(--ink-soft)', maxWidth: '560px' }}>
-              We started Morivaná Daily because we were frustrated — not with wellness, but with the wellness industry. Too many products, too many promises, too little transparency.
+              We started Morivaná Daily because we were frustrated not with wellness, but with the wellness industry. Too many products, too many promises, too little transparency.
             </p>
           </div>
 
-          {/* Section 1 — Why we started */}
+          {/* Section 1 Why we started */}
           <section style={{ marginBottom: '72px', borderTop: '1px solid var(--line-soft)', paddingTop: '48px' }}>
             <div className="kicker" style={{ marginBottom: '16px', color: 'var(--ink-mute)' }}>Why We Started</div>
             <h2 style={{
@@ -88,7 +88,7 @@ export default function AboutPage() {
                 We looked at what was available and found the same pattern everywhere: 40+ ingredient "proprietary blends" where individual amounts are hidden, artificial sweeteners dressed up as clean labels, and prices that make daily use unsustainable for most people.
               </p>
               <p style={{ color: 'var(--ink-soft)', lineHeight: 1.75, marginBottom: '16px' }}>
-                The Indian market had its own problem: greens powders designed for Western markets and Western bodies, priced in dollars, with supply chains that have nothing to do with the extraordinary plants growing here — moringa in Tamil Nadu, amla in Uttarakhand, ginger in Kerala.
+                The Indian market had its own problem: greens powders designed for Western markets and Western bodies, priced in dollars, with supply chains that have nothing to do with the extraordinary plants growing here moringa in Tamil Nadu, amla in Uttarakhand, ginger in Kerala.
               </p>
               <p style={{ color: 'var(--ink-soft)', lineHeight: 1.75 }}>
                 So we built what we wanted to use: a greens powder that starts with the sourcing, not the marketing. Eight plants, nothing else. Every amount disclosed. Cold-dried to preserve what the plants actually contain. Priced for daily use.
@@ -96,7 +96,7 @@ export default function AboutPage() {
             </div>
           </section>
 
-          {/* Section 2 — Philosophy */}
+          {/* Section 2 Philosophy */}
           <section style={{ marginBottom: '72px', background: 'var(--surface-deep)', borderRadius: '24px', padding: 'clamp(32px, 5vw, 56px)' }}>
             <div className="kicker" style={{ marginBottom: '16px', color: 'var(--accent)' }}>Our Philosophy</div>
             <h2 style={{
@@ -111,14 +111,14 @@ export default function AboutPage() {
               Eight Plants. Nothing Else.
             </h2>
             <p style={{ color: 'var(--ink-on-dark-mute)', lineHeight: 1.75, maxWidth: '600px', marginBottom: '24px' }}>
-              Every decision we've made comes back to this constraint. We asked: if you could put only 8 plants in a daily greens powder — plants that had to earn their place based purely on nutritional evidence — what would they be? Moringa, spirulina, amla, ginger, lemon, inulin, orange peel, and monk fruit. No filler. No pad. No 40th ingredient that appears at 0.5mg just so the brand can put it on the label.
+              Every decision we've made comes back to this constraint. We asked: if you could put only 8 plants in a daily greens powder plants that had to earn their place based purely on nutritional evidence what would they be? Moringa, spirulina, amla, ginger, lemon, inulin, orange peel, and monk fruit. No filler. No pad. No 40th ingredient that appears at 0.5mg just so the brand can put it on the label.
             </p>
             <p style={{ color: 'var(--ink-on-dark-mute)', lineHeight: 1.75, maxWidth: '600px' }}>
-              We didn't add probiotics because we already have inulin — a prebiotic that grows the probiotics already in your gut rather than adding transient external ones. We didn't add vitamin C because we have amla — the most bioavailable natural source on earth. Every ingredient does a job that can't be done better by another.
+              We didn't add probiotics because we already have inulin a prebiotic that grows the probiotics already in your gut rather than adding transient external ones. We didn't add vitamin C because we have amla the most bioavailable natural source on earth. Every ingredient does a job that can't be done better by another.
             </p>
           </section>
 
-          {/* Section 3 — Sourcing */}
+          {/* Section 3 Sourcing */}
           <section style={{ marginBottom: '72px', borderTop: '1px solid var(--line-soft)', paddingTop: '48px' }}>
             <div className="kicker" style={{ marginBottom: '16px', color: 'var(--ink-mute)' }}>Where We Source</div>
             <h2 style={{
@@ -194,7 +194,7 @@ export default function AboutPage() {
             </div>
           </section>
 
-          {/* Section 4 — Our Promise */}
+          {/* Section 4 Our Promise */}
           <section style={{ marginBottom: '72px', borderTop: '1px solid var(--line-soft)', paddingTop: '48px' }}>
             <div className="kicker" style={{ marginBottom: '16px', color: 'var(--ink-mute)' }}>Our Promise</div>
             <h2 style={{
@@ -212,7 +212,7 @@ export default function AboutPage() {
               {[
                 { title: 'Full Transparency', body: 'Every ingredient amount is disclosed. No proprietary blends that hide under-dosing.' },
                 { title: 'Cold-Dried Process', body: 'Low-temperature drying preserves water-soluble vitamins and heat-sensitive compounds that high-heat processing destroys.' },
-                { title: 'India-First Sourcing', body: 'Moringa, amla, and ginger sourced directly from Indian farms — not imported and re-badged.' },
+                { title: 'India-First Sourcing', body: 'Moringa, amla, and ginger sourced directly from Indian farms not imported and re-badged.' },
                 { title: 'No Synthetic Additives', body: 'No artificial colors, flavors, preservatives, or sweeteners. Monk fruit for natural sweetness only.' },
               ].map((item) => (
                 <div
@@ -236,7 +236,7 @@ export default function AboutPage() {
           </section>
 
           {/* CTAs */}
-          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '24px', justifyContent: 'center' }}>
             <Link to="/ingredients" className="cta-btn">
               Meet All 8 Ingredients →
             </Link>
@@ -266,7 +266,7 @@ export default function AboutPage() {
 
       <RelatedPages items={[
         { title: 'All 8 Ingredients', description: 'Explore every plant in the Morivaná Daily blend with full nutritional profiles.', href: '/ingredients', tag: 'Ingredients' },
-        { title: 'Sourcing & Sustainability', description: 'Complete supply chain transparency — where every ingredient comes from.', href: '/sustainability', tag: 'Brand' },
+        { title: 'Sourcing & Sustainability', description: 'Complete supply chain transparency where every ingredient comes from.', href: '/sustainability', tag: 'Brand' },
         { title: 'The Science', description: 'Research citations behind every health claim we make.', href: '/science', tag: 'Research' },
       ]} />
 

@@ -83,7 +83,7 @@ export default function PrivacyPolicyPage() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', lineHeight: 1.7, fontSize: '0.98rem' }}>
           <p>
-            Morivaná Daily values your privacy. This privacy policy describes how we collect, use, and share your personal information when you visit and join the waitlist at <strong>morivana.com</strong>.
+            Morivaná Daily values your privacy. This privacy policy describes how we collect, use, and share your personal information when you visit and join the waitlist at <strong>moriavandaily.com</strong>.
           </p>
           
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', marginTop: '12px', color: 'var(--surface-deep)' }}>

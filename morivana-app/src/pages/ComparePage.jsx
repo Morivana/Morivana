@@ -15,7 +15,7 @@ const comparisonData = [
     priceIndia: '₹1,299 / 30 servings',
     pricePerDay: '₹43/day',
     ingredients: '8',
-    proprietary: 'No — all amounts disclosed',
+    proprietary: 'No all amounts disclosed',
     sourcing: '✓ Full transparency',
     indiaAvail: '✓ India-made',
     vegan: '✓ Yes',
@@ -27,7 +27,7 @@ const comparisonData = [
     priceIndia: '~₹7,500–9,000 (imported)',
     pricePerDay: '~₹250–300/day',
     ingredients: '75',
-    proprietary: 'Partial — some undisclosed',
+    proprietary: 'Partial some undisclosed',
     sourcing: '✓ Third-party tested',
     indiaAvail: '✗ Not officially',
     vegan: '✓ Yes',
@@ -75,7 +75,7 @@ const schemas = [
   {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'Morivaná Daily vs AG1 vs Setu vs Oziva — An Honest Comparison',
+    headline: 'Morivaná Daily vs AG1 vs Setu vs Oziva An Honest Comparison',
     description: 'Side-by-side comparison of the best greens powders available in India: Morivaná Daily, AG1, Setu, and Oziva.',
     author: { '@type': 'Organization', name: 'Morivaná Daily' },
   },
@@ -87,7 +87,7 @@ export default function ComparePage() {
     <>
       <SEOHead
         title="Morivaná Daily vs AG1 vs Setu vs Oziva | Honest Comparison India"
-        description="Honest comparison of the best greens powders in India. Morivaná Daily vs AG1, Setu, and Oziva — compared on price, ingredients, sourcing, and transparency."
+        description="Honest comparison of the best greens powders in India. Morivaná Daily vs AG1, Setu, and Oziva compared on price, ingredients, sourcing, and transparency."
         canonical="/compare"
         schemas={schemas}
       />
@@ -111,7 +111,7 @@ export default function ComparePage() {
               Morivaná Daily vs AG1 vs Setu vs Oziva
             </h1>
             <p style={{ fontSize: '1rem', lineHeight: 1.75, color: 'var(--ink-soft)' }}>
-              We built Morivaná Daily for ourselves first — which means we had to be clear-eyed about what else was on the market. Here's our honest comparison of the{' '}
+              We built Morivaná Daily for ourselves first which means we had to be clear-eyed about what else was on the market. Here's our honest comparison of the{' '}
               <Link to="/learn/best-greens-powder-india" style={{ color: 'var(--surface-deep)', fontWeight: 600 }}>
                 best greens powders available in India
               </Link>.
@@ -173,7 +173,7 @@ export default function ComparePage() {
               </table>
             </div>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--ink-mute)' }}>
-              ★ We're biased about Morivaná Daily — obviously. We've tried to be accurate about competitors based on publicly available information. Prices may vary.
+              ★ We're biased about Morivaná Daily obviously. We've tried to be accurate about competitors based on publicly available information. Prices may vary.
             </p>
           </section>
 
@@ -193,10 +193,10 @@ export default function ComparePage() {
             </h2>
             <div style={{ maxWidth: '640px' }}>
               <p style={{ color: 'var(--ink-soft)', lineHeight: 1.75, marginBottom: '16px' }}>
-                We use AG1 ourselves. It's excellent. But at ₹7,500–9,000/month (when you factor in importing), it's not a realistic daily staple for most Indians. Setu and Oziva are more accessible but use proprietary blends — you can't verify if the 39th ingredient is present at a meaningful dose or just enough to make the label look comprehensive.
+                We use AG1 ourselves. It's excellent. But at ₹7,500–9,000/month (when you factor in importing), it's not a realistic daily staple for most Indians. Setu and Oziva are more accessible but use proprietary blends you can't verify if the 39th ingredient is present at a meaningful dose or just enough to make the label look comprehensive.
               </p>
               <p style={{ color: 'var(--ink-soft)', lineHeight: 1.75, marginBottom: '16px' }}>
-                We built Morivaná Daily around a different question: what's the minimum number of carefully chosen, precisely dosed, fully transparent whole plants that deliver real nutritional impact? Our answer is 8. Your answer might be different — and that's fine. But you should know what you're taking and why.
+                We built Morivaná Daily around a different question: what's the minimum number of carefully chosen, precisely dosed, fully transparent whole plants that deliver real nutritional impact? Our answer is 8. Your answer might be different and that's fine. But you should know what you're taking and why.
               </p>
               <p style={{ color: 'var(--ink-soft)', lineHeight: 1.75 }}>
                 Explore our{' '}
@@ -223,7 +223,7 @@ export default function ComparePage() {
               Switching from AG1?
             </h2>
             <p style={{ color: 'var(--ink-soft)', lineHeight: 1.7, maxWidth: '580px', fontSize: '0.9rem', marginBottom: '12px' }}>
-              If you've been ordering AG1 internationally and the cost or shipping complexity is becoming unsustainable, Morivaná Daily offers a transparent, India-sourced alternative. We don't match AG1's 75-ingredient scope — we're 8 carefully chosen plants. Different philosophy, different price point, same commitment to ingredient honesty.
+              If you've been ordering AG1 internationally and the cost or shipping complexity is becoming unsustainable, Morivaná Daily offers a transparent, India-sourced alternative. We don't match AG1's 75-ingredient scope we're 8 carefully chosen plants. Different philosophy, different price point, same commitment to ingredient honesty.
             </p>
             <Link
               to="/learn/ag1-alternative-india"

@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import FloatingLeaves from '../components/FloatingLeaves'
 
 /**
- * CheckoutPage — Protected checkout placeholder.
+ * CheckoutPage Protected checkout placeholder.
  * Uses the dark surface (surface-deep) to feel transactional and premium,
  * matching the WaitlistCTA section's authority.
  */

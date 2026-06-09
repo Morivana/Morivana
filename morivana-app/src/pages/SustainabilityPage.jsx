@@ -15,7 +15,7 @@ const schemas = [
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Where Every Ingredient Comes From | Morivaná Daily Sourcing Transparency',
-    description: 'Complete sourcing transparency for all 8 Morivaná Daily ingredients — origin farms, harvest methods, cold-drying process, and sustainability commitments.',
+    description: 'Complete sourcing transparency for all 8 Morivaná Daily ingredients origin farms, harvest methods, cold-drying process, and sustainability commitments.',
     author: { '@type': 'Organization', name: 'Morivaná Daily' },
   },
   buildBreadcrumbSchema(breadcrumbs),
@@ -28,7 +28,7 @@ const regionGroups = [
     coords: 'South India',
     color: '#2d6a4f',
     ingredients: ['moringa'],
-    detail: 'Hot, semi-arid climate ideal for moringa leaf development. We partner with farms in the Tirunelveli district where moringa is harvested at 6–8 weeks of growth — the peak nutrient window — and shade-dried to prevent chlorophyll degradation.',
+    detail: 'Hot, semi-arid climate ideal for moringa leaf development. We partner with farms in the Tirunelveli district where moringa is harvested at 6–8 weeks of growth the peak nutrient window and shade-dried to prevent chlorophyll degradation.',
   },
   {
     region: 'Uttarakhand, India',
@@ -42,7 +42,7 @@ const regionGroups = [
     coords: 'Southwest India',
     color: '#40916c',
     ingredients: ['ginger'],
-    detail: 'Kerala\'s monsoon climate and volcanic soil create ginger with notably higher gingerol content than ginger grown in drier climates. Rhizomes are harvested after 8–9 months of growth — optimal for therapeutic gingerol concentration.',
+    detail: 'Kerala\'s monsoon climate and volcanic soil create ginger with notably higher gingerol content than ginger grown in drier climates. Rhizomes are harvested after 8–9 months of growth optimal for therapeutic gingerol concentration.',
   },
   {
     region: 'Guangxi, China',
@@ -56,7 +56,7 @@ const regionGroups = [
     coords: 'Global',
     color: '#74c69d',
     ingredients: ['spirulina'],
-    detail: 'Spirulina requires specific temperature, pH, and light conditions that vary significantly by geography. We use closed-pond systems with continuous water quality monitoring for heavy metals, cyanotoxins, and microbial contamination — tested to European food safety standards.',
+    detail: 'Spirulina requires specific temperature, pH, and light conditions that vary significantly by geography. We use closed-pond systems with continuous water quality monitoring for heavy metals, cyanotoxins, and microbial contamination tested to European food safety standards.',
   },
   {
     region: 'Mediterranean & Europe',
@@ -72,7 +72,7 @@ export default function SustainabilityPage() {
     <>
       <SEOHead
         title="How We Source | Morivaná Daily Sourcing & Sustainability"
-        description="Full supply chain transparency for Morivaná Daily's 8 ingredients — where each plant comes from, how it's processed, and our commitment to no hidden sourcing."
+        description="Full supply chain transparency for Morivaná Daily's 8 ingredients where each plant comes from, how it's processed, and our commitment to no hidden sourcing."
         canonical="/sustainability"
         schemas={schemas}
       />
@@ -96,7 +96,7 @@ export default function SustainabilityPage() {
               Where Every Ingredient Comes From
             </h1>
             <p style={{ fontSize: '1rem', lineHeight: 1.75, color: 'var(--ink-soft)' }}>
-              We believe you have the right to know the complete supply chain of what you put in your body. No hidden sources, no "proprietary blend" behind the scenes — just plants, origins, and processing.
+              We believe you have the right to know the complete supply chain of what you put in your body. No hidden sources, no "proprietary blend" behind the scenes just plants, origins, and processing.
             </p>
           </div>
 
@@ -252,7 +252,7 @@ export default function SustainabilityPage() {
               Cold-Drying: No Heat, No Nutrient Loss
             </h2>
             <p style={{ color: 'var(--ink-on-dark-mute)', lineHeight: 1.75, maxWidth: '580px', marginBottom: '16px', fontSize: '0.92rem' }}>
-              Every ingredient in Morivaná Daily is dried at low temperatures (≤40–50°C) — never spray-dried or oven-dried at the 120–200°C temperatures that degrade water-soluble vitamins by up to 80%.
+              Every ingredient in Morivaná Daily is dried at low temperatures (≤40–50°C) never spray-dried or oven-dried at the 120–200°C temperatures that degrade water-soluble vitamins by up to 80%.
             </p>
             <p style={{ color: 'var(--ink-on-dark-mute)', lineHeight: 1.75, maxWidth: '580px', fontSize: '0.92rem' }}>
               Cold-drying costs more and takes longer than conventional processing. It's a choice we make because the nutritional integrity of the whole plant is the entire point.{' '}
@@ -277,7 +277,7 @@ export default function SustainabilityPage() {
               Packaging & Our Future Commitments
             </h2>
             <p style={{ color: 'var(--ink-soft)', lineHeight: 1.75, maxWidth: '580px', marginBottom: '16px' }}>
-              Our launch packaging uses a foil-lined resealable pouch — the most effective material for preserving moisture-sensitive plant powders. We've prioritized product integrity over packaging optics at launch.
+              Our launch packaging uses a foil-lined resealable pouch the most effective material for preserving moisture-sensitive plant powders. We've prioritized product integrity over packaging optics at launch.
             </p>
             <p style={{ color: 'var(--ink-soft)', lineHeight: 1.75, maxWidth: '580px' }}>
               Our roadmap includes: (1) a refill pouch program in Phase 2 that reduces packaging per serving by 60%, and (2) a full packaging lifecycle assessment published on this page. We'll update this when we have the data.

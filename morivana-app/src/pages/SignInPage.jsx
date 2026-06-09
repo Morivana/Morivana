@@ -5,7 +5,7 @@ import { useAuth } from '@clerk/react'
 import FloatingLeaves from '../components/FloatingLeaves'
 
 /**
- * SignInPage — Clerk sign-in styled to Morivana's editorial luxury aesthetic.
+ * SignInPage Clerk sign-in styled to Morivana's editorial luxury aesthetic.
  *
  * Layout mirrors the WaitlistCTA section:
  *   dark forest surface + citrus headline + FloatingLeaves ambient texture
@@ -54,10 +54,10 @@ export default function SignInPage() {
         overflow: 'hidden',
       }}
     >
-      {/* Ambient floating leaves — same as landing page sections */}
+      {/* Ambient floating leaves same as landing page sections */}
       <FloatingLeaves variant="dark" density="sparse" />
 
-      {/* Photo collage background — same tiles as WaitlistCTA */}
+      {/* Photo collage background same tiles as WaitlistCTA */}
       <div className="auth-collage" aria-hidden="true">
         <div className="auth-tile auth-tile--1" style={{ backgroundImage: 'url(/Moringa%20Leaves%20Overhead.webp)' }} />
         <div className="auth-tile auth-tile--2" style={{ backgroundImage: 'url(/morivana-scoop.webp)' }} />

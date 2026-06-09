@@ -84,7 +84,7 @@ export default function WaitlistPage() {
                   Welcome to the List
                 </h1>
                 <p style={{ color: 'var(--ink-on-dark-mute)', lineHeight: 1.7, marginBottom: '24px', fontSize: '0.95rem' }}>
-                  You'll be the first to know when Morivaná Daily launches — and your 15% early bird discount will be waiting. Check your inbox for confirmation.
+                  You'll be the first to know when Morivaná Daily launches and your 15% early bird discount will be waiting. Check your inbox for confirmation.
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center' }}>
                   <Link to="/ingredients" style={{
@@ -139,7 +139,7 @@ export default function WaitlistPage() {
                   </span>
                 </h1>
                 <p style={{ fontSize: '1rem', lineHeight: 1.75, color: 'var(--ink-soft)', marginBottom: '32px' }}>
-                  Join the Morivaná Daily waitlist. When we launch, you'll be the first to know — and your early bird discount will be waiting. No spam, just one email when we go live.
+                  Join the Morivaná Daily waitlist. When we launch, you'll be the first to know and your early bird discount will be waiting. No spam, just one email when we go live.
                 </p>
 
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -228,7 +228,7 @@ export default function WaitlistPage() {
                     className="cta-btn"
                     style={{ border: 'none', cursor: 'pointer' }}
                   >
-                    Join Waitlist — Get 15% Off →
+                    Join Waitlist Get 15% Off →
                   </button>
 
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--ink-mute)', margin: 0 }}>
@@ -241,9 +241,9 @@ export default function WaitlistPage() {
                   <div className="kicker" style={{ marginBottom: '16px', color: 'var(--ink-mute)' }}>Early Bird Benefits</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     {[
-                      { text: '15% off your first order — reserved for waitlist members only.' },
-                      { text: 'Priority shipping — waitlist orders fulfilled before public launch.' },
-                      { text: 'Launch kit — 30-day guide, recipes, and nutrient timeline.' },
+                      { text: '15% off your first order reserved for waitlist members only.' },
+                      { text: 'Priority shipping waitlist orders fulfilled before public launch.' },
+                      { text: 'Launch kit 30-day guide, recipes, and nutrient timeline.' },
                     ].map((item, i) => (
                       <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                         <span style={{ fontSize: '1.1rem', flexShrink: 0, color: 'var(--accent)', marginTop: '2px' }}>•</span>

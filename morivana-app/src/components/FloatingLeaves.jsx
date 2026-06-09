@@ -96,7 +96,7 @@ export default function FloatingLeaves({
   // GSAP scroll-driven drift (cheap transforms tied to the parent section's
   // visibility) + Anime.js continuous idle motion. The Anime.js loops are
   // paused whenever the leaves container is offscreen via IntersectionObserver
-  // — without that, 5+ instances of this component kept dozens of loops
+  // without that, 5+ instances of this component kept dozens of loops
   // running every frame across the whole page.
   useEffect(() => {
     if (!rootRef.current) return
@@ -113,7 +113,7 @@ export default function FloatingLeaves({
         stagger: 0.08,
       })
 
-      // Scroll-driven drift — each leaf travels a unique distance as its
+      // Scroll-driven drift each leaf travels a unique distance as its
       // parent section scrolls across the viewport. Trigger is the leaves'
       // direct parent, so the drift only runs while the section is visible.
       items.forEach((el, i) => {
@@ -136,7 +136,7 @@ export default function FloatingLeaves({
       })
     }, rootRef)
 
-    // Anime.js — idle life animations. Each leaf gets its own loop with a
+    // Anime.js idle life animations. Each leaf gets its own loop with a
     // unique period so they never fall into a robotic sync.
     // High-perf only gets the extra scale + opacity loops. Phone & tablet
     // get rotation only.
@@ -180,7 +180,7 @@ export default function FloatingLeaves({
     // container scrolls out of view, and resumes when it comes back. With
     // 5+ instances of this component across the page, this prevents the
     // off-screen sections from holding ~30+ loops on the main thread at
-    // once — the biggest single source of pre-fix lag on iPad-class GPUs.
+    // once the biggest single source of pre-fix lag on iPad-class GPUs.
     let isVisible = true
     const io = new IntersectionObserver(
       (entries) => {
@@ -219,7 +219,7 @@ export default function FloatingLeaves({
         // Lowest stacking level inside the section. Real foreground content
         // sits at z-index 1+ via the .section-content helper class (see
         // globals.css). Per-component decoration like the WaitlistCTA collage
-        // also lives at z-index 0 — leaves and the collage are peers in the
+        // also lives at z-index 0 leaves and the collage are peers in the
         // background plane and paint in DOM order, with the collage rendered
         // first so leaves drift above it.
         zIndex: 0,
@@ -234,7 +234,7 @@ export default function FloatingLeaves({
             top: l.top,
             left: l.left,
             right: l.right,
-            // will-change only on high-perf — promoting every leaf to its
+            // will-change only on high-perf promoting every leaf to its
             // own GPU layer was costing iPad more than it saved.
             willChange: isHighPerf ? 'transform' : 'auto',
           }}

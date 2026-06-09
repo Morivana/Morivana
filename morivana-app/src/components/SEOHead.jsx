@@ -1,10 +1,10 @@
 import { Helmet } from 'react-helmet-async'
 
-const BASE_URL = 'https://morivana.pages.dev'
+const BASE_URL = 'https://moriavandaily.com'
 const DEFAULT_OG_IMAGE = `${BASE_URL}/packaging_highres.webp`
 
 /**
- * SEOHead — inject per-route <title>, meta tags, canonical, OG, and JSON-LD schemas.
+ * SEOHead inject per-route <title>, meta tags, canonical, OG, and JSON-LD schemas.
  *
  * @param {string}  title        - Page title (50–60 chars)
  * @param {string}  description  - Meta description (130–155 chars)

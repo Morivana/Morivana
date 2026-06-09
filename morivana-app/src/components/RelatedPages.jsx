@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 
 /**
- * RelatedPages — "You might also like" section at the bottom of each page.
+ * RelatedPages "You might also like" section at the bottom of each page.
  *
  * @param {Array}   items       - [{title, description, href, tag}]
  * @param {string}  [heading]   - Section heading (default: "You Might Also Like")

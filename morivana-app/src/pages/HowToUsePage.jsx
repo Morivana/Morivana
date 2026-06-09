@@ -34,7 +34,7 @@ const steps = [
     label: 'DRINK',
     num: '03',
     title: 'Drink Immediately',
-    body: 'Drink right after mixing. Chlorophyll and phycocyanin degrade with prolonged exposure to light and air — fresh is best.',
+    body: 'Drink right after mixing. Chlorophyll and phycocyanin degrade with prolonged exposure to light and air fresh is best.',
     image: '/drink.webp',
     alt: 'Step 3: Drink Morivaná Daily and start your day energized and clear',
   },
@@ -42,7 +42,7 @@ const steps = [
 
 const recipes = [
   { name: 'Classic Water', desc: '300ml room-temperature water. Clean. Fast. Preferred for maximum nutrient absorption.', emoji: '💧' },
-  { name: 'Coconut Water', desc: '250ml coconut water. Adds electrolytes and natural sweetness — ideal post-workout.', emoji: '🥥' },
+  { name: 'Coconut Water', desc: '250ml coconut water. Adds electrolytes and natural sweetness ideal post-workout.', emoji: '🥥' },
   { name: 'Green Smoothie', desc: 'Add one scoop to your morning fruit smoothie. The moringa color will be vivid and bright.', emoji: '🥤' },
   { name: 'Warm Oat Milk', desc: 'Warm (not boiling) oat milk for a winter option. Keep below 50°C to preserve nutrients.', emoji: '🌿' },
   { name: 'Orange Juice', desc: 'The vitamin C in OJ amplifies iron absorption from moringa and spirulina. A functional pairing.', emoji: '🍊' },
@@ -53,19 +53,19 @@ const faqs = [
   { q: 'Can I double scoop?', a: 'One scoop (5g) is the intended serving and is where the research-backed doses are calibrated. You can safely take 2 scoops, but it\'s not necessary for most people. More is not always better with whole-plant nutrition.' },
   { q: 'Is it safe during pregnancy?', a: 'Consult your OB/GYN before use during pregnancy or breastfeeding. While the individual ingredients are generally considered food-safe, high doses of ginger and spirulina during pregnancy have not been extensively studied.' },
   { q: 'Can children take Morivaná Daily?', a: 'Not recommended for children under 12 without medical guidance. Spirulina and moringa at these doses are designed for adult nutritional needs.' },
-  { q: 'What if I miss a day?', a: 'No issue. The benefits of Morivaná Daily are cumulative — one missed day won\'t reset your progress. Just resume the next morning.' },
+  { q: 'What if I miss a day?', a: 'No issue. The benefits of Morivaná Daily are cumulative one missed day won\'t reset your progress. Just resume the next morning.' },
 ]
 
 const howToSchema = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
-  name: 'How to Use Morivaná Daily Super Greens — Your 30-Second Morning Ritual',
+  name: 'How to Use Morivaná Daily Super Greens Your 30-Second Morning Ritual',
   description: 'How to prepare and drink Morivaná Daily super greens powder in under 30 seconds.',
   step: steps.map(s => ({
     '@type': 'HowToStep',
     name: s.title,
     text: s.body,
-    image: `https://morivana.pages.dev${s.image}`,
+    image: `https://moriavandaily.com${s.image}`,
   })),
 }
 
@@ -92,11 +92,11 @@ export default function HowToUsePage() {
         schemas={schemas}
       />
 
-      <PageLayout background="var(--surface-base)">
+      <PageLayout background="var(--surface-base)" centered>
         <div style={{ paddingTop: '48px', paddingBottom: '80px' }}>
           <Breadcrumb items={breadcrumbs} />
 
-          <div style={{ marginTop: '40px', marginBottom: '56px', maxWidth: '640px' }}>
+          <div style={{ marginTop: '40px', marginBottom: '56px', maxWidth: '640px', margin: '40px auto 56px' }}>
             <div className="kicker" style={{ marginBottom: '16px' }}>The Ritual</div>
             <h1 style={{
               fontFamily: 'var(--font-display)',
@@ -163,7 +163,7 @@ export default function HowToUsePage() {
                       borderRadius: '999px',
                       padding: '4px 12px',
                     }}>
-                      {step.num} — {step.label}
+                      {step.num} {step.label}
                     </div>
                   </div>
                   <div style={{ padding: '24px' }}>
@@ -289,10 +289,11 @@ export default function HowToUsePage() {
             <FAQAccordion items={faqs} title="FAQ" />
           </section>
 
-          {/* CTA */}
-          <Link to="/shop" className="cta-btn">
-            Ready to Start? Pre-Order Now →
-          </Link>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Link to="/shop" className="cta-btn">
+              Ready to Start? Pre-Order Now →
+            </Link>
+          </div>
         </div>
       </PageLayout>
 

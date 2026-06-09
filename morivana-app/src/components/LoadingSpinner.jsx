@@ -1,5 +1,5 @@
 /**
- * LoadingSpinner — Morivana brand-matched full-page loader.
+ * LoadingSpinner Morivana brand-matched full-page loader.
  * Matches the site's dark forest surface with citrus spinner ring.
  */
 export default function LoadingSpinner() {
@@ -17,7 +17,7 @@ export default function LoadingSpinner() {
         overflow: 'hidden',
       }}
     >
-      {/* Ambient radial glow — mirrors WaitlistCTA */}
+      {/* Ambient radial glow mirrors WaitlistCTA */}
       <div
         aria-hidden="true"
         style={{

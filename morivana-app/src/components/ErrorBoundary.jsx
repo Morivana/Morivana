@@ -1,7 +1,7 @@
 import React from 'react'
 
 /**
- * ErrorBoundary — Catches JS errors in children, logs them, and displays
+ * ErrorBoundary Catches JS errors in children, logs them, and displays
  * a beautiful brand-matched fallback screen with technical details to assist debugging.
  */
 export default class ErrorBoundary extends React.Component {

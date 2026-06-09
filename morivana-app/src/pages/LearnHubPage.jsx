@@ -26,7 +26,7 @@ const schemas = [
       '@type': 'Article',
       headline: p.title,
       description: p.description,
-      url: `https://morivana.pages.dev/learn/${p.slug}`,
+      url: `https://moriavandaily.com/learn/${p.slug}`,
     })),
   },
   buildBreadcrumbSchema(breadcrumbs),
@@ -40,16 +40,16 @@ export default function LearnHubPage() {
     <>
       <SEOHead
         title="Learn Hub | Moringa Super Greens & Plant Nutrition Guides"
-        description="Evidence-based guides on super greens, moringa, spirulina, amla, and more. Written by the Morivaná Daily team. No ads, no affiliate links — just the research."
+        description="Evidence-based guides on super greens, moringa, spirulina, amla, and more. Written by the Morivaná Daily team. No ads, no affiliate links just the research."
         canonical="/learn"
         schemas={schemas}
       />
 
-      <PageLayout background="var(--surface-soft)">
+      <PageLayout background="var(--surface-soft)" centered>
         <div style={{ paddingTop: '48px', paddingBottom: '80px' }}>
           <Breadcrumb items={breadcrumbs} />
 
-          <div style={{ marginTop: '40px', marginBottom: '48px', maxWidth: '640px' }}>
+          <div style={{ marginTop: '40px', marginBottom: '48px', maxWidth: '640px', margin: '40px auto 48px' }}>
             <div className="kicker" style={{ marginBottom: '16px' }}>Knowledge Hub</div>
             <h1 style={{
               fontFamily: 'var(--font-display)',
@@ -275,9 +275,9 @@ export default function LearnHubPage() {
       </PageLayout>
 
       <RelatedPages items={[
-        { title: 'Health Benefits', description: 'What Morivaná Daily does for your body — timeline and science.', href: '/benefits', tag: 'Benefits' },
+        { title: 'Health Benefits', description: 'What Morivaná Daily does for your body timeline and science.', href: '/benefits', tag: 'Benefits' },
         { title: 'All Ingredients', description: 'Full profiles for all 8 plants in the blend.', href: '/ingredients', tag: 'Ingredients' },
-        { title: 'Pre-Order', description: 'Early bird pricing — 15% off at launch.', href: '/shop', tag: 'Shop' },
+        { title: 'Pre-Order', description: 'Early bird pricing 15% off at launch.', href: '/shop', tag: 'Shop' },
       ]} />
     </>
   )

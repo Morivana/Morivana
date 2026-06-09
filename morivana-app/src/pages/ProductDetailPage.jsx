@@ -33,7 +33,7 @@ const schemas = [
     '@type': 'Product',
     name: 'Morivaná Daily Super Greens Powder',
     description: 'Morivaná Daily clean super greens powder. 8 whole plants, cold-dried, all amounts disclosed. No proprietary blends.',
-    image: 'https://morivana.pages.dev/packaging_highres.webp',
+    image: 'https://moriavandaily.com/packaging_highres.webp',
     brand: { '@type': 'Brand', name: 'Morivaná Daily' },
     offers: [
       {
@@ -43,7 +43,7 @@ const schemas = [
         priceCurrency: 'INR',
         price: '499',
         priceValidUntil: '2027-12-31',
-        url: 'https://morivana.pages.dev/shop/daily-greens',
+        url: 'https://moriavandaily.com/shop/daily-greens',
         eligibleRegion: { '@type': 'Country', name: 'India' },
         shippingDetails: {
           '@type': 'OfferShippingDetails',
@@ -88,7 +88,7 @@ const schemas = [
         priceCurrency: 'INR',
         price: '799',
         priceValidUntil: '2027-12-31',
-        url: 'https://morivana.pages.dev/shop/daily-greens',
+        url: 'https://moriavandaily.com/shop/daily-greens',
         eligibleRegion: { '@type': 'Country', name: 'India' },
         shippingDetails: {
           '@type': 'OfferShippingDetails',
@@ -133,7 +133,7 @@ const schemas = [
         priceCurrency: 'CAD',
         price: '21',
         priceValidUntil: '2027-12-31',
-        url: 'https://morivana.pages.dev/shop/daily-greens',
+        url: 'https://moriavandaily.com/shop/daily-greens',
         eligibleRegion: { '@type': 'Country', name: 'Canada' },
         shippingDetails: {
           '@type': 'OfferShippingDetails',
@@ -178,7 +178,7 @@ const schemas = [
         priceCurrency: 'CAD',
         price: '39',
         priceValidUntil: '2027-12-31',
-        url: 'https://morivana.pages.dev/shop/daily-greens',
+        url: 'https://moriavandaily.com/shop/daily-greens',
         eligibleRegion: { '@type': 'Country', name: 'Canada' },
         shippingDetails: {
           '@type': 'OfferShippingDetails',
@@ -235,7 +235,7 @@ export default function ProductDetailPage() {
     <>
       <SEOHead
         title="Morivaná Daily Super Greens | Buy Online India & Canada"
-        description="Buy Morivaná Daily Super Greens — clean greens powder made from 8 whole plants. Sizing from 50g trial pack to 100g daily ritual pack. Pre-order ₹499/₹799 India or CA$21/CA$39 Canada."
+        description="Buy Morivaná Daily Super Greens clean greens powder made from 8 whole plants. Sizing from 50g trial pack to 100g daily ritual pack. Pre-order ₹499/₹799 India or CA$21/CA$39 Canada."
         canonical="/shop/daily-greens"
         ogType="product"
         schemas={schemas}
@@ -279,7 +279,7 @@ export default function ProductDetailPage() {
               }}>
                 <img
                   src="/packaging_highres.webp"
-                  alt="Morivaná Daily Super Greens pouch — front"
+                  alt="Morivaná Daily Super Greens pouch front"
                   style={{ width: '80%', height: '80%', objectFit: 'contain' }}
                   loading="eager"
                   width="664"
@@ -297,7 +297,7 @@ export default function ProductDetailPage() {
               }}>
                 <img
                   src="/packaging_highres_back.webp"
-                  alt="Morivaná Daily Super Greens pouch — back with ingredient label"
+                  alt="Morivaná Daily Super Greens pouch back with ingredient label"
                   style={{ width: '80%', height: '80%', objectFit: 'contain' }}
                   loading="lazy"
                   width="665"
@@ -477,7 +477,7 @@ export default function ProductDetailPage() {
 
               {/* CTA */}
               <Link to="/waitlist" className="cta-btn" style={{ textAlign: 'center' }}>
-                Join Waitlist — Be First →
+                Join Waitlist Be First →
               </Link>
 
               {/* Certifications */}

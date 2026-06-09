@@ -15,7 +15,7 @@ const schemas = [
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: 'Eight Plants. Nothing Else. | All Morivaná Daily Ingredients',
-    description: 'All 8 whole-plant ingredients in Morivaná Daily super greens powder — moringa, spirulina, amla, ginger, lemon, inulin, orange peel, and monk fruit.',
+    description: 'All 8 whole-plant ingredients in Morivaná Daily super greens powder moringa, spirulina, amla, ginger, lemon, inulin, orange peel, and monk fruit.',
   },
   buildBreadcrumbSchema(breadcrumbs),
 ]
@@ -25,16 +25,16 @@ export default function IngredientsHubPage() {
     <>
       <SEOHead
         title="All 8 Ingredients | What's Inside Morivaná Daily Super Greens"
-        description="Explore all 8 whole-plant ingredients in Morivaná Daily — moringa, spirulina, amla, ginger, lemon zest, inulin, orange peel & monk fruit. Every amount disclosed."
+        description="Explore all 8 whole-plant ingredients in Morivaná Daily moringa, spirulina, amla, ginger, lemon zest, inulin, orange peel & monk fruit. Every amount disclosed."
         canonical="/ingredients"
         schemas={schemas}
       />
 
-      <PageLayout background="var(--surface-soft)">
+      <PageLayout background="var(--surface-soft)" centered>
         <div style={{ paddingTop: '48px', paddingBottom: '80px' }}>
           <Breadcrumb items={breadcrumbs} />
 
-          <div style={{ marginTop: '40px', marginBottom: '56px', maxWidth: '640px' }}>
+          <div style={{ marginTop: '40px', marginBottom: '56px', maxWidth: '640px', margin: '40px auto 56px' }}>
             <div className="kicker" style={{ marginBottom: '16px' }}>The Formula</div>
             <h1 style={{
               fontFamily: 'var(--font-display)',
@@ -52,7 +52,7 @@ export default function IngredientsHubPage() {
               </span>
             </h1>
             <p style={{ fontSize: '1rem', lineHeight: 1.75, color: 'var(--ink-soft)', maxWidth: '520px' }}>
-              Every entry below is a whole plant — cold-dried, ground, weighed. Nothing synthesized. Nothing hidden. We chose each one because it does something the others can't, and because the evidence behind it is real. <Link to="/science" style={{ color: 'var(--surface-deep)', fontWeight: 600 }}>Backed by research →</Link>
+              Every entry below is a whole plant cold-dried, ground, weighed. Nothing synthesized. Nothing hidden. We chose each one because it does something the others can't, and because the evidence behind it is real. <Link to="/science" style={{ color: 'var(--surface-deep)', fontWeight: 600 }}>Backed by research →</Link>
             </p>
           </div>
 
@@ -169,7 +169,7 @@ export default function IngredientsHubPage() {
           </div>
 
           {/* Certifications */}
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '40px' }}>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '40px', justifyContent: 'center' }}>
             {['Vegan', 'Soy-Free', 'No Added Sugar', 'No Artificial Sweeteners', 'Cold-Dried'].map(cert => (
               <span key={cert} style={{
                 fontFamily: 'var(--font-body)',
@@ -187,16 +187,17 @@ export default function IngredientsHubPage() {
             ))}
           </div>
 
-          {/* CTA */}
-          <Link to="/shop" className="cta-btn">
-            Get All 8 in One Scoop →
-          </Link>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Link to="/shop" className="cta-btn">
+              Get All 8 in One Scoop →
+            </Link>
+          </div>
         </div>
       </PageLayout>
 
       <RelatedPages items={[
         { title: 'The Science Behind Morivaná Daily', description: 'Research citations for every health claim we make.', href: '/science', tag: 'Research' },
-        { title: 'Health Benefits', description: 'What happens when you take Morivaná Daily every day — timeline and deep-dives.', href: '/benefits', tag: 'Benefits' },
+        { title: 'Health Benefits', description: 'What happens when you take Morivaná Daily every day timeline and deep-dives.', href: '/benefits', tag: 'Benefits' },
         { title: 'Pre-Order Now', description: 'Join the early bird list and get 15% off at launch.', href: '/shop', tag: 'Shop' },
       ]} />
     </>

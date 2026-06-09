@@ -104,7 +104,7 @@ export default function Loader({ onDismiss, onLeaveStart }) {
 
   const wordmarkRef = useRef(null)
   const rootRef = useRef(null)
-  // Single-fire latch — any dismissal path (submit, skip, scroll, key, touch)
+  // Single-fire latch any dismissal path (submit, skip, scroll, key, touch)
   // can only trigger the exit animation once.
   const dismissedRef = useRef(false)
   // Mount timestamp so we can enforce a grace period before scroll-dismiss
@@ -303,7 +303,7 @@ export default function Loader({ onDismiss, onLeaveStart }) {
     >
       <LeafField />
 
-      {/* Grain overlay — SVG turbulence, ~5% opacity */}
+      {/* Grain overlay SVG turbulence, ~5% opacity */}
       <svg
         aria-hidden="true"
         style={{

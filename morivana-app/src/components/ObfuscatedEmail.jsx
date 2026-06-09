@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 /**
- * ObfuscatedEmail — renders a clickable email link that is hidden from static HTML
+ * ObfuscatedEmail renders a clickable email link that is hidden from static HTML
  * scrapers and bots by assembling the address dynamically after client-side mount.
  */
 export default function ObfuscatedEmail({ style, className, children, ...props }) {

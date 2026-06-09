@@ -11,8 +11,8 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     // Two entrance modes:
-    //   default — cold-load, snappy.
-    //   bigEntrance — post-loader, slower, more cinematic. Carries the cream/
+    //   default cold-load, snappy.
+    //   bigEntrance post-loader, slower, more cinematic. Carries the cream/
     //   deep-green memory of the loader via a scrim that lifts as type rises.
     // In bigEntrance the parent column does the rising, so per-child y is 0
     // (otherwise they compound and the headline overshoots past readable).
@@ -37,7 +37,7 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
           { y: prefersReducedMotion ? 0 : 56, opacity: 0 },
           { y: 0, opacity: 1, duration: prefersReducedMotion ? 0 : 1.05, ease: 'power3.out', delay: prefersReducedMotion ? 0 : 0.05 }
         )
-        // 3D pouch fades in alongside the headline. No translateY — the
+        // 3D pouch fades in alongside the headline. No translateY the
         // pouch position is scroll-controlled elsewhere; translating here
         // fights that and causes a snap when the entrance ends.
         gsap.fromTo('.global-canvas-layer',
@@ -115,7 +115,7 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
         />
       )}
 
-      {/* Text content — editorial newspaper layout */}
+      {/* Text content editorial newspaper layout */}
       <div
         className="hero-layout"
         style={{
@@ -151,7 +151,7 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
             clip: 'rect(0, 0, 0, 0)',
             border: '0',
           }}>
-            Clean Daily Super Greens Powder — 8 Whole Plants, Nothing Else
+            Clean Daily Super Greens Powder 8 Whole Plants, Nothing Else
           </div>
           {/* ── BIG HEADLINE ── */}
           <h1 className="hero-headline" style={{ marginBottom: '12px' }}>

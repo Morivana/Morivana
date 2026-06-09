@@ -13,7 +13,7 @@ const breadcrumbs = [
 
 const faqs = [
   { q: 'Is Morivaná Daily FDA approved?', a: 'Morivaná Daily is a dietary supplement, not a drug. Dietary supplements in India fall under FSSAI regulation, not FDA (US) approval. All ingredients are GRAS (Generally Recognized as Safe) in the US and are approved food ingredients in India and Canada. We are not claiming to diagnose, treat, cure, or prevent any disease.' },
-  { q: 'Are there clinical trials on Morivaná Daily?', a: 'There are no clinical trials on Morivaná Daily as a proprietary blend — we are a pre-launch brand. All health claims are based on published clinical research on the individual ingredients at equivalent doses. We\'ve linked to each study on this page.' },
+  { q: 'Are there clinical trials on Morivaná Daily?', a: 'There are no clinical trials on Morivaná Daily as a proprietary blend we are a pre-launch brand. All health claims are based on published clinical research on the individual ingredients at equivalent doses. We\'ve linked to each study on this page.' },
   { q: 'What does "cold-dried" mean exactly?', a: 'Cold-drying refers to low-temperature drying (typically ≤40–50°C) as opposed to spray-drying or oven-drying (≥120°C). At high temperatures, water-soluble vitamins (especially vitamin C and B vitamins) degrade significantly. Cold-drying preserves 80–95% of heat-sensitive nutrients, depending on the specific compound and processing time.' },
 ]
 
@@ -53,11 +53,11 @@ export default function SciencePage() {
         schemas={schemas}
       />
 
-      <PageLayout background="var(--surface-base)">
+      <PageLayout background="var(--surface-base)" centered>
         <div style={{ paddingTop: '48px', paddingBottom: '80px' }}>
           <Breadcrumb items={breadcrumbs} />
 
-          <div style={{ marginTop: '40px', marginBottom: '56px', maxWidth: '640px' }}>
+          <div style={{ marginTop: '40px', marginBottom: '56px', maxWidth: '640px', margin: '40px auto 56px' }}>
             <div className="kicker" style={{ marginBottom: '16px' }}>Evidence-Based</div>
             <h1 style={{
               fontFamily: 'var(--font-display)',
@@ -197,17 +197,17 @@ export default function SciencePage() {
               color: 'var(--surface-deep)',
               marginBottom: '20px',
             }}>
-              What "Cold-Dried" Means — and Why It Matters
+              What "Cold-Dried" Means and Why It Matters
             </h2>
             <div style={{ maxWidth: '640px' }}>
               <p style={{ color: 'var(--ink-soft)', lineHeight: 1.75, marginBottom: '16px' }}>
-                Conventional spray-drying — the industry standard for creating powdered supplements — operates at 120–200°C. At these temperatures, water-soluble vitamins (particularly vitamin C and B vitamins) degrade by 30–80% depending on processing time. Heat also destroys heat-labile enzymes and alters the polyphenol structure of plant antioxidants.
+                Conventional spray-drying the industry standard for creating powdered supplements operates at 120–200°C. At these temperatures, water-soluble vitamins (particularly vitamin C and B vitamins) degrade by 30–80% depending on processing time. Heat also destroys heat-labile enzymes and alters the polyphenol structure of plant antioxidants.
               </p>
               <p style={{ color: 'var(--ink-soft)', lineHeight: 1.75, marginBottom: '16px' }}>
-                Cold-drying (low-temperature drying at ≤40–50°C, or freeze-drying for more delicate ingredients) preserves 80–95% of these heat-sensitive compounds. The trade-off is cost and processing time — cold-drying is significantly more expensive than spray-drying — but we consider it non-negotiable for a product whose value proposition is whole-plant nutrition.
+                Cold-drying (low-temperature drying at ≤40–50°C, or freeze-drying for more delicate ingredients) preserves 80–95% of these heat-sensitive compounds. The trade-off is cost and processing time cold-drying is significantly more expensive than spray-drying but we consider it non-negotiable for a product whose value proposition is whole-plant nutrition.
               </p>
               <p style={{ color: 'var(--ink-soft)', lineHeight: 1.75 }}>
-                For amla specifically — our primary vitamin C source — the cold-drying method is critical. Amla's vitamin C is partially bound to tannins which protect it from oxidation, but high heat still accelerates degradation. Our cold-dried amla retains 85%+ of its natural vitamin C compared to &lt;40% in conventionally spray-dried amla powder.
+                For amla specifically our primary vitamin C source the cold-drying method is critical. Amla's vitamin C is partially bound to tannins which protect it from oxidation, but high heat still accelerates degradation. Our cold-dried amla retains 85%+ of its natural vitamin C compared to &lt;40% in conventionally spray-dried amla powder.
               </p>
             </div>
           </section>
@@ -218,7 +218,7 @@ export default function SciencePage() {
           </section>
 
           {/* CTA */}
-          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
             <Link to="/shop" className="cta-btn">Pre-Order Morivaná Daily →</Link>
             <Link to="/about" style={{
               fontFamily: 'var(--font-body)',

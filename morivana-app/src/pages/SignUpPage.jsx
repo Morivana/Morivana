@@ -4,8 +4,8 @@ import { useEffect } from 'react'
 import FloatingLeaves from '../components/FloatingLeaves'
 
 /**
- * SignUpPage — Clerk sign-up matching Morivana's editorial luxury aesthetic.
- * Identical layout to SignInPage — dark forest surface + citrus + leaves.
+ * SignUpPage Clerk sign-up matching Morivana's editorial luxury aesthetic.
+ * Identical layout to SignInPage dark forest surface + citrus + leaves.
  */
 export default function SignUpPage() {
   // Dynamic client-side noindex to ensure search engines do not index the sign-up page

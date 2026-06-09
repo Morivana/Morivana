@@ -115,7 +115,7 @@ export default function WhatIsMorivana() {
             </p>
           </div>
 
-          {/* Numbered highlights — typographic, no icons */}
+          {/* Numbered highlights typographic, no icons */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '8px' }}>
             {highlights.map(h => (
               <div

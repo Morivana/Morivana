@@ -8,7 +8,7 @@ const ingredients = [
     latin: 'Moringa oleifera',
     compound: 'Quercetin',
     origin: 'Tamil Nadu, IN',
-    benefit: 'The most nutrient-dense leaf on earth — iron, calcium, and 92 antioxidants in a single scoop.',
+    benefit: 'The most nutrient-dense leaf on earth iron, calcium, and 92 antioxidants in a single scoop.',
     potency: 92,
   },
   {
@@ -40,7 +40,7 @@ const ingredients = [
     latin: 'Citrus limon',
     compound: 'Citric acid',
     origin: 'Sun-dried zest',
-    benefit: 'Cold-dried lemon for an alkalizing, brightening lift — without the acidity of juice.',
+    benefit: 'Cold-dried lemon for an alkalizing, brightening lift without the acidity of juice.',
     potency: 78,
   },
   {
@@ -299,7 +299,7 @@ export default function Ingredients() {
           padding: 6px 14px;
         }
 
-        /* Tablet landscape (iPad landscape ~1024px) — slightly tighter */
+        /* Tablet landscape (iPad landscape ~1024px) slightly tighter */
         @media (max-width: 1100px) {
           .ingredient-grid { grid-template-columns: repeat(3, 1fr); }
           .ingredient-monograph { min-height: 230px; }

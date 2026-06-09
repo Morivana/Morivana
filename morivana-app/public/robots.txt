@@ -8,4 +8,4 @@ Disallow: /account
 Disallow: /orders
 Disallow: /checkout
 
-Sitemap: https://morivana.pages.dev/sitemap.xml
+Sitemap: https://moriavandaily.com/sitemap.xml
