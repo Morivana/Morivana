@@ -1,3 +1,22 @@
 # Prevent indexing of the default Cloudflare Pages subdomains
 https://morivana.pages.dev/*
   X-Robots-Tag: noindex
+
+# Applied to all pages
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self "https://js.stripe.com"), usb=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: unsafe-none
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://js.stripe.com https://www.googletagmanager.com https://www.google-analytics.com https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://api.morivanadaily.com https://api.stripe.com https://www.google-analytics.com https://clerk.morivanadaily.com https://*.clerk.accounts.dev; frame-src https://js.stripe.com https://hooks.stripe.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;
+
+# Static assets — long cache, immutable
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML pages — always revalidate
+/*.html
+  Cache-Control: no-cache, no-store, must-revalidate

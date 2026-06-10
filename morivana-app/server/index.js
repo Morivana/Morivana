@@ -1,13 +1,20 @@
 import 'dotenv/config'
 import express from 'express'
-import cors from 'cors'
 import crypto from 'crypto'
 import { MongoClient, ServerApiVersion } from 'mongodb'
-import helmet from 'helmet'
-import rateLimit from 'express-rate-limit'
 import { google } from 'googleapis'
-
-import { z } from 'zod'
+import { clerkMiddleware } from '@clerk/express'
+import {
+  corsOptions,
+  helmetConfig,
+  generalLimiter,
+  formLimiter,
+  mongoSanitizeMiddleware,
+  hppMiddleware,
+} from './middleware/security.js'
+import { validate, waitlistSchema } from './middleware/validate.js'
+import { errorHandler } from './middleware/errorHandler.js'
+import stripeWebhooksRouter from './routes/webhooks.js'
 
 const {
   MONGODB_URI,
@@ -280,81 +287,50 @@ Date: ${new Date().toLocaleString()}
 // ── MongoDB ─────────────────────────────────────────────────────────────────
 const client = new MongoClient(MONGODB_URI, {
   serverApi: { version: ServerApiVersion.v1, strict: true, deprecationErrors: true },
+  // Hardened Security Options
+  ssl: true,
+  tlsAllowInvalidCertificates: false,
+  // Connection Pool Limits (to prevent resource exhaustion)
+  maxPoolSize: 10,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+  connectTimeoutMS: 10000,
 })
 
-await client.connect()
+await client.connect().then(() => {
+  console.log('[DB] MongoDB connected successfully')
+}).catch(err => {
+  console.error('[DB] MongoDB connection failed:', err.message)
+  process.exit(1)
+})
 const db = client.db(MONGODB_DB)
 const waitlist = db.collection('waitlist')
 await waitlist.createIndex({ email: 1 }, { unique: true })
-
-// ── CORS ─────────────────────────────────────────────────────────────────────
-const allowedOrigins = ALLOWED_ORIGIN
-  ? ALLOWED_ORIGIN.split(',').map(o => o.trim())
-  : ['https://www.morivanadaily.com', 'https://morivanadaily.com', 'https://www.morivandaily.com', 'https://morivandaily.com', 'https://www.moriavandaily.com', 'https://moriavandaily.com', 'https://www.morivana.com', 'https://morivana.com', 'https://morivana.pages.dev']
-
-const corsOptions = {
-  origin: NODE_ENV === 'production'
-    ? allowedOrigins
-    : ['http://localhost:5173', 'http://localhost:5174', true],
-  credentials: true,
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
-}
 
 const app = express()
 
 // Trust proxy (required when running behind a reverse proxy like Render or Cloudflare)
 app.set('trust proxy', 1)
 
-// Enable CORS early to handle preflight OPTIONS requests before rate limiting/body parsing
-app.use(cors(corsOptions))
+// ── Security middleware — must be first, before any routes ──
+app.use(helmetConfig)
+app.use(corsOptions)
+app.options('*', corsOptions) // handle preflight requests
+app.use(generalLimiter)
+app.use(mongoSanitizeMiddleware)
+app.use(hppMiddleware)
 
+// ── Clerk authentication middleware ──
+app.use(clerkMiddleware())
 
-// 1. HELMET — HTTP Security Headers
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", 'https://js.stripe.com', 'https://checkout.razorpay.com', 'https://challenges.cloudflare.com'],
-      frameSrc: ["'self'", 'https://js.stripe.com', 'https://api.razorpay.com', 'https://challenges.cloudflare.com'],
-      imgSrc: ["'self'", 'data:', 'https://www.morivanadaily.com', 'https://morivanadaily.com', 'https://www.morivandaily.com', 'https://morivandaily.com', 'https://www.moriavandaily.com', 'https://moriavandaily.com', 'https://www.morivana.com', 'https://morivana.com', 'https://morivana.pages.dev'],
-      connectSrc: ["'self'", 'https://api.clerk.com', 'https://ipapi.co', 'https://challenges.cloudflare.com', 'https://morivanadaily.com', 'https://morivandaily.com', 'https://moriavandaily.com', 'https://morivana.pages.dev'],
-    },
-  },
-  hsts: {
-    maxAge: 31536000,        // 1 year
-    includeSubDomains: true,
-    preload: true,
-  },
-}))
+// ── Raw body parser for Stripe webhooks (registered BEFORE express.json) ──
+app.use('/api/webhooks/stripe', express.raw({ type: 'application/json' }))
 
-// 2. RATE LIMITING
-const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,  // 15 minutes
-  max: 100,                   // 100 req per IP per window
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { error: 'Too many requests. Please try again later.' },
-})
+// Webhook Router
+app.use('/api/webhooks', stripeWebhooksRouter)
 
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 5,                     // 5 attempts per window (auth routes)
-  message: { error: 'Too many attempts. Please try again in 15 minutes.' },
-})
-
-const checkoutLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000,  // 1 hour
-  max: 10,                    // 10 checkout attempts per hour per IP
-  message: { error: 'Too many checkout attempts. Please try again later.' },
-})
-
-app.use('/api/', globalLimiter)
-app.use('/api/auth/', authLimiter)
-app.use('/api/checkout/', checkoutLimiter)
-
-// 3. BODY PARSING (with payload size limit)
-app.use(express.json({ limit: '10kb' }))
+// ── Body parsers — after security middleware ──
+app.use(express.json({ limit: '10kb' })) // 10kb limit prevents payload flooding
 app.use(express.urlencoded({ extended: true, limit: '10kb' }))
 
 
@@ -416,54 +392,28 @@ async function verifyTurnstile(token, ip) {
   }
 }
 
-const rateLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-  message: { error: 'Too many requests. Please try again later.' },
-})
-
 // ── Routes ───────────────────────────────────────────────────────────────────
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
 app.get('/api/csrf', (req, res) => {
   return res.json({ csrfToken: 'static_csrf_token' })
 })
 
-const waitlistSchema = z.object({
-  name: z.string().trim().optional(),
-  email: z.string().trim().toLowerCase().email('Valid email is required'),
-  confirm_email: z.string().optional(),
-  turnstileToken: z.string().optional(),
-  region: z.string().trim().optional(),
-  source: z.string().trim().optional()
-})
-
-app.post('/api/waitlist', rateLimiter, async (req, res) => {
-  // 1. Honeypot check
-  if (req.body?.confirm_email) {
-    // Fail silently to fool spam bots
-    return res.status(201).json({ ok: true, note: 'silenced' })
-  }
-
-  // 2. Validate input schema using Zod
-  const validationResult = waitlistSchema.safeParse(req.body)
-  if (!validationResult.success) {
-    const errorMsg = validationResult.error.errors[0]?.message || 'Invalid input'
-    return res.status(400).json({ error: errorMsg })
-  }
-
-  const { name, email, turnstileToken, region, source } = validationResult.data
-
-  // 3. Turnstile verification
-  const ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress
-  const turnstileOk = await verifyTurnstile(turnstileToken, ip)
-  if (!turnstileOk) {
-    return res.status(400).json({ error: 'Turnstile verification failed' })
-  }
-
+app.post('/api/waitlist', formLimiter, validate(waitlistSchema), async (req, res, next) => {
   try {
+    // 1. Honeypot check
+    if (req.body?.confirm_email) {
+      // Fail silently to fool spam bots
+      return res.status(201).json({ ok: true, note: 'silenced' })
+    }
+
+    const { name, email, turnstileToken, region, source } = req.body
+
+    // 2. Turnstile verification
+    const ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress
+    const turnstileOk = await verifyTurnstile(turnstileToken, ip)
+    if (!turnstileOk) {
+      return res.status(400).json({ error: 'Turnstile verification failed' })
+    }
+
     await waitlist.insertOne({
       name: name || null,
       email,
@@ -482,25 +432,32 @@ app.post('/api/waitlist', rateLimiter, async (req, res) => {
     return res.status(201).json({ ok: true })
   } catch (err) {
     if (err?.code === 11000) {
+      const { name, email, region, source } = req.body
       // Send email even if duplicate to satisfy "whenever user fills form, email should be sent"
       sendWaitlistEmail({ name, email, region, source: (source || 'waitlist') + ' (duplicate)' }).catch(err => {
         console.error('Background duplicate waitlist email error:', err)
       })
       return res.status(200).json({ ok: true, duplicate: true })
     }
-    console.error('waitlist insert error:', err)
-    return res.status(500).json({ error: 'Something went wrong' })
+    next(err)
   }
 })
 
-app.post('/api/vitals', (req, res) => {
-  const { name, value, path } = req.body || {}
-  console.log(`[Web Vital] ${name}: ${value} on ${path}`)
-  return res.json({ ok: true })
+app.post('/api/vitals', (req, res, next) => {
+  try {
+    const { name, value, path } = req.body || {}
+    console.log(`[Web Vital] ${name}: ${value} on ${path}`)
+    return res.json({ ok: true })
+  } catch (err) {
+    next(err)
+  }
 })
 
 app.get('/', (_req, res) => res.json({ ok: true, message: 'Morivaná API is running', env: NODE_ENV }))
 app.get('/api/health', (_req, res) => res.json({ ok: true, env: NODE_ENV }))
+
+// ── Error Handler (must be last) ─────────────────────────────────────────────
+app.use(errorHandler)
 
 // ── Start ────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {

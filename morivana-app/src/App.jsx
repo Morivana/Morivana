@@ -193,6 +193,14 @@ function App() {
     throw new Error('Missing VITE_CLERK_PUBLISHABLE_KEY in .env add it before starting the dev server.')
   }
 
+  const clerkConfig = {
+    publishableKey: PUBLISHABLE_KEY,
+    navigate: (to) => navigate(to),
+    afterSignOutUrl: '/',
+    signInUrl: '/sign-in',
+    signUpUrl: '/sign-up',
+  }
+
   return (
     <RegionProvider>
       {/* Navbar persists across all routes except auth & account */}
@@ -208,11 +216,7 @@ function App() {
             <Route
               path="/sign-in/*"
               element={
-                <ClerkProvider
-                  publishableKey={PUBLISHABLE_KEY}
-                  navigate={(to) => navigate(to)}
-                  afterSignOutUrl="/"
-                >
+                <ClerkProvider {...clerkConfig}>
                   <SignInPage />
                 </ClerkProvider>
               }
@@ -220,11 +224,7 @@ function App() {
             <Route
               path="/sign-up/*"
               element={
-                <ClerkProvider
-                  publishableKey={PUBLISHABLE_KEY}
-                  navigate={(to) => navigate(to)}
-                  afterSignOutUrl="/"
-                >
+                <ClerkProvider {...clerkConfig}>
                   <SignUpPage />
                 </ClerkProvider>
               }
@@ -253,11 +253,7 @@ function App() {
             <Route
               path="/account"
               element={
-                <ClerkProvider
-                  publishableKey={PUBLISHABLE_KEY}
-                  navigate={(to) => navigate(to)}
-                  afterSignOutUrl="/"
-                >
+                <ClerkProvider {...clerkConfig}>
                   <ProtectedRoute>
                     <AccountPage />
                   </ProtectedRoute>
@@ -267,11 +263,7 @@ function App() {
             <Route
               path="/orders"
               element={
-                <ClerkProvider
-                  publishableKey={PUBLISHABLE_KEY}
-                  navigate={(to) => navigate(to)}
-                  afterSignOutUrl="/"
-                >
+                <ClerkProvider {...clerkConfig}>
                   <ProtectedRoute>
                     <OrdersPage />
                   </ProtectedRoute>
@@ -281,11 +273,7 @@ function App() {
             <Route
               path="/checkout"
               element={
-                <ClerkProvider
-                  publishableKey={PUBLISHABLE_KEY}
-                  navigate={(to) => navigate(to)}
-                  afterSignOutUrl="/"
-                >
+                <ClerkProvider {...clerkConfig}>
                   <ProtectedRoute>
                     <CheckoutPage />
                   </ProtectedRoute>
