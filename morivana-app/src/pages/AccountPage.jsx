@@ -1243,7 +1243,173 @@ export default function AccountPage() {
           {renderSection()}
         </main>
       </div>
+      <style>{`
+        /* ── Account page layout ── */
+        #acct-body {
+          flex: 1;
+          display: flex;
+          flex-direction: row;
+          max-width: 1100px;
+          width: 100%;
+          margin: 0 auto;
+          padding: clamp(24px, 4vw, 48px) clamp(16px, 3vw, 32px);
+          gap: clamp(24px, 4vw, 48px);
+          align-items: flex-start;
+        }
+        #acct-sidebar {
+          width: 220px;
+          flex-shrink: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+        }
+        #acct-identity {
+          margin-bottom: 28px;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 14px;
+        }
+        #acct-identity-text { display: flex; flex-direction: column; }
+        #acct-nav {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+        #acct-main {
+          flex: 1;
+          min-width: 0;
+          background: #F6F6F4;
+        }
 
+        /* ── Nav buttons ── */
+        .acct-nav-btn {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 10px 12px;
+          border-radius: 10px;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          text-align: left;
+          transition: background 0.18s;
+          width: 100%;
+          min-height: 44px;
+          -webkit-tap-highlight-color: transparent;
+        }
+        .acct-nav-btn:hover { background: rgba(25,65,2,0.04); }
+        .acct-nav-btn--active { background: rgba(25,65,2,0.07) !important; }
+
+        /* Icons — hard size constraints so they never blow up */
+        .acct-nav-icon {
+          width: 22px;
+          height: 22px;
+          min-width: 22px;
+          min-height: 22px;
+          max-width: 22px;
+          max-height: 22px;
+          object-fit: contain;
+          flex-shrink: 0;
+          opacity: 0.45;
+          transition: opacity 0.18s;
+          display: block;
+        }
+        .acct-nav-btn--active .acct-nav-icon { opacity: 1; }
+
+        .acct-nav-label {
+          font-family: var(--font-body);
+          font-weight: 500;
+          font-size: 0.88rem;
+          color: var(--ink-mute);
+          letter-spacing: 0.01em;
+          transition: color 0.18s, font-weight 0.18s;
+        }
+        .acct-nav-btn--active .acct-nav-label {
+          font-weight: 700;
+          color: var(--surface-deep);
+        }
+
+        /* ── Mobile layout ── */
+        @media (max-width: 680px) {
+          #acct-body {
+            flex-direction: column;
+            padding: 0 0 32px;
+            gap: 0;
+          }
+          #acct-sidebar {
+            width: 100%;
+            position: sticky;
+            top: 60px;
+            z-index: 40;
+            background: #fff;
+            border-bottom: 1px solid rgba(14,39,1,0.09);
+            padding: 12px 16px 0;
+            box-shadow: 0 2px 8px rgba(14,39,1,0.06);
+          }
+          #acct-identity {
+            flex-direction: row;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+          }
+          #acct-identity > div:first-child {
+            width: 40px !important;
+            height: 40px !important;
+          }
+          #acct-nav {
+            flex-direction: row;
+            gap: 0;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+          }
+          #acct-nav::-webkit-scrollbar { display: none; }
+
+          /* Tab style on mobile */
+          .acct-nav-btn {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 8px 12px 10px;
+            border-radius: 0;
+            flex: 0 0 auto;
+            width: auto;
+            min-width: 72px;
+            border-bottom: 2px solid transparent;
+            background: transparent !important;
+            overflow: hidden;
+          }
+          .acct-nav-btn--active {
+            border-bottom-color: var(--surface-deep) !important;
+          }
+
+          /* Icons on mobile tabs — strictly 20×20 */
+          .acct-nav-icon {
+            width: 20px !important;
+            height: 20px !important;
+            min-width: 20px !important;
+            min-height: 20px !important;
+            max-width: 20px !important;
+            max-height: 20px !important;
+            opacity: 0.5;
+          }
+          .acct-nav-btn--active .acct-nav-icon { opacity: 1; }
+
+          .acct-nav-label {
+            font-size: 0.68rem;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+          }
+          #acct-main { padding: 20px 16px 0; }
+        }
+
+        @keyframes modalFadeIn {
+          from { opacity: 0; transform: scale(0.95); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+      `}</style>
 
     </div>
   )
