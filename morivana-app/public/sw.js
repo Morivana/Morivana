@@ -1,28 +1,12 @@
-const CACHE_NAME = 'morivana-assets-v1'
+const CACHE_NAME = 'morivana-assets-v2'
 
+// Only pre-cache the minimal app shell — JS/HTML built by Vite.
+// Images, 3D models, and fonts are now served via jsDelivr CDN and
+// are NOT pre-cached here (service workers cannot cache cross-origin
+// responses unless the server sends CORS headers with proper scope).
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',
-  '/models/morivana_pouch_fixed_draco.glb',
-  '/draco/draco_decoder.js',
-  '/draco/draco_decoder.wasm',
-  '/draco/draco_wasm_wrapper.js',
-  '/morivana-sip.jpeg',
-  '/Moringa%20Leaves%20Overhead.webp',
-  '/morivana-scoop.webp',
-  '/morivana-jar.jpeg',
-  '/Morning%20Light%20.webp',
-  '/morivana-ingredients.webp',
-  '/morivana-powder.jpeg',
-  '/packaging_highres.webp',
-  '/icon-bag.png',
-  '/icon-gear-3d.png',
-  '/icon-pin-3d.png',
-  '/icon-mail-3d.png',
-  '/icon-phone-3d.png',
-  '/icon-shield-3d.png',
-  '/avatar-male.png',
-  '/avatar-female.png',
   '/logo.svg',
 ]
 
@@ -56,9 +40,17 @@ self.addEventListener('fetch', (event) => {
     return
   }
 
-  // Do not intercept or cache Clerk requests or API endpoints
+  // ── CRITICAL: Let ALL cross-origin requests pass through untouched ──
+  // The SW must not intercept CDN (jsDelivr), Google Fonts, analytics,
+  // Clerk, Stripe, geolocation APIs, or any other external domain.
+  // Cross-origin fetch through the SW is subject to connect-src CSP,
+  // which causes widespread blocking. Let the browser handle them directly.
+  if (url.hostname !== self.location.hostname) {
+    return
+  }
+
+  // Do not intercept API endpoints or Clerk well-known routes
   if (
-    url.hostname.includes('clerk') ||
     url.pathname.startsWith('/api/') ||
     url.pathname.includes('/.well-known/')
   ) {
@@ -68,7 +60,7 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
-        // Fetch in background to update cache (stale-while-revalidate for index/assets)
+        // Stale-while-revalidate for HTML and JS bundles
         if (
           url.pathname === '/' ||
           url.pathname === '/index.html' ||
@@ -82,7 +74,7 @@ self.addEventListener('fetch', (event) => {
                 })
               }
             })
-            .catch(() => {}) // fallback silently if offline
+            .catch(() => {}) // fail silently when offline
         }
         return cachedResponse
       }
@@ -92,13 +84,11 @@ self.addEventListener('fetch', (event) => {
           return networkResponse
         }
 
-        // Cache Vite bundles and other static files dynamically
+        // Only cache same-origin Vite bundles and SVG assets
         const isAsset = url.pathname.startsWith('/assets/')
-        const isImage = /\.(png|jpe?g|gif|svg|webp|avif)$/i.test(url.pathname)
-        const isFont = /\.(woff2?|eot|ttf|otf)$/i.test(url.pathname)
-        const isModel = url.pathname.endsWith('.glb') || url.pathname.endsWith('.gltf')
+        const isSVG = url.pathname.endsWith('.svg')
 
-        if (isAsset || isImage || isFont || isModel) {
+        if (isAsset || isSVG) {
           const responseToCache = networkResponse.clone()
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache)
@@ -106,12 +96,11 @@ self.addEventListener('fetch', (event) => {
         }
 
         return networkResponse
-      }).catch((err) => {
-        // SPA offline fallback: serve /index.html if we are fetching a document page
+      }).catch(() => {
+        // SPA offline fallback: serve /index.html for navigation requests
         if (event.request.mode === 'navigate') {
           return caches.match('/index.html')
         }
-        throw err
       })
     })
   )
