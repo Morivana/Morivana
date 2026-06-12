@@ -6,6 +6,7 @@ import Breadcrumb, { buildBreadcrumbSchema } from '../components/Breadcrumb'
 import RelatedPages from '../components/RelatedPages'
 import PageLayout from '../components/PageLayout'
 import FAQAccordion from '../components/FAQAccordion'
+import ProductImageSlider from '../components/ProductImageSlider'
 
 const breadcrumbs = [
   { label: 'Home', href: '/' },
@@ -290,25 +291,8 @@ export default function ShopPage() {
             marginBottom: '64px',
             alignItems: 'start',
           }}>
-            {/* Product image */}
-            <div style={{
-              borderRadius: '24px',
-              overflow: 'hidden',
-              background: 'var(--surface-soft)',
-              aspectRatio: '1',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-              <img
-                src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/packaging_highres.webp"
-                alt="Morivaná Daily Super Greens Powder packaging"
-                style={{ width: '80%', height: '80%', objectFit: 'contain' }}
-                loading="eager"
-                width="664"
-                height="1000"
-              />
-            </div>
+            {/* Product image slider */}
+            <ProductImageSlider />
 
             {/* Product info */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
