@@ -1333,7 +1333,7 @@ export default function AccountPage() {
         /* ── Mobile layout ── */
         @media (max-width: 680px) {
           #acct-body {
-            flex-direction: column;
+            flex-direction: column !important;
             padding: 0 0 32px;
             gap: 0;
           }
@@ -1348,7 +1348,7 @@ export default function AccountPage() {
             box-shadow: 0 2px 8px rgba(14,39,1,0.06);
           }
           #acct-identity {
-            flex-direction: row;
+            flex-direction: row !important;
             align-items: center;
             gap: 12px;
             margin-bottom: 12px;
@@ -1357,8 +1357,10 @@ export default function AccountPage() {
             width: 40px !important;
             height: 40px !important;
           }
+          /* ── Horizontal scrollable tab bar ── */
           #acct-nav {
-            flex-direction: row;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
             gap: 0;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -1366,41 +1368,47 @@ export default function AccountPage() {
           }
           #acct-nav::-webkit-scrollbar { display: none; }
 
-          /* Tab style on mobile */
+          /* Tab buttons: icon LEFT of label (horizontal) */
           .acct-nav-btn {
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            padding: 8px 12px 10px;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            gap: 6px;
+            padding: 10px 14px;
             border-radius: 0;
             flex: 0 0 auto;
             width: auto;
-            min-width: 72px;
+            min-width: 0;
             border-bottom: 2px solid transparent;
             background: transparent !important;
             overflow: hidden;
+            white-space: nowrap;
           }
           .acct-nav-btn--active {
             border-bottom-color: var(--surface-deep) !important;
           }
 
-          /* Icons on mobile tabs — strictly 20×20 */
+          /* Icons: strictly 18×18 on mobile */
           .acct-nav-icon {
-            width: 20px !important;
-            height: 20px !important;
-            min-width: 20px !important;
-            min-height: 20px !important;
-            max-width: 20px !important;
-            max-height: 20px !important;
+            width: 18px !important;
+            height: 18px !important;
+            min-width: 18px !important;
+            min-height: 18px !important;
+            max-width: 18px !important;
+            max-height: 18px !important;
             opacity: 0.5;
+            flex-shrink: 0;
           }
           .acct-nav-btn--active .acct-nav-icon { opacity: 1; }
 
           .acct-nav-label {
-            font-size: 0.68rem;
+            font-size: 0.75rem;
+            font-weight: 500;
             letter-spacing: 0.02em;
             white-space: nowrap;
+          }
+          .acct-nav-btn--active .acct-nav-label {
+            font-weight: 700;
           }
           #acct-main { padding: 20px 16px 0; }
         }
