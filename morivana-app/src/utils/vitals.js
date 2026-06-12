@@ -14,9 +14,6 @@ export function initWebVitals() {
       path: window.location.pathname,
     })
 
-    // Debug log
-    console.log(`[Web Vitals] ${name}:`, value)
-
     if (navigator.sendBeacon) {
       navigator.sendBeacon(`${apiBase}/api/vitals`, new Blob([payload], { type: 'application/json' }))
     } else {

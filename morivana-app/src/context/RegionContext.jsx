@@ -37,7 +37,6 @@ export function RegionProvider({ children }) {
           const country = data.country_code
           if (country) {
             detectedRegion = country === 'IN' ? 'IN' : 'CA'
-            console.log('Detected region via ipapi.co:', detectedRegion)
           }
         }
       } catch (err) {
@@ -53,7 +52,6 @@ export function RegionProvider({ children }) {
             const country = data.country
             if (country) {
               detectedRegion = country === 'IN' ? 'IN' : 'CA'
-              console.log('Detected region via ipinfo.io:', detectedRegion)
             }
           }
         } catch (err) {
@@ -64,7 +62,6 @@ export function RegionProvider({ children }) {
       // Final default fallback
       if (!detectedRegion) {
         detectedRegion = 'IN'
-        console.log('All geolocation APIs failed. Defaulting region to IN.')
       }
 
       if (isMounted) {
