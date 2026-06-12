@@ -255,7 +255,9 @@ export default function ComparePage() {
           </section>
 
           {/* CTA */}
-          <Link to="/shop" className="cta-btn">Try Morivaná Daily →</Link>
+          <div className="page-cta-row">
+            <Link to="/shop" className="cta-btn">Try Morivaná Daily →</Link>
+          </div>
         </div>
       </PageLayout>
 

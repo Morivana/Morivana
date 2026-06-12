@@ -81,7 +81,7 @@ export default function SustainabilityPage() {
         <div style={{ paddingTop: '48px', paddingBottom: '80px' }}>
           <Breadcrumb items={breadcrumbs} />
 
-          <div className="page-hero-header" style={{ marginTop: '40px', marginBottom: '56px', maxWidth: '640px' }}>
+          <div className="page-hero-header" style={{ marginTop: '40px', marginBottom: '56px', maxWidth: '640px', margin: '40px auto 56px' }}>
             <div className="kicker" style={{ marginBottom: '16px' }}>Sourcing</div>
             <h1 style={{
               fontFamily: 'var(--font-display)',
@@ -321,7 +321,7 @@ export default function SustainabilityPage() {
           </section>
 
           {/* CTAs */}
-          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+          <div className="page-cta-row">
             <Link to="/about" style={{
               fontFamily: 'var(--font-body)',
               fontWeight: 700,

@@ -264,6 +264,39 @@ main section {
   color: var(--accent);
 }
 
+/* ─── Page hero header ──────────────────────────────────────────────────────
+   Center the page-level hero (kicker + h1 + subtitle) on all inner pages.
+   Applied globally so ANY page using className="page-hero-header" gets this
+   for free without needing the `centered` PageLayout prop.
+   Body/content sections below the hero are left-aligned by default.
+────────────────────────────────────────────────────────────────────────── */
+.page-hero-header {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 680px;
+  width: 100%;
+}
+
+/* ─── Inner section header (kicker + h2 + subtitle row inside a section) ─── */
+.page-section-header {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 640px;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+/* ─── CTA row at the bottom of a page or section ─── */
+.page-cta-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
 /* ─── Section headline ─── */
 .section-headline {
   font-family: var(--font-display);
