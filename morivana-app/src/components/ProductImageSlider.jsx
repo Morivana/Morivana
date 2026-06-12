@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 
-const CDN = 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public'
+// In dev: files in public/ are served at / by Vite — no CDN needed.
+// In prod: serve from jsDelivr for global CDN performance.
+const CDN = import.meta.env.DEV
+  ? ''
+  : 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public'
 
 const SLIDES = [
   {
