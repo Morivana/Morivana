@@ -5,10 +5,10 @@ import LoadingSpinner from '../components/LoadingSpinner'
 
 // ─── Sidebar nav items ────────────────────────────────────────────────────────
 const NAV_ITEMS = [
-  { id: 'personal', label: 'Personal Information', icon: 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-bag.png' },
-  { id: 'orders', label: 'Order History', icon: 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-bag-3d.png', href: '/orders' },
-  { id: 'addresses', label: 'My Addresses', icon: 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-pin-3d.png' },
-  { id: 'settings', label: 'Account Settings', icon: 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-gear-3d.png' },
+  { id: 'personal', label: 'Personal', icon: 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-bag.png' },
+  { id: 'orders', label: 'Orders', icon: 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-bag-3d.png', href: '/orders' },
+  { id: 'addresses', label: 'Addresses', icon: 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-pin-3d.png' },
+  { id: 'settings', label: 'Settings', icon: 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-gear-3d.png' },
 ]
 
 // ─── Info card component ──────────────────────────────────────────────────────
@@ -138,13 +138,13 @@ function PersonalSection({ user }) {
 
   return (
     <>
-      <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '20px' }}>
-        <div>
+      <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', flexWrap: 'wrap' }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
           <h2
             style={{
               fontFamily: 'var(--font-serif)',
               fontWeight: 700,
-              fontSize: 'clamp(22px, 3.5vw, 30px)',
+              fontSize: 'clamp(20px, 3.5vw, 30px)',
               color: 'var(--surface-deep)',
               letterSpacing: '-0.01em',
               marginBottom: '8px',
@@ -156,7 +156,7 @@ function PersonalSection({ user }) {
           <p
             style={{
               fontFamily: 'var(--font-body)',
-              fontSize: '0.88rem',
+              fontSize: '0.85rem',
               color: 'var(--ink-mute)',
               lineHeight: 1.6,
               maxWidth: '480px',
@@ -185,7 +185,9 @@ function PersonalSection({ user }) {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '6px',
-            minHeight: '36px',
+            minHeight: '40px',
+            flexShrink: 0,
+            whiteSpace: 'nowrap',
           }}
           onMouseEnter={e => {
             e.currentTarget.style.background = 'var(--surface-deep)'
@@ -1234,6 +1236,7 @@ export default function AccountPage() {
 
         {/* ── Right content panel ── */}
         <main
+          id="acct-main"
           style={{
             flex: 1,
             minWidth: 0,
