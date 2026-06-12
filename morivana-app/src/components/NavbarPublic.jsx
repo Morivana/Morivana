@@ -2,14 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import gsap from 'gsap'
 
-// Pages that use anchor-based scroll (only homepage)
-const HOME_SCROLL_LINKS = [
-  { label: 'Ingredients', id: 'ingredients' },
-  { label: 'Benefits', id: 'benefits' },
-  { label: 'How To Use', id: 'how-to-use' },
-  { label: 'About', id: 'what-section' },
-]
-
 // Full site nav links map to real routes
 const NAV_LINKS = [
   { label: 'About', href: '/about' },
@@ -25,19 +17,6 @@ export default function NavbarPublic() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
-  const navigate = useNavigate()
-  const isHome = location.pathname === '/'
-
-  // Smooth-scroll to section anchor (homepage only)
-  const scrollToSection = (id) => {
-    if (!isHome) {
-      navigate(`/#${id}`)
-      return
-    }
-    const el = document.getElementById(id)
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
-    setMenuOpen(false)
-  }
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -55,13 +34,18 @@ export default function NavbarPublic() {
   }, [])
 
   // Close mobile menu on route change
+  useEffect(() => { setMenuOpen(false) }, [location.pathname])
+
+  // Prevent body scroll when menu is open
   useEffect(() => {
-    setMenuOpen(false)
-  }, [location.pathname])
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [menuOpen])
 
   return (
     <>
       <style>{`
+        /* ── Desktop nav links ── */
         .nav-link-item {
           font-family: var(--font-body);
           font-weight: 600;
@@ -79,8 +63,6 @@ export default function NavbarPublic() {
           text-decoration: none;
           display: inline-flex;
           align-items: center;
-          min-height: 0;
-          min-width: 0;
         }
         .nav-link-item::after {
           content: '';
@@ -96,13 +78,9 @@ export default function NavbarPublic() {
           border-radius: 2px;
         }
         .nav-link-item:hover,
-        .nav-link-item.active {
-          color: var(--surface-deep);
-        }
+        .nav-link-item.active { color: var(--surface-deep); }
         .nav-link-item.active::after,
-        .nav-link-item:hover::after {
-          transform: scaleX(1);
-        }
+        .nav-link-item:hover::after { transform: scaleX(1); }
 
         .nav-cta {
           font-family: var(--font-body);
@@ -121,8 +99,6 @@ export default function NavbarPublic() {
           text-decoration: none;
           display: inline-flex;
           align-items: center;
-          min-height: 0;
-          min-width: 0;
         }
         .nav-cta:hover {
           transform: translateY(-1px);
@@ -142,10 +118,6 @@ export default function NavbarPublic() {
           text-decoration: none;
           transition: color 0.2s ease;
           white-space: nowrap;
-          min-height: 0;
-          min-width: 0;
-          padding: 0;
-          display: inline;
         }
         .nav-login-link:hover { color: var(--surface-deep); }
 
@@ -156,42 +128,11 @@ export default function NavbarPublic() {
           flex-shrink: 0;
         }
 
-        /* Mobile hamburger */
-        .nav-hamburger {
-          display: none;
-          background: none;
-          border: none;
-          color: var(--surface-deep);
-          cursor: pointer;
-          padding: 4px;
-          flex-direction: column;
-          gap: 5px;
-          align-items: center;
-          justify-content: center;
-          width: 36px;
-          height: 36px;
-          min-height: 0;
-          min-width: 0;
-        }
-        .nav-hamburger span {
-          display: block;
-          width: 22px;
-          height: 1.5px;
-          background: var(--surface-deep);
-          border-radius: 2px;
-          transition: transform 0.25s ease, opacity 0.25s ease;
-          transform-origin: center;
-        }
-        .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-        .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-        .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
-
         .nav-links-group {
           display: flex;
           gap: 28px;
           align-items: center;
         }
-
         .nav-right-group {
           display: flex;
           gap: 16px;
@@ -199,53 +140,154 @@ export default function NavbarPublic() {
           justify-content: flex-end;
         }
 
-        /* Mobile drawer */
-        .nav-mobile-drawer {
-          position: absolute;
-          top: 100%;
-          left: 0;
-          right: 0;
-          background: rgba(255,255,255,0.97);
-          backdrop-filter: blur(20px) saturate(160%);
-          border-bottom: 1px solid var(--line-soft);
-          padding: 20px 24px 28px;
-          display: flex;
-          flex-direction: column;
-          gap: 0;
-          animation: drawerSlideIn 0.22s ease;
-          z-index: 99;
-        }
-        @keyframes drawerSlideIn {
-          from { opacity: 0; transform: translateY(-8px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        .nav-mobile-link {
-          font-family: var(--font-body);
-          font-weight: 600;
-          font-size: 0.88rem;
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
-          color: var(--surface-deep);
+        /* ── Hamburger ── */
+        .nav-hamburger {
+          display: none;
           background: none;
           border: none;
-          text-align: left;
+          color: var(--surface-deep);
           cursor: pointer;
-          padding: 14px 0;
-          border-bottom: 1px solid var(--line-soft);
-          transition: opacity 0.15s ease;
-          text-decoration: none;
-          display: block;
-          min-height: 0;
-          min-width: 0;
+          padding: 0;
+          flex-direction: column;
+          gap: 5px;
+          align-items: center;
+          justify-content: center;
+          width: 44px;
+          height: 44px;
+          border-radius: 8px;
+          -webkit-tap-highlight-color: transparent;
+          flex-shrink: 0;
+          transition: background 0.2s;
         }
-        .nav-mobile-link:hover { opacity: 0.6; }
-        .nav-mobile-link:last-of-type { border-bottom: none; }
+        .nav-hamburger:active { background: rgba(14,39,1,0.06); }
+        .nav-hamburger span {
+          display: block;
+          width: 22px;
+          height: 2px;
+          background: var(--surface-deep);
+          border-radius: 2px;
+          transition: transform 0.28s cubic-bezier(0.16,1,0.3,1), opacity 0.2s ease, width 0.2s ease;
+          transform-origin: center;
+        }
+        .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .nav-hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+        .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* ── Full-screen mobile overlay ── */
+        .nav-mobile-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(248, 246, 238, 0.98);
+          backdrop-filter: blur(24px) saturate(180%);
+          -webkit-backdrop-filter: blur(24px) saturate(180%);
+          z-index: 98;
+          display: flex;
+          flex-direction: column;
+          padding: 80px 32px 40px;
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+          animation: mobileOverlayIn 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes mobileOverlayIn {
+          from { opacity: 0; transform: translateY(-16px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-mobile-links {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          padding-top: 8px;
+        }
+
+        .nav-mobile-link {
+          font-family: var(--font-serif);
+          font-weight: 700;
+          font-size: clamp(26px, 7vw, 34px);
+          letter-spacing: -0.02em;
+          color: var(--surface-deep);
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          padding: 16px 0;
+          border-bottom: 1px solid rgba(14,39,1,0.07);
+          transition: color 0.18s ease, opacity 0.18s ease;
+          -webkit-tap-highlight-color: transparent;
+          min-height: 60px;
+          background: none;
+          border-left: none;
+          border-right: none;
+          border-top: none;
+          cursor: pointer;
+          width: 100%;
+          text-align: left;
+        }
+        .nav-mobile-link:last-child { border-bottom: none; }
+        .nav-mobile-link:active { opacity: 0.5; }
+        .nav-mobile-link.active { color: var(--color-green-mid, #2d6b2d); }
+
+        .nav-mobile-link-arrow {
+          margin-left: auto;
+          opacity: 0.25;
+          font-size: 1.2em;
+          transition: transform 0.18s, opacity 0.18s;
+        }
+        .nav-mobile-link:active .nav-mobile-link-arrow {
+          transform: translateX(4px);
+          opacity: 0.6;
+        }
+
         .nav-mobile-actions {
           display: flex;
+          flex-direction: column;
           gap: 10px;
-          margin-top: 16px;
-          align-items: center;
+          margin-top: 32px;
+          padding-top: 24px;
+          border-top: 1px solid rgba(14,39,1,0.08);
         }
+        .nav-mobile-cta {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          font-family: var(--font-body);
+          font-weight: 700;
+          font-size: 0.85rem;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          text-decoration: none;
+          background: var(--surface-deep);
+          color: var(--ink-on-dark, #f5f0dc);
+          border: none;
+          border-radius: 100px;
+          padding: 15px 24px;
+          cursor: pointer;
+          transition: background 0.18s, transform 0.18s;
+          min-height: 52px;
+          -webkit-tap-highlight-color: transparent;
+        }
+        .nav-mobile-cta:active { transform: scale(0.98); }
+        .nav-mobile-login {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          font-family: var(--font-body);
+          font-weight: 600;
+          font-size: 0.85rem;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          text-decoration: none;
+          color: var(--surface-deep);
+          border: 1.5px solid rgba(14,39,1,0.18);
+          border-radius: 100px;
+          padding: 14px 24px;
+          cursor: pointer;
+          transition: border-color 0.18s, background 0.18s;
+          min-height: 52px;
+          -webkit-tap-highlight-color: transparent;
+        }
+        .nav-mobile-login:active { background: rgba(14,39,1,0.04); }
 
         @media (max-width: 900px) {
           .nav-links-group { display: none !important; }
@@ -268,12 +310,12 @@ export default function NavbarPublic() {
           borderBottom: scrolled ? '1px solid var(--line-soft)' : '1px solid transparent',
           boxShadow: scrolled ? '0 4px 20px rgba(25,65,2,0.05)' : 'none',
           transition: 'background 0.35s ease, backdrop-filter 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease',
-          padding: '0 40px',
+          padding: '0 clamp(16px, 5vw, 40px)',
           height: '60px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: 24,
+          gap: 16,
         }}
       >
         {/* Logo left */}
@@ -290,14 +332,12 @@ export default function NavbarPublic() {
             textDecoration: 'none',
             display: 'inline-flex',
             alignItems: 'center',
-            minHeight: 0,
-            minWidth: 0,
           }}
         >
           <span style={{
             fontFamily: 'var(--font-serif)',
             fontWeight: 700,
-            fontSize: 'clamp(18px, 4.5vw, 22px)',
+            fontSize: 'clamp(17px, 4.5vw, 22px)',
             color: 'var(--surface-deep)',
             letterSpacing: '-0.01em',
           }}>
@@ -305,7 +345,7 @@ export default function NavbarPublic() {
           </span>
         </Link>
 
-        {/* Center nav links desktop only */}
+        {/* Center nav links — desktop only */}
         <div className="nav-links-group">
           {NAV_LINKS.map(link => (
             <NavLink
@@ -318,15 +358,11 @@ export default function NavbarPublic() {
           ))}
         </div>
 
-        {/* Right CTA + auth desktop only */}
+        {/* Right CTA + auth — desktop only */}
         <div className="nav-right-group">
-          <Link to="/sign-in" className="nav-login-link">
-            Log in
-          </Link>
+          <Link to="/sign-in" className="nav-login-link">Log in</Link>
           <div className="nav-divider" />
-          <Link to="/shop" className="nav-cta">
-            Pre-Order
-          </Link>
+          <Link to="/shop" className="nav-cta">Pre-Order</Link>
         </div>
 
         {/* Mobile hamburger */}
@@ -340,41 +376,35 @@ export default function NavbarPublic() {
           <span />
           <span />
         </button>
+      </nav>
 
-        {/* Mobile drawer */}
-        {menuOpen && (
-          <div className="nav-mobile-drawer" role="dialog" aria-label="Site navigation">
+      {/* Full-screen mobile overlay */}
+      {menuOpen && (
+        <div className="nav-mobile-overlay" role="dialog" aria-modal="true" aria-label="Site navigation">
+          <div className="nav-mobile-links">
             {NAV_LINKS.map(link => (
               <NavLink
                 key={link.href}
                 to={link.href}
-                className="nav-mobile-link"
+                className={({ isActive }) => `nav-mobile-link${isActive ? ' active' : ''}`}
                 onClick={() => setMenuOpen(false)}
               >
                 {link.label}
+                <span className="nav-mobile-link-arrow">→</span>
               </NavLink>
             ))}
-            <div className="nav-mobile-actions">
-              <Link
-                to="/sign-in"
-                className="nav-login-link"
-                onClick={() => setMenuOpen(false)}
-                style={{ flex: 1, textAlign: 'center', padding: '10px', border: '1px solid var(--line-soft)', borderRadius: '100px', display: 'block', minHeight: 0 }}
-              >
-                Log in
-              </Link>
-              <Link
-                to="/shop"
-                className="nav-cta"
-                onClick={() => setMenuOpen(false)}
-                style={{ flex: 1, textAlign: 'center' }}
-              >
-                Pre-Order
-              </Link>
-            </div>
           </div>
-        )}
-      </nav>
+
+          <div className="nav-mobile-actions">
+            <Link to="/shop" className="nav-mobile-cta" onClick={() => setMenuOpen(false)}>
+              Pre-Order Now
+            </Link>
+            <Link to="/sign-in" className="nav-mobile-login" onClick={() => setMenuOpen(false)}>
+              Log in
+            </Link>
+          </div>
+        </div>
+      )}
     </>
   )
 }
