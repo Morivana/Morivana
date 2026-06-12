@@ -29,7 +29,7 @@ const SLIDES = [
   },
 ]
 
-const AUTO_PLAY_MS = 4000
+const AUTO_PLAY_MS = 2000
 
 export default function ProductImageSlider() {
   const [active, setActive] = useState(0)
@@ -323,26 +323,6 @@ export default function ProductImageSlider() {
         ))}
       </div>
 
-      {/* Progress dots */}
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
-        {SLIDES.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => goTo(idx)}
-            aria-label={`Go to slide ${idx + 1}`}
-            style={{
-              width: idx === active ? '20px' : '6px',
-              height: '6px',
-              borderRadius: '999px',
-              border: 'none',
-              background: idx === active ? 'var(--surface-deep)' : 'var(--line-soft)',
-              cursor: 'pointer',
-              padding: 0,
-              transition: 'width 0.3s ease, background 0.3s ease',
-            }}
-          />
-        ))}
-      </div>
 
       {/* Progress bar keyframe (injected once) */}
       <style>{`
