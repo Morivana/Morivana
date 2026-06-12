@@ -47,7 +47,7 @@ export default function AboutPage() {
           <Breadcrumb items={breadcrumbs} />
 
           {/* Hero */}
-          <div style={{ marginTop: '40px', marginBottom: '64px', maxWidth: '680px', margin: '40px auto 64px' }}>
+          <div className="page-hero-header" style={{ marginTop: '40px', marginBottom: '64px', maxWidth: '680px', margin: '40px auto 64px' }}>
             <div className="kicker" style={{ marginBottom: '16px' }}>Our Story</div>
             <h1 style={{
               fontFamily: 'var(--font-display)',
@@ -67,6 +67,16 @@ export default function AboutPage() {
             <p style={{ fontSize: '1.1rem', lineHeight: 1.7, color: 'var(--ink-soft)', maxWidth: '560px' }}>
               We started Morivaná Daily because we were frustrated not with wellness, but with the wellness industry. Too many products, too many promises, too little transparency.
             </p>
+          </div>
+
+          {/* Hero image */}
+          <div style={{ marginBottom: '64px', borderRadius: '20px', overflow: 'hidden', height: 'clamp(200px, 40vw, 360px)' }}>
+            <img
+              src="/morivana-jar.jpeg"
+              alt="Morivaná Daily super greens powder jar with fresh moringa leaves"
+              loading="eager"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
           </div>
 
           {/* Section 1 Why we started */}
@@ -94,6 +104,14 @@ export default function AboutPage() {
                 So we built what we wanted to use: a greens powder that starts with the sourcing, not the marketing. Eight plants, nothing else. Every amount disclosed. Cold-dried to preserve what the plants actually contain. Priced for daily use.
               </p>
             </div>
+            <div style={{ marginTop: '28px', borderRadius: '12px', overflow: 'hidden', height: 'clamp(160px, 30vw, 240px)' }}>
+              <img
+                src="/Moringa Leaves Overhead.webp"
+                alt="Fresh green moringa leaves overhead view"
+                loading="lazy"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
+            </div>
           </section>
 
           {/* Section 2 Philosophy */}
@@ -116,6 +134,16 @@ export default function AboutPage() {
             <p style={{ color: 'var(--ink-on-dark-mute)', lineHeight: 1.75, maxWidth: '600px' }}>
               We didn't add probiotics because we already have inulin a prebiotic that grows the probiotics already in your gut rather than adding transient external ones. We didn't add vitamin C because we have amla the most bioavailable natural source on earth. Every ingredient does a job that can't be done better by another.
             </p>
+
+            {/* Processing image */}
+            <div style={{ marginTop: '28px', borderRadius: '12px', overflow: 'hidden', height: 'clamp(160px, 30vw, 240px)' }}>
+              <img
+                src="/about-processing.png"
+                alt="Cold-drying process used for Morivaná Daily ingredients"
+                loading="lazy"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', opacity: 0.9 }}
+              />
+            </div>
           </section>
 
           {/* Section 3 Sourcing */}
@@ -270,11 +298,6 @@ export default function AboutPage() {
         { title: 'The Science', description: 'Research citations behind every health claim we make.', href: '/science', tag: 'Research' },
       ]} />
 
-      <PageLayout fullWidth>
-        <div style={{ padding: 0 }}>
-          {/* Footer rendered by App.jsx */}
-        </div>
-      </PageLayout>
     </>
   )
 }

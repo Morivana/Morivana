@@ -52,7 +52,7 @@ export default function LearnHubPage() {
         <div style={{ paddingTop: '48px', paddingBottom: '80px' }}>
           <Breadcrumb items={breadcrumbs} />
 
-          <div style={{ marginTop: '40px', marginBottom: '48px', maxWidth: '640px', margin: '40px auto 48px' }}>
+          <div className="page-hero-header" style={{ marginTop: '40px', marginBottom: '48px', maxWidth: '640px', margin: '40px auto 48px' }}>
             <div className="kicker" style={{ marginBottom: '16px' }}>Knowledge Hub</div>
             <h1 style={{
               fontFamily: 'var(--font-display)',

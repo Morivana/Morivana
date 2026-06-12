@@ -17,6 +17,12 @@ export default function ProtectedRoute({ children }) {
   const { isLoaded, isSignedIn } = useAuth()
   const location = useLocation()
 
+  // Allow bypass admin token to pass for admin dashboard routes
+  const hasBypassToken = typeof window !== 'undefined' && !!localStorage.getItem('admin_bypass_token')
+  if (location.pathname.startsWith('/admin') && hasBypassToken) {
+    return children
+  }
+
   // Auth state not yet resolved show branded spinner (no content flash)
   if (!isLoaded) return <LoadingSpinner />
 

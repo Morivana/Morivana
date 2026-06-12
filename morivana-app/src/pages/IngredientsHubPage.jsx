@@ -34,7 +34,7 @@ export default function IngredientsHubPage() {
         <div style={{ paddingTop: '48px', paddingBottom: '80px' }}>
           <Breadcrumb items={breadcrumbs} />
 
-          <div style={{ marginTop: '40px', marginBottom: '56px', maxWidth: '640px', margin: '40px auto 56px' }}>
+          <div className="page-hero-header" style={{ marginTop: '40px', marginBottom: '56px', maxWidth: '640px', margin: '40px auto 56px' }}>
             <div className="kicker" style={{ marginBottom: '16px' }}>The Formula</div>
             <h1 style={{
               fontFamily: 'var(--font-display)',
@@ -54,6 +54,16 @@ export default function IngredientsHubPage() {
             <p style={{ fontSize: '1rem', lineHeight: 1.75, color: 'var(--ink-soft)', maxWidth: '520px' }}>
               Every entry below is a whole plant cold-dried, ground, weighed. Nothing synthesized. Nothing hidden. We chose each one because it does something the others can't, and because the evidence behind it is real. <Link to="/science" style={{ color: 'var(--surface-deep)', fontWeight: 600 }}>Backed by research →</Link>
             </p>
+          </div>
+
+          {/* Hero Image */}
+          <div style={{ marginBottom: '64px', borderRadius: '20px', overflow: 'hidden', height: 'clamp(200px, 40vw, 360px)' }}>
+            <img
+              src="/Ingredients-eight-plants.png"
+              alt="Ingredients of Morivaná Daily including moringa, amla, spirulina, and ginger"
+              loading="eager"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
           </div>
 
           {/* Ingredient grid */}
@@ -166,6 +176,16 @@ export default function IngredientsHubPage() {
                 </Link>
               )
             })}
+          </div>
+
+          {/* Before CTA Image */}
+          <div style={{ marginBottom: '48px', borderRadius: '16px', overflow: 'hidden', height: 'clamp(180px, 35vw, 280px)', maxWidth: '520px', margin: '0 auto 48px' }}>
+            <img
+              src="/morivana-ingredients.webp"
+              alt="Close-up of Morivaná Daily ingredient blend"
+              loading="lazy"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
           </div>
 
           {/* Certifications */}

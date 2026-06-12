@@ -65,7 +65,7 @@ export default function IngredientDetailPage() {
           <Breadcrumb items={breadcrumbs} />
 
           {/* Hero */}
-          <div style={{ marginTop: '40px', marginBottom: '56px' }}>
+          <div className="page-hero-header" style={{ marginTop: '40px', marginBottom: '56px', margin: '40px auto 56px' }}>
             <div style={{ marginBottom: '12px' }}>
               <div className="kicker" style={{ color: 'var(--ink-mute)' }}>{ing.origin}</div>
             </div>

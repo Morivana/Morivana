@@ -176,7 +176,7 @@ export default function Benefits() {
           display: inline-block;
           font-family: var(--font-serif);
           font-style: italic;
-          ont-weight: 500;
+          font-weight: 500;
           font-size: clamp(14px, 4vw, 32px);
           line-height: 1.2;
           color: var(--ink);
@@ -338,68 +338,133 @@ export default function Benefits() {
 
         /* iPad portrait drop the metric to bottom */
         @media (max-width: 900px) {
-          #benefits { padding: 72px 0 !important; }
-          .ben-header { margin-bottom: 44px; gap: 24px; }
+          #benefits { padding: 56px 0 !important; }
+          .ben-header { margin-bottom: 32px; gap: 16px; }
           .ben-header-note { max-width: 100%; }
+          .ben-head-display { font-size: clamp(24px, 6vw, 44px) !important; }
+          .ben-head-serif { font-size: clamp(12px, 3vw, 22px) !important; }
+          .ben-header-note p { font-size: 0.82rem !important; }
           .timeline-row {
             grid-template-columns: 100px 24px 1fr;
-            gap: 16px;
+            gap: 14px;
+            padding: 22px 0;
           }
           .timeline-spine { left: calc(clamp(20px, 4vw, 32px) + 100px); }
           .tr-metric {
             grid-column: 1 / -1;
             margin-left: 140px;
-            margin-top: 12px;
+            margin-top: 8px;
             flex-direction: row;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
             align-self: stretch;
+            padding: 10px 14px;
           }
-          .tr-metric-num { font-size: 1.6rem; margin-bottom: 0; }
+          .tr-metric-num { font-size: 1.4rem; margin-bottom: 0; }
+          .tr-metric-label { font-size: 0.56rem; }
         }
 
-        /* Large phone collapse phase to a single row above content */
+        /* Large phone collapse to compact card-style */
         @media (max-width: 640px) {
-          .timeline-wrap { padding-left: 20px; padding-right: 20px; }
-          .timeline-spine { left: 26px; top: 36px; bottom: 36px; }
+          #benefits { padding: 40px 0 !important; }
+          .ben-header { margin-bottom: 24px; padding: 0 16px; }
+          .ben-head-display { font-size: clamp(20px, 6vw, 36px) !important; }
+          .ben-head-serif { font-size: clamp(11px, 2.8vw, 18px) !important; }
+          .ben-header-note p { font-size: 0.78rem !important; }
+          .timeline-wrap {
+            padding-left: 16px;
+            padding-right: 16px;
+            max-width: 380px;
+            margin: 0 auto;
+          }
+          .timeline-spine { left: 22px; top: 28px; bottom: 28px; }
           .timeline-row {
             grid-template-columns: 14px 1fr;
-            gap: 16px;
-            padding: 24px 0;
+            gap: 12px;
+            padding: 18px 0;
           }
           .tr-phase {
             grid-column: 2 / -1;
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            gap: 12px;
+            gap: 8px;
             padding-top: 0;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
           }
-          .tr-phase-tag { margin-bottom: 0; }
+          .tr-phase-tag {
+            margin-bottom: 0;
+            font-size: 0.62rem !important;
+            letter-spacing: 0.14em;
+          }
+          .tr-phase-when {
+            font-size: 0.7rem !important;
+          }
           .tr-node {
             justify-content: flex-start;
-            padding-top: 6px;
+            padding-top: 4px;
+          }
+          .tr-dot {
+            width: 10px;
+            height: 10px;
+          }
+          .tr-dot-inner {
+            inset: 2px;
           }
           .tr-content {
             grid-column: 2 / -1;
             padding-right: 0;
           }
+          .tr-title-row {
+            gap: 8px;
+            margin-bottom: 6px;
+          }
+          .tr-title {
+            font-size: clamp(0.9rem, 3.5vw, 1.15rem) !important;
+          }
+          .tr-tag {
+            font-size: 0.52rem;
+            padding: 2px 6px;
+          }
+          .tr-desc {
+            font-size: 0.76rem !important;
+            line-height: 1.5;
+          }
           .tr-metric {
             grid-column: 2 / -1;
             margin-left: 0;
+            margin-top: 6px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
           }
-          .tr-title { font-size: 1.35rem; }
-          .tr-desc { font-size: 0.9rem; }
+          .tr-metric-num {
+            font-size: 1.1rem;
+            margin-bottom: 0;
+          }
+          .tr-metric-label {
+            font-size: 0.52rem;
+          }
         }
 
+        /* Small phone */
         @media (max-width: 380px) {
-          #benefits { padding: 56px 0 !important; }
-          .ben-header { padding: 0 20px; }
-          .timeline-wrap { padding-left: 18px; padding-right: 18px; }
-          .timeline-spine { left: 24px; }
-          .tr-metric { padding: 12px 14px; }
-          .tr-metric-num { font-size: 1.4rem; }
+          #benefits { padding: 32px 0 !important; }
+          .ben-header { padding: 0 14px; }
+          .timeline-wrap {
+            max-width: 320px;
+            padding-left: 14px;
+            padding-right: 14px;
+          }
+          .timeline-spine { left: 20px; }
+          .timeline-row { padding: 14px 0; }
+          .tr-title { font-size: 0.85rem !important; }
+          .tr-desc { font-size: 0.72rem !important; }
+          .tr-metric { padding: 6px 10px; }
+          .tr-metric-num { font-size: 1rem; }
+          .tr-metric-label { font-size: 0.48rem; }
         }
       `}</style>
     </section>

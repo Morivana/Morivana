@@ -124,25 +124,27 @@ export default function WaitlistPage() {
               </div>
             ) : (
               <>
-                <div className="kicker" style={{ marginBottom: '16px' }}>Early Bird</div>
-                <h1 style={{
-                  fontFamily: 'var(--font-display)',
-                  fontWeight: 800,
-                  fontSize: 'clamp(28px, 5vw, 56px)',
-                  lineHeight: 0.95,
-                  letterSpacing: '-0.02em',
-                  textTransform: 'uppercase',
-                  color: 'var(--surface-deep)',
-                  marginBottom: '16px',
-                }}>
-                  Be First.<br />
-                  <span style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontWeight: 500, textTransform: 'none', fontSize: '0.65em', color: 'var(--ink-soft)' }}>
-                    Get 15% Off at Launch.
-                  </span>
-                </h1>
-                <p style={{ fontSize: '1rem', lineHeight: 1.75, color: 'var(--ink-soft)', marginBottom: '32px' }}>
-                  Join the Morivaná Daily waitlist. When we launch, you'll be the first to know and your early bird discount will be waiting. No spam, just one email when we go live.
-                </p>
+                <div className="page-hero-header" style={{ maxWidth: '560px', margin: '0 auto 32px' }}>
+                  <div className="kicker" style={{ marginBottom: '16px' }}>Early Bird</div>
+                  <h1 style={{
+                    fontFamily: 'var(--font-display)',
+                    fontWeight: 800,
+                    fontSize: 'clamp(28px, 5vw, 56px)',
+                    lineHeight: 0.95,
+                    letterSpacing: '-0.02em',
+                    textTransform: 'uppercase',
+                    color: 'var(--surface-deep)',
+                    marginBottom: '16px',
+                  }}>
+                    Be First.<br />
+                    <span style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontWeight: 500, textTransform: 'none', fontSize: '0.65em', color: 'var(--ink-soft)' }}>
+                      Get 15% Off at Launch.
+                    </span>
+                  </h1>
+                  <p style={{ fontSize: '1rem', lineHeight: 1.75, color: 'var(--ink-soft)' }}>
+                    Join the Morivaná Daily waitlist. When we launch, you'll be the first to know and your early bird discount will be waiting. No spam, just one email when we go live.
+                  </p>
+                </div>
 
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                   <div>

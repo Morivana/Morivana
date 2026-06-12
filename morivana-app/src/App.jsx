@@ -1,5 +1,5 @@
 import { useEffect, useState, lazy, Suspense } from 'react'
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
+import { Routes, Route, useLocation, useNavigate, Outlet } from 'react-router-dom'
 import { ClerkProvider } from '@clerk/react'
 import { RegionProvider } from './context/RegionContext'
 import gsap from 'gsap'
@@ -51,6 +51,8 @@ const LearnHubPage = lazy(() => import('./pages/LearnHubPage'))
 const BlogPostPage = lazy(() => import('./pages/BlogPostPage'))
 const WaitlistPage = lazy(() => import('./pages/WaitlistPage'))
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
+const AdminPage = lazy(() => import('./pages/AdminPage'))
+const AdminPortalPage = lazy(() => import('./pages/AdminPortalPage'))
 
 
 
@@ -178,14 +180,26 @@ function HomePage() {
   )
 }
 
+// A layout wrapper to ensure a single, shared ClerkProvider context
+// across all authentication and account pages, preventing state loss on redirect.
+function ClerkAuthLayout({ config }) {
+  return (
+    <ClerkProvider {...config}>
+      <Outlet />
+    </ClerkProvider>
+  )
+}
+
 // ─── App shell with routing ───────────────────────────────────────────────────
 function App() {
   const location = useLocation()
   const navigate = useNavigate()
-  const isAuthOrAccountPage =
+  const isAuthOrDashboardPage =
     location.pathname.startsWith('/sign-in') ||
     location.pathname.startsWith('/sign-up') ||
-    location.pathname.startsWith('/account')
+    location.pathname.startsWith('/account') ||
+    location.pathname.startsWith('/admin-portal') ||
+    location.pathname.startsWith('/admin')
 
   const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
@@ -203,8 +217,8 @@ function App() {
 
   return (
     <RegionProvider>
-      {/* Navbar persists across all routes except auth & account */}
-      {!isAuthOrAccountPage && <Navbar />}
+      {/* Navbar persists across all routes except auth, account, and admin */}
+      {!isAuthOrDashboardPage && <Navbar />}
 
       <ErrorBoundary>
         <Suspense fallback={null}>
@@ -212,23 +226,18 @@ function App() {
             {/* Landing page all existing scroll sections */}
             <Route path="/" element={<HomePage />} />
 
-            {/* Auth pages */}
-            <Route
-              path="/sign-in/*"
-              element={
-                <ClerkProvider {...clerkConfig}>
-                  <SignInPage />
-                </ClerkProvider>
-              }
-            />
-            <Route
-              path="/sign-up/*"
-              element={
-                <ClerkProvider {...clerkConfig}>
-                  <SignUpPage />
-                </ClerkProvider>
-              }
-            />
+            {/* Clerk-dependent routes sharing a single ClerkProvider context */}
+            <Route element={<ClerkAuthLayout config={clerkConfig} />}>
+              <Route path="/sign-in/*" element={<SignInPage />} />
+              <Route path="/sign-up/*" element={<SignUpPage />} />
+              <Route path="/admin/*" element={<ProtectedRoute><AdminPage /></ProtectedRoute>} />
+              <Route path="/account" element={<ProtectedRoute><AccountPage /></ProtectedRoute>} />
+              <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
+              <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
+            </Route>
+
+            {/* Secret Admin Portal Login (Passcode Bypass) */}
+            <Route path="/admin-portal" element={<AdminPortalPage />} />
 
             {/* ── New multi-page routes ── */}
             <Route path="/about" element={<><AboutPage /><Footer /></>} />
@@ -249,37 +258,6 @@ function App() {
             <Route path="/privacy-policy" element={<><PrivacyPolicyPage /><Footer /></>} />
             <Route path="/terms" element={<><TermsPage /><Footer /></>} />
 
-            {/* Protected pages */}
-            <Route
-              path="/account"
-              element={
-                <ClerkProvider {...clerkConfig}>
-                  <ProtectedRoute>
-                    <AccountPage />
-                  </ProtectedRoute>
-                </ClerkProvider>
-              }
-            />
-            <Route
-              path="/orders"
-              element={
-                <ClerkProvider {...clerkConfig}>
-                  <ProtectedRoute>
-                    <OrdersPage />
-                  </ProtectedRoute>
-                </ClerkProvider>
-              }
-            />
-            <Route
-              path="/checkout"
-              element={
-                <ClerkProvider {...clerkConfig}>
-                  <ProtectedRoute>
-                    <CheckoutPage />
-                  </ProtectedRoute>
-                </ClerkProvider>
-              }
-            />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>

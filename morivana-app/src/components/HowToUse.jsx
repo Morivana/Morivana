@@ -539,35 +539,49 @@ export default function HowToUse() {
           .rt-arrow { display: none; }
         }
         @media (max-width: 768px) {
-          .rt-section { padding: 80px 18px 96px; }
+          .rt-section { padding: 64px 18px 72px; }
           .rt-cards {
             flex-direction: column;
-            align-items: stretch;
-            gap: 32px;
+            align-items: center;
+            gap: 24px;
           }
-          .rt-card { max-width: none; min-width: 0; }
-          .rt-header { margin-bottom: 40px; }
-          .rt-pills-wrap { margin-bottom: 40px; }
+          .rt-card { max-width: 340px; min-width: 0; width: 100%; }
+          .rt-step-media { aspect-ratio: 3 / 2; }
+          .rt-header { margin-bottom: 32px; }
+          .rt-pills-wrap { margin-bottom: 32px; }
           .rt-protip { padding: 12px 14px; gap: 10px; }
           .rt-protip p { font-size: 0.78rem; }
+          .rt-headline-sans { font-size: clamp(22px, 6vw, 42px) !important; }
+          .rt-headline-serif { font-size: clamp(14px, 3vw, 24px) !important; }
+          .rt-subhead { font-size: 0.82rem; }
+          .rt-step-title { font-size: clamp(18px, 4vw, 26px) !important; }
+          .rt-step-body { font-size: 0.78rem; min-height: auto; }
+          .rt-step-label { font-size: 0.56rem; margin-bottom: 6px; }
           /* vertical dotted connector between stacked cards */
           .rt-card:not(:last-child) .rt-card-inner::after {
             content: '';
             position: absolute;
             left: 50%;
-            bottom: -28px;
+            bottom: -20px;
             width: 0;
-            height: 24px;
+            height: 16px;
             border-left: 2px dotted var(--rt-gold-dim);
             transform: translateX(-50%);
           }
         }
         @media (max-width: 480px) {
-          .rt-section { padding: 60px 14px 80px; }
-          .rt-cards { gap: 24px; }
-          .rt-card-inner { padding: 18px 16px 14px; }
-          .rt-step-media { width: calc(100% + 32px); margin: -18px -16px 12px; }
-          .rt-pill { padding: 6px 12px; font-size: 0.62rem; letter-spacing: 0.10em; }
+          .rt-section { padding: 48px 14px 60px; }
+          .rt-cards { gap: 20px; }
+          .rt-card { max-width: 300px; }
+          .rt-card-inner { padding: 14px 14px 12px; }
+          .rt-step-media {
+            width: calc(100% + 28px);
+            margin: -14px -14px 10px;
+            aspect-ratio: 16 / 9;
+          }
+          .rt-step-title { font-size: clamp(16px, 3.5vw, 22px) !important; }
+          .rt-step-body { font-size: 0.74rem; }
+          .rt-pill { padding: 6px 12px; font-size: 0.58rem; letter-spacing: 0.10em; }
           .rt-pills { gap: 6px; }
         }
         @media (max-width: 360px) {

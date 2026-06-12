@@ -48,7 +48,7 @@ export default function WhatIsMorivana() {
     >
       <FloatingLeaves variant="light" density="normal" />
 
-      <div className="section-content" style={{ minHeight: '100vh', display: 'flex', alignItems: 'stretch' }}>
+      <div className="section-content what-section-content" style={{ minHeight: '100vh', display: 'flex', alignItems: 'stretch' }}>
         {/* Text content - left side, leaves right open for 3D overlay */}
         <div className="story-text-col">
           <div className="what-text-block">
@@ -63,7 +63,7 @@ export default function WhatIsMorivana() {
                   display: 'inline-block',
                   fontFamily: 'var(--font-display)',
                   fontWeight: 800,
-                  fontSize: 'clamp(20px, 7.5vw, 80px)',
+                  fontSize: 'clamp(20px, 6vw, 64px)',
                   lineHeight: 0.9,
                   color: 'var(--surface-deep)',
                   letterSpacing: '0.01em',
@@ -76,7 +76,7 @@ export default function WhatIsMorivana() {
                   fontFamily: 'var(--font-serif)',
                   fontStyle: 'italic',
                   fontWeight: 500,
-                  fontSize: 'clamp(18px, 2.4vw, 32px)',
+                  fontSize: 'clamp(14px, 2vw, 28px)',
                   lineHeight: 1.15,
                   color: 'var(--ink-soft)',
                   letterSpacing: '0.005em',
@@ -91,7 +91,7 @@ export default function WhatIsMorivana() {
           <div className="what-text-block">
             <p style={{
               fontFamily: 'var(--font-body)',
-              fontSize: '1.02rem',
+              fontSize: '0.92rem',
               lineHeight: 1.7,
               color: 'var(--ink-soft)',
               maxWidth: '460px',
@@ -105,7 +105,7 @@ export default function WhatIsMorivana() {
           <div className="what-text-block">
             <p style={{
               fontFamily: 'var(--font-body)',
-              fontSize: '1.02rem',
+              fontSize: '0.92rem',
               lineHeight: 1.7,
               color: 'var(--ink-soft)',
               maxWidth: '460px',
@@ -168,3 +168,6 @@ export default function WhatIsMorivana() {
     </section>
   )
 }
+
+// Add mobile-specific styles inline
+WhatIsMorivana.displayName = 'WhatIsMorivana'

@@ -128,9 +128,9 @@ export default function Footer() {
         style={{
           display: 'flex',
           justifyContent: 'space-between',
-          gap: '40px',
+          gap: '24px',
           flexWrap: 'wrap',
-          marginBottom: '24px',
+          marginBottom: '16px',
         }}
       >
         {/* Column 1 Brand */}
@@ -201,31 +201,39 @@ export default function Footer() {
         </div>
 
         {/* Navigation columns */}
-        {FOOTER_COLUMNS.map((col) => (
-          <div
-            key={col.heading}
-            className="footer-col-item"
-            style={{ flex: '1 1 120px', minWidth: '100px', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'flex-start' }}
-          >
-            <div style={{
-              fontFamily: 'var(--font-body)',
-              fontWeight: 700,
-              fontSize: '11px',
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              color: 'var(--accent)',
-              opacity: 0.9,
-              marginBottom: '2px',
-            }}>
-              {col.heading}
-            </div>
-            {col.links.map(link => (
-              <div key={link.label}>
-                {renderLink(link)}
+        <div className="footer-nav-grid" style={{
+          display: 'flex',
+          flex: '2 1 600px',
+          justifyContent: 'space-between',
+          gap: '24px',
+          flexWrap: 'wrap',
+        }}>
+          {FOOTER_COLUMNS.map((col) => (
+            <div
+              key={col.heading}
+              className="footer-col-item"
+              style={{ flex: '1 1 120px', minWidth: '100px', display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'flex-start' }}
+            >
+              <div style={{
+                fontFamily: 'var(--font-body)',
+                fontWeight: 700,
+                fontSize: '11px',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                color: 'var(--accent)',
+                opacity: 0.9,
+                marginBottom: '2px',
+              }}>
+                {col.heading}
               </div>
-            ))}
-          </div>
-        ))}
+              {col.links.map(link => (
+                <div key={link.label}>
+                  {renderLink(link)}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Bottom bar */}

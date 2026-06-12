@@ -96,7 +96,7 @@ export default function HowToUsePage() {
         <div style={{ paddingTop: '48px', paddingBottom: '80px' }}>
           <Breadcrumb items={breadcrumbs} />
 
-          <div style={{ marginTop: '40px', marginBottom: '56px', maxWidth: '640px', margin: '40px auto 56px' }}>
+          <div className="page-hero-header" style={{ marginTop: '40px', marginBottom: '56px', maxWidth: '640px', margin: '40px auto 56px' }}>
             <div className="kicker" style={{ marginBottom: '16px' }}>The Ritual</div>
             <h1 style={{
               fontFamily: 'var(--font-display)',

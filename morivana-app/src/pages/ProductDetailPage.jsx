@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import SEOHead from '../components/SEOHead'
 import { useUserRegion } from '../context/RegionContext'
@@ -229,6 +229,28 @@ const schemas = [
 export default function ProductDetailPage() {
   const { region, setRegion } = useUserRegion()
   const [selectedPack, setSelectedPack] = useState('100g')
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const apiBase = import.meta.env.VITE_API_URL || ''
+    fetch(`${apiBase}/api/products`)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setProducts(data)
+        }
+        setLoading(false)
+      })
+      .catch(err => {
+        console.error('Failed to load products:', err)
+        setLoading(false)
+      })
+  }, [])
+
+  // Find matching product variant
+  const skuCode = selectedPack === '50g' ? 'MD-50G' : 'MD-100G'
+  const activeProduct = products.find(p => p.sku === skuCode)
   const nutritionFacts = getNutritionFacts(selectedPack)
 
   return (
@@ -245,7 +267,7 @@ export default function ProductDetailPage() {
         <div style={{ paddingTop: '48px', paddingBottom: '80px' }}>
           <Breadcrumb items={breadcrumbs} />
 
-          <div style={{ marginTop: '40px', marginBottom: '56px' }}>
+          <div className="page-hero-header" style={{ marginTop: '40px', marginBottom: '56px', margin: '40px auto 56px' }}>
             <div className="kicker" style={{ marginBottom: '16px' }}>Product Details</div>
             <h1 style={{
               fontFamily: 'var(--font-display)',
@@ -402,7 +424,7 @@ export default function ProductDetailPage() {
                     <div>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
                         <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '2rem', color: 'var(--surface-deep)', lineHeight: 1 }}>
-                          {selectedPack === '50g' ? 'CA$21' : 'CA$39'}
+                          {activeProduct ? `CA$${activeProduct.priceUSD || Math.round(activeProduct.price / 24)}` : (selectedPack === '50g' ? 'CA$21' : 'CA$39')}
                         </span>
                         <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)', textDecoration: 'line-through' }}>
                           {selectedPack === '50g' ? 'CA$25' : 'CA$47'}
@@ -416,7 +438,7 @@ export default function ProductDetailPage() {
                     <div>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
                         <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '2rem', color: 'var(--surface-deep)', lineHeight: 1 }}>
-                          {selectedPack === '50g' ? '₹499' : '₹799'}
+                          {activeProduct ? `₹${activeProduct.price}` : (selectedPack === '50g' ? '₹499' : '₹799')}
                         </span>
                         <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)', textDecoration: 'line-through' }}>
                           {selectedPack === '50g' ? '₹599' : '₹999'}
@@ -430,10 +452,57 @@ export default function ProductDetailPage() {
                 </div>
               </div>
 
+              {/* Stock Status Indicator */}
+              {activeProduct && (
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '0.82rem',
+                  fontWeight: 600,
+                  color: activeProduct.stock > 20
+                    ? '#2C6B1A'
+                    : activeProduct.stock > 0
+                    ? 'var(--color-brand-orange)'
+                    : '#ef4444',
+                  background: 'var(--surface-soft)',
+                  border: '1px solid var(--line-soft)',
+                  borderRadius: '12px',
+                  padding: '10px 14px',
+                  alignSelf: 'flex-start'
+                }}>
+                  <span style={{
+                    height: '8px',
+                    width: '8px',
+                    borderRadius: '50%',
+                    background: activeProduct.stock > 20
+                      ? '#4F8A35'
+                      : activeProduct.stock > 0
+                      ? '#e87c20'
+                      : '#ef4444',
+                    display: 'inline-block'
+                  }} />
+                  {activeProduct.stock > 20 ? (
+                    <span>In Stock — Ready to ship</span>
+                  ) : activeProduct.stock > 0 ? (
+                    <span>Low Stock — Only {activeProduct.stock} units remaining!</span>
+                  ) : (
+                    <span>Sold Out — Join waitlist to buy on next restock</span>
+                  )}
+                </div>
+              )}
+
               {/* CTA */}
-              <Link to="/waitlist" className="cta-btn" style={{ textAlign: 'center' }}>
-                Join Waitlist Be First →
-              </Link>
+              {activeProduct && activeProduct.stock === 0 ? (
+                <Link to="/waitlist" className="cta-btn" style={{ textAlign: 'center', background: '#7A8A6E', borderColor: '#7A8A6E' }}>
+                  Sold Out — Join Waitlist →
+                </Link>
+              ) : (
+                <Link to="/waitlist" className="cta-btn" style={{ textAlign: 'center' }}>
+                  Join Waitlist Be First →
+                </Link>
+              )}
 
               {/* Certifications */}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>

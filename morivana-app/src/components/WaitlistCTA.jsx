@@ -353,7 +353,7 @@ export default function WaitlistCTA() {
                 display: 'inline-block',
                 fontFamily: 'var(--font-display)',
                 fontWeight: 900,
-                fontSize: 'clamp(36px, 8vw, 120px)',
+                fontSize: 'clamp(28px, 7vw, 80px)',
                 lineHeight: 0.9,
                 color: 'var(--accent)',
                 letterSpacing: '-0.025em',
@@ -370,7 +370,7 @@ export default function WaitlistCTA() {
                 fontFamily: 'var(--font-serif)',
                 fontStyle: 'italic',
                 fontWeight: 500,
-                fontSize: 'clamp(18px, 3.6vw, 48px)',
+                fontSize: 'clamp(14px, 3vw, 36px)',
                 lineHeight: 1.05,
                 color: 'var(--ink-on-dark)',
                 letterSpacing: '-0.005em',
@@ -385,7 +385,7 @@ export default function WaitlistCTA() {
           className="cta-reveal"
           style={{
             fontFamily: 'var(--font-body)',
-            fontSize: '1rem',
+            fontSize: '0.88rem',
             lineHeight: 1.7,
             color: 'var(--cream)',
             opacity: 0.85,
@@ -565,7 +565,7 @@ export default function WaitlistCTA() {
           <span style={{
             fontFamily: 'var(--font-body)',
             fontWeight: 600,
-            fontSize: '14px',
+            fontSize: '12px',
             color: 'var(--cream)',
             letterSpacing: '0.06em',
           }}>

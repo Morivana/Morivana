@@ -307,25 +307,80 @@ export default function Ingredients() {
 
         /* iPad portrait & small tablets */
         @media (max-width: 880px) {
-          #ingredients { padding: 72px 0 !important; }
-          .ing-header { margin-bottom: 44px; gap: 24px; }
+          #ingredients { padding: 56px 0 !important; }
+          .ing-header { margin-bottom: 32px; gap: 16px; }
           .ing-header-note { max-width: 100%; border-left-width: 2px; }
           .ingredient-grid { grid-template-columns: repeat(2, 1fr); }
-          .ingredient-monograph { min-height: 220px; padding: 20px 18px 18px; }
+          .ingredient-monograph { min-height: 180px; padding: 16px 14px 14px; }
+          .ing-head-display { font-size: clamp(24px, 6vw, 44px) !important; }
+          .ing-head-serif { font-size: clamp(12px, 3vw, 22px) !important; }
+          .ing-header-note p { font-size: 0.82rem !important; }
         }
 
         /* Large phone */
         @media (max-width: 560px) {
-          .ingredient-grid { grid-template-columns: 1fr; }
-          .ingredient-monograph { min-height: auto; padding: 18px 18px 18px; }
-          .im-body { min-height: 70px; }
+          #ingredients { padding: 40px 0 !important; }
+          .ing-header { margin-bottom: 24px; padding: 0 16px; }
+          .ingredient-grid {
+            grid-template-columns: 1fr;
+            max-width: 340px;
+            margin: 0 auto;
+            padding: 0 16px;
+          }
+          .ingredient-monograph {
+            min-height: auto;
+            padding: 14px 14px;
+          }
+          .im-top { margin-bottom: 8px; }
+          .im-idx { font-size: 0.62rem; }
+          .im-compound {
+            font-size: 0.52rem;
+            padding: 3px 7px;
+          }
+          .im-name {
+            font-size: clamp(0.95rem, 3.5vw, 1.15rem) !important;
+            margin-bottom: 2px;
+          }
+          .im-latin {
+            font-size: 0.72rem !important;
+            margin-bottom: 10px;
+          }
+          .im-body { min-height: auto; }
+          .im-divider { margin-bottom: 8px; }
+          .im-origin {
+            font-size: 0.56rem;
+            margin-bottom: 6px;
+          }
+          .im-benefit {
+            font-size: 0.76rem !important;
+            line-height: 1.45;
+          }
+          .ing-certs {
+            margin-top: 28px;
+            gap: 6px;
+          }
+          .ing-cert {
+            font-size: 0.58rem;
+            padding: 5px 10px;
+          }
+          .ing-head-display { font-size: clamp(20px, 6vw, 36px) !important; }
+          .ing-head-serif { font-size: clamp(11px, 2.8vw, 18px) !important; }
+          .ing-header-note p { font-size: 0.78rem !important; }
         }
 
         /* Small phone */
         @media (max-width: 380px) {
-          .ing-header { padding: 0 20px; }
-          .ingredient-grid { padding: 0 20px; }
-          .ingredient-monograph { padding: 16px 16px; }
+          #ingredients { padding: 32px 0 !important; }
+          .ing-header { padding: 0 14px; }
+          .ingredient-grid {
+            max-width: 300px;
+            padding: 0 14px;
+          }
+          .ingredient-monograph { padding: 12px 12px; }
+          .im-name { font-size: 0.9rem !important; }
+          .im-benefit { font-size: 0.72rem !important; }
+          .im-latin { font-size: 0.68rem !important; }
+          .ing-cert { font-size: 0.52rem; padding: 4px 8px; }
         }
       `}</style>
     </section>

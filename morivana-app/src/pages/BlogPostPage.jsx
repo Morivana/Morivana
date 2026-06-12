@@ -74,7 +74,7 @@ export default function BlogPostPage() {
           <Breadcrumb items={breadcrumbs} />
 
           {/* Article header */}
-          <header style={{ marginTop: '40px', marginBottom: '40px', maxWidth: '720px' }}>
+          <header className="page-hero-header" style={{ marginTop: '40px', marginBottom: '40px', maxWidth: '720px', margin: '40px auto' }}>
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap' }}>
               <span style={{
                 fontFamily: 'var(--font-mono)',

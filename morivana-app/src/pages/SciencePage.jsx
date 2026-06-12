@@ -57,7 +57,7 @@ export default function SciencePage() {
         <div style={{ paddingTop: '48px', paddingBottom: '80px' }}>
           <Breadcrumb items={breadcrumbs} />
 
-          <div style={{ marginTop: '40px', marginBottom: '56px', maxWidth: '640px', margin: '40px auto 56px' }}>
+          <div className="page-hero-header" style={{ marginTop: '40px', marginBottom: '56px', maxWidth: '640px', margin: '40px auto 56px' }}>
             <div className="kicker" style={{ marginBottom: '16px' }}>Evidence-Based</div>
             <h1 style={{
               fontFamily: 'var(--font-display)',
@@ -76,6 +76,16 @@ export default function SciencePage() {
               <Link to="/ingredients" style={{ color: 'var(--surface-deep)', fontWeight: 600 }}>ingredient</Link>{' '}
               with direct links to PubMed so you can read them yourself.
             </p>
+          </div>
+
+          {/* Hero Image */}
+          <div style={{ marginBottom: '64px', borderRadius: '20px', overflow: 'hidden', height: 'clamp(200px, 40vw, 360px)' }}>
+            <img
+              src="/research-test.png"
+              alt="Scientific plant-based nutritional research setup"
+              loading="eager"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
           </div>
 
           {/* Formulation philosophy */}
@@ -209,6 +219,14 @@ export default function SciencePage() {
               <p style={{ color: 'var(--ink-soft)', lineHeight: 1.75 }}>
                 For amla specifically our primary vitamin C source the cold-drying method is critical. Amla's vitamin C is partially bound to tannins which protect it from oxidation, but high heat still accelerates degradation. Our cold-dried amla retains 85%+ of its natural vitamin C compared to &lt;40% in conventionally spray-dried amla powder.
               </p>
+            </div>
+            <div style={{ marginTop: '28px', borderRadius: '12px', overflow: 'hidden', height: 'clamp(160px, 30vw, 240px)' }}>
+              <img
+                src="/morivana-powder.jpeg"
+                alt="Cold-dried Morivaná super greens powder close-up"
+                loading="lazy"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
             </div>
           </section>
 

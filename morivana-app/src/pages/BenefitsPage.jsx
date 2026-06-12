@@ -88,7 +88,7 @@ export default function BenefitsPage() {
         <div style={{ paddingTop: '48px', paddingBottom: '80px' }}>
           <Breadcrumb items={breadcrumbs} />
 
-          <div style={{ marginTop: '40px', marginBottom: '64px', maxWidth: '640px', margin: '40px auto 64px' }}>
+          <div className="page-hero-header" style={{ marginTop: '40px', marginBottom: '64px', maxWidth: '640px', margin: '40px auto 64px' }}>
             <div className="kicker" style={{ marginBottom: '16px' }}>What to Expect</div>
             <h1 style={{
               fontFamily: 'var(--font-display)',
@@ -108,6 +108,16 @@ export default function BenefitsPage() {
               do at a biochemical level, confirmed by{' '}
               <Link to="/science" style={{ color: 'var(--surface-deep)', fontWeight: 600 }}>clinical research</Link>.
             </p>
+          </div>
+
+          {/* Hero Image */}
+          <div style={{ marginBottom: '64px', borderRadius: '20px', overflow: 'hidden', height: 'clamp(200px, 40vw, 360px)' }}>
+            <img
+              src="/benefit-timeline.png"
+              alt="Timeline of health benefits from taking Morivaná Daily"
+              loading="eager"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
           </div>
 
           {/* Timeline */}
@@ -256,6 +266,14 @@ export default function BenefitsPage() {
             >
               Read the Full Research →
             </Link>
+            <div style={{ marginTop: '28px', borderRadius: '12px', overflow: 'hidden', height: 'clamp(160px, 30vw, 240px)' }}>
+              <img
+                src="/morning-ritual.png"
+                alt="Morning ritual wellness setup with Morivaná greens powder"
+                loading="lazy"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', opacity: 0.9 }}
+              />
+            </div>
           </section>
 
           {/* FAQ */}

@@ -161,7 +161,7 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
               display: 'block',
               fontFamily: 'var(--font-display)',
               fontWeight: 700,
-              fontSize: 'clamp(48px, 8.5vw, 120px)',
+              fontSize: 'clamp(36px, 8.5vw, 120px)',
               lineHeight: 0.9,
               color: 'var(--surface-deep)',
               letterSpacing: '-0.03em',
@@ -253,6 +253,7 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
             }}
           >
             <span
+              className="hero-spec-text"
               style={{
                 fontFamily: 'var(--font-body)',
                 fontWeight: 600,
@@ -272,59 +273,92 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
 
       <style>{`
         @media (max-width: 768px) {
+          #hero {
+            min-height: auto !important;
+          }
+          .hero-layout {
+            min-height: auto !important;
+          }
           .hero-text-col {
-            padding: 36px 24px 0 !important;
+            padding: 96px 20px 0 !important;
+            text-align: center !important;
+            align-items: center !important;
+          }
+          .hero-headline {
+            text-align: center !important;
+            margin-bottom: 6px !important;
           }
           .hero-word-display {
-            font-size: clamp(44px, 13vw, 76px) !important;
+            font-size: clamp(32px, 9vw, 52px) !important;
+            white-space: normal !important;
+            word-break: break-word !important;
+            text-align: center !important;
+            margin: 0 auto !important;
           }
           .hero-word-italic {
-            font-size: clamp(15px, 4vw, 20px) !important;
+            font-size: clamp(13px, 3.5vw, 18px) !important;
+            text-align: center !important;
           }
           .hero-meta-row {
             grid-template-columns: 1fr !important;
-            gap: 12px 0 !important;
+            gap: 16px 0 !important;
+            text-align: center !important;
+            justify-content: center !important;
           }
-          .hero-meta-row .hero-body {
-            text-align: left !important;
-          }
-          .hero-body {
-            font-size: 0.9rem !important;
-          }
-          .hero-sublabel {
-            font-size: 0.68rem !important;
-            letter-spacing: 0.2em !important;
-            margin-bottom: 16px !important;
+          .hero-meta-row > div {
+            text-align: center !important;
+            align-items: center !important;
+            display: flex !important;
+            flex-direction: column !important;
           }
           .hero-kicker {
-            font-size: 0.62rem !important;
+            font-size: 0.58rem !important;
+            text-align: center !important;
+            margin: 0 auto !important;
           }
-          .hero-headline {
-            margin-bottom: 8px !important;
+          .hero-meta-row .hero-body {
+            text-align: center !important;
+            margin: 0 auto !important;
+          }
+          .hero-body {
+            font-size: 0.82rem !important;
+          }
+          .hero-sublabel {
+            font-size: 0.62rem !important;
+            letter-spacing: 0.18em !important;
+            margin-bottom: 12px !important;
           }
           .hero-divider {
-            margin-bottom: 24px !important;
+            margin-bottom: 18px !important;
+          }
+          .hero-spec-text {
+            font-size: 11px !important;
+            letter-spacing: 0.14em !important;
           }
         }
         @media (max-width: 480px) {
           .hero-text-col {
-            padding: 28px 20px 0 !important;
+            padding: 80px 16px 0 !important;
           }
           .hero-word-display {
-            font-size: clamp(40px, 12vw, 60px) !important;
+            font-size: clamp(28px, 8.5vw, 44px) !important;
           }
           .hero-word-italic {
-            font-size: clamp(14px, 4vw, 18px) !important;
+            font-size: clamp(12px, 3.2vw, 16px) !important;
           }
           .hero-body {
-            font-size: 0.86rem !important;
+            font-size: 0.78rem !important;
           }
           .hero-cta .cta-btn {
-            font-size: 0.74rem !important;
-            padding: 13px 24px !important;
+            font-size: 0.7rem !important;
+            padding: 11px 20px !important;
           }
           .hero-kicker {
-            font-size: 0.6rem !important;
+            font-size: 0.55rem !important;
+          }
+          .hero-spec-text {
+            font-size: 10px !important;
+            letter-spacing: 0.12em !important;
           }
         }
       `}</style>

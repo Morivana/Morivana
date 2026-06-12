@@ -202,7 +202,7 @@ export default function NavbarPublic() {
         /* Mobile drawer */
         .nav-mobile-drawer {
           position: absolute;
-          top: 60px;
+          top: 100%;
           left: 0;
           right: 0;
           background: rgba(255,255,255,0.97);
@@ -297,7 +297,7 @@ export default function NavbarPublic() {
           <span style={{
             fontFamily: 'var(--font-serif)',
             fontWeight: 700,
-            fontSize: '22px',
+            fontSize: 'clamp(18px, 4.5vw, 22px)',
             color: 'var(--surface-deep)',
             letterSpacing: '-0.01em',
           }}>

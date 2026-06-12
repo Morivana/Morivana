@@ -291,28 +291,52 @@ export default function SignInPage() {
           }}
         />
 
-        {/* Back to site */}
-        <Link
-          to="/"
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontWeight: 600,
-            fontSize: '0.78rem',
-            letterSpacing: '0.16em',
-            textTransform: 'uppercase',
-            color: 'var(--ink-on-dark)',
-            opacity: 0.55,
-            textDecoration: 'none',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            transition: 'opacity 0.2s',
-          }}
-          onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
-          onMouseLeave={e => (e.currentTarget.style.opacity = '0.55')}
-        >
-          ← Back to Morivaná Daily
-        </Link>
+        {/* Navigation links */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+          <Link
+            to="/"
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontWeight: 600,
+              fontSize: '0.78rem',
+              letterSpacing: '0.16em',
+              textTransform: 'uppercase',
+              color: 'var(--ink-on-dark)',
+              opacity: 0.55,
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              transition: 'opacity 0.2s',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '0.55')}
+          >
+            ← Back to Morivaná Daily
+          </Link>
+
+          <Link
+            to="/admin-portal"
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontWeight: 600,
+              fontSize: '0.78rem',
+              letterSpacing: '0.16em',
+              textTransform: 'uppercase',
+              color: 'var(--accent)',
+              opacity: 0.75,
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              transition: 'opacity 0.25s',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '0.75')}
+          >
+            🔑 Owner Passcode Entry
+          </Link>
+        </div>
       </div>
 
       <style>{`

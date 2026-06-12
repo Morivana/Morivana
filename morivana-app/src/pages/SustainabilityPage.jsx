@@ -81,7 +81,7 @@ export default function SustainabilityPage() {
         <div style={{ paddingTop: '48px', paddingBottom: '80px' }}>
           <Breadcrumb items={breadcrumbs} />
 
-          <div style={{ marginTop: '40px', marginBottom: '56px', maxWidth: '640px' }}>
+          <div className="page-hero-header" style={{ marginTop: '40px', marginBottom: '56px', maxWidth: '640px' }}>
             <div className="kicker" style={{ marginBottom: '16px' }}>Sourcing</div>
             <h1 style={{
               fontFamily: 'var(--font-display)',
@@ -98,6 +98,16 @@ export default function SustainabilityPage() {
             <p style={{ fontSize: '1rem', lineHeight: 1.75, color: 'var(--ink-soft)' }}>
               We believe you have the right to know the complete supply chain of what you put in your body. No hidden sources, no "proprietary blend" behind the scenes just plants, origins, and processing.
             </p>
+          </div>
+
+          {/* Hero Image */}
+          <div style={{ marginBottom: '64px', borderRadius: '20px', overflow: 'hidden', height: 'clamp(200px, 40vw, 360px)' }}>
+            <img
+              src="/farm-nature.png"
+              alt="Lush green Moringa farm and nature scenery"
+              loading="eager"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
           </div>
 
           {/* Visual sourcing map (CSS-based) */}
@@ -282,6 +292,14 @@ export default function SustainabilityPage() {
             <p style={{ color: 'var(--ink-soft)', lineHeight: 1.75, maxWidth: '580px' }}>
               Our roadmap includes: (1) a refill pouch program in Phase 2 that reduces packaging per serving by 60%, and (2) a full packaging lifecycle assessment published on this page. We'll update this when we have the data.
             </p>
+            <div style={{ marginTop: '28px', borderRadius: '12px', overflow: 'hidden', height: 'clamp(180px, 35vw, 280px)', maxWidth: '480px' }}>
+              <img
+                src="/packaging_highres_back.webp"
+                alt="Morivaná Daily packaging back details"
+                loading="lazy"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
+            </div>
           </section>
 
           {/* Promise */}

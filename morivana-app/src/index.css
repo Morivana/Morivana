@@ -10,19 +10,19 @@ body {
 }
 
 p, li {
-  font-size: 1rem !important;
-  line-height: 1.7 !important;
+  font-size: 1rem;
+  line-height: 1.7;
 }
 
-/* Ensure no element has font-size below 14px (excluding compact footer text) */
-.im-idx, .im-compound, .im-origin, .im-benefit, .im-latin,
-.tr-phase-tag, .tr-phase-when, .tr-tag, .tr-metric-label,
-.rt-kicker, .rt-step-label, .rt-step-body, .rt-pills-label, .rt-pill, .rt-protip p,
-.ing-cert, .kicker, .hero-kicker, .hero-sublabel, .countdown-label,
+/* Ensure body-level text elements have accessible base size while letting micro-labels scale naturally */
+.im-benefit, .im-latin,
+.tr-phase-tag, .tr-phase-when,
+.rt-step-body, .rt-protip p,
+.ing-cert, .kicker, .hero-kicker, .hero-sublabel,
 .waitlist-input, .cta-btn, .success-state p, .nav-pill, .nav-link,
-.logo-text, .brand-text, .nav-center-logo div, .hero-body,
+.logo-text, .brand-text, .hero-body,
 small, sub, sup, caption, figcaption {
-  font-size: 14px !important;
+  font-size: 14px;
 }
 
 /* Compact Footer UI Overrides */
