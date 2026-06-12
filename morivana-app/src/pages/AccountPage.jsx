@@ -1156,31 +1156,11 @@ export default function AccountPage() {
       </header>
 
       {/* ── Body: sidebar + content ── */}
-      <div
-        style={{
-          flex: 1,
-          display: 'flex',
-          maxWidth: '1100px',
-          width: '100%',
-          margin: '0 auto',
-          padding: 'clamp(24px, 4vw, 48px) clamp(16px, 3vw, 32px)',
-          gap: 'clamp(24px, 4vw, 48px)',
-          alignItems: 'flex-start',
-        }}
-      >
+      <div id="acct-body">
         {/* ── Left sidebar ── */}
-        <aside
-          style={{
-            width: '220px',
-            flexShrink: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '0',
-          }}
-        >
+        <aside id="acct-sidebar">
           {/* Avatar + identity */}
-          <div style={{ marginBottom: '28px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0' }}>
-            {/* Avatar */}
+          <div id="acct-identity">
             <div
               style={{
                 width: '64px',
@@ -1189,7 +1169,6 @@ export default function AccountPage() {
                 overflow: 'hidden',
                 background: 'var(--surface-soft)',
                 border: '2px solid var(--line-soft)',
-                marginBottom: '14px',
                 flexShrink: 0,
                 boxShadow: '0 4px 14px rgba(25, 65, 2, 0.12)',
               }}
@@ -1201,86 +1180,52 @@ export default function AccountPage() {
               />
             </div>
 
-            {/* Name */}
-            <div
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontWeight: 700,
-                fontSize: '0.98rem',
-                color: 'var(--surface-deep)',
-                letterSpacing: '0.01em',
-                marginBottom: '2px',
-                wordBreak: 'break-word',
-              }}
-            >
-              {user?.fullName || user?.firstName || 'Your Profile'}
-            </div>
-
-            {/* Email */}
-            <div
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.8rem',
-                color: 'var(--ink-mute)',
-                wordBreak: 'break-all',
-                lineHeight: 1.4,
-              }}
-            >
-              {user?.primaryEmailAddress?.emailAddress}
+            <div id="acct-identity-text">
+              <div
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontWeight: 700,
+                  fontSize: '0.98rem',
+                  color: 'var(--surface-deep)',
+                  letterSpacing: '0.01em',
+                  marginBottom: '2px',
+                  wordBreak: 'break-word',
+                }}
+              >
+                {user?.fullName || user?.firstName || 'Your Profile'}
+              </div>
+              <div
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '0.8rem',
+                  color: 'var(--ink-mute)',
+                  wordBreak: 'break-all',
+                  lineHeight: 1.4,
+                }}
+              >
+                {user?.primaryEmailAddress?.emailAddress}
+              </div>
             </div>
           </div>
 
           {/* Nav links */}
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+          <nav id="acct-nav">
             {NAV_ITEMS.map(item => {
               const isActive = activeSection === item.id
               return (
                 <button
                   key={item.id}
+                  className={`acct-nav-btn${isActive ? ' acct-nav-btn--active' : ''}`}
                   onClick={() => setActiveSection(item.id)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    padding: '10px 12px',
-                    borderRadius: '10px',
-                    background: isActive ? 'rgba(25,65,2,0.07)' : 'transparent',
-                    border: 'none',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    transition: 'background 0.18s',
-                    width: '100%',
-                  }}
-                  onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(25,65,2,0.04)' }}
-                  onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent' }}
                 >
-                  {/* 3D icon */}
                   <img
                     src={item.id === 'personal' ? avatarSrc : item.icon}
                     alt=""
                     aria-hidden="true"
-                    style={{
-                      width: '22px',
-                      height: '22px',
-                      objectFit: 'contain',
-                      flexShrink: 0,
-                      opacity: isActive ? 1 : 0.45,
-                      transition: 'opacity 0.18s',
-                      borderRadius: item.id === 'personal' ? '50%' : '0',
-                    }}
+                    className="acct-nav-icon"
+                    style={{ borderRadius: item.id === 'personal' ? '50%' : '0' }}
                   />
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontWeight: isActive ? 700 : 500,
-                      fontSize: '0.88rem',
-                      color: isActive ? 'var(--surface-deep)' : 'var(--ink-mute)',
-                      letterSpacing: '0.01em',
-                      transition: 'color 0.18s, font-weight 0.18s',
-                    }}
-                  >
-                    {item.label}
-                  </span>
+                  <span className="acct-nav-label">{item.label}</span>
                 </button>
               )
             })}
@@ -1299,27 +1244,7 @@ export default function AccountPage() {
         </main>
       </div>
 
-      {/* Mobile responsive styles */}
-      <style>{`
-        @media (max-width: 680px) {
-          /* Stack sidebar above content on mobile */
-          div[style*="flex"][style*="maxWidth: '1100px'"] {
-            flex-direction: column !important;
-          }
-          aside {
-            width: 100% !important;
-          }
-          nav {
-            flex-direction: row !important;
-            flex-wrap: wrap !important;
-            gap: 6px !important;
-          }
-          nav button {
-            flex: 1 1 auto !important;
-            min-width: 130px !important;
-          }
-        }
-      `}</style>
+
     </div>
   )
 }
