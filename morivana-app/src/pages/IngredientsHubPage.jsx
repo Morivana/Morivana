@@ -59,7 +59,7 @@ export default function IngredientsHubPage() {
           {/* Hero Image */}
           <div style={{ marginBottom: '64px', borderRadius: '20px', overflow: 'hidden', height: 'clamp(200px, 40vw, 360px)' }}>
             <img
-              src="/Ingredients-eight-plants.png"
+              src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/Ingredients-eight-plants.png"
               alt="Ingredients of Morivaná Daily including moringa, amla, spirulina, and ginger"
               loading="eager"
               style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
@@ -181,7 +181,7 @@ export default function IngredientsHubPage() {
           {/* Before CTA Image */}
           <div style={{ marginBottom: '48px', borderRadius: '16px', overflow: 'hidden', height: 'clamp(180px, 35vw, 280px)', maxWidth: '520px', margin: '0 auto 48px' }}>
             <img
-              src="/morivana-ingredients.webp"
+              src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/morivana-ingredients.webp"
               alt="Close-up of Morivaná Daily ingredient blend"
               loading="lazy"
               style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}

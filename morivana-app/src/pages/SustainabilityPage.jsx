@@ -103,7 +103,7 @@ export default function SustainabilityPage() {
           {/* Hero Image */}
           <div style={{ marginBottom: '64px', borderRadius: '20px', overflow: 'hidden', height: 'clamp(200px, 40vw, 360px)' }}>
             <img
-              src="/farm-nature.png"
+              src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/farm-nature.png"
               alt="Lush green Moringa farm and nature scenery"
               loading="eager"
               style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
@@ -294,7 +294,7 @@ export default function SustainabilityPage() {
             </p>
             <div style={{ marginTop: '28px', borderRadius: '12px', overflow: 'hidden', height: 'clamp(180px, 35vw, 280px)', maxWidth: '480px' }}>
               <img
-                src="/packaging_highres_back.webp"
+                src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/packaging_highres_back.webp"
                 alt="Morivaná Daily packaging back details"
                 loading="lazy"
                 style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}

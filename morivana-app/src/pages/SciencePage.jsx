@@ -81,7 +81,7 @@ export default function SciencePage() {
           {/* Hero Image */}
           <div style={{ marginBottom: '64px', borderRadius: '20px', overflow: 'hidden', height: 'clamp(200px, 40vw, 360px)' }}>
             <img
-              src="/research-test.png"
+              src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/research-test.png"
               alt="Scientific plant-based nutritional research setup"
               loading="eager"
               style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
@@ -222,7 +222,7 @@ export default function SciencePage() {
             </div>
             <div style={{ marginTop: '28px', borderRadius: '12px', overflow: 'hidden', height: 'clamp(160px, 30vw, 240px)' }}>
               <img
-                src="/morivana-powder.jpeg"
+                src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/morivana-powder.jpeg"
                 alt="Cold-dried Morivaná super greens powder close-up"
                 loading="lazy"
                 style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}

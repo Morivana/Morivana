@@ -301,7 +301,7 @@ export default function ShopPage() {
               justifyContent: 'center',
             }}>
               <img
-                src="/packaging_highres.webp"
+                src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/packaging_highres.webp"
                 alt="Morivaná Daily Super Greens Powder packaging"
                 style={{ width: '80%', height: '80%', objectFit: 'contain' }}
                 loading="eager"

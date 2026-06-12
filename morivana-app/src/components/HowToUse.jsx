@@ -4,9 +4,9 @@ import ScrollTrigger from 'gsap/ScrollTrigger'
 import FloatingLeaves from './FloatingLeaves'
 
 const steps = [
-  { num: '01', title: 'ADD',   body: '1 scoop · 5 grams of cool-dried daily greens.',                  image: '/add.webp', alt: 'Step 1: Add 1 scoop of Morivaná Daily Super Greens Powder', width: 600, height: 400 },
-  { num: '02', title: 'MIX',   body: 'With 200ml water, milk, or your morning smoothie.', highlighted: true, image: '/mix.webp', alt: 'Step 2: Mix Morivaná Daily Greens with water or smoothie', width: 600, height: 400 },
-  { num: '03', title: 'DRINK', body: 'Start your day calm, clear, and quietly fueled.',                image: '/drink.webp', alt: 'Step 3: Drink Morivaná Daily and start your day energized', width: 600, height: 480 },
+  { num: '01', title: 'ADD',   body: '1 scoop · 5 grams of cool-dried daily greens.',                  image: 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/add.webp', alt: 'Step 1: Add 1 scoop of Morivaná Daily Super Greens Powder', width: 600, height: 400 },
+  { num: '02', title: 'MIX',   body: 'With 200ml water, milk, or your morning smoothie.', highlighted: true, image: 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/mix.webp', alt: 'Step 2: Mix Morivaná Daily Greens with water or smoothie', width: 600, height: 400 },
+  { num: '03', title: 'DRINK', body: 'Start your day calm, clear, and quietly fueled.',                image: 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/drink.webp', alt: 'Step 3: Drink Morivaná Daily and start your day energized', width: 600, height: 480 },
 ]
 
 const mixOptions = [

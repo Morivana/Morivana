@@ -17,7 +17,7 @@ const steps = [
     num: '01',
     title: 'Add One Scoop',
     body: 'Add 1 level scoop (5g) of Morivaná Daily to your glass or shaker bottle. The scoop is included in every pouch.',
-    image: '/add.webp',
+    image: 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/add.webp',
     alt: 'Step 1: Add one scoop of Morivaná Daily super greens powder to your glass',
   },
   {
@@ -26,7 +26,7 @@ const steps = [
     num: '02',
     title: 'Mix Thoroughly',
     body: 'Add 250–350ml of water (room temperature or cool). Shake in a shaker bottle for 10–15 seconds, or stir briskly for 30 seconds in a glass.',
-    image: '/mix.webp',
+    image: 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/mix.webp',
     alt: 'Step 2: Mix Morivaná Daily greens with water or your preferred liquid',
   },
   {
@@ -35,7 +35,7 @@ const steps = [
     num: '03',
     title: 'Drink Immediately',
     body: 'Drink right after mixing. Chlorophyll and phycocyanin degrade with prolonged exposure to light and air fresh is best.',
-    image: '/drink.webp',
+    image: 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/drink.webp',
     alt: 'Step 3: Drink Morivaná Daily and start your day energized and clear',
   },
 ]

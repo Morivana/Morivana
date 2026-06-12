@@ -59,10 +59,10 @@ export default function SignInPage() {
 
       {/* Photo collage background same tiles as WaitlistCTA */}
       <div className="auth-collage" aria-hidden="true">
-        <div className="auth-tile auth-tile--1" style={{ backgroundImage: 'url(/Moringa%20Leaves%20Overhead.webp)' }} />
-        <div className="auth-tile auth-tile--2" style={{ backgroundImage: 'url(/morivana-scoop.webp)' }} />
-        <div className="auth-tile auth-tile--3" style={{ backgroundImage: 'url(/morivana-powder.jpeg)' }} />
-        <div className="auth-tile auth-tile--4" style={{ backgroundImage: 'url(/morivana-jar.jpeg)' }} />
+        <div className="auth-tile auth-tile--1" style={{ backgroundImage: 'url(https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/Moringa%20Leaves%20Overhead.webp)' }} />
+        <div className="auth-tile auth-tile--2" style={{ backgroundImage: 'url(https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/morivana-scoop.webp)' }} />
+        <div className="auth-tile auth-tile--3" style={{ backgroundImage: 'url(https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/morivana-powder.jpeg)' }} />
+        <div className="auth-tile auth-tile--4" style={{ backgroundImage: 'url(https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/morivana-jar.jpeg)' }} />
       </div>
       {/* Dark scrim for legibility */}
       <div className="auth-scrim" aria-hidden="true" />

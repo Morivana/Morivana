@@ -300,7 +300,7 @@ export default function ProductDetailPage() {
                 marginBottom: '16px',
               }}>
                 <img
-                  src="/packaging_highres.webp"
+                  src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/packaging_highres.webp"
                   alt="Morivaná Daily Super Greens pouch front"
                   style={{ width: '80%', height: '80%', objectFit: 'contain' }}
                   loading="eager"
@@ -318,7 +318,7 @@ export default function ProductDetailPage() {
                 justifyContent: 'center',
               }}>
                 <img
-                  src="/packaging_highres_back.webp"
+                  src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/packaging_highres_back.webp"
                   alt="Morivaná Daily Super Greens pouch back with ingredient label"
                   style={{ width: '80%', height: '80%', objectFit: 'contain' }}
                   loading="lazy"

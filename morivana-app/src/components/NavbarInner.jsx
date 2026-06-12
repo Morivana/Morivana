@@ -81,7 +81,7 @@ export default function NavbarInner() {
   }, [location.pathname])
 
   const gender = user?.unsafeMetadata?.gender
-  const avatarSrc = gender === 'male' ? '/avatar-male.png' : '/avatar-female.png'
+  const avatarSrc = gender === 'male' ? 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/avatar-male.png' : 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/avatar-female.png'
 
   return (
     <>

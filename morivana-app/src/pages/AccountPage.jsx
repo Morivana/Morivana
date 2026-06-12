@@ -5,10 +5,10 @@ import LoadingSpinner from '../components/LoadingSpinner'
 
 // ─── Sidebar nav items ────────────────────────────────────────────────────────
 const NAV_ITEMS = [
-  { id: 'personal', label: 'Personal Information', icon: '/icon-bag.png' },
-  { id: 'orders', label: 'Order History', icon: '/icon-bag-3d.png', href: '/orders' },
-  { id: 'addresses', label: 'My Addresses', icon: '/icon-pin-3d.png' },
-  { id: 'settings', label: 'Account Settings', icon: '/icon-gear-3d.png' },
+  { id: 'personal', label: 'Personal Information', icon: 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-bag.png' },
+  { id: 'orders', label: 'Order History', icon: 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-bag-3d.png', href: '/orders' },
+  { id: 'addresses', label: 'My Addresses', icon: 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-pin-3d.png' },
+  { id: 'settings', label: 'Account Settings', icon: 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-gear-3d.png' },
 ]
 
 // ─── Info card component ──────────────────────────────────────────────────────
@@ -82,7 +82,7 @@ function PersonalSection({ user }) {
   const email = user?.primaryEmailAddress?.emailAddress
   const phone = user?.unsafeMetadata?.phone || user?.primaryPhoneNumber?.phoneNumber
   const gender = user?.unsafeMetadata?.gender
-  const avatarSrc = gender === 'male' ? '/avatar-male.png' : '/avatar-female.png'
+  const avatarSrc = gender === 'male' ? 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/avatar-male.png' : 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/avatar-female.png'
   const [loading, setLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [firstName, setFirstName] = useState(user?.firstName || '')
@@ -210,9 +210,9 @@ function PersonalSection({ user }) {
         }}
       >
         <InfoCard label="Name" value={user?.fullName} icon={avatarSrc} />
-        <InfoCard label="Email" value={email} icon="/icon-mail-3d.png" />
-        <InfoCard label="Phone" value={phone || 'Not set'} icon="/icon-phone-3d.png" />
-        <InfoCard label="Member Since" value={user?.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'N/A'} icon="/icon-shield-3d.png" />
+        <InfoCard label="Email" value={email} icon="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-mail-3d.png" />
+        <InfoCard label="Phone" value={phone || 'Not set'} icon="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-phone-3d.png" />
+        <InfoCard label="Member Since" value={user?.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'N/A'} icon="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-shield-3d.png" />
 
         {/* Interactive Gender & Profile Avatar selector */}
         <div
@@ -248,7 +248,7 @@ function PersonalSection({ user }) {
               Gender Profile
             </span>
             <img
-              src={gender === 'male' ? '/avatar-male.png' : '/avatar-female.png'}
+              src={gender === 'male' ? 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/avatar-male.png' : 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/avatar-female.png'}
               alt=""
               aria-hidden="true"
               style={{ width: '22px', height: '22px', borderRadius: '50%', objectFit: 'cover', opacity: 0.85 }}
@@ -574,7 +574,7 @@ function OrdersSection() {
           gap: '0',
         }}
       >
-        <img src="/icon-bag.png" alt="" aria-hidden="true" style={{ width: '72px', height: '72px', objectFit: 'contain', marginBottom: '20px', opacity: 0.5 }} />
+        <img src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-bag.png" alt="" aria-hidden="true" style={{ width: '72px', height: '72px', objectFit: 'contain', marginBottom: '20px', opacity: 0.5 }} />
         <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '1rem', color: 'var(--surface-deep)', marginBottom: '8px' }}>
           No orders yet
         </div>
@@ -620,7 +620,7 @@ function AddressesSection() {
           alignItems: 'center',
         }}
       >
-        <img src="/icon-pin-3d.png" alt="" aria-hidden="true" style={{ width: '72px', height: '72px', objectFit: 'contain', marginBottom: '20px', opacity: 0.5 }} />
+        <img src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-pin-3d.png" alt="" aria-hidden="true" style={{ width: '72px', height: '72px', objectFit: 'contain', marginBottom: '20px', opacity: 0.5 }} />
         <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '1rem', color: 'var(--surface-deep)', marginBottom: '8px' }}>
           No addresses saved
         </div>
@@ -733,7 +733,7 @@ function SettingsSection({ user }) {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <img src="/icon-mail-3d.png" alt="" aria-hidden="true" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+              <img src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-mail-3d.png" alt="" aria-hidden="true" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
               <h3 style={{ fontFamily: 'var(--font-serif)', fontWeight: 700, fontSize: '1.1rem', color: 'var(--surface-deep)', margin: 0 }}>
                 Email Preferences
               </h3>
@@ -795,7 +795,7 @@ function SettingsSection({ user }) {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <img src="/icon-gear-3d.png" alt="" aria-hidden="true" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+              <img src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-gear-3d.png" alt="" aria-hidden="true" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
               <h3 style={{ fontFamily: 'var(--font-serif)', fontWeight: 700, fontSize: '1.1rem', color: 'var(--surface-deep)', margin: 0 }}>
                 Security Settings
               </h3>
@@ -979,7 +979,7 @@ function SettingsSection({ user }) {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <img src="/icon-shield-3d.png" alt="" aria-hidden="true" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+            <img src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-shield-3d.png" alt="" aria-hidden="true" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
             <h3 style={{ fontFamily: 'var(--font-serif)', fontWeight: 700, fontSize: '1.1rem', color: 'var(--surface-deep)', margin: 0 }}>
               Active Sessions
             </h3>
@@ -1057,7 +1057,7 @@ export default function AccountPage() {
   const [activeSection, setActiveSection] = useState('personal')
 
   const gender = user?.unsafeMetadata?.gender
-  const avatarSrc = gender === 'male' ? '/avatar-male.png' : '/avatar-female.png'
+  const avatarSrc = gender === 'male' ? 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/avatar-male.png' : 'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/avatar-female.png'
 
   const handleSignOut = () => signOut({ redirectUrl: '/' })
 

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 
 const CRITICAL_IMAGES = [
-  '/morivana-sip.jpeg',
-  '/morivana-jar.jpeg',
-  '/morivana-powder.jpeg',
+  'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/morivana-sip.jpeg',
+  'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/morivana-jar.jpeg',
+  'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/morivana-powder.jpeg',
 ]
 
 const CRITICAL_MODELS = [
-  '/models/morivana_pouch_fixed_draco.glb'
+  'https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/models/morivana_pouch_fixed_draco.glb'
 ]
 
 function preloadImage(src) {

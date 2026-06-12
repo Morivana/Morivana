@@ -4,12 +4,14 @@ import { useGLTF, Environment, ContactShadows } from '@react-three/drei'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import { animate, createTimeline, utils } from 'animejs'
+import { cdn } from '../utils/cdn'
 
+const MODEL_URL = cdn('/models/morivana_pouch_fixed_draco.glb')
 useGLTF.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/')
-useGLTF.preload('/models/morivana_pouch_fixed_draco.glb', '/draco/')
+useGLTF.preload(MODEL_URL)
 
 function PouchModel({ isMobile, isHighPerf }) {
-  const { scene } = useGLTF('/models/morivana_pouch_fixed_draco.glb', '/draco/')
+  const { scene } = useGLTF(MODEL_URL)
   const outerRef = useRef()   // position + scale (set by master scroll timeline)
   const innerRef = useRef()   // rotation (idle spin + scroll-driven rotation)
   const lifeRef  = useRef()   // empty group between inner + mesh - drives "alive" micro-motion
@@ -344,7 +346,7 @@ function ModelLoader() {
       animation: 'skeleton-pulse 1.8s ease-in-out infinite',
     }}>
       <img
-        src="/packaging_highres.webp"
+        src={cdn('/packaging_highres.webp')}
         alt="Loading pouch..."
         style={{
           maxHeight: '75%',
