@@ -1165,8 +1165,6 @@ main section {
   --text-1:      #F2F2F2;
   --text-2:      #888888;
   --text-3:      #555555;
-  --accent:      #22C55E;
-  --accent-dim:  rgba(34,197,94,0.12);
   --danger:      #EF4444;
   --danger-dim:  rgba(239,68,68,0.10);
   --warning:     #F59E0B;
@@ -1184,7 +1182,6 @@ html.light {
   --text-1:      #111111;
   --text-2:      #6B6B6B;
   --text-3:      #ABABAB;
-  --accent-dim:  rgba(34,197,94,0.08);
   --danger-dim:  rgba(239,68,68,0.08);
 }
 
@@ -1238,10 +1235,13 @@ body {
   --color-text-primary: var(--text-1);
   --color-text-secondary: var(--text-2);
   --color-text-tertiary: var(--text-3);
-  --color-text-success: var(--accent);
+  --color-text-success: var(--admin-accent);
   --color-text-danger: var(--danger);
-  --color-background-info: var(--accent-dim);
-  --color-text-info: var(--accent);
+  --color-background-info: var(--admin-accent-dim);
+  --color-text-info: var(--admin-accent);
+  /* Admin-specific green accent — scoped here so it doesn't pollute the brand palette */
+  --admin-accent:     #22C55E;
+  --admin-accent-dim: rgba(34,197,94,0.12);
 }
 
 .admin-portal-wrapper,
