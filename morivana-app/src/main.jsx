@@ -40,11 +40,15 @@ if ('serviceWorker' in navigator) {
 // Register GSAP plugins ONCE globally - never in individual components
 gsap.registerPlugin(ScrollTrigger)
 
+import { CountryProvider } from './context/CountryContext.jsx'
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <HelmetProvider>
       <BrowserRouter>
-        <App />
+        <CountryProvider>
+          <App />
+        </CountryProvider>
       </BrowserRouter>
     </HelmetProvider>
   </React.StrictMode>,

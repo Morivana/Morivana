@@ -24,3 +24,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Service Account Keys
+server/ga4-key.json
+ga4-key.json
