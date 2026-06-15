@@ -502,7 +502,7 @@ export default function AdminPage() {
 
           <h1 className="text-[16px] font-semibold mb-2">Access Restricted</h1>
           <p className="text-[13px] mb-6 leading-relaxed text-[var(--text-2)]">
-            This admin panel is restricted to the storefront owner. Your profile (<span className="font-mono text-[11px] text-[var(--text-1)]">{user?.emailAddresses[0]?.emailAddress || 'anonymous'}</span>) does not possess administrator credentials.
+            This admin panel is restricted to the storefront owner. Your profile (<span className="font-mono text-[11px] text-[var(--text-1)]">{user?.emailAddresses?.[0]?.emailAddress || user?.primaryEmailAddress?.emailAddress || 'anonymous'}</span>) does not possess administrator credentials.
           </p>
 
           <div className="space-y-4">
