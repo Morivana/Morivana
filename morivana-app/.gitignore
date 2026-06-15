@@ -28,3 +28,7 @@ dist-ssr
 # Service Account Keys
 server/ga4-key.json
 ga4-key.json
+
+# Python virtual environment
+venv/
+
