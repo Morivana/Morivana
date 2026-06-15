@@ -1,0 +1,261 @@
+
+<style>
+.rz-section { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; background: var(--color-background-primary); margin-bottom: 12px; }
+.rz-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer; user-select: none; }
+.rz-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.rz-title { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+.rz-sub { font-size: 12px; color: var(--color-text-secondary); }
+.rz-body { display: none; margin-top: 10px; border-top: 0.5px solid var(--color-border-tertiary); padding-top: 10px; }
+.rz-body.open { display: block; }
+.chip { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 3px 8px; border-radius: 4px; margin: 2px 2px 2px 0; font-family: var(--font-mono); }
+.chip-warn { background: var(--color-background-warning); color: var(--color-text-warning); }
+.chip-ok { background: var(--color-background-success); color: var(--color-text-success); }
+.chip-info { background: var(--color-background-info); color: var(--color-text-info); }
+.chip-danger { background: var(--color-background-danger); color: var(--color-text-danger); }
+.chip-muted { background: var(--color-background-secondary); color: var(--color-text-secondary); }
+pre { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; font-size: 11px; overflow-x: auto; margin: 8px 0; color: var(--color-text-primary); font-family: var(--font-mono); white-space: pre; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+.mini-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; }
+.mini-card p { margin: 0; font-size: 12px; color: var(--color-text-secondary); }
+.mini-card b { font-size: 13px; color: var(--color-text-primary); font-weight: 500; display: block; margin-bottom: 2px; }
+.warn-box { background: var(--color-background-warning); border-left: 3px solid var(--color-border-warning); border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 8px 12px; margin: 8px 0; font-size: 12px; color: var(--color-text-warning); }
+.ok-box { background: var(--color-background-success); border-left: 3px solid var(--color-border-success); border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 8px 12px; margin: 8px 0; font-size: 12px; color: var(--color-text-success); }
+.chevron { margin-left: auto; font-size: 12px; color: var(--color-text-tertiary); transition: transform .2s; }
+.chevron.open { transform: rotate(180deg); }
+button.ask { font-size: 12px; margin-top: 8px; padding: 6px 12px; cursor: pointer; }
+</style>
+
+<h2 class="sr-only">Razorpay admin panel integration guide for Morivaná Daily</h2>
+
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;">
+  <div class="mini-card"><b>6 modules</b><p>to add to your portal</p></div>
+  <div class="mini-card"><b>Never expose</b><p>key_secret client-side</p></div>
+  <div class="mini-card"><b>Webhook first</b><p>don't poll for status</p></div>
+</div>
+
+<!-- MODULE 1: Payment dashboard -->
+<div class="rz-section">
+  <div class="rz-head" onclick="toggle(this)">
+    <div class="rz-icon" style="background:var(--color-background-info)"><i class="ti ti-credit-card" style="color:var(--color-text-info)" aria-hidden="true"></i></div>
+    <div><div class="rz-title">1 · Payments dashboard</div><div class="rz-sub">List all payments — captured, authorized, failed</div></div>
+    <span class="chevron">▼</span>
+  </div>
+  <div class="rz-body">
+    <p style="font-size:12px;color:var(--color-text-secondary);margin:0 0 8px">Your backend proxies <code>GET /v1/payments</code> to Razorpay. Never call Razorpay APIs from the React frontend directly — your key_secret would be exposed.</p>
+    <pre>// Express route (server-side only)
+router.get('/admin/payments', auth, async (req, res) => {
+  const { from, to, count = 20 } = req.query;
+  const payments = await razorpay.payments.all({
+    from, to, count,
+  });
+  res.json(payments);
+});</pre>
+    <div style="font-size:12px;color:var(--color-text-secondary);margin:4px 0 6px">Status chips to show in the UI:</div>
+    <span class="chip chip-warn">authorized</span>
+    <span class="chip chip-ok">captured</span>
+    <span class="chip chip-danger">failed</span>
+    <span class="chip chip-muted">refunded</span>
+    <div class="warn-box"><i class="ti ti-alert-triangle" aria-hidden="true"></i> Authorized payments auto-refund after 3 days if not captured. Flag these in your admin with a countdown timer.</div>
+    <button class="ask" onclick="sendPrompt('Show me the React component code for the Razorpay payments table in the Morivaná admin panel ↗')">Build the payments table component ↗</button>
+  </div>
+</div>
+
+<!-- MODULE 2: Capture payments -->
+<div class="rz-section">
+  <div class="rz-head" onclick="toggle(this)">
+    <div class="rz-icon" style="background:var(--color-background-success)"><i class="ti ti-check" style="color:var(--color-text-success)" aria-hidden="true"></i></div>
+    <div><div class="rz-title">2 · Capture payment</div><div class="rz-sub">Authorized → Captured — money moves to your account</div></div>
+    <span class="chevron">▼</span>
+  </div>
+  <div class="rz-body">
+    <div class="ok-box">Set auto-capture in Razorpay Dashboard → Account &amp; Settings → Payment Capture. For Morivaná you almost certainly want auto-capture ON so no manual step is needed per order.</div>
+    <p style="font-size:12px;color:var(--color-text-secondary);margin:6px 0">For manual capture (e.g. pre-orders or high-value review):</p>
+    <pre>// POST /admin/payments/:id/capture
+router.post('/admin/payments/:id/capture', auth, async (req, res) => {
+  const payment = await razorpay.payments.capture(
+    req.params.id,
+    req.body.amount, // in paise — must equal or less than auth amount
+    'INR'
+  );
+  await Order.findOneAndUpdate(
+    { razorpayPaymentId: req.params.id },
+    { status: 'paid', capturedAt: new Date() }
+  );
+  res.json(payment);
+});</pre>
+    <div class="row2">
+      <div class="mini-card"><b>Amount unit</b><p>Paise, not rupees. ₹500 = 50000</p></div>
+      <div class="mini-card"><b>Partial capture</b><p>Capture less than auth to adjust order value</p></div>
+    </div>
+    <button class="ask" onclick="sendPrompt('Write the admin panel UI for manual payment capture with a confirm modal in Morivaná ↗')">Build the capture UI ↗</button>
+  </div>
+</div>
+
+<!-- MODULE 3: Refunds -->
+<div class="rz-section">
+  <div class="rz-head" onclick="toggle(this)">
+    <div class="rz-icon" style="background:var(--color-background-danger)"><i class="ti ti-arrow-back-up" style="color:var(--color-text-danger)" aria-hidden="true"></i></div>
+    <div><div class="rz-title">3 · Issue refunds</div><div class="rz-sub">Full or partial — tied to your returns flow</div></div>
+    <span class="chevron">▼</span>
+  </div>
+  <div class="rz-body">
+    <p style="font-size:12px;color:var(--color-text-secondary);margin:0 0 8px">Only captured payments can be refunded. Link this to your Returns tab so admin can trigger a refund directly from the order detail page.</p>
+    <pre>// POST /admin/payments/:id/refund
+router.post('/admin/payments/:id/refund', auth, async (req, res) => {
+  const { amount, reason, notes } = req.body;
+  const refund = await razorpay.payments.refund(req.params.id, {
+    amount,           // partial: less than captured. Full: omit field
+    speed: 'normal',  // 'normal' (5–7 days) or 'optimum' (instant, if eligible)
+    notes: { reason, orderId: notes.orderId },
+  });
+  await Order.findOneAndUpdate(
+    { razorpayPaymentId: req.params.id },
+    { status: 'refunded', refundId: refund.id }
+  );
+  res.json(refund);
+});</pre>
+    <div class="row2">
+      <div class="mini-card"><b>speed: normal</b><p>5–7 business days to customer bank</p></div>
+      <div class="mini-card"><b>speed: optimum</b><p>Instant if bank supports, else normal fallback</p></div>
+    </div>
+    <div class="warn-box">Webhook <code>refund.created</code> fires when Razorpay processes it. Update order status from the webhook, not from the API response alone.</div>
+    <button class="ask" onclick="sendPrompt('Build a refund modal component for the Morivaná admin panel with full/partial toggle ↗')">Build the refund modal ↗</button>
+  </div>
+</div>
+
+<!-- MODULE 4: Webhooks -->
+<div class="rz-section">
+  <div class="rz-head" onclick="toggle(this)">
+    <div class="rz-icon" style="background:var(--color-background-warning)"><i class="ti ti-webhook" style="color:var(--color-text-warning)" aria-hidden="true"></i></div>
+    <div><div class="rz-title">4 · Webhook handler</div><div class="rz-sub">The source of truth — never poll, always listen</div></div>
+    <span class="chevron">▼</span>
+  </div>
+  <div class="rz-body">
+    <p style="font-size:12px;color:var(--color-text-secondary);margin:0 0 8px">Register <code>https://morivanadaily.com/api/webhooks/razorpay</code> in Razorpay Dashboard → Account &amp; Settings → Webhooks.</p>
+    <pre>// Express webhook endpoint — must use raw body parser
+router.post('/webhooks/razorpay',
+  express.raw({ type: 'application/json' }),
+  async (req, res) => {
+    const sig = req.headers['x-razorpay-signature'];
+    const valid = razorpay.webhooks.validateWebhookSignature(
+      req.body.toString(),
+      sig,
+      process.env.RAZORPAY_WEBHOOK_SECRET
+    );
+    if (!valid) return res.status(400).send('Invalid signature');
+
+    const event = JSON.parse(req.body);
+    switch (event.event) {
+      case 'payment.authorized':
+        await handleAuthorized(event.payload.payment.entity); break;
+      case 'payment.captured':
+        await handleCaptured(event.payload.payment.entity); break;
+      case 'payment.failed':
+        await handleFailed(event.payload.payment.entity); break;
+      case 'refund.created':
+        await handleRefund(event.payload.refund.entity); break;
+      case 'order.paid':
+        await markOrderPaid(event.payload.order.entity); break;
+    }
+    res.json({ status: 'ok' });
+  }
+);</pre>
+    <div class="warn-box">Always verify the <code>x-razorpay-signature</code> HMAC before trusting any webhook payload. Razorpay retries failed webhooks for 24 hours — make your handlers idempotent.</div>
+    <div style="margin-top:8px;font-size:12px;color:var(--color-text-secondary)">Key events to subscribe:</div>
+    <div style="margin-top:4px">
+      <span class="chip chip-warn">payment.authorized</span>
+      <span class="chip chip-ok">payment.captured</span>
+      <span class="chip chip-danger">payment.failed</span>
+      <span class="chip chip-info">refund.created</span>
+      <span class="chip chip-ok">order.paid</span>
+      <span class="chip chip-danger">payment.dispute.created</span>
+    </div>
+  </div>
+</div>
+
+<!-- MODULE 5: Payment links -->
+<div class="rz-section">
+  <div class="rz-head" onclick="toggle(this)">
+    <div class="rz-icon" style="background:var(--color-background-info)"><i class="ti ti-link" style="color:var(--color-text-info)" aria-hidden="true"></i></div>
+    <div><div class="rz-title">5 · Payment links</div><div class="rz-sub">Send custom links for manual / B2B orders</div></div>
+    <span class="chevron">▼</span>
+  </div>
+  <div class="rz-body">
+    <p style="font-size:12px;color:var(--color-text-secondary);margin:0 0 8px">Useful for wholesale inquiries, Instagram DM orders, or COD conversions. Admin generates a link and sends via WhatsApp/email directly from the portal.</p>
+    <pre>// POST /admin/payment-links
+router.post('/admin/payment-links', auth, async (req, res) => {
+  const { amount, customer, description, expiry } = req.body;
+  const link = await razorpay.paymentLink.create({
+    amount,          // in paise
+    currency: 'INR',
+    description,
+    customer: {
+      name: customer.name,
+      email: customer.email,
+      contact: customer.phone,
+    },
+    notify: { sms: true, email: true },
+    reminder_enable: true,
+    expire_by: expiry, // Unix timestamp
+  });
+  res.json({ url: link.short_url, id: link.id });
+});</pre>
+    <div class="row2">
+      <div class="mini-card"><b>short_url</b><p>Share on WhatsApp / email directly</p></div>
+      <div class="mini-card"><b>Webhook</b><p><code>payment_link.paid</code> fires on completion</p></div>
+    </div>
+    <button class="ask" onclick="sendPrompt('Build the payment link generator UI for the Morivaná admin panel with WhatsApp share button ↗')">Build the payment link UI ↗</button>
+  </div>
+</div>
+
+<!-- MODULE 6: Settlements & analytics -->
+<div class="rz-section">
+  <div class="rz-head" onclick="toggle(this)">
+    <div class="rz-icon" style="background:var(--color-background-success)"><i class="ti ti-chart-bar" style="color:var(--color-text-success)" aria-hidden="true"></i></div>
+    <div><div class="rz-title">6 · Settlements &amp; analytics</div><div class="rz-sub">Track what actually lands in your bank</div></div>
+    <span class="chevron">▼</span>
+  </div>
+  <div class="rz-body">
+    <pre>// GET /admin/settlements
+router.get('/admin/settlements', auth, async (req, res) => {
+  const settlements = await razorpay.settlements.all({
+    from: req.query.from,
+    to:   req.query.to,
+    count: 20,
+  });
+  res.json(settlements);
+});
+
+// Fetch items in a settlement (for reconciliation)
+router.get('/admin/settlements/:id/items', auth, async (req, res) => {
+  const items = await razorpay.settlements.fetchReconDetails({
+    year: req.query.year,
+    month: req.query.month,
+    day: req.query.day,
+  });
+  res.json(items);
+});</pre>
+    <div class="row2">
+      <div class="mini-card"><b>T+2 cycle</b><p>Captured Mon = bank credit Wed</p></div>
+      <div class="mini-card"><b>Fees deducted</b><p>Razorpay fee + GST before settlement</p></div>
+      <div class="mini-card"><b>On-demand</b><p>Instant settlement available (fee applies)</p></div>
+      <div class="mini-card"><b>Reconcile</b><p>Match settlement items to MongoDB orders</p></div>
+    </div>
+    <button class="ask" onclick="sendPrompt('Build a settlements reconciliation view for the Morivaná admin panel with revenue chart ↗')">Build the settlements view ↗</button>
+  </div>
+</div>
+
+<!-- ENV vars reminder -->
+<div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 14px;font-size:12px;color:var(--color-text-secondary)">
+  <i class="ti ti-lock" aria-hidden="true"></i> Required env vars in your Node backend:
+  <code style="display:block;margin-top:4px;color:var(--color-text-primary)">RAZORPAY_KEY_ID=rzp_live_xxx<br>RAZORPAY_KEY_SECRET=xxx<br>RAZORPAY_WEBHOOK_SECRET=xxx</code>
+</div>
+
+<script>
+function toggle(head) {
+  const body = head.nextElementSibling;
+  const chev = head.querySelector('.chevron');
+  const isOpen = body.classList.toggle('open');
+  chev.classList.toggle('open', isOpen);
+}
+</script>

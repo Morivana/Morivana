@@ -20,6 +20,7 @@ import { errorHandler } from './middleware/errorHandler.js'
 import stripeWebhooksRouter from './routes/webhooks.js'
 import { adminAuth } from './middleware/adminAuth.js'
 import { ObjectId } from 'mongodb'
+import axios from 'axios'
 
 const {
   MONGODB_URI,
@@ -378,7 +379,21 @@ let storeSettingsData = {
   },
   webhooks: [
     { url: 'https://api.morivanadaily.com/v1/webhook', events: ['order.created', 'payment.settled'] }
-  ]
+  ],
+  delhiveryApiKey: '',
+  delhiveryClientName: 'MORIVANA DAILY',
+  delhiveryPickupLocationName: 'Morivana Depot',
+  delhiveryMode: 'staging',
+  delhiveryPickupAddress: 'Hangar 3, Sector 15',
+  delhiveryPickupCity: 'Gurgaon',
+  delhiveryPickupState: 'Haryana',
+  delhiveryPickupPin: '122001',
+  delhiveryPickupPhone: '9876543210',
+  razorpayKeyId: '',
+  razorpayKeySecret: '',
+  razorpayMode: 'staging',
+  razorpayActive: false,
+  razorpayWebhookSecret: ''
 }
 
 let emailLogsList = [
@@ -703,6 +718,7 @@ app.use((req, res, next) => clerkMiddle(req, res, next))
 
 // ── Raw body parser for Stripe webhooks (registered BEFORE express.json) ──
 app.use('/api/webhooks/stripe', express.raw({ type: 'application/json' }))
+app.use('/api/webhooks/razorpay', express.raw({ type: 'application/json' }))
 
 // Webhook Router
 app.use('/api/webhooks', stripeWebhooksRouter)
@@ -2457,6 +2473,651 @@ app.put('/api/admin/settings', adminAuth, async (req, res, next) => {
     return res.json({ ok: true, settings: result })
   } catch (err) {
     next(err)
+  }
+})
+
+// POST Test Razorpay Connection
+app.post('/api/admin/payments/razorpay/test-connection', adminAuth, async (req, res, next) => {
+  try {
+    const { keyId, keySecret } = req.body
+    if (!keyId || !keySecret) {
+      return res.status(400).json({ error: 'Key ID and Key Secret are required.' })
+    }
+
+    const authHeader = 'Basic ' + Buffer.from(`${keyId}:${keySecret}`).toString('base64')
+    try {
+      const response = await axios.get('https://api.razorpay.com/v1/payments?count=1', {
+        headers: {
+          'Authorization': authHeader
+        }
+      })
+      if (response.status === 200) {
+        return res.json({ ok: true })
+      } else {
+        return res.status(400).json({ error: 'Failed to authenticate with Razorpay.' })
+      }
+    } catch (apiErr) {
+      console.error('[Razorpay Connection Test Error]', apiErr.response?.data || apiErr.message)
+      const errorMsg = apiErr.response?.data?.error?.description || 'Authentication failed. Please verify Key ID and Key Secret.'
+      return res.status(400).json({ error: errorMsg })
+    }
+  } catch (err) {
+    next(err)
+  }
+})
+
+// GET Live Razorpay Payments
+app.get('/api/admin/payments/razorpay/live', adminAuth, async (req, res, next) => {
+  try {
+    const settings = await getSettingsHelper()
+    const keyId = settings.razorpayKeyId
+    const keySecret = settings.razorpayKeySecret
+
+    if (!keyId || !keySecret) {
+      return res.json([])
+    }
+
+    const authHeader = 'Basic ' + Buffer.from(`${keyId}:${keySecret}`).toString('base64')
+    try {
+      const response = await axios.get('https://api.razorpay.com/v1/payments?count=50', {
+        headers: {
+          'Authorization': authHeader
+        }
+      })
+
+      const paymentsListObj = response.data?.items || []
+      const formatted = paymentsListObj.map(p => {
+        const amtRupees = p.amount / 100
+        const formattedAmount = `₹${amtRupees.toLocaleString('en-IN')}`
+        const usdEquiv = `$${(amtRupees / 83.5).toFixed(2)}`
+        const dateObj = new Date(p.created_at * 1000)
+        const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+
+        let status = 'Pending'
+        if (p.status === 'captured') status = 'Settled'
+        else if (p.status === 'refunded') status = 'Refunded'
+        else if (p.status === 'failed') status = 'Failed'
+        else if (p.status === 'authorized') status = 'Authorized'
+
+        return {
+          _id: p.id,
+          gateway: 'Razorpay',
+          order: p.order_id || '—',
+          amount: formattedAmount,
+          usd: usdEquiv,
+          status,
+          method: (p.method || 'UPI').toUpperCase(),
+          date: dateStr,
+          createdAt: dateObj,
+          region: 'IN',
+          email: p.email || '',
+          contact: p.contact || '',
+          amountRefunded: p.amount_refunded / 100,
+          description: p.description || ''
+        }
+      })
+
+      return res.json(formatted)
+    } catch (apiErr) {
+      console.error('[Razorpay Live Payments Error]', apiErr.response?.data || apiErr.message)
+      const errorMsg = apiErr.response?.data?.error?.description || 'Failed to fetch live payments from Razorpay.'
+      return res.status(400).json({ error: errorMsg })
+    }
+  } catch (err) {
+    next(err)
+  }
+})
+
+// POST Razorpay Capture
+app.post('/api/admin/payments/razorpay/:id/capture', adminAuth, async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const { amount } = req.body
+
+    if (!amount) {
+      return res.status(400).json({ error: 'Capture amount is required.' })
+    }
+
+    const settings = await getSettingsHelper()
+    const keyId = settings.razorpayKeyId
+    const keySecret = settings.razorpayKeySecret
+
+    if (!keyId || !keySecret) {
+      return res.status(400).json({ error: 'Razorpay is not configured.' })
+    }
+
+    const authHeader = 'Basic ' + Buffer.from(`${keyId}:${keySecret}`).toString('base64')
+    const body = {
+      amount: Math.round(parseFloat(amount) * 100),
+      currency: 'INR'
+    }
+
+    try {
+      const response = await axios.post(`https://api.razorpay.com/v1/payments/${id}/capture`, body, {
+        headers: {
+          'Authorization': authHeader,
+          'Content-Type': 'application/json'
+        }
+      })
+
+      if (isDbConnected && payments) {
+        await payments.findOneAndUpdate(
+          { _id: id },
+          { $set: { status: 'Settled' } }
+        )
+      }
+
+      return res.json({ ok: true, payment: response.data })
+    } catch (apiErr) {
+      console.error('[Razorpay Capture Error]', apiErr.response?.data || apiErr.message)
+      const errorMsg = apiErr.response?.data?.error?.description || 'Failed to capture payment.'
+      return res.status(400).json({ error: errorMsg })
+    }
+  } catch (err) {
+    next(err)
+  }
+})
+
+// POST Razorpay Refund (Supports partial, notes, reason, and speed)
+app.post('/api/admin/payments/razorpay/refund', adminAuth, async (req, res, next) => {
+  try {
+    const { paymentId, amount, reason, speed = 'normal' } = req.body
+    if (!paymentId) {
+      return res.status(400).json({ error: 'Payment ID is required.' })
+    }
+
+    const settings = await getSettingsHelper()
+    const keyId = settings.razorpayKeyId
+    const keySecret = settings.razorpayKeySecret
+
+    if (!keyId || !keySecret) {
+      return res.status(400).json({ error: 'Razorpay is not configured.' })
+    }
+
+    const authHeader = 'Basic ' + Buffer.from(`${keyId}:${keySecret}`).toString('base64')
+    const body = {
+      speed: speed || 'normal'
+    }
+    if (amount) {
+      body.amount = Math.round(parseFloat(amount) * 100)
+    }
+    if (reason) {
+      body.notes = { reason }
+    }
+
+    try {
+      const response = await axios.post(`https://api.razorpay.com/v1/payments/${paymentId}/refund`, body, {
+        headers: {
+          'Authorization': authHeader,
+          'Content-Type': 'application/json'
+        }
+      })
+
+      if (isDbConnected && payments) {
+        await payments.findOneAndUpdate(
+          { _id: paymentId },
+          { $set: { status: 'Refunded' } }
+        )
+      }
+
+      return res.json({ ok: true, refund: response.data })
+    } catch (apiErr) {
+      console.error('[Razorpay Refund Error]', apiErr.response?.data || apiErr.message)
+      const errorMsg = apiErr.response?.data?.error?.description || 'Failed to issue refund.'
+      return res.status(400).json({ error: errorMsg })
+    }
+  } catch (err) {
+    next(err)
+  }
+})
+
+// POST Razorpay Create Payment Link
+app.post('/api/admin/payments/razorpay/payment-link', adminAuth, async (req, res, next) => {
+  try {
+    const { amount, customerName, customerEmail, customerPhone, description, expiryDays = 7 } = req.body
+    if (!amount || !customerName) {
+      return res.status(400).json({ error: 'Amount and Customer Name are required.' })
+    }
+
+    const settings = await getSettingsHelper()
+    const keyId = settings.razorpayKeyId
+    const keySecret = settings.razorpayKeySecret
+
+    if (!keyId || !keySecret) {
+      return res.status(400).json({ error: 'Razorpay is not configured.' })
+    }
+
+    const authHeader = 'Basic ' + Buffer.from(`${keyId}:${keySecret}`).toString('base64')
+    const expireTimestamp = Math.floor((Date.now() + (parseInt(expiryDays) * 24 * 60 * 60 * 1000)) / 1000)
+    
+    const body = {
+      amount: Math.round(parseFloat(amount) * 100),
+      currency: 'INR',
+      accept_partial: false,
+      description: description || 'Payment for Morivaná Daily',
+      customer: {
+        name: customerName,
+        email: customerEmail || undefined,
+        contact: customerPhone || undefined
+      },
+      notify: {
+        sms: !!customerPhone,
+        email: !!customerEmail
+      },
+      reminder_enable: true,
+      expire_by: expireTimestamp
+    }
+
+    try {
+      const response = await axios.post('https://api.razorpay.com/v1/payment_links', body, {
+        headers: {
+          'Authorization': authHeader,
+          'Content-Type': 'application/json'
+        }
+      })
+      return res.json({ ok: true, paymentLink: response.data })
+    } catch (apiErr) {
+      console.error('[Razorpay Payment Link Error]', apiErr.response?.data || apiErr.message)
+      const errorMsg = apiErr.response?.data?.error?.description || 'Failed to create payment link.'
+      return res.status(400).json({ error: errorMsg })
+    }
+  } catch (err) {
+    next(err)
+  }
+})
+
+// GET Razorpay Payouts / Settlements
+app.get('/api/admin/payments/razorpay/settlements', adminAuth, async (req, res, next) => {
+  try {
+    const settings = await getSettingsHelper()
+    const keyId = settings.razorpayKeyId
+    const keySecret = settings.razorpayKeySecret
+
+    if (!keyId || !keySecret) {
+      return res.json([])
+    }
+
+    const authHeader = 'Basic ' + Buffer.from(`${keyId}:${keySecret}`).toString('base64')
+    try {
+      const response = await axios.get('https://api.razorpay.com/v1/settlements?count=20', {
+        headers: {
+          'Authorization': authHeader
+        }
+      })
+
+      const settlementsList = response.data?.items || []
+      const formatted = settlementsList.map(s => {
+        const amtRupees = s.amount / 100
+        const feeRupees = s.fees / 100
+        const taxRupees = s.tax / 100
+        const netRupees = (s.amount - s.fees - s.tax) / 100
+
+        const dateObj = new Date(s.created_at * 1000)
+        const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+
+        return {
+          id: s.id,
+          amount: `₹${amtRupees.toLocaleString('en-IN')}`,
+          fees: `₹${feeRupees.toLocaleString('en-IN')}`,
+          tax: `₹${taxRupees.toLocaleString('en-IN')}`,
+          net: `₹${netRupees.toLocaleString('en-IN')}`,
+          status: s.status,
+          date: dateStr,
+          createdAt: dateObj
+        }
+      })
+      return res.json(formatted)
+    } catch (apiErr) {
+      console.error('[Razorpay Settlements Error]', apiErr.response?.data || apiErr.message)
+      const errorMsg = apiErr.response?.data?.error?.description || 'Failed to fetch settlements.'
+      return res.status(400).json({ error: errorMsg })
+    }
+  } catch (err) {
+    next(err)
+  }
+})
+
+// POST Razorpay Webhook Endpoint
+app.post('/api/webhooks/razorpay', async (req, res) => {
+  try {
+    const sig = req.headers['x-razorpay-signature']
+    const settings = await getSettingsHelper()
+    const secret = process.env.RAZORPAY_WEBHOOK_SECRET || settings.razorpayWebhookSecret || 'morivana_webhook_sec'
+
+    if (!sig) {
+      return res.status(400).send('Missing signature')
+    }
+
+    const expectedSig = crypto
+      .createHmac('sha256', secret)
+      .update(req.body.toString())
+      .digest('hex')
+
+    if (expectedSig !== sig) {
+      console.warn('[Razorpay Webhook Warning] Signature mismatch')
+      return res.status(400).send('Invalid signature')
+    }
+
+    const event = JSON.parse(req.body)
+    console.log('[Razorpay Webhook Received]', event.event)
+
+    const paymentObj = event.payload?.payment?.entity
+    if (paymentObj && isDbConnected && payments) {
+      let dbStatus = 'Pending'
+      if (paymentObj.status === 'captured') dbStatus = 'Settled'
+      else if (paymentObj.status === 'refunded') dbStatus = 'Refunded'
+      else if (paymentObj.status === 'failed') dbStatus = 'Failed'
+      else if (paymentObj.status === 'authorized') dbStatus = 'Authorized'
+
+      await payments.findOneAndUpdate(
+        { _id: paymentObj.id },
+        {
+          $set: {
+            status: dbStatus,
+            method: (paymentObj.method || 'UPI').toUpperCase(),
+            amount: `₹${paymentObj.amount / 100}`,
+            region: 'IN'
+          }
+        },
+        { upsert: true }
+      )
+    }
+
+    return res.json({ status: 'ok' })
+  } catch (err) {
+    console.error('[Razorpay Webhook Error]', err)
+    return res.status(500).send('Internal server error')
+  }
+})
+
+// Helper to retrieve store settings
+async function getSettingsHelper() {
+  if (isDbConnected && storeSettings) {
+    const settings = await storeSettings.findOne()
+    return settings || storeSettingsData
+  }
+  return storeSettingsData
+}
+
+// ── DELHIVERY API INTEGRATION ───────────────────────────────────────────────
+
+// 1. Test Delhivery API Connection
+app.post('/api/admin/delhivery/test-connection', adminAuth, async (req, res, next) => {
+  try {
+    const { token, mode } = req.body
+    const activeToken = token || (await getSettingsHelper()).delhiveryApiKey
+    const activeMode = mode || (await getSettingsHelper()).delhiveryMode || 'staging'
+
+    if (!activeToken) {
+      return res.status(400).json({ error: 'Delhivery API token is required.' })
+    }
+
+    const domain = activeMode === 'production' ? 'track.delhivery.com' : 'staging-express.delhivery.com'
+    const testUrl = `https://${domain}/api/v1/packages/json/?token=${activeToken}&waybill=TESTTOKEN123`
+
+    const response = await fetch(testUrl, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' }
+    })
+
+    if (response.status === 401 || response.status === 403) {
+      return res.status(401).json({ error: 'Authentication failed. Invalid API token.' })
+    }
+
+    // A status of 200/404 indicating we connected to the gateway (even if the testing waybill doesn't exist)
+    return res.json({ ok: true, message: 'Connection to Delhivery API established successfully!' })
+  } catch (err) {
+    console.error('Delhivery connection test failed:', err)
+    return res.status(500).json({ error: `Connection failed: ${err.message}` })
+  }
+})
+
+// 2. Create Delhivery Shipment (Booking/Manifestation)
+app.post('/api/admin/deliveries/delhivery/create', adminAuth, async (req, res, next) => {
+  try {
+    const {
+      deliveryId,
+      consigneeName,
+      consigneeAddress,
+      consigneeCity,
+      consigneeState,
+      consigneePin,
+      consigneePhone,
+      weight,
+      length,
+      breadth,
+      height,
+      paymentMode,
+      totalAmount
+    } = req.body
+
+    if (!deliveryId || !consigneeName || !consigneeAddress || !consigneeCity || !consigneeState || !consigneePin || !consigneePhone) {
+      return res.status(400).json({ error: 'Missing required consignee details.' })
+    }
+
+    const settings = await getSettingsHelper()
+    const token = settings.delhiveryApiKey
+    const mode = settings.delhiveryMode || 'staging'
+    const clientName = settings.delhiveryClientName || 'MORIVANA DAILY'
+    const pickupLocationName = settings.delhiveryPickupLocationName || 'Morivana Depot'
+
+    if (!token) {
+      return res.status(400).json({ error: 'Delhivery API key is not configured in Settings.' })
+    }
+
+    const weightInKg = Number(weight || 150) / 1000
+    
+    // Construct single package shipment details
+    const shipment = {
+      name: consigneeName,
+      add: consigneeAddress,
+      city: consigneeCity,
+      state: consigneeState,
+      pin: consigneePin,
+      phone: consigneePhone,
+      country: 'India',
+      order: deliveryId,
+      payment_mode: paymentMode || 'Prepaid',
+      total_amount: Number(totalAmount || 0),
+      cod_amount: paymentMode === 'COD' ? Number(totalAmount || 0) : 0,
+      weight: weightInKg,
+      length: Number(length || 10),
+      breadth: Number(breadth || 10),
+      height: Number(height || 10),
+      products_desc: 'Morivaná Daily Super Greens Pack',
+      hsn_code: '12119029'
+    }
+
+    const payload = {
+      shipments: [shipment],
+      pickup_location: {
+        name: pickupLocationName
+      }
+    }
+
+    const domain = mode === 'production' ? 'track.delhivery.com' : 'staging-express.delhivery.com'
+    const createUrl = `https://${domain}/api/cmu/create.json`
+
+    const bodyParams = new URLSearchParams()
+    bodyParams.append('format', 'json')
+    bodyParams.append('data', JSON.stringify(payload))
+
+    console.log(`[DELHIVERY] Creating shipment via ${createUrl} for order ${deliveryId}`)
+    const response = await fetch(createUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Token ${token}`,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: bodyParams.toString()
+    })
+
+    const result = await response.json()
+    console.log('[DELHIVERY] Response:', JSON.stringify(result))
+
+    if (!response.ok || !result.success || (result.packages && result.packages[0]?.status === 'Fail')) {
+      const firstPackage = result.packages?.[0]
+      const errMsg = firstPackage?.remarks?.join(', ') || result.rmk || 'Delhivery shipment manifestation failed.'
+      return res.status(400).json({ error: errMsg, details: result })
+    }
+
+    const packageInfo = result.packages[0]
+    const waybill = packageInfo.waybill
+
+    // Update in Database
+    let deliveryRecord = null
+    const formattedDate = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+    
+    if (!isDbConnected || !deliveries) {
+      const delIdx = deliveriesList.findIndex(d => d.id === deliveryId || d._id === deliveryId)
+      if (delIdx !== -1) {
+        deliveriesList[delIdx].carrier = 'Delhivery'
+        deliveriesList[delIdx].tracking = waybill
+        deliveriesList[delIdx].status = 'In transit'
+        deliveriesList[delIdx].date = formattedDate
+        deliveriesList[delIdx].delhiveryDetails = packageInfo
+        deliveryRecord = deliveriesList[delIdx]
+      }
+      
+      const ordIdx = ordersList.findIndex(o => o.orderId === deliveryId)
+      if (ordIdx !== -1) {
+        ordersList[ordIdx].orderStatus = 'Shipped'
+      }
+    } else {
+      let query = { id: deliveryId }
+      const existing = await deliveries.findOne({ id: deliveryId })
+      if (!existing) {
+        // Try looking up by ObjectId or create a delivery row if it doesn't exist
+        try {
+          query = { _id: new ObjectId(deliveryId) }
+        } catch(e) {}
+      }
+
+      deliveryRecord = await deliveries.findOneAndUpdate(
+        query,
+        {
+          $set: {
+            carrier: 'Delhivery',
+            tracking: waybill,
+            status: 'In transit',
+            date: formattedDate,
+            delhiveryDetails: packageInfo
+          }
+        },
+        { returnDocument: 'after' }
+      )
+
+      await orders.updateOne(
+        { orderId: deliveryId },
+        { $set: { orderStatus: 'Shipped' } }
+      )
+    }
+
+    return res.json({ ok: true, waybill, delivery: deliveryRecord })
+  } catch (err) {
+    console.error('Delhivery shipment creation failed:', err)
+    return res.status(500).json({ error: `Manifestation failed: ${err.message}` })
+  }
+})
+
+// 3. Get Real-time Delhivery Tracking Details
+app.get('/api/admin/deliveries/delhivery/track/:waybill', adminAuth, async (req, res, next) => {
+  try {
+    const { waybill } = req.params
+    if (!waybill) {
+      return res.status(400).json({ error: 'Waybill number is required.' })
+    }
+
+    const settings = await getSettingsHelper()
+    const token = settings.delhiveryApiKey
+    const mode = settings.delhiveryMode || 'staging'
+
+    const isMock = waybill.startsWith('DEL') || waybill.startsWith('DL2026') || waybill.startsWith('12345') || waybill.includes('test')
+
+    // If it's a mock waybill or if Delhivery token is not configured, return realistic simulated scans.
+    if (isMock || !token) {
+      const isDelivered = waybill === 'DEL123456789' || waybill.endsWith('1') || waybill.includes('delivered')
+      
+      const mockScans = [
+        {
+          scan: {
+            date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+            location: "Pune Hub",
+            status: "In Transit",
+            instructions: "Package received at origin hub"
+          }
+        },
+        {
+          scan: {
+            date: new Date(Date.now() - 1.8 * 24 * 60 * 60 * 1000).toISOString(),
+            location: "Pune Hub",
+            status: "In Transit",
+            instructions: "Departed from origin facility"
+          }
+        },
+        {
+          scan: {
+            date: new Date(Date.now() - 1.2 * 24 * 60 * 60 * 1000).toISOString(),
+            location: "Mumbai Gateway",
+            status: "In Transit",
+            instructions: "Arrived at gateway"
+          }
+        }
+      ]
+
+      if (isDelivered) {
+        mockScans.push({
+          scan: {
+            date: new Date(Date.now() - 0.5 * 24 * 60 * 60 * 1000).toISOString(),
+            location: "Destination City",
+            status: "Delivered",
+            instructions: "Package delivered to consignee"
+          }
+        })
+      } else {
+        mockScans.push({
+          scan: {
+            date: new Date(Date.now() - 0.1 * 24 * 60 * 60 * 1000).toISOString(),
+            location: "Destination City",
+            status: "In Transit",
+            instructions: "Out for delivery in destination city"
+          }
+        })
+      }
+
+      return res.json({
+        shipment_data: [
+          {
+            shipment: {
+              status: {
+                status: isDelivered ? "Delivered" : "In Transit",
+                instructions: isDelivered ? "Shipment delivered successfully." : "Out for delivery."
+              },
+              scans: mockScans
+            }
+          }
+        ]
+      })
+    }
+
+    const domain = mode === 'production' ? 'track.delhivery.com' : 'staging-express.delhivery.com'
+    const trackUrl = `https://${domain}/api/v1/packages/json/?token=${token}&waybill=${waybill}`
+
+    console.log(`[DELHIVERY] Tracking waybill ${waybill} via ${trackUrl}`)
+    const response = await fetch(trackUrl, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' }
+    })
+
+    if (!response.ok) {
+      throw new Error(`Delhivery returned HTTP ${response.status}`)
+    }
+
+    const data = await response.json()
+    return res.json(data)
+  } catch (err) {
+    console.error('Delhivery tracking failed:', err)
+    return res.status(500).json({ error: `Tracking check failed: ${err.message}` })
   }
 })
 

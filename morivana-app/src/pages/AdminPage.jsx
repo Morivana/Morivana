@@ -3,6 +3,7 @@ import { useAuth, useUser } from '@clerk/react'
 import { useNavigate, Routes, Route, Link, useLocation } from 'react-router-dom'
 import { useApi } from '../utils/api'
 import { useCountry } from '../context/CountryContext'
+import DelhiveryConsole from '../components/DelhiveryConsole'
 
 import {
   IconLayoutDashboard,
@@ -37,7 +38,9 @@ import {
   IconTrash,
   IconMessages,
   IconUpload,
-  IconClock
+  IconClock,
+  IconEye,
+  IconEyeOff
 } from '@tabler/icons-react'
 
 // Dynamic Google Fonts Injection
@@ -464,6 +467,7 @@ export default function AdminPage() {
     if (location.pathname === '/admin/inventory') return 'Inventory Control'
     if (location.pathname === '/admin/list-product') return 'List New Variant'
     if (location.pathname === '/admin/deliveries') return 'Deliveries'
+    if (location.pathname === '/admin/delhivery') return 'Delhivery Shipping Console'
     if (location.pathname === '/admin/payments') return 'Payments'
     if (location.pathname === '/admin/returns') return 'Returns'
     if (location.pathname === '/admin/analytics') return 'Analytics'
@@ -751,6 +755,18 @@ export default function AdminPage() {
                 <IconTruck size={17} className={`shrink-0 ${location.pathname === '/admin/deliveries' ? 'text-[var(--accent)]' : 'text-[var(--text-3)]'}`} />
                 <span>Deliveries</span>
                 <span className="nav-badge">3</span>
+              </Link>
+
+              <Link
+                to="/admin/delhivery"
+                className={`flex items-center gap-2.5 h-9 px-4 mx-2 rounded-lg text-[13.5px] transition-all duration-150 ${
+                  location.pathname === '/admin/delhivery'
+                    ? 'bg-[var(--bg-hover)] text-[var(--text-1)] font-medium'
+                    : 'text-[var(--text-2)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-1)]'
+                }`}
+              >
+                <IconTruck size={17} className={`shrink-0 ${location.pathname === '/admin/delhivery' ? 'text-[var(--accent)]' : 'text-[var(--text-3)]'}`} />
+                <span>Delhivery Console</span>
               </Link>
 
               <Link
@@ -1293,6 +1309,9 @@ export default function AdminPage() {
             {/* PAGE 4: DELIVERIES */}
             <Route path="/deliveries" element={<DeliveriesPage />} />
 
+            {/* NEW PAGE: DELHIVERY CONSOLE */}
+            <Route path="/delhivery" element={<DelhiveryConsole />} />
+
             {/* PAGE 5: PAYMENTS */}
             <Route path="/payments" element={<PaymentsPage />} />
 
@@ -1332,6 +1351,44 @@ export default function AdminPage() {
     </div>
   )
 }
+// Lightweight Code 128 barcode generator
+function drawBarcode(canvas, text) {
+  if (!canvas || !text) return;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  const code128Patterns = {
+    '0': '11011001100', '1': '11001101100', '2': '11001100110', '3': '10010011000',
+    '4': '10010001100', '5': '10001001100', '6': '10011001000', '7': '10011000100',
+    '8': '10001100100', '9': '11001110010', 'A': '11001011100', 'B': '11001001110',
+    'C': '11011100100', 'D': '11001110100', 'E': '11001110010', 'F': '11011101100',
+    'G': '11011100110', 'H': '11001110110', 'I': '11001011000', 'J': '11001000110',
+    'K': '11000100110', 'L': '11010001100', 'M': '11000101100', 'N': '11000100100',
+    'O': '11011000110', 'P': '11000110110', 'Q': '11000110010', 'R': '11011011000',
+    'S': '11011000100', 'T': '11011000100', 'U': '11000110100', 'V': '11000110010',
+    'W': '11010111000', 'X': '11010001110', 'Y': '11000101110', 'Z': '11011101000',
+    '-': '10001011000', '.': '10001000110', ' ': '11011101110', '*': '11000100010'
+  };
+  
+  let binary = '11010010000'; // Start code B
+  const upperText = text.toUpperCase();
+  for (let i = 0; i < upperText.length; i++) {
+    const char = upperText[i];
+    const pattern = code128Patterns[char] || '11000100010';
+    binary += pattern;
+  }
+  binary += '1100011101011'; // Stop pattern
+  
+  const barWidth = Math.max(1.5, Math.floor(canvas.width / binary.length));
+  const startX = Math.floor((canvas.width - binary.length * barWidth) / 2);
+  
+  ctx.fillStyle = '#000000';
+  for (let i = 0; i < binary.length; i++) {
+    if (binary[i] === '1') {
+      ctx.fillRect(startX + i * barWidth, 0, barWidth, canvas.height);
+    }
+  }
+}
 
 // DELIVERIES SUBPAGE
 function DeliveriesPage() {
@@ -1357,6 +1414,146 @@ function DeliveriesPage() {
   const [selectedDelivery, setSelectedDelivery] = useState(null)
   const [showLabelModal, setShowLabelModal] = useState(false)
   const [showTrackModal, setShowTrackModal] = useState(false)
+  const [showFulfillModal, setShowFulfillModal] = useState(false)
+  const [settings, setSettings] = useState(null)
+
+  // Tracking detailed state
+  const [trackingData, setTrackingData] = useState(null)
+  const [trackingLoading, setTrackingLoading] = useState(false)
+  const [trackingError, setTrackingError] = useState('')
+
+  // Fetch settings on mount to check Delhivery key config
+  useEffect(() => {
+    api.get('/api/admin/settings')
+      .then(res => setSettings(res))
+      .catch(err => console.error('Failed to fetch settings in DeliveriesPage:', err))
+  }, [])
+
+  // Delhivery live tracking status fetcher
+  useEffect(() => {
+    if (showTrackModal && selectedDelivery) {
+      if (selectedDelivery.carrier?.toLowerCase() === 'delhivery' && !selectedDelivery.tracking?.startsWith('DEL98765') && !selectedDelivery.tracking?.startsWith('DEL12345')) {
+        setTrackingLoading(true)
+        setTrackingError('')
+        setTrackingData(null)
+        api.get(`/api/admin/deliveries/delhivery/track/${selectedDelivery.tracking}`)
+          .then(data => {
+            setTrackingData(data)
+          })
+          .catch(err => {
+            console.error('Tracking API error:', err)
+            setTrackingError(err.message || 'Failed to load tracking data from Delhivery.')
+          })
+          .finally(() => {
+            setTrackingLoading(false)
+          })
+      } else {
+        setTrackingData(null)
+        setTrackingLoading(false)
+        setTrackingError('')
+      }
+    }
+  }, [showTrackModal, selectedDelivery])
+
+  // Fulfill Modal states
+  const [fulfillmentType, setFulfillmentType] = useState('delhivery')
+  const [consigneeName, setConsigneeName] = useState('')
+  const [consigneeAddress, setConsigneeAddress] = useState('')
+  const [consigneeCity, setConsigneeCity] = useState('')
+  const [consigneeState, setConsigneeState] = useState('')
+  const [consigneePin, setConsigneePin] = useState('')
+  const [consigneePhone, setConsigneePhone] = useState('')
+  const [packageWeight, setPackageWeight] = useState(150)
+  const [packageLength, setPackageLength] = useState(10)
+  const [packageBreadth, setPackageBreadth] = useState(10)
+  const [packageHeight, setPackageHeight] = useState(10)
+  const [paymentMode, setPaymentMode] = useState('Prepaid')
+  const [manualCarrier, setManualCarrier] = useState('Shiprocket')
+  const [manualTracking, setManualTracking] = useState('')
+  const [submittingFulfillment, setSubmittingFulfillment] = useState(false)
+  const barcodeCanvasRef = useRef(null)
+
+  // Autoload/Sync FulfillModal fields on selectedDelivery opening
+  useEffect(() => {
+    if (selectedDelivery && showFulfillModal) {
+      setConsigneeName(selectedDelivery.customer || '')
+      setConsigneeAddress(selectedDelivery.dest || '')
+      
+      const parts = (selectedDelivery.dest || '').split(',')
+      const cityPart = parts[0]?.trim() || ''
+      setConsigneeCity(cityPart)
+      setConsigneeState(parts[1]?.trim()?.replace(/[^a-zA-Z\s]/g, '') || '')
+      setConsigneePin(selectedDelivery.pin || '')
+      setConsigneePhone(selectedDelivery.phone || '')
+      
+      setPaymentMode('Prepaid')
+      
+      const isIN = (selectedDelivery.region || '').toUpperCase() === 'IN' || (selectedDelivery.region || '').toUpperCase() === 'INDIA'
+      setManualCarrier(isIN ? 'Shiprocket' : 'Canada Post')
+      setManualTracking((isIN ? 'SR' : 'CP') + Math.floor(1000000000 + Math.random() * 9000000000))
+      
+      if (!settings?.delhiveryApiKey) {
+        setFulfillmentType('manual')
+      } else {
+        setFulfillmentType('delhivery')
+      }
+    }
+  }, [selectedDelivery, showFulfillModal])
+
+  // Barcode drawer callback
+  useEffect(() => {
+    if (showLabelModal && selectedDelivery && barcodeCanvasRef.current) {
+      drawBarcode(barcodeCanvasRef.current, selectedDelivery.tracking || selectedDelivery.id)
+    }
+  }, [showLabelModal, selectedDelivery, barcodeCanvasRef.current])
+
+  const handleCreateFulfillment = async (e) => {
+    e.preventDefault()
+    setSubmittingFulfillment(true)
+    try {
+      if (fulfillmentType === 'delhivery') {
+        const cleanAmt = parseInt((selectedDelivery.total || '799').replace(/[^\d]/g, '')) || 799
+        const res = await api.post('/api/admin/deliveries/delhivery/create', {
+          deliveryId: selectedDelivery.id,
+          consigneeName,
+          consigneeAddress,
+          consigneeCity,
+          consigneeState,
+          consigneePin,
+          consigneePhone,
+          weight: packageWeight,
+          length: packageLength,
+          breadth: packageBreadth,
+          height: packageHeight,
+          paymentMode,
+          totalAmount: cleanAmt
+        })
+        if (res.ok) {
+          alert(`Shipment successfully booked with Delhivery! AWB: ${res.waybill}`)
+          setShowFulfillModal(false)
+          fetchDeliveries()
+        }
+      } else {
+        // Manual Courier assignment
+        const res = await api.put(`/api/admin/deliveries/${selectedDelivery._id || selectedDelivery.id}`, {
+          carrier: manualCarrier,
+          tracking: manualTracking,
+          status: 'In transit',
+          date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        })
+        if (res.ok) {
+          alert(`Manual shipment configured: ${manualCarrier} (AWB: ${manualTracking})`)
+          setShowFulfillModal(false)
+          fetchDeliveries()
+        }
+      }
+    } catch (err) {
+      console.error('Fulfillment error:', err)
+      alert(err.message || 'Fulfillment assignment failed.')
+    } finally {
+      setSubmittingFulfillment(false)
+    }
+  }
 
   const POLL_INTERVAL = 30_000 // 30 seconds
 
@@ -1511,7 +1708,7 @@ function DeliveriesPage() {
                         )}
                         {(d.status === 'Packed' || d.carrier === '—') && (
                           <button 
-                            onClick={() => handleAssignCourier(d)}
+                            onClick={() => { setSelectedDelivery(d); setShowFulfillModal(true); }}
                             className="act-btn success px-2.5 py-0.5"
                           >
                             Assign courier
@@ -1526,7 +1723,6 @@ function DeliveriesPage() {
           </table>
         </div>
       </div>
-
       {/* Shipping Label Modal */}
       {selectedDelivery && showLabelModal && (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
@@ -1536,7 +1732,9 @@ function DeliveriesPage() {
                 <div className="flex justify-between items-start border-b border-black pb-2 mb-3">
                   <div>
                     <div className="text-[14px] font-bold tracking-widest font-mono">{selectedDelivery.carrier?.toUpperCase()}</div>
-                    <div className="text-[8px] font-semibold text-gray-500 mt-0.5">PREPAID - SHIPPED VIA SHIPROCKET</div>
+                    <div className="text-[8px] font-semibold text-gray-500 mt-0.5">
+                      PREPAID - SHIPPED VIA {selectedDelivery.carrier?.toUpperCase() === 'DELHIVERY' ? 'DELHIVERY EXPRESS' : 'SHIPROCKET'}
+                    </div>
                   </div>
                   <div className="text-right text-[9px] font-bold font-mono">AWB: {selectedDelivery.tracking}</div>
                 </div>
@@ -1550,29 +1748,27 @@ function DeliveriesPage() {
                   <strong>TO:</strong>
                   <div className="font-bold text-black mt-0.5">{selectedDelivery.customer}</div>
                   <div className="text-gray-800 text-[10px]">{selectedDelivery.dest}</div>
+                  {selectedDelivery.pin && <div className="text-gray-800 font-mono text-[9px] mt-0.5">PIN: {selectedDelivery.pin}</div>}
+                  {selectedDelivery.phone && <div className="text-gray-800 font-mono text-[9px]">TEL: {selectedDelivery.phone}</div>}
                   <div className="text-gray-800 font-mono text-[9px] mt-1">Estimated Delivery: {selectedDelivery.date}</div>
                 </div>
               </div>
 
               <div className="flex flex-col items-center gap-1.5 my-4">
-                {/* Simulated Barcode */}
-                <div className="w-full h-11 bg-black flex items-stretch">
-                  {[...Array(32)].map((_, i) => (
-                    <div key={i} className="flex-1" style={{ background: i % 3 === 0 || i % 7 === 0 ? 'white' : 'black' }}></div>
-                  ))}
-                </div>
-                <div className="text-[9px] font-mono tracking-widest text-black font-semibold">*{selectedDelivery.id}*</div>
+                {/* Real-time barcode drawn to canvas */}
+                <canvas ref={barcodeCanvasRef} width={280} height={50} className="w-full h-12" />
+                <div className="text-[9px] font-mono tracking-widest text-black font-semibold">*{selectedDelivery.tracking || selectedDelivery.id}*</div>
               </div>
 
               <div className="flex justify-between items-baseline border-t border-black pt-2 text-[10px] font-bold">
-                <span>Weight: 150g</span>
+                <span>Weight: {selectedDelivery.delhiveryDetails?.weight ? `${parseFloat(selectedDelivery.delhiveryDetails.weight) * 1000}g` : '150g'}</span>
                 <span className="font-mono">PREPAID</span>
               </div>
             </div>
 
             <div className="flex gap-3 mt-6">
-              <button onClick={() => window.print()} className="btn-primary flex-1 py-2 text-xs bg-black text-white hover:bg-gray-800">Print Label</button>
-              <button onClick={() => { setShowLabelModal(false); setSelectedDelivery(null); }} className="btn-ghost flex-1 py-2 text-xs border-gray-300 text-gray-700 hover:bg-gray-100">Cancel</button>
+              <button onClick={() => window.print()} className="btn-primary flex-1 py-2 text-xs bg-black text-white hover:bg-gray-800 cursor-pointer">Print Label</button>
+              <button onClick={() => { setShowLabelModal(false); setSelectedDelivery(null); }} className="btn-ghost flex-1 py-2 text-xs border-gray-300 text-gray-700 hover:bg-gray-100 cursor-pointer">Cancel</button>
             </div>
           </div>
         </div>
@@ -1581,30 +1777,283 @@ function DeliveriesPage() {
       {/* Tracking Modal */}
       {selectedDelivery && showTrackModal && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="bg-[var(--color-background-primary)] border border-[var(--color-border-tertiary)] rounded-xl p-6 max-w-sm w-full">
-            <h3 className="text-sm font-semibold text-[var(--color-text-primary)] mb-5">AWB Tracking Path · {selectedDelivery.id}</h3>
+          <div className="bg-[var(--color-background-primary)] border border-[var(--color-border-tertiary)] rounded-xl p-6 max-w-sm w-full max-h-[85vh] overflow-y-auto">
+            <h3 className="text-sm font-semibold text-[var(--color-text-primary)] mb-5 text-left">
+              Tracking Path · {selectedDelivery.carrier} ({selectedDelivery.tracking})
+            </h3>
             
-            <div className="flex flex-col gap-5 relative pl-6 before:content-[''] before:absolute before:left-2 before:top-2 before:bottom-2 before:w-[1.5px] before:bg-[var(--color-border-tertiary)]">
-              {[
-                { label: 'AWB Waybill Generated', desc: `${selectedDelivery.carrier} courier registered waybill`, done: true },
-                { label: 'Package Picked Up', desc: 'Package scanned at warehouse', done: true },
-                { label: 'In Transit', desc: 'Scanned at transit terminal hubs', done: selectedDelivery.status === 'Delivered' || selectedDelivery.status === 'Shipped' || selectedDelivery.status === 'In transit' },
-                { label: 'Delivered', desc: 'Successfully signed at address destination', done: selectedDelivery.status === 'Delivered' }
-              ].map((t, idx) => (
-                <div key={idx} className="relative text-left">
-                  <span className={`absolute -left-[23px] top-0.5 w-[9px] h-[9px] rounded-full ${t.done ? 'bg-[var(--accent)] ring-4 ring-[var(--color-background-info)]' : 'bg-[var(--color-border-tertiary)]'}`} />
-                  <div className={`text-xs font-semibold ${t.done ? 'text-[var(--color-text-primary)]' : 'text-[var(--color-text-tertiary)]'}`}>{t.label}</div>
-                  <div className="text-[10px] text-[var(--color-text-secondary)] mt-0.5">{t.desc}</div>
+            {trackingLoading ? (
+              <div className="py-12 text-center text-xs font-mono text-[var(--color-text-tertiary)]">
+                <IconLoader2 className="animate-spin w-4 h-4 inline-block mr-2 text-[var(--accent)]" /> 
+                Fetching live scans from Delhivery...
+              </div>
+            ) : trackingError ? (
+              <div className="p-3 mb-4 rounded border border-[rgba(239,68,68,0.2)] bg-[var(--danger-dim)] text-[var(--color-text-danger)] text-[11px] font-semibold text-left">
+                ✕ {trackingError}
+              </div>
+            ) : trackingData?.shipment_data?.[0]?.shipment?.scans ? (
+              <div className="flex flex-col gap-5 relative pl-6 before:content-[''] before:absolute before:left-2 before:top-2 before:bottom-2 before:w-[1.5px] before:bg-[var(--color-border-tertiary)] max-h-[300px] overflow-y-auto font-sans">
+                {trackingData.shipment_data[0].shipment.scans.map((s, idx) => {
+                  const scan = s.scan || {}
+                  const scanDate = scan.date ? new Date(scan.date).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''
+                  return (
+                    <div key={idx} className="relative text-left text-xs">
+                      <span className="absolute -left-[23px] top-0.5 w-[9px] h-[9px] rounded-full bg-[var(--accent)] ring-4 ring-[var(--color-background-info)]" />
+                      <div className="text-xs font-semibold text-[var(--color-text-primary)]">{scan.instructions || scan.status}</div>
+                      <div className="text-[10px] text-[var(--color-text-secondary)] mt-0.5">{scan.location}</div>
+                      <div className="text-[9px] text-[var(--color-text-tertiary)] font-mono mt-0.5">{scanDate}</div>
+                    </div>
+                  )
+                })}
+              </div>
+            ) : (
+              <div>
+                {selectedDelivery.carrier?.toLowerCase() === 'delhivery' && (
+                  <div className="p-3 mb-4 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded text-[11px] font-semibold text-left">
+                    No live scans found from Delhivery yet. Showing standard estimated path.
+                  </div>
+                )}
+                <div className="flex flex-col gap-5 relative pl-6 before:content-[''] before:absolute before:left-2 before:top-2 before:bottom-2 before:w-[1.5px] before:bg-[var(--color-border-tertiary)] font-sans">
+                  {[
+                    { label: 'AWB Waybill Generated', desc: `${selectedDelivery.carrier} courier registered waybill`, done: true },
+                    { label: 'Package Picked Up', desc: 'Package scanned at warehouse', done: true },
+                    { label: 'In Transit', desc: 'Scanned at transit terminal hubs', done: selectedDelivery.status === 'Delivered' || selectedDelivery.status === 'Shipped' || selectedDelivery.status === 'In transit' },
+                    { label: 'Delivered', desc: 'Successfully signed at address destination', done: selectedDelivery.status === 'Delivered' }
+                  ].map((t, idx) => (
+                    <div key={idx} className="relative text-left">
+                      <span className={`absolute -left-[23px] top-0.5 w-[9px] h-[9px] rounded-full ${t.done ? 'bg-[var(--accent)] ring-4 ring-[var(--color-background-info)]' : 'bg-[var(--color-border-tertiary)]'}`} />
+                      <div className={`text-xs font-semibold ${t.done ? 'text-[var(--color-text-primary)]' : 'text-[var(--color-text-tertiary)]'}`}>{t.label}</div>
+                      <div className="text-[10px] text-[var(--color-text-secondary)] mt-0.5">{t.desc}</div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
 
             <button 
-              onClick={() => { setShowTrackModal(false); setSelectedDelivery(null); }} 
-              className="btn-primary mt-6 py-2 text-xs"
+              onClick={() => { setShowTrackModal(false); setSelectedDelivery(null); setTrackingData(null); }} 
+              className="btn-primary mt-6 py-2 text-xs cursor-pointer w-full"
             >
               Done
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Fulfill Shipment Modal */}
+      {selectedDelivery && showFulfillModal && (
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[var(--color-background-primary)] border border-[var(--color-border-tertiary)] rounded-xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto font-sans text-left">
+            <h3 className="text-sm font-semibold text-[var(--color-text-primary)] mb-1 flex items-center gap-2">
+              <IconTruck className="text-[var(--accent)]" size={18} />
+              Book Shipment · {selectedDelivery.id}
+            </h3>
+            <p className="text-[11px] text-[var(--color-text-tertiary)] mb-4">Configure carrier assignment and manifestation parameters.</p>
+
+            <form onSubmit={handleCreateFulfillment} className="flex flex-col gap-4">
+              {/* Tabs for Delhivery vs Manual */}
+              <div className="flex gap-1 bg-[var(--color-background-secondary)] p-1 rounded-lg border border-[var(--color-border-tertiary)]">
+                <button
+                  type="button"
+                  disabled={!settings?.delhiveryApiKey}
+                  onClick={() => setFulfillmentType('delhivery')}
+                  className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-all cursor-pointer ${
+                    fulfillmentType === 'delhivery'
+                      ? 'bg-[var(--color-text-primary)] text-[var(--color-background-primary)] font-semibold'
+                      : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] disabled:opacity-40 disabled:cursor-not-allowed'
+                  }`}
+                >
+                  Delhivery (Integrated)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFulfillmentType('manual')}
+                  className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-all cursor-pointer ${
+                    fulfillmentType === 'manual'
+                      ? 'bg-[var(--color-text-primary)] text-[var(--color-background-primary)] font-semibold'
+                      : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                  }`}
+                >
+                  Manual Entry
+                </button>
+              </div>
+
+              {!settings?.delhiveryApiKey && fulfillmentType === 'delhivery' && (
+                <div className="p-2.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-500 text-[11px]">
+                  ✕ Delhivery API Token not configured. Please connect Delhivery in Settings.
+                </div>
+              )}
+
+              {fulfillmentType === 'delhivery' ? (
+                <>
+                  <div style={{ fontSize: '11px', color: '#8a8c84', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid var(--color-border-tertiary)', paddingBottom: '4px' }}>Recipient Consignee Details</div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-sans">
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] font-medium text-[var(--color-text-secondary)]">Consignee Name</label>
+                      <input
+                        type="text"
+                        required
+                        value={consigneeName}
+                        onChange={e => setConsigneeName(e.target.value)}
+                        className="form-input text-xs"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] font-medium text-[var(--color-text-secondary)]">Phone Number</label>
+                      <input
+                        type="text"
+                        required
+                        value={consigneePhone}
+                        onChange={e => setConsigneePhone(e.target.value)}
+                        className="form-input text-xs font-mono"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5 md:col-span-2">
+                      <label className="text-[10px] font-medium text-[var(--color-text-secondary)]">Address Line</label>
+                      <input
+                        type="text"
+                        required
+                        value={consigneeAddress}
+                        onChange={e => setConsigneeAddress(e.target.value)}
+                        className="form-input text-xs"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] font-medium text-[var(--color-text-secondary)]">City</label>
+                      <input
+                        type="text"
+                        required
+                        value={consigneeCity}
+                        onChange={e => setConsigneeCity(e.target.value)}
+                        className="form-input text-xs"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] font-medium text-[var(--color-text-secondary)]">State</label>
+                      <input
+                        type="text"
+                        required
+                        value={consigneeState}
+                        onChange={e => setConsigneeState(e.target.value)}
+                        className="form-input text-xs"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] font-medium text-[var(--color-text-secondary)]">Pincode</label>
+                      <input
+                        type="text"
+                        required
+                        value={consigneePin}
+                        onChange={e => setConsigneePin(e.target.value)}
+                        className="form-input text-xs font-mono"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] font-medium text-[var(--color-text-secondary)]">Payment Mode</label>
+                      <select
+                        value={paymentMode}
+                        onChange={e => setPaymentMode(e.target.value)}
+                        className="form-select text-xs"
+                      >
+                        <option value="Prepaid">Prepaid (Electronic)</option>
+                        <option value="COD">Cash on Delivery (COD)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div style={{ fontSize: '11px', color: '#8a8c84', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid var(--color-border-tertiary)', paddingBottom: '4px', marginTop: '6px' }}>Package Metrics</div>
+                  <div className="grid grid-cols-4 gap-2 font-sans">
+                    <div className="flex flex-col gap-1">
+                      <label className="text-[9px] text-[var(--color-text-secondary)]">Weight (g)</label>
+                      <input
+                        type="number"
+                        required
+                        value={packageWeight}
+                        onChange={e => setPackageWeight(Number(e.target.value))}
+                        className="form-input text-xs font-mono"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-[9px] text-[var(--color-text-secondary)]">Length (cm)</label>
+                      <input
+                        type="number"
+                        required
+                        value={packageLength}
+                        onChange={e => setPackageLength(Number(e.target.value))}
+                        className="form-input text-xs font-mono"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-[9px] text-[var(--color-text-secondary)]">Breadth (cm)</label>
+                      <input
+                        type="number"
+                        required
+                        value={packageBreadth}
+                        onChange={e => setPackageBreadth(Number(e.target.value))}
+                        className="form-input text-xs font-mono"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-[9px] text-[var(--color-text-secondary)]">Height (cm)</label>
+                      <input
+                        type="number"
+                        required
+                        value={packageHeight}
+                        onChange={e => setPackageHeight(Number(e.target.value))}
+                        className="form-input text-xs font-mono"
+                      />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className="flex flex-col gap-3 font-sans text-left">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[11px] font-medium text-[var(--color-text-secondary)]">Courier Name</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. BlueDart / Fedex"
+                      value={manualCarrier}
+                      onChange={e => setManualCarrier(e.target.value)}
+                      className="form-input text-xs"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[11px] font-medium text-[var(--color-text-secondary)]">AWB / Tracking Number</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Enter Tracking AWB"
+                      value={manualTracking}
+                      onChange={e => setManualTracking(e.target.value)}
+                      className="form-input text-xs font-mono"
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="flex gap-3 mt-4 border-t border-[var(--color-border-tertiary)] pt-4">
+                <button
+                  type="submit"
+                  disabled={submittingFulfillment || (fulfillmentType === 'delhivery' && !settings?.delhiveryApiKey)}
+                  className="btn-primary flex-1 py-2 text-xs flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-40"
+                >
+                  {submittingFulfillment ? (
+                    <>
+                      <IconLoader2 className="animate-spin" size={14} />
+                      Booking Shipment...
+                    </>
+                  ) : fulfillmentType === 'delhivery' ? 'Create Delhivery Shipment' : 'Save Manual Assignment'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setShowFulfillModal(false); setSelectedDelivery(null); }}
+                  className="btn-ghost flex-1 py-2 text-xs border-gray-300 dark:border-zinc-800 text-gray-700 dark:text-zinc-300 hover:bg-gray-100 dark:hover:bg-zinc-900 cursor-pointer"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
@@ -1621,7 +2070,54 @@ function PaymentsPage() {
   const [refreshing, setRefreshing] = useState(false)
   const [error, setError] = useState('')
   const [lastUpdated, setLastUpdated] = useState(null)
+  
+  // Tab view: 'db' | 'razorpay' | 'settlements'
+  const [viewMode, setViewMode] = useState('db') 
+  const [razorpayConfigured, setRazorpayConfigured] = useState(false)
   const POLL_INTERVAL = 30_000
+
+  // Capture modal states
+  const [selectedCapturePayment, setSelectedCapturePayment] = useState(null)
+  const [captureAmount, setCaptureAmount] = useState('')
+  const [captureSubmitting, setCaptureSubmitting] = useState(false)
+
+  // Refund modal states
+  const [selectedRefundPayment, setSelectedRefundPayment] = useState(null)
+  const [refundType, setRefundType] = useState('full') // 'full' | 'partial'
+  const [partialRefundAmount, setPartialRefundAmount] = useState('')
+  const [refundReason, setRefundReason] = useState('')
+  const [refundSpeed, setRefundSpeed] = useState('normal') // 'normal' | 'optimum'
+  const [refundSubmitting, setRefundSubmitting] = useState(false)
+
+  // Payment Link modal states
+  const [showLinkModal, setShowLinkModal] = useState(false)
+  const [linkAmount, setLinkAmount] = useState('')
+  const [linkCustomerName, setLinkCustomerName] = useState('')
+  const [linkCustomerEmail, setLinkCustomerEmail] = useState('')
+  const [linkCustomerPhone, setLinkCustomerPhone] = useState('')
+  const [linkDescription, setLinkDescription] = useState('')
+  const [linkExpiryDays, setLinkExpiryDays] = useState('7')
+  const [generatedLink, setGeneratedLink] = useState(null)
+  const [linkSubmitting, setLinkSubmitting] = useState(false)
+  const [copied, setCopied] = useState(false)
+
+  // Settlements states
+  const [settlementList, setSettlementList] = useState([])
+  const [settlementsLoading, setSettlementsLoading] = useState(false)
+
+  useEffect(() => {
+    async function checkRzp() {
+      try {
+        const settingsRes = await api.get('/api/admin/settings')
+        if (settingsRes?.razorpayKeyId) {
+          setRazorpayConfigured(true)
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    checkRzp()
+  }, [])
 
   const processedTransactions = transactions.map(t => {
     const isIN = (t.region || '').toUpperCase() === 'IN' || (t.region || '').toUpperCase() === 'INDIA'
@@ -1652,6 +2148,7 @@ function PaymentsPage() {
   })
 
   const filteredTransactions = processedTransactions.filter(t => {
+    if (viewMode === 'razorpay') return true
     if (country === 'all') return true
     if (country === 'IN') return t.isIN
     if (country === 'CA') return !t.isIN
@@ -1662,7 +2159,14 @@ function PaymentsPage() {
     try {
       if (!silent) setLoading(true)
       else setRefreshing(true)
-      const data = await api.get(`/api/admin/payments?country=${country}`)
+      
+      let data = []
+      if (viewMode === 'db') {
+        data = await api.get(`/api/admin/payments?country=${country}`)
+      } else if (viewMode === 'razorpay') {
+        data = await api.get('/api/admin/payments/razorpay/live')
+      }
+      
       setTransactions(data)
       setLastUpdated(new Date())
       setError('')
@@ -1675,11 +2179,107 @@ function PaymentsPage() {
     }
   }
 
+  const fetchSettlements = async () => {
+    try {
+      setSettlementsLoading(true)
+      const data = await api.get('/api/admin/payments/razorpay/settlements')
+      setSettlementList(data)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setSettlementsLoading(false)
+    }
+  }
+
   useEffect(() => {
-    fetchPayments()
-    const interval = setInterval(() => fetchPayments({ silent: true }), POLL_INTERVAL)
-    return () => clearInterval(interval)
-  }, [country])
+    if (viewMode === 'settlements') {
+      fetchSettlements()
+    } else {
+      fetchPayments()
+    }
+  }, [country, viewMode])
+
+  // Process Capture
+  const handleCaptureSubmit = async (e) => {
+    e.preventDefault()
+    if (!selectedCapturePayment || !captureAmount) return
+    setCaptureSubmitting(true)
+    try {
+      const res = await api.post(`/api/admin/payments/razorpay/${selectedCapturePayment._id}/capture`, {
+        amount: captureAmount
+      })
+      if (res.ok) {
+        alert('Payment captured successfully!')
+        setSelectedCapturePayment(null)
+        fetchPayments()
+      } else {
+        alert(`Failed to capture: ${res.error || 'Unknown error'}`)
+      }
+    } catch (err) {
+      alert(`Network error: ${err.message}`)
+    } finally {
+      setCaptureSubmitting(false)
+    }
+  }
+
+  // Process Refund
+  const handleRefundSubmit = async (e) => {
+    e.preventDefault()
+    if (!selectedRefundPayment) return
+    setRefundSubmitting(true)
+    try {
+      const amtVal = refundType === 'partial' ? partialRefundAmount : null
+      const res = await api.post('/api/admin/payments/razorpay/refund', {
+        paymentId: selectedRefundPayment._id,
+        amount: amtVal,
+        reason: refundReason,
+        speed: refundSpeed
+      })
+      if (res.ok) {
+        alert('Refund processed successfully!')
+        setSelectedRefundPayment(null)
+        fetchPayments()
+      } else {
+        alert(`Failed to refund: ${res.error || 'Unknown error'}`)
+      }
+    } catch (err) {
+      alert(`Network error: ${err.message}`)
+    } finally {
+      setRefundSubmitting(false)
+    }
+  }
+
+  // Process Payment Link Creation
+  const handleCreateLink = async (e) => {
+    e.preventDefault()
+    setLinkSubmitting(true)
+    setGeneratedLink(null)
+    try {
+      const res = await api.post('/api/admin/payments/razorpay/payment-link', {
+        amount: linkAmount,
+        customerName: linkCustomerName,
+        customerEmail: linkCustomerEmail,
+        customerPhone: linkCustomerPhone,
+        description: linkDescription,
+        expiryDays: linkExpiryDays
+      })
+      if (res.ok && res.paymentLink) {
+        setGeneratedLink(res.paymentLink)
+      } else {
+        alert(`Failed to create payment link: ${res.error || 'Unknown error'}`)
+      }
+    } catch (err) {
+      alert(`Network error: ${err.message}`)
+    } finally {
+      setLinkSubmitting(false)
+    }
+  }
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
 
   // Settled transactions
   const settledIN = processedTransactions.filter(t => t.isIN && t.status === 'Settled')
@@ -1688,7 +2288,7 @@ function PaymentsPage() {
     .reduce((sum, t) => sum + t.parsedAmount, 0)
 
   // Pending transactions
-  const pendingIN = processedTransactions.filter(t => t.isIN && t.status === 'Pending')
+  const pendingIN = processedTransactions.filter(t => t.isIN && (t.status === 'Pending' || t.status === 'Authorized'))
     .reduce((sum, t) => sum + t.parsedAmount, 0)
   const pendingCA = processedTransactions.filter(t => !t.isIN && t.status === 'Pending')
     .reduce((sum, t) => sum + t.parsedAmount, 0)
@@ -1700,160 +2300,590 @@ function PaymentsPage() {
       <div className="flex items-start justify-between gap-4 mb-1">
         <div>
           <div className="admin-page-title">Payments</div>
-          <div className="admin-page-sub">Recent payment settlements and processing states.</div>
+          <div className="admin-page-sub">
+            {viewMode === 'settlements' ? 'Settlements and bank deposits tracking.' : 'Recent payment settlements and processing states.'}
+          </div>
         </div>
         <div className="flex items-center gap-3 mt-1 shrink-0">
-          {lastUpdated && (
+          {viewMode !== 'settlements' && lastUpdated && (
             <span className="flex items-center gap-1.5 text-[11px] text-[var(--color-text-tertiary)] font-mono">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse inline-block" />
               {refreshing ? 'Refreshing…' : `Updated ${lastUpdated.toLocaleTimeString()}`}
             </span>
           )}
+          {viewMode === 'razorpay' && (
+            <button
+              onClick={() => {
+                setLinkAmount('')
+                setLinkCustomerName('')
+                setLinkCustomerEmail('')
+                setLinkCustomerPhone('')
+                setLinkDescription('')
+                setGeneratedLink(null)
+                setShowLinkModal(true)
+              }}
+              className="flex items-center gap-1.5 text-[11.5px] font-semibold bg-[var(--accent)] text-black rounded-md px-3 py-1.5 transition-colors cursor-pointer"
+            >
+              <IconPlus size={14} />
+              Create Payment Link
+            </button>
+          )}
           <button
-            onClick={() => fetchPayments({ silent: true })}
-            disabled={loading || refreshing}
-            className="flex items-center gap-1.5 text-[11px] font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] border border-[var(--color-border-tertiary)] rounded-md px-2.5 py-1 transition-colors disabled:opacity-40 cursor-pointer"
+            onClick={() => viewMode === 'settlements' ? fetchSettlements() : fetchPayments({ silent: true })}
+            disabled={loading || refreshing || settlementsLoading}
+            className="flex items-center gap-1.5 text-[11.5px] font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] border border-[var(--color-border-tertiary)] rounded-md px-2.5 py-1.5 transition-colors disabled:opacity-40 cursor-pointer"
           >
-            <IconLoader2 className={`w-3 h-3 ${refreshing ? 'animate-spin' : ''}`} />
+            <IconLoader2 className={`w-3.5 h-3.5 ${refreshing || settlementsLoading ? 'animate-spin' : ''}`} />
             Refresh
           </button>
         </div>
       </div>
 
-      <div className="kpi-grid" style={{ marginTop: '20px', marginBottom: '20px' }}>
-        <div className="kpi-card">
-          <div className="kpi-label">Total settled</div>
-          {country === 'all' ? (
-            <div className="flex flex-col gap-1.5 w-full text-[12px] font-mono text-left mt-1">
-              <div className="flex justify-between border-b border-[var(--color-border-tertiary)] pb-0.5">
-                <span className="text-[var(--text-3)] font-sans">🇮🇳 India:</span>
-                <span className="font-semibold text-[var(--text-1)]">₹{settledIN.toLocaleString('en-IN')} INR</span>
-              </div>
-              <div className="flex justify-between pt-0.5">
-                <span className="text-[var(--text-3)] font-sans">🇨🇦 Canada:</span>
-                <span className="font-semibold text-[var(--text-1)]">${settledCA.toFixed(2)} CAD</span>
-              </div>
-            </div>
-          ) : country === 'IN' ? (
-            <div className="kpi-value">₹{settledIN.toLocaleString('en-IN')} INR</div>
-          ) : (
-            <div className="kpi-value">${settledCA.toFixed(2)} CAD</div>
-          )}
-          <div className="kpi-change up">
-            <IconTrendingUp size={13} className="inline mr-1" /> {settledCount} transactions
-          </div>
+      {razorpayConfigured && (
+        <div className="flex gap-2 mb-2" style={{ maxWidth: '480px', marginTop: '10px' }}>
+          <button
+            onClick={() => setViewMode('db')}
+            className={`flex-1 py-1.5 text-xs font-semibold rounded-md border transition-all cursor-pointer ${
+              viewMode === 'db'
+                ? 'bg-[var(--color-text-primary)] text-[var(--color-background-primary)] border-transparent'
+                : 'bg-transparent text-[var(--color-text-secondary)] border-[var(--color-border-tertiary)] hover:text-[var(--color-text-primary)]'
+            }`}
+          >
+            Store Ledger (DB)
+          </button>
+          <button
+            onClick={() => setViewMode('razorpay')}
+            className={`flex-1 py-1.5 text-xs font-semibold rounded-md border transition-all cursor-pointer ${
+              viewMode === 'razorpay'
+                ? 'bg-[var(--color-text-primary)] text-[var(--color-background-primary)] border-transparent'
+                : 'bg-transparent text-[var(--color-text-secondary)] border-[var(--color-border-tertiary)] hover:text-[var(--color-text-primary)]'
+            }`}
+          >
+            Live Payments (Gateway)
+          </button>
+          <button
+            onClick={() => setViewMode('settlements')}
+            className={`flex-1 py-1.5 text-xs font-semibold rounded-md border transition-all cursor-pointer ${
+              viewMode === 'settlements'
+                ? 'bg-[var(--color-text-primary)] text-[var(--color-background-primary)] border-transparent'
+                : 'bg-transparent text-[var(--color-text-secondary)] border-[var(--color-border-tertiary)] hover:text-[var(--color-text-primary)]'
+            }`}
+          >
+            Settlements (Razorpay)
+          </button>
         </div>
-        <div className="kpi-card">
-          <div className="kpi-label">Pending payout</div>
-          {country === 'all' ? (
-            <div className="flex flex-col gap-1.5 w-full text-[12px] font-mono text-left mt-1">
-              <div className="flex justify-between border-b border-[var(--color-border-tertiary)] pb-0.5">
-                <span className="text-[var(--text-3)] font-sans">🇮🇳 India:</span>
-                <span className="font-semibold text-[var(--text-1)]">₹{pendingIN.toLocaleString('en-IN')} INR</span>
-              </div>
-              <div className="flex justify-between pt-0.5">
-                <span className="text-[var(--text-3)] font-sans">🇨🇦 Canada:</span>
-                <span className="font-semibold text-[var(--text-1)]">${pendingCA.toFixed(2)} CAD</span>
-              </div>
-            </div>
-          ) : country === 'IN' ? (
-            <div className="kpi-value" style={{ color: '#f59e0b' }}>₹{pendingIN.toLocaleString('en-IN')} INR</div>
-          ) : (
-            <div className="kpi-value" style={{ color: '#f59e0b' }}>${pendingCA.toFixed(2)} CAD</div>
-          )}
-          <div className="kpi-change warn">
-            <IconClock size={13} className="inline mr-1" /> Settlement due Jun 15
-          </div>
-        </div>
-        <div className="kpi-card">
-          <div className="kpi-label">Next payout / Gateway</div>
-          {country === 'all' ? (
-            <div className="flex flex-col gap-1.5 w-full text-[12px] font-mono text-left mt-1">
-              <div className="flex justify-between border-b border-[var(--color-border-tertiary)] pb-0.5">
-                <span className="text-[var(--text-3)] font-sans">🇮🇳 Razorpay:</span>
-                <span className="font-semibold text-[var(--text-1)]">Jun 15</span>
-              </div>
-              <div className="flex justify-between pt-0.5">
-                <span className="text-[var(--text-3)] font-sans">🇨🇦 Stripe:</span>
-                <span className="font-semibold text-[var(--text-1)]">Jun 15</span>
-              </div>
-            </div>
-          ) : (
-            <>
-              <div className="kpi-value" style={{ fontSize: '18px' }}>Jun 15</div>
-              <div className="kpi-change neutral">Via {country === 'IN' ? 'Razorpay (₹ INR)' : 'Stripe ($ CAD)'}</div>
-            </>
-          )}
-        </div>
-      </div>
+      )}
 
-      <div className="bg-[var(--color-background-primary)] border-[0.5px] border-[var(--color-border-tertiary)] rounded-[var(--r)] overflow-hidden">
-        <div className="w-full overflow-x-auto">
-          <table className="w-full border-collapse min-w-[700px]">
-            <thead>
-              <tr className="bg-[var(--color-background-secondary)] border-b border-[var(--color-border-tertiary)] h-11 text-left">
-                <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Gateway</th>
-                <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Order ref</th>
-                <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Amount</th>
-                <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">USD equiv.</th>
-                <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Method</th>
-                <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Status</th>
-                <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Settlement</th>
-                <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan="8" className="h-20 text-center text-xs text-[var(--color-text-tertiary)] font-mono">
-                    <IconLoader2 className="animate-spin w-4 h-4 inline-block mr-2 text-[var(--accent)]" /> Loading transactions…
-                  </td>
-                </tr>
-              ) : error ? (
-                <tr>
-                  <td colSpan="8" className="h-20 text-center text-xs text-[var(--color-text-danger)] font-mono">
-                    ✕ {error}
-                  </td>
-                </tr>
-              ) : filteredTransactions.length === 0 ? (
-                <tr>
-                  <td colSpan="8" className="h-20 text-center text-xs text-[var(--color-text-tertiary)] font-mono">
-                    No transactions found.
-                  </td>
-                </tr>
+      {viewMode !== 'settlements' && (
+        <>
+          <div className="kpi-grid" style={{ marginTop: '20px', marginBottom: '20px' }}>
+            <div className="kpi-card">
+              <div className="kpi-label">Total settled</div>
+              {viewMode === 'razorpay' ? (
+                <div className="kpi-value">
+                  ₹{filteredTransactions.filter(t => t.status === 'Settled').reduce((sum, t) => sum + t.parsedAmount, 0).toLocaleString('en-IN')} INR
+                </div>
+              ) : country === 'all' ? (
+                <div className="flex flex-col gap-1.5 w-full text-[12px] font-mono text-left mt-1">
+                  <div className="flex justify-between border-b border-[var(--color-border-tertiary)] pb-0.5">
+                    <span className="text-[var(--text-3)] font-sans">🇮🇳 India:</span>
+                    <span className="font-semibold text-[var(--text-1)]">₹{settledIN.toLocaleString('en-IN')} INR</span>
+                  </div>
+                  <div className="flex justify-between pt-0.5">
+                    <span className="text-[var(--text-3)] font-sans">🇨🇦 Canada:</span>
+                    <span className="font-semibold text-[var(--text-1)]">${settledCA.toFixed(2)} CAD</span>
+                  </div>
+                </div>
+              ) : country === 'IN' ? (
+                <div className="kpi-value">₹{settledIN.toLocaleString('en-IN')} INR</div>
               ) : (
-                filteredTransactions.map((t, idx) => (
-                  <tr key={t._id || idx} className="h-14 border-b border-[var(--color-border-tertiary)] hover:bg-[var(--color-background-secondary)] transition-colors duration-100 last:border-b-0">
-                    <td className="px-5 text-[13px] font-medium text-[var(--color-text-primary)]">{t.gateway}</td>
-                    <td className="px-5 text-xs font-mono text-[var(--accent)]">{t.order}</td>
-                    <td className="px-5 text-xs font-mono font-semibold text-[var(--color-text-primary)]">{t.amount}</td>
-                    <td className="px-5 text-xs font-mono text-[var(--color-text-tertiary)]">{t.usd}</td>
-                    <td className="px-5 text-xs text-[var(--color-text-secondary)]">{t.method}</td>
-                    <td className="px-5">
-                      <span className={`text-[10px] font-semibold tracking-wider px-2 py-0.5 rounded-md ${
-                        t.status === 'Settled'
-                          ? 'bg-[#f0fdf4] text-[#166534]'
-                          : 'bg-amber-100 text-amber-800 dark:bg-amber-950/30 dark:text-amber-400'
-                      }`}>
-                        {t.status.toUpperCase()}
-                      </span>
-                    </td>
-                    <td className="px-5 text-xs text-[var(--color-text-secondary)]">{t.date}</td>
-                    <td className="px-5">
-                      <button 
-                        onClick={() => alert(`Receipt generated for order ${t.order}\nAmount: ${t.amount} (${t.usd})\nGateway: ${t.gateway}\nMethod: ${t.method}\nSettled on: ${t.date}`)}
-                        className="act-btn"
-                      >
-                        Receipt
-                      </button>
+                <div className="kpi-value">${settledCA.toFixed(2)} CAD</div>
+              )}
+              <div className="kpi-change up">
+                <IconTrendingUp size={13} className="inline mr-1" /> {settledCount} transactions
+              </div>
+            </div>
+            <div className="kpi-card">
+              <div className="kpi-label">Pending / Authorized</div>
+              {viewMode === 'razorpay' ? (
+                <div className="kpi-value" style={{ color: '#f59e0b' }}>
+                  ₹{filteredTransactions.filter(t => t.status === 'Pending' || t.status === 'Authorized').reduce((sum, t) => sum + t.parsedAmount, 0).toLocaleString('en-IN')} INR
+                </div>
+              ) : country === 'all' ? (
+                <div className="flex flex-col gap-1.5 w-full text-[12px] font-mono text-left mt-1">
+                  <div className="flex justify-between border-b border-[var(--color-border-tertiary)] pb-0.5">
+                    <span className="text-[var(--text-3)] font-sans">🇮🇳 India:</span>
+                    <span className="font-semibold text-[var(--text-1)]">₹{pendingIN.toLocaleString('en-IN')} INR</span>
+                  </div>
+                  <div className="flex justify-between pt-0.5">
+                    <span className="text-[var(--text-3)] font-sans">🇨🇦 Canada:</span>
+                    <span className="font-semibold text-[var(--text-1)]">${pendingCA.toFixed(2)} CAD</span>
+                  </div>
+                </div>
+              ) : country === 'IN' ? (
+                <div className="kpi-value" style={{ color: '#f59e0b' }}>₹{pendingIN.toLocaleString('en-IN')} INR</div>
+              ) : (
+                <div className="kpi-value" style={{ color: '#f59e0b' }}>${pendingCA.toFixed(2)} CAD</div>
+              )}
+              <div className="kpi-change warn">
+                <IconClock size={13} className="inline mr-1" /> Auto-captures active
+              </div>
+            </div>
+            <div className="kpi-card">
+              <div className="kpi-label">Next payout / Cycle</div>
+              {viewMode === 'razorpay' ? (
+                <>
+                  <div className="kpi-value" style={{ fontSize: '18px' }}>T+2 Cycle</div>
+                  <div className="kpi-change neutral">Direct bank deposit</div>
+                </>
+              ) : country === 'all' ? (
+                <div className="flex flex-col gap-1.5 w-full text-[12px] font-mono text-left mt-1">
+                  <div className="flex justify-between border-b border-[var(--color-border-tertiary)] pb-0.5">
+                    <span className="text-[var(--text-3)] font-sans">🇮🇳 Razorpay:</span>
+                    <span className="font-semibold text-[var(--text-1)]">T+2 Deposit</span>
+                  </div>
+                  <div className="flex justify-between pt-0.5">
+                    <span className="text-[var(--text-3)] font-sans">🇨🇦 Stripe:</span>
+                    <span className="font-semibold text-[var(--text-1)]">T+2 Deposit</span>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="kpi-value" style={{ fontSize: '18px' }}>T+2 Cycle</div>
+                  <div className="kpi-change neutral">Via {country === 'IN' ? 'Razorpay (₹ INR)' : 'Stripe ($ CAD)'}</div>
+                </>
+              )}
+            </div>
+          </div>
+
+          <div className="bg-[var(--color-background-primary)] border-[0.5px] border-[var(--color-border-tertiary)] rounded-[var(--r)] overflow-hidden">
+            <div className="w-full overflow-x-auto">
+              <table className="w-full border-collapse min-w-[700px]">
+                <thead>
+                  <tr className="bg-[var(--color-background-secondary)] border-b border-[var(--color-border-tertiary)] h-11 text-left">
+                    <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Gateway</th>
+                    <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">{viewMode === 'db' ? 'Order ref' : 'Payment ID / Order'}</th>
+                    <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Amount</th>
+                    <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">USD equiv.</th>
+                    <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Method</th>
+                    <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Status</th>
+                    <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Date</th>
+                    <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loading ? (
+                    <tr>
+                      <td colSpan="8" className="h-20 text-center text-xs text-[var(--color-text-tertiary)] font-mono">
+                        <IconLoader2 className="animate-spin w-4 h-4 inline-block mr-2 text-[var(--accent)]" /> Loading transactions…
+                      </td>
+                    </tr>
+                  ) : error ? (
+                    <tr>
+                      <td colSpan="8" className="h-20 text-center text-xs text-[var(--color-text-danger)] font-mono">
+                        ✕ {error}
+                      </td>
+                    </tr>
+                  ) : filteredTransactions.length === 0 ? (
+                    <tr>
+                      <td colSpan="8" className="h-20 text-center text-xs text-[var(--color-text-tertiary)] font-mono">
+                        No transactions found.
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredTransactions.map((t, idx) => (
+                      <tr key={t._id || idx} className="h-14 border-b border-[var(--color-border-tertiary)] hover:bg-[var(--color-background-secondary)] transition-colors duration-100 last:border-b-0">
+                        <td className="px-5 text-[13px] font-medium text-[var(--color-text-primary)]">{t.gateway}</td>
+                        <td className="px-5 text-xs font-mono text-[var(--accent)]">
+                          <div>{viewMode === 'db' ? t.order : t._id}</div>
+                          {viewMode === 'razorpay' && t.order && <div className="text-[10px] text-[var(--color-text-tertiary)] mt-0.5">{t.order}</div>}
+                        </td>
+                        <td className="px-5 text-xs font-mono font-semibold text-[var(--color-text-primary)]">{t.amount}</td>
+                        <td className="px-5 text-xs font-mono text-[var(--color-text-tertiary)]">{t.usd}</td>
+                        <td className="px-5 text-xs text-[var(--color-text-secondary)]">
+                          <div>{t.method}</div>
+                          {viewMode === 'razorpay' && t.email && <div className="text-[9px] text-[var(--color-text-tertiary)] lowercase font-mono mt-0.5">{t.email}</div>}
+                        </td>
+                        <td className="px-5">
+                          <span className={`text-[10px] font-semibold tracking-wider px-2 py-0.5 rounded-md ${
+                            t.status === 'Settled'
+                              ? 'bg-[#f0fdf4] text-[#166534]'
+                              : t.status === 'Refunded'
+                              ? 'bg-blue-50 text-blue-800 dark:bg-blue-950/30 dark:text-blue-400'
+                              : t.status === 'Authorized'
+                              ? 'bg-amber-50 text-amber-800 dark:bg-amber-950/30 dark:text-amber-400'
+                              : 'bg-red-50 text-red-800 dark:bg-red-950/30 dark:text-red-400'
+                          }`}>
+                            {t.status.toUpperCase()}
+                          </span>
+                        </td>
+                        <td className="px-5 text-xs text-[var(--color-text-secondary)]">{t.date}</td>
+                        <td className="px-5">
+                          <div className="flex gap-2">
+                            <button 
+                              onClick={() => alert(`Receipt details:\nID: ${t._id}\nOrder ref: ${t.order}\nAmount: ${t.amount} (${t.usd})\nGateway: ${t.gateway}\nMethod: ${t.method}\nSettled on: ${t.date}`)}
+                              className="act-btn"
+                            >
+                              Receipt
+                            </button>
+                            {viewMode === 'razorpay' && t.status === 'Authorized' && (
+                              <button 
+                                onClick={() => {
+                                  const numeric = parseFloat(t.amount.replace(/[^\d.]/g, '')) || 0
+                                  setCaptureAmount(numeric.toString())
+                                  setSelectedCapturePayment(t)
+                                }}
+                                className="act-btn success"
+                                style={{ border: '1px solid rgba(34,197,94,0.2)' }}
+                              >
+                                Capture
+                              </button>
+                            )}
+                            {viewMode === 'razorpay' && t.status === 'Settled' && (
+                              <button 
+                                onClick={() => {
+                                  const numeric = parseFloat(t.amount.replace(/[^\d.]/g, '')) || 0
+                                  setPartialRefundAmount(numeric.toString())
+                                  setRefundType('full')
+                                  setRefundReason('')
+                                  setRefundSpeed('normal')
+                                  setSelectedRefundPayment(t)
+                                }}
+                                className="act-btn danger"
+                                style={{ border: '1px solid rgba(239,68,68,0.2)' }}
+                              >
+                                Refund
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
+
+      {viewMode === 'settlements' && (
+        <div className="bg-[var(--color-background-primary)] border-[0.5px] border-[var(--color-border-tertiary)] rounded-[var(--r)] overflow-hidden" style={{ marginTop: '20px' }}>
+          <div className="w-full overflow-x-auto">
+            <table className="w-full border-collapse min-w-[700px]">
+              <thead>
+                <tr className="bg-[var(--color-background-secondary)] border-b border-[var(--color-border-tertiary)] h-11 text-left">
+                  <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Settlement ID</th>
+                  <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Created Date</th>
+                  <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Gross Amount</th>
+                  <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Fees Deducted</th>
+                  <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Tax Deducted</th>
+                  <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Net Payout</th>
+                  <th className="px-5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {settlementsLoading ? (
+                  <tr>
+                    <td colSpan="7" className="h-20 text-center text-xs text-[var(--color-text-tertiary)] font-mono">
+                      <IconLoader2 className="animate-spin w-4 h-4 inline-block mr-2 text-[var(--accent)]" /> Loading settlements…
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : settlementList.length === 0 ? (
+                  <tr>
+                    <td colSpan="7" className="h-20 text-center text-xs text-[var(--color-text-tertiary)] font-mono">
+                      No settlements found.
+                    </td>
+                  </tr>
+                ) : (
+                  settlementList.map((s, idx) => (
+                    <tr key={s.id || idx} className="h-14 border-b border-[var(--color-border-tertiary)] hover:bg-[var(--color-background-secondary)] transition-colors duration-100 last:border-b-0">
+                      <td className="px-5 text-xs font-mono font-semibold text-[var(--accent)]">{s.id}</td>
+                      <td className="px-5 text-xs text-[var(--color-text-secondary)]">{s.date}</td>
+                      <td className="px-5 text-xs font-mono text-[var(--color-text-primary)]">{s.amount}</td>
+                      <td className="px-5 text-xs font-mono text-red-500">{s.fees}</td>
+                      <td className="px-5 text-xs font-mono text-red-500">{s.tax}</td>
+                      <td className="px-5 text-xs font-mono font-semibold text-green-500">{s.net}</td>
+                      <td className="px-5">
+                        <span className={`text-[10px] font-semibold tracking-wider px-2 py-0.5 rounded-md ${
+                          s.status === 'processed'
+                            ? 'bg-[#f0fdf4] text-[#166534]'
+                            : 'bg-amber-100 text-amber-800'
+                        }`}>
+                          {(s.status || 'PROCESSED').toUpperCase()}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Capture Confirm Modal */}
+      {selectedCapturePayment && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[var(--color-background-primary)] border border-[var(--color-border-tertiary)] rounded-xl p-6 max-w-sm w-full font-sans text-left">
+            <h3 className="text-sm font-semibold text-[var(--color-text-primary)] mb-2">Capture Payment</h3>
+            <p className="text-[11px] text-[var(--color-text-secondary)] mb-4">
+              Authorize capturing payment ID <strong>{selectedCapturePayment._id}</strong>. Once captured, funds will be processed for transfer.
+            </p>
+            <form onSubmit={handleCaptureSubmit} className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] text-[var(--color-text-secondary)]">Capture Amount (INR)</label>
+                <input 
+                  type="number"
+                  required
+                  value={captureAmount}
+                  onChange={e => setCaptureAmount(e.target.value)}
+                  className="form-input text-xs font-mono"
+                />
+              </div>
+              <div className="flex gap-3 mt-2">
+                <button
+                  type="submit"
+                  disabled={captureSubmitting}
+                  className="btn-primary flex-1 py-2 text-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  {captureSubmitting ? <IconLoader2 className="animate-spin" size={13} /> : 'Capture'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedCapturePayment(null)}
+                  className="btn-ghost flex-1 py-2 text-xs border-gray-300 text-gray-700 cursor-pointer"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Refund Modal */}
+      {selectedRefundPayment && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[var(--color-background-primary)] border border-[var(--color-border-tertiary)] rounded-xl p-6 max-w-sm w-full font-sans text-left">
+            <h3 className="text-sm font-semibold text-[var(--color-text-primary)] mb-2">Issue Refund</h3>
+            <p className="text-[11px] text-[var(--color-text-secondary)] mb-4">
+              Refund payment <strong>{selectedRefundPayment._id}</strong> ({selectedRefundPayment.amount}).
+            </p>
+            <form onSubmit={handleRefundSubmit} className="flex flex-col gap-4">
+              <div className="flex gap-2 p-1 bg-[var(--color-background-secondary)] rounded-md border border-[var(--color-border-tertiary)] mb-1">
+                <button 
+                  type="button"
+                  onClick={() => setRefundType('full')}
+                  className={`flex-1 py-1 text-[11px] font-semibold rounded ${refundType === 'full' ? 'bg-[var(--color-text-primary)] text-[var(--color-background-primary)]' : 'text-[var(--color-text-secondary)]'}`}
+                >
+                  Full Refund
+                </button>
+                <button 
+                  type="button"
+                  onClick={() => setRefundType('partial')}
+                  className={`flex-1 py-1 text-[11px] font-semibold rounded ${refundType === 'partial' ? 'bg-[var(--color-text-primary)] text-[var(--color-background-primary)]' : 'text-[var(--color-text-secondary)]'}`}
+                >
+                  Partial
+                </button>
+              </div>
+
+              {refundType === 'partial' && (
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] text-[var(--color-text-secondary)]">Refund Amount (INR)</label>
+                  <input 
+                    type="number"
+                    required
+                    value={partialRefundAmount}
+                    onChange={e => setPartialRefundAmount(e.target.value)}
+                    className="form-input text-xs font-mono"
+                  />
+                </div>
+              )}
+
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] text-[var(--color-text-secondary)]">Reason for refund</label>
+                <input 
+                  type="text"
+                  required
+                  placeholder="e.g. Damaged item packaging"
+                  value={refundReason}
+                  onChange={e => setRefundReason(e.target.value)}
+                  className="form-input text-xs"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] text-[var(--color-text-secondary)]">Refund Speed</label>
+                <select
+                  value={refundSpeed}
+                  onChange={e => setRefundSpeed(e.target.value)}
+                  className="form-select text-xs"
+                >
+                  <option value="normal">Normal (5-7 business days)</option>
+                  <option value="optimum">Optimum (Instant if eligible)</option>
+                </select>
+              </div>
+
+              <div className="flex gap-3 mt-2">
+                <button
+                  type="submit"
+                  disabled={refundSubmitting}
+                  className="btn-primary flex-1 py-2 text-xs flex items-center justify-center gap-1.5 cursor-pointer bg-red-600 text-white"
+                >
+                  {refundSubmitting ? <IconLoader2 className="animate-spin" size={13} /> : 'Process Refund'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedRefundPayment(null)}
+                  className="btn-ghost flex-1 py-2 text-xs border-gray-300 text-gray-700 cursor-pointer"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Payment Link Modal */}
+      {showLinkModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[var(--color-background-primary)] border border-[var(--color-border-tertiary)] rounded-xl p-6 max-w-md w-full font-sans text-left">
+            <h3 className="text-sm font-semibold text-[var(--color-text-primary)] mb-2">Generate Payment Link</h3>
+            
+            {!generatedLink ? (
+              <form onSubmit={handleCreateLink} className="flex flex-col gap-4">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] text-[var(--color-text-secondary)]">Amount (₹ INR)</label>
+                    <input 
+                      type="number"
+                      required
+                      placeholder="500"
+                      value={linkAmount}
+                      onChange={e => setLinkAmount(e.target.value)}
+                      className="form-input text-xs font-mono"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] text-[var(--color-text-secondary)]">Expiry (Days)</label>
+                    <select
+                      value={linkExpiryDays}
+                      onChange={e => setLinkExpiryDays(e.target.value)}
+                      className="form-select text-xs"
+                    >
+                      <option value="1">1 Day</option>
+                      <option value="7">7 Days</option>
+                      <option value="15">15 Days</option>
+                      <option value="30">30 Days</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] text-[var(--color-text-secondary)]">Customer Name</label>
+                  <input 
+                    type="text"
+                    required
+                    placeholder="E.g. Priya Mehta"
+                    value={linkCustomerName}
+                    onChange={e => setLinkCustomerName(e.target.value)}
+                    className="form-input text-xs"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] text-[var(--color-text-secondary)]">Customer Email</label>
+                    <input 
+                      type="email"
+                      placeholder="priya@example.com"
+                      value={linkCustomerEmail}
+                      onChange={e => setLinkCustomerEmail(e.target.value)}
+                      className="form-input text-xs font-mono"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] text-[var(--color-text-secondary)]">Customer Phone</label>
+                    <input 
+                      type="text"
+                      placeholder="E.g. 9876543210"
+                      value={linkCustomerPhone}
+                      onChange={e => setLinkCustomerPhone(e.target.value)}
+                      className="form-input text-xs font-mono"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] text-[var(--color-text-secondary)]">Description</label>
+                  <input 
+                    type="text"
+                    placeholder="Waitlist preorder balance payment"
+                    value={linkDescription}
+                    onChange={e => setLinkDescription(e.target.value)}
+                    className="form-input text-xs"
+                  />
+                </div>
+
+                <div className="flex gap-3 mt-2">
+                  <button
+                    type="submit"
+                    disabled={linkSubmitting}
+                    className="btn-primary flex-1 py-2 text-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    {linkSubmitting ? <IconLoader2 className="animate-spin" size={13} /> : 'Generate'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowLinkModal(false)}
+                    className="btn-ghost flex-1 py-2 text-xs border-gray-300 text-gray-700 cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div className="flex flex-col gap-4 mt-2">
+                <div className="p-3 bg-[var(--color-background-secondary)] rounded-lg border border-[var(--color-border-tertiary)] flex flex-col gap-2">
+                  <div className="text-[10px] uppercase font-mono tracking-wider text-[var(--color-text-tertiary)]">Short URL Link</div>
+                  <div className="text-xs font-mono font-semibold text-[var(--accent)] break-all select-all">{generatedLink.short_url}</div>
+                </div>
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => copyToClipboard(generatedLink.short_url)}
+                    className="act-btn flex-1 py-2 text-xs flex items-center justify-center gap-1.5"
+                    style={{ border: '1px solid var(--color-border-tertiary)', borderRadius: '6px', height: '36px' }}
+                  >
+                    {copied ? '✓ Copied!' : 'Copy Link'}
+                  </button>
+
+                  {linkCustomerPhone && (
+                    <a
+                      href={`https://api.whatsapp.com/send?phone=${linkCustomerPhone.replace(/\D/g, '')}&text=${encodeURIComponent(`Hi ${linkCustomerName}, please complete your payment of ₹${linkAmount} for Morivaná Daily using this link: ${generatedLink.short_url}`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-primary flex-1 py-2 text-xs flex items-center justify-center gap-1.5 cursor-pointer text-center"
+                      style={{ textDecoration: 'none', background: '#25D366', color: 'black', fontWeight: 600 }}
+                    >
+                      Share on WhatsApp
+                    </a>
+                  )}
+                </div>
+
+                <button
+                  onClick={() => setShowLinkModal(false)}
+                  className="btn-ghost w-full py-2 text-xs border-gray-300 text-gray-700 cursor-pointer mt-2"
+                >
+                  Done
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -2032,9 +3062,26 @@ function ReturnsPage() {
                           <>
                             {((r.region || '').toUpperCase() === 'IN' || (r.region || '').toUpperCase() === 'INDIA') ? (
                               <button 
-                                onClick={() => {
-                                  alert(`Refund via Razorpay API initiated for return ${r.id || r._id}`);
-                                  handleUpdateReturnStatus(r._id || r.id, 'Refunded');
+                                onClick={async () => {
+                                  const paymentId = window.prompt(`Please enter the Razorpay Payment ID (e.g. pay_xxxxx) to refund for Return ${r.id || r._id} (Order ${r.order}):`);
+                                  if (!paymentId) return;
+
+                                  const confirmRefund = window.confirm(`Initiating refund for Payment ID: ${paymentId}\nProceed?`);
+                                  if (!confirmRefund) return;
+
+                                  try {
+                                    const res = await api.post('/api/admin/payments/razorpay/refund', {
+                                      paymentId
+                                    });
+                                    if (res.ok) {
+                                      alert(`Refund via Razorpay API completed successfully for payment ${paymentId}!`);
+                                      handleUpdateReturnStatus(r._id || r.id, 'Refunded');
+                                    } else {
+                                      alert(`Failed to process refund: ${res.error || 'Unknown error'}`);
+                                    }
+                                  } catch (err) {
+                                    alert(`Network error: ${err.message}`);
+                                  }
                                 }}
                                 className="act-btn px-2 py-0.5 font-medium"
                               >
@@ -3922,10 +4969,55 @@ function SettingsPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [ga4Status, setGa4Status] = useState({ configured: false })
-
   const [bypassPasscode, setBypassPasscode] = useState(true)
   const [autoScroll, setAutoScroll] = useState(true)
   const [realtimeNotify, setRealtimeNotify] = useState(true)
+  const [connectionTesting, setConnectionTesting] = useState(false)
+  const [connectionStatus, setConnectionStatus] = useState(null)
+
+  const handleTestConnection = async () => {
+    setConnectionTesting(true)
+    setConnectionStatus(null)
+    try {
+      const res = await api.post('/api/admin/delhivery/test-connection', {
+        token: settings.delhiveryApiKey,
+        mode: settings.delhiveryMode
+      })
+      if (res.ok) {
+        setConnectionStatus({ ok: true })
+      } else {
+        setConnectionStatus({ ok: false, error: res.error || 'Failed to authenticate.' })
+      }
+    } catch (err) {
+      setConnectionStatus({ ok: false, error: err.message || 'Network error.' })
+    } finally {
+      setConnectionTesting(false)
+    }
+  }
+
+  const [rzpConnectionTesting, setRzpConnectionTesting] = useState(false)
+  const [rzpConnectionStatus, setRzpConnectionStatus] = useState(null)
+  const [showRzpSecret, setShowRzpSecret] = useState(false)
+
+  const handleTestRazorpayConnection = async () => {
+    setRzpConnectionTesting(true)
+    setRzpConnectionStatus(null)
+    try {
+      const res = await api.post('/api/admin/payments/razorpay/test-connection', {
+        keyId: settings.razorpayKeyId,
+        keySecret: settings.razorpayKeySecret
+      })
+      if (res.ok) {
+        setRzpConnectionStatus({ ok: true })
+      } else {
+        setRzpConnectionStatus({ ok: false, error: res.error || 'Failed to authenticate.' })
+      }
+    } catch (err) {
+      setRzpConnectionStatus({ ok: false, error: err.message || 'Network error.' })
+    } finally {
+      setRzpConnectionTesting(false)
+    }
+  }
 
   useEffect(() => {
     async function loadData() {
@@ -4081,11 +5173,19 @@ function SettingsPage() {
           <div className="panel-title">INTEGRATIONS</div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #1e1f1c' }}>
             <div style={{ fontSize: '13px', color: '#d0d2c8' }}>Razorpay</div>
-            <span className="badge badge-green">Connected</span>
+            <span className={`badge ${settings.razorpayKeyId ? 'badge-green' : 'badge-yellow'}`}>
+              {settings.razorpayKeyId ? 'Connected' : 'Not connected'}
+            </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #1e1f1c' }}>
             <div style={{ fontSize: '13px', color: '#d0d2c8' }}>Shiprocket</div>
             <span className="badge badge-yellow">Not connected</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #1e1f1c' }}>
+            <div style={{ fontSize: '13px', color: '#d0d2c8' }}>Delhivery</div>
+            <span className={`badge ${settings.delhiveryApiKey ? 'badge-green' : 'badge-yellow'}`}>
+              {settings.delhiveryApiKey ? 'Connected' : 'Not connected'}
+            </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #1e1f1c' }}>
             <div style={{ fontSize: '13px', color: '#d0d2c8' }}>Google Analytics 4</div>
@@ -4096,6 +5196,210 @@ function SettingsPage() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0' }}>
             <div style={{ fontSize: '13px', color: '#d0d2c8' }}>Stripe (Canada)</div>
             <span className="badge badge-gray">Planned</span>
+          </div>
+        </div>
+
+        {/* DELHIVERY CONFIG */}
+        <div className="panel">
+          <div className="panel-title">DELHIVERY SHIPPING CONFIG</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '8px' }}>
+            <div className="form-row">
+              <div className="form-label">API Key / Token</div>
+              <input 
+                type="password" 
+                placeholder="Enter Delhivery API Token"
+                value={settings.delhiveryApiKey || ''}
+                onChange={e => setSettings(prev => ({ ...prev, delhiveryApiKey: e.target.value }))}
+                className="form-input font-mono"
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="form-row">
+                <div className="form-label">Client Name</div>
+                <input 
+                  type="text" 
+                  placeholder="e.g. MORIVANA DAILY"
+                  value={settings.delhiveryClientName || ''}
+                  onChange={e => setSettings(prev => ({ ...prev, delhiveryClientName: e.target.value }))}
+                  className="form-input text-xs"
+                />
+              </div>
+              <div className="form-row">
+                <div className="form-label">Pickup Location Name</div>
+                <input 
+                  type="text" 
+                  placeholder="e.g. Morivana Depot"
+                  value={settings.delhiveryPickupLocationName || ''}
+                  onChange={e => setSettings(prev => ({ ...prev, delhiveryPickupLocationName: e.target.value }))}
+                  className="form-input text-xs"
+                />
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-label">API Environment</div>
+              <select 
+                value={settings.delhiveryMode || 'staging'}
+                onChange={e => setSettings(prev => ({ ...prev, delhiveryMode: e.target.value }))}
+                className="form-select text-xs"
+              >
+                <option value="staging">Staging (Sandbox)</option>
+                <option value="production">Production (Live)</option>
+              </select>
+            </div>
+            
+            <div style={{ borderTop: '1px solid #1e1f1c', paddingTop: '10px', marginTop: '6px' }}>
+              <div style={{ fontSize: '11px', color: '#8a8c84', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>Pickup Address (For CMU Manifest)</div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-sans">
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] text-[var(--color-text-secondary)]">Pickup Address</label>
+                  <input 
+                    type="text" 
+                    value={settings.delhiveryPickupAddress || ''}
+                    onChange={e => setSettings(prev => ({ ...prev, delhiveryPickupAddress: e.target.value }))}
+                    className="form-input text-xs" 
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] text-[var(--color-text-secondary)]">City</label>
+                  <input 
+                    type="text" 
+                    value={settings.delhiveryPickupCity || ''}
+                    onChange={e => setSettings(prev => ({ ...prev, delhiveryPickupCity: e.target.value }))}
+                    className="form-input text-xs" 
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] text-[var(--color-text-secondary)]">State</label>
+                  <input 
+                    type="text" 
+                    value={settings.delhiveryPickupState || ''}
+                    onChange={e => setSettings(prev => ({ ...prev, delhiveryPickupState: e.target.value }))}
+                    className="form-input text-xs" 
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] text-[var(--color-text-secondary)]">Pincode</label>
+                  <input 
+                    type="text" 
+                    value={settings.delhiveryPickupPin || ''}
+                    onChange={e => setSettings(prev => ({ ...prev, delhiveryPickupPin: e.target.value }))}
+                    className="form-input text-xs font-mono" 
+                  />
+                </div>
+                <div className="flex flex-col gap-1 md:col-span-2">
+                  <label className="text-[10px] text-[var(--color-text-secondary)]">Pickup Contact Phone</label>
+                  <input 
+                    type="text" 
+                    value={settings.delhiveryPickupPhone || ''}
+                    onChange={e => setSettings(prev => ({ ...prev, delhiveryPickupPhone: e.target.value }))}
+                    className="form-input text-xs font-mono" 
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 mt-3">
+              <button 
+                type="button"
+                disabled={connectionTesting}
+                onClick={handleTestConnection}
+                className="act-btn px-4 py-2 flex items-center justify-center gap-1.5"
+                style={{ border: '1px solid var(--color-border-tertiary)', borderRadius: '6px', fontSize: '11px', height: '32px' }}
+              >
+                {connectionTesting ? (
+                  <>
+                    <IconLoader2 size={13} className="animate-spin" />
+                    Testing...
+                  </>
+                ) : 'Test Connection'}
+              </button>
+              {connectionStatus && (
+                <span className={`text-[11px] font-semibold ${connectionStatus.ok ? 'text-green-500' : 'text-red-500'}`}>
+                  {connectionStatus.ok ? '✓ Connection Succeeded!' : `✕ Test Error: ${connectionStatus.error}`}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* RAZORPAY CONFIG */}
+        <div className="panel">
+          <div className="panel-title">RAZORPAY GATEWAY CONFIG</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '8px' }}>
+            <div className="form-row">
+              <div className="form-label">Key ID</div>
+              <input 
+                type="text" 
+                placeholder="Enter Razorpay Key ID"
+                value={settings.razorpayKeyId || ''}
+                onChange={e => setSettings(prev => ({ ...prev, razorpayKeyId: e.target.value }))}
+                className="form-input font-mono"
+              />
+            </div>
+            <div className="form-row">
+              <div className="form-label">Key Secret</div>
+              <div style={{ position: 'relative', display: 'flex', alignItems: 'center', width: '100%' }}>
+                <input 
+                  type={showRzpSecret ? 'text' : 'password'} 
+                  placeholder="Enter Razorpay Key Secret"
+                  value={settings.razorpayKeySecret || ''}
+                  onChange={e => setSettings(prev => ({ ...prev, razorpayKeySecret: e.target.value }))}
+                  className="form-input font-mono"
+                  style={{ paddingRight: '36px', width: '100%' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowRzpSecret(!showRzpSecret)}
+                  style={{
+                    position: 'absolute',
+                    right: '10px',
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--color-text-secondary)',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: 0
+                  }}
+                >
+                  {showRzpSecret ? <IconEyeOff size={16} /> : <IconEye size={16} />}
+                </button>
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-label">API Environment</div>
+              <select 
+                value={settings.razorpayMode || 'staging'}
+                onChange={e => setSettings(prev => ({ ...prev, razorpayMode: e.target.value }))}
+                className="form-select text-xs"
+              >
+                <option value="staging">Staging (Sandbox)</option>
+                <option value="production">Production (Live)</option>
+              </select>
+            </div>
+
+            <div className="flex items-center gap-3 mt-3">
+              <button 
+                type="button"
+                disabled={rzpConnectionTesting}
+                onClick={handleTestRazorpayConnection}
+                className="act-btn px-4 py-2 flex items-center justify-center gap-1.5"
+                style={{ border: '1px solid var(--color-border-tertiary)', borderRadius: '6px', fontSize: '11px', height: '32px' }}
+              >
+                {rzpConnectionTesting ? (
+                  <>
+                    <IconLoader2 size={13} className="animate-spin" />
+                    Testing...
+                  </>
+                ) : 'Test Connection'}
+              </button>
+              {rzpConnectionStatus && (
+                <span className={`text-[11px] font-semibold ${rzpConnectionStatus.ok ? 'text-green-500' : 'text-red-500'}`}>
+                  {rzpConnectionStatus.ok ? '✓ Connection Succeeded!' : `✕ Test Error: ${rzpConnectionStatus.error}`}
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </div>

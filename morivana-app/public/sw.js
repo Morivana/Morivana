@@ -101,6 +101,7 @@ self.addEventListener('fetch', (event) => {
         if (event.request.mode === 'navigate') {
           return caches.match('/index.html')
         }
+        return new Response('Network error', { status: 408, headers: { 'Content-Type': 'text/plain' } })
       })
     })
   )

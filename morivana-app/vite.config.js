@@ -1,17 +1,27 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import path from 'path'
 
-export default defineConfig({
-  plugins: [
-    react({
-      babel: {
-        plugins: ['babel-plugin-react-compiler'],
+export default defineConfig(({ command }) => {
+  const isDev = command === 'serve'
+  return {
+    plugins: [
+      react({
+        babel: {
+          plugins: ['babel-plugin-react-compiler'],
+        },
+      }),
+      tailwindcss(),
+    ],
+    assetsInclude: ['**/*.glb'],
+    resolve: {
+      alias: {
+        ...(isDev && {
+          '@clerk/react': path.resolve('src/utils/mockClerk.jsx'),
+        }),
       },
-    }),
-    tailwindcss(),
-  ],
-  assetsInclude: ['**/*.glb'],
+    },
   build: {
     target: 'es2022',
     sourcemap: false,
@@ -50,4 +60,5 @@ export default defineConfig({
   optimizeDeps: {
     include: ['three', '@react-three/fiber', '@react-three/drei'],
   },
+  }
 })
