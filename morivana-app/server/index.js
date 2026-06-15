@@ -2352,8 +2352,32 @@ const userAuth = async (req, res, next) => {
       authHeader === 'Bearer mock_dev_bypass_token'
     )
     
-    // If Clerk is mocked locally (keys are missing) or bypass token is supplied
-    if (!hasClerkKeys || isBypassToken) {
+    // If we have a bypass token, it's the admin pretending to be a customer or bypass user
+    if (isBypassToken) {
+      req.user = {
+        id: 'user_mock_12345',
+        email: 'admin@morivana.local',
+        fullName: 'Bypass Admin'
+      }
+      return next()
+    }
+
+    // If Clerk keys are missing on the backend (local development)
+    if (!hasClerkKeys) {
+      const headerEmail = req.headers['x-user-email']
+      const headerName = req.headers['x-user-name']
+      const headerId = req.headers['x-user-id']
+
+      if (headerEmail) {
+        req.user = {
+          id: headerId || 'user_mock_12345',
+          email: headerEmail,
+          fullName: headerName || headerEmail
+        }
+        return next()
+      }
+
+      // Default fallback if no headers are provided but Clerk is bypassed
       req.user = {
         id: 'user_mock_12345',
         email: 'admin@morivana.local',

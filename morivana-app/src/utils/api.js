@@ -1,14 +1,15 @@
-import { useAuth } from '@clerk/react'
+import { useAuth, useUser } from '@clerk/react'
 
 const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
 const BASE_URL = isLocal ? '' : (import.meta.env.VITE_API_URL || '')
 
 // Central fetch wrapper with auth + security
-async function apiFetch(endpoint, options = {}, getToken) {
+async function apiFetch(endpoint, options = {}, getToken, userContext) {
   const url = `${BASE_URL}${endpoint}`
 
-  // Support local passcode-based secret admin bypass token
-  const bypassToken = typeof window !== 'undefined' ? localStorage.getItem('admin_bypass_token') : null
+  // Support local passcode-based secret admin bypass token ONLY on admin routes
+  const isAdminRoute = endpoint.startsWith('/api/admin')
+  const bypassToken = isAdminRoute && typeof window !== 'undefined' ? localStorage.getItem('admin_bypass_token') : null
   const token = bypassToken || (getToken ? await getToken() : null)
 
   const config = {
@@ -16,6 +17,11 @@ async function apiFetch(endpoint, options = {}, getToken) {
     headers: {
       'Content-Type': 'application/json',
       ...(token && { Authorization: `Bearer ${token}` }),
+      ...(userContext && {
+        'x-user-email': userContext.email,
+        'x-user-name': userContext.fullName,
+        'x-user-id': userContext.id
+      }),
       ...options.headers,
     },
   }
@@ -34,13 +40,20 @@ async function apiFetch(endpoint, options = {}, getToken) {
 // Hook for use in React components
 export function useApi() {
   const { getToken } = useAuth()
+  const { user } = useUser()
+
+  const userContext = user ? {
+    email: user.primaryEmailAddress?.emailAddress,
+    fullName: user.fullName || `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.primaryEmailAddress?.emailAddress,
+    id: user.id
+  } : null
 
   return {
-    get: (endpoint) => apiFetch(endpoint, { method: 'GET' }, getToken),
-    post: (endpoint, body) => apiFetch(endpoint, { method: 'POST', body: JSON.stringify(body) }, getToken),
-    put: (endpoint, body) => apiFetch(endpoint, { method: 'PUT', body: JSON.stringify(body) }, getToken),
-    patch: (endpoint, body) => apiFetch(endpoint, { method: 'PATCH', body: JSON.stringify(body) }, getToken),
-    delete: (endpoint) => apiFetch(endpoint, { method: 'DELETE' }, getToken),
+    get: (endpoint) => apiFetch(endpoint, { method: 'GET' }, getToken, userContext),
+    post: (endpoint, body) => apiFetch(endpoint, { method: 'POST', body: JSON.stringify(body) }, getToken, userContext),
+    put: (endpoint, body) => apiFetch(endpoint, { method: 'PUT', body: JSON.stringify(body) }, getToken, userContext),
+    patch: (endpoint, body) => apiFetch(endpoint, { method: 'PATCH', body: JSON.stringify(body) }, getToken, userContext),
+    delete: (endpoint) => apiFetch(endpoint, { method: 'DELETE' }, getToken, userContext),
   }
 }
 
