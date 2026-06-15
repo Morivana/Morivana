@@ -23,7 +23,14 @@ const corsOptionsConfig = {
     ? allowedOrigins
     : ['http://localhost:5173', 'http://localhost:5174', true],
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
+  allowedHeaders: [
+    'Content-Type', 
+    'Authorization', 
+    'X-CSRF-Token',
+    'x-user-email',
+    'x-user-name',
+    'x-user-id'
+  ],
   credentials: true,
   maxAge: 86400, // preflight cache 24h
 }
@@ -84,7 +91,9 @@ export const helmetConfig = helmet({
         'https://morivanadaily.com',
         'https://morivandaily.com',
         'https://moriavandaily.com',
-        'https://morivana.pages.dev'
+        'https://morivana.pages.dev',
+        'https://api.morivanadaily.com',
+        'https://morivana-api-0l3l.onrender.com'
       ],
       objectSrc: ["'none'"],
       upgradeInsecureRequests: [],
