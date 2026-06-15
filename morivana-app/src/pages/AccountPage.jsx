@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useUser, useClerk, useSession, useSessionList } from '@clerk/react'
 import { Link, useNavigate } from 'react-router-dom'
 import LoadingSpinner from '../components/LoadingSpinner'
+import { useApi } from '../utils/api'
 
 // ─── Sidebar nav items ────────────────────────────────────────────────────────
 const NAV_ITEMS = [
@@ -645,6 +646,93 @@ function SettingsSection({ user }) {
   const [passwordError, setPasswordError] = useState('')
   const [passwordSuccess, setPasswordSuccess] = useState('')
 
+  // Support Chat State & Helpers
+  const api = useApi()
+  const [userTickets, setUserTickets] = useState([])
+  const [ticketsLoading, setTicketsLoading] = useState(false)
+  const [activeTicket, setActiveTicket] = useState(null)
+  const [chatText, setChatText] = useState('')
+  const [subjectText, setSubjectText] = useState('')
+  const [messageText, setMessageText] = useState('')
+  const [showNewChatForm, setShowNewChatForm] = useState(false)
+  const [submittingChat, setSubmittingChat] = useState(false)
+  const [sendingReply, setSendingReply] = useState(false)
+
+  const fetchUserTickets = async (silent = false) => {
+    if (!silent) setTicketsLoading(true)
+    try {
+      const data = await api.get('/api/user/tickets')
+      setUserTickets(data)
+      if (activeTicket) {
+        const updated = data.find(t => t._id === activeTicket._id || t.ticketId === activeTicket.ticketId)
+        if (updated) {
+          setActiveTicket(updated)
+        }
+      }
+    } catch (err) {
+      console.error('Failed to load user support tickets', err)
+    } finally {
+      if (!silent) setTicketsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchUserTickets()
+  }, [])
+
+  // Auto-refresh active chat every 10 seconds
+  useEffect(() => {
+    if (!activeTicket) return
+    const timer = setInterval(() => {
+      fetchUserTickets(true)
+    }, 10000)
+    return () => clearInterval(timer)
+  }, [activeTicket])
+
+  const handleCreateChat = async (e) => {
+    e.preventDefault()
+    if (!subjectText.trim() || !messageText.trim()) return
+    setSubmittingChat(true)
+    try {
+      const res = await api.post('/api/user/tickets', {
+        subject: subjectText,
+        initialMessage: messageText
+      })
+      if (res.ok) {
+        setSubjectText('')
+        setMessageText('')
+        setShowNewChatForm(false)
+        await fetchUserTickets()
+        if (res.ticket) {
+          setActiveTicket(res.ticket)
+        }
+      }
+    } catch (err) {
+      alert(err.message || 'Failed to start support chat. Please try again.')
+    } finally {
+      setSubmittingChat(false)
+    }
+  }
+
+  const handleSendReply = async (e) => {
+    e.preventDefault()
+    if (!chatText.trim() || !activeTicket) return
+    setSendingReply(true)
+    try {
+      const res = await api.post(`/api/user/tickets/${activeTicket._id || activeTicket.ticketId}/replies`, {
+        text: chatText
+      })
+      if (res.ok) {
+        setChatText('')
+        await fetchUserTickets()
+      }
+    } catch (err) {
+      alert('Failed to send message.')
+    } finally {
+      setSendingReply(false)
+    }
+  }
+
   const handleNewsletterToggle = async () => {
     setLoading(true)
     const nextVal = !newsletter
@@ -968,84 +1056,430 @@ function SettingsSection({ user }) {
           </div>
         </div>
 
-        {/* Right Column: Active Sessions */}
-        <div
-          style={{
-            background: '#fff',
-            borderRadius: '20px',
-            border: '1px solid rgba(14,39,1,0.09)',
-            padding: '24px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <img src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-shield-3d.png" alt="" aria-hidden="true" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
-            <h3 style={{ fontFamily: 'var(--font-serif)', fontWeight: 700, fontSize: '1.1rem', color: 'var(--surface-deep)', margin: 0 }}>
-              Active Sessions
-            </h3>
+        {/* Right Column: Active Sessions & Support */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          
+          {/* Active Sessions */}
+          <div
+            style={{
+              background: '#fff',
+              borderRadius: '20px',
+              border: '1px solid rgba(14,39,1,0.09)',
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <img src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-shield-3d.png" alt="" aria-hidden="true" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+              <h3 style={{ fontFamily: 'var(--font-serif)', fontWeight: 700, fontSize: '1.1rem', color: 'var(--surface-deep)', margin: 0 }}>
+                Active Sessions
+              </h3>
+            </div>
+
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.84rem', color: 'var(--ink-mute)', lineHeight: 1.5, margin: 0 }}>
+              Devices currently logged into your account.
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '4px' }}>
+              {!sessionsLoaded ? (
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.84rem', color: 'var(--ink-mute)' }}>Loading sessions...</span>
+              ) : (
+                sessions?.map(session => {
+                  const isCurrent = session.id === currentSession?.id
+                  const browser = session.latestActivity?.browser || 'Browser'
+                  const os = session.latestActivity?.os || 'OS'
+                  const ip = session.latestActivity?.ipAddress || 'IP Unknown'
+
+                  return (
+                    <div
+                      key={session.id}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        borderBottom: '1px solid rgba(14,39,1,0.06)',
+                        paddingBottom: '12px',
+                      }}
+                    >
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', fontWeight: 700, color: 'var(--surface-deep)', textTransform: 'capitalize' }}>
+                            {browser} on {os}
+                          </span>
+                          {isCurrent && (
+                            <span
+                              style={{
+                                background: 'var(--surface-soft)',
+                                color: 'var(--surface-deep)',
+                                fontSize: '0.68rem',
+                                fontWeight: 700,
+                                borderRadius: '999px',
+                                padding: '2px 8px',
+                                letterSpacing: '0.04em',
+                                textTransform: 'uppercase',
+                                border: '1px solid rgba(25, 65, 2, 0.18)',
+                              }}
+                            >
+                              Current
+                            </span>
+                          )}
+                        </div>
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)' }}>
+                          IP: {ip} · Last active: {new Date(session.lastActiveAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                      </div>
+                    </div>
+                  )
+                })
+              )}
+            </div>
           </div>
 
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.84rem', color: 'var(--ink-mute)', lineHeight: 1.5, margin: 0 }}>
-            Devices currently logged into your account.
-          </p>
+          {/* Support Chat Card */}
+          <div
+            style={{
+              background: '#fff',
+              borderRadius: '20px',
+              border: '1px solid rgba(14,39,1,0.09)',
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <img
+                  src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/icon-phone-3d.png"
+                  alt=""
+                  aria-hidden="true"
+                  style={{ width: '24px', height: '24px', objectFit: 'contain' }}
+                />
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontWeight: 700, fontSize: '1.1rem', color: 'var(--surface-deep)', margin: 0 }}>
+                  Support Chat
+                </h3>
+              </div>
+              {activeTicket && (
+                <button
+                  onClick={() => setActiveTicket(null)}
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 700,
+                    fontSize: '0.72rem',
+                    letterSpacing: '0.04em',
+                    textTransform: 'uppercase',
+                    color: 'var(--ink-mute)',
+                    border: '1px solid rgba(14, 39, 1, 0.14)',
+                    background: 'transparent',
+                    borderRadius: '999px',
+                    padding: '4px 10px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  ← Back
+                </button>
+              )}
+            </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '4px' }}>
-            {!sessionsLoaded ? (
-              <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.84rem', color: 'var(--ink-mute)' }}>Loading sessions...</span>
-            ) : (
-              sessions?.map(session => {
-                const isCurrent = session.id === currentSession?.id
-                const browser = session.latestActivity?.browser || 'Browser'
-                const os = session.latestActivity?.os || 'OS'
-                const ip = session.latestActivity?.ipAddress || 'IP Unknown'
-
-                return (
-                  <div
-                    key={session.id}
+            {activeTicket ? (
+              // Active Conversation View
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(14,39,1,0.06)', paddingBottom: '8px' }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.86rem', color: 'var(--surface-deep)' }}>
+                    {activeTicket.subject}
+                  </span>
+                  <span
                     style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      borderBottom: '1px solid rgba(14,39,1,0.06)',
-                      paddingBottom: '12px',
+                      background: activeTicket.status === 'Resolved' ? 'rgba(34, 197, 94, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+                      color: activeTicket.status === 'Resolved' ? '#166534' : '#991b1b',
+                      fontSize: '0.68rem',
+                      fontWeight: 700,
+                      borderRadius: '999px',
+                      padding: '2px 8px',
+                      textTransform: 'uppercase',
                     }}
                   >
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', fontWeight: 700, color: 'var(--surface-deep)', textTransform: 'capitalize' }}>
-                          {browser} on {os}
-                        </span>
-                        {isCurrent && (
-                          <span
+                    {activeTicket.status}
+                  </span>
+                </div>
+
+                {/* Messages Feed */}
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '12px',
+                    maxHeight: '260px',
+                    overflowY: 'auto',
+                    padding: '10px 4px',
+                    background: '#F9F9F7',
+                    borderRadius: '12px',
+                    border: '1px solid rgba(14,39,1,0.04)',
+                  }}
+                >
+                  {activeTicket.replies && activeTicket.replies.length > 0 ? (
+                    activeTicket.replies.map((reply, i) => {
+                      const isUser = reply.sender === 'customer'
+                      return (
+                        <div
+                          key={i}
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignSelf: isUser ? 'flex-end' : 'flex-start',
+                            maxWidth: '85%',
+                            gap: '4px',
+                          }}
+                        >
+                          <div
                             style={{
-                              background: 'var(--surface-soft)',
+                              background: isUser ? 'var(--surface-soft)' : '#fff',
                               color: 'var(--surface-deep)',
-                              fontSize: '0.68rem',
-                              fontWeight: 700,
-                              borderRadius: '999px',
-                              padding: '2px 8px',
-                              letterSpacing: '0.04em',
-                              textTransform: 'uppercase',
-                              border: '1px solid rgba(25, 65, 2, 0.18)',
+                              border: isUser ? '1px solid rgba(25, 65, 2, 0.08)' : '1px solid rgba(14,39,1,0.06)',
+                              borderRadius: isUser ? '14px 14px 2px 14px' : '14px 14px 14px 2px',
+                              padding: '8px 12px',
+                              fontSize: '0.8rem',
+                              fontFamily: 'var(--font-body)',
+                              lineHeight: 1.4,
+                              boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
                             }}
                           >
-                            Current
+                            {reply.text}
+                          </div>
+                          <span style={{ fontSize: '0.65rem', color: 'var(--ink-mute)', alignSelf: isUser ? 'flex-end' : 'flex-start', fontFamily: 'var(--font-body)' }}>
+                            {new Date(reply.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                           </span>
-                        )}
-                      </div>
-                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)' }}>
-                        IP: {ip} · Last active: {new Date(session.lastActiveAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                      </span>
+                        </div>
+                      )
+                    })
+                  ) : (
+                    <div style={{ textAlign: 'center', padding: '20px 0', fontSize: '0.8rem', color: 'var(--ink-mute)', fontFamily: 'var(--font-body)' }}>
+                      No messages in this chat.
                     </div>
+                  )}
+                </div>
+
+                {/* Reply Form */}
+                <form onSubmit={handleSendReply} style={{ display: 'flex', gap: '8px', alignItems: 'stretch' }}>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Type a message..."
+                    value={chatText}
+                    onChange={e => setChatText(e.target.value)}
+                    style={{
+                      flex: 1,
+                      border: '1.5px solid rgba(14, 39, 1, 0.14)',
+                      borderRadius: '12px',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '0.86rem',
+                      padding: '8px 12px',
+                      outline: 'none',
+                    }}
+                  />
+                  <button
+                    type="submit"
+                    disabled={sendingReply}
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontWeight: 700,
+                      fontSize: '0.78rem',
+                      letterSpacing: '0.04em',
+                      textTransform: 'uppercase',
+                      background: 'var(--surface-deep)',
+                      color: 'var(--accent)',
+                      border: 'none',
+                      borderRadius: '12px',
+                      padding: '0 16px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    {sendingReply ? '...' : 'Send'}
+                  </button>
+                </form>
+              </div>
+            ) : showNewChatForm ? (
+              // Start New Chat Form
+              <form onSubmit={handleCreateChat} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <label style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--ink-soft)' }}>
+                    Subject / Order ID
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Question about shipping"
+                    value={subjectText}
+                    onChange={e => setSubjectText(e.target.value)}
+                    style={{
+                      border: '1.5px solid rgba(14, 39, 1, 0.14)',
+                      borderRadius: '10px',
+                      fontSize: '0.86rem',
+                      padding: '8px 12px',
+                      outline: 'none',
+                    }}
+                  />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <label style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--ink-soft)' }}>
+                    Your Message
+                  </label>
+                  <textarea
+                    required
+                    rows="3"
+                    placeholder="Describe what you need help with..."
+                    value={messageText}
+                    onChange={e => setMessageText(e.target.value)}
+                    style={{
+                      border: '1.5px solid rgba(14, 39, 1, 0.14)',
+                      borderRadius: '10px',
+                      fontSize: '0.86rem',
+                      padding: '8px 12px',
+                      outline: 'none',
+                      resize: 'none',
+                    }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+                  <button
+                    type="button"
+                    onClick={() => setShowNewChatForm(false)}
+                    style={{
+                      flex: 1,
+                      fontFamily: 'var(--font-body)',
+                      fontWeight: 700,
+                      fontSize: '0.75rem',
+                      textTransform: 'uppercase',
+                      background: 'transparent',
+                      color: 'var(--ink-mute)',
+                      border: '1.5px solid rgba(14, 39, 1, 0.14)',
+                      borderRadius: '999px',
+                      padding: '8px 12px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={submittingChat}
+                    style={{
+                      flex: 1,
+                      fontFamily: 'var(--font-body)',
+                      fontWeight: 700,
+                      fontSize: '0.75rem',
+                      textTransform: 'uppercase',
+                      background: 'var(--surface-deep)',
+                      color: 'var(--accent)',
+                      border: 'none',
+                      borderRadius: '999px',
+                      padding: '8px 12px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {submittingChat ? 'Starting...' : 'Start Chat'}
+                  </button>
+                </div>
+              </form>
+            ) : (
+              // Chat List View
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.84rem', color: 'var(--ink-mute)', lineHeight: 1.5, margin: 0 }}>
+                  Need help? Connect directly with our customer support team via chat.
+                </p>
+
+                {ticketsLoading ? (
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--ink-mute)' }}>Loading active chats...</span>
+                ) : userTickets.length > 0 ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {userTickets.map(ticket => (
+                      <div
+                        key={ticket._id || ticket.ticketId}
+                        onClick={() => setActiveTicket(ticket)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          border: '1px solid rgba(14,39,1,0.06)',
+                          borderRadius: '12px',
+                          padding: '10px 14px',
+                          cursor: 'pointer',
+                          background: '#F9F9F7',
+                          transition: 'border-color 0.2s',
+                        }}
+                        onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(14,39,1,0.18)'}
+                        onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(14,39,1,0.06)'}
+                      >
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', textAlign: 'left' }}>
+                          <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.84rem', fontWeight: 600, color: 'var(--surface-deep)' }}>
+                            {ticket.subject}
+                          </span>
+                          <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--ink-mute)' }}>
+                            ID: {ticket.ticketId} · {new Date(ticket.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <span
+                          style={{
+                            background: ticket.status === 'Resolved' ? 'rgba(34, 197, 94, 0.08)' : 'rgba(239, 68, 68, 0.08)',
+                            color: ticket.status === 'Resolved' ? '#166534' : '#991b1b',
+                            fontSize: '0.64rem',
+                            fontWeight: 700,
+                            borderRadius: '999px',
+                            padding: '2px 8px',
+                            textTransform: 'uppercase',
+                          }}
+                        >
+                          {ticket.status}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                )
-              })
+                ) : (
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--ink-mute)' }}>No active support chats found.</span>
+                )}
+
+                <button
+                  onClick={() => setShowNewChatForm(true)}
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 700,
+                    fontSize: '0.78rem',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    background: 'transparent',
+                    color: 'var(--surface-deep)',
+                    border: '1.5px solid rgba(14, 39, 1, 0.18)',
+                    borderRadius: '999px',
+                    padding: '8px 16px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    width: 'fit-content',
+                    minHeight: '36px',
+                    marginTop: '4px',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.background = 'var(--surface-deep)'
+                    e.currentTarget.style.color = 'var(--accent)'
+                    e.currentTarget.style.borderColor = 'var(--surface-deep)'
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.background = 'transparent'
+                    e.currentTarget.style.color = 'var(--surface-deep)'
+                    e.currentTarget.style.borderColor = 'rgba(14, 39, 1, 0.18)'
+                  }}
+                >
+                  Start New Chat
+                </button>
+              </div>
             )}
           </div>
-        </div>
 
+        </div>
       </div>
     </>
   )

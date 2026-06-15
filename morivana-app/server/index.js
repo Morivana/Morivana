@@ -6,7 +6,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { MongoClient, ServerApiVersion } from 'mongodb'
 import { google } from 'googleapis'
-import { clerkMiddleware } from '@clerk/express'
+import { clerkMiddleware, clerkClient } from '@clerk/express'
 import {
   corsOptions,
   helmetConfig,
@@ -2333,6 +2333,125 @@ app.post('/api/admin/tickets/:id/replies', adminAuth, async (req, res, next) => 
       { returnDocument: 'after' }
     )
     if (!result) return res.status(404).json({ error: 'Ticket not found' })
+    return res.json({ ok: true, ticket: result })
+  } catch (err) {
+    next(err)
+  }
+})
+
+// ── USER SUPPORT CHAT ROUTES ──────────────────────────────────────────────────
+
+// User Authentication Middleware
+const userAuth = async (req, res, next) => {
+  try {
+    const { userId } = req.auth || {}
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized. Please sign in.' })
+    }
+    const user = await clerkClient.users.getUser(userId)
+    const email = user.emailAddresses[0]?.emailAddress
+    if (!email) {
+      return res.status(400).json({ error: 'User email not found in auth provider.' })
+    }
+    req.user = {
+      id: userId,
+      email,
+      fullName: `${user.firstName || ''} ${user.lastName || ''}`.trim() || email
+    }
+    next()
+  } catch (err) {
+    console.error('[USER AUTH ERROR]', err)
+    return res.status(500).json({ error: 'User authentication check failed.' })
+  }
+}
+
+// GET User Support Tickets (only their own)
+app.get('/api/user/tickets', userAuth, async (req, res, next) => {
+  try {
+    const userEmail = req.user.email
+    if (!isDbConnected || !tickets) {
+      const filtered = ticketsList.filter(t => t.email.toLowerCase() === userEmail.toLowerCase())
+      return res.json(filtered)
+    }
+    const list = await tickets.find({ email: { $regex: new RegExp(`^${userEmail}$`, 'i') } }).sort({ createdAt: -1 }).toArray()
+    return res.json(list)
+  } catch (err) {
+    next(err)
+  }
+})
+
+// POST Create User Support Ticket
+app.post('/api/user/tickets', userAuth, async (req, res, next) => {
+  try {
+    const { subject, initialMessage } = req.body
+    if (!subject || !initialMessage) {
+      return res.status(400).json({ error: 'Subject and initial message are required.' })
+    }
+    const newTicket = {
+      ticketId: `TCK-${Math.floor(100 + Math.random() * 900)}`,
+      customer: req.user.fullName,
+      email: req.user.email,
+      orderId: '',
+      subject: subject,
+      priority: 'Medium',
+      status: 'Open',
+      replies: [
+        {
+          sender: 'customer',
+          text: initialMessage,
+          timestamp: new Date()
+        }
+      ],
+      region: 'GLOBAL',
+      createdAt: new Date()
+    }
+    if (!isDbConnected || !tickets) {
+      newTicket._id = `mock-tck-${Date.now()}`
+      ticketsList.unshift(newTicket)
+      return res.json({ ok: true, ticket: newTicket })
+    }
+    const result = await tickets.insertOne(newTicket)
+    newTicket._id = result.insertedId
+    return res.json({ ok: true, ticket: newTicket })
+  } catch (err) {
+    next(err)
+  }
+})
+
+// POST User reply to their own ticket
+app.post('/api/user/tickets/:id/replies', userAuth, async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const { text } = req.body
+    if (!text) return res.status(400).json({ error: 'Reply text is required' })
+
+    const newReply = { sender: 'customer', text, timestamp: new Date() }
+
+    if (!isDbConnected || !tickets) {
+      const idx = ticketsList.findIndex(t => t._id === id || t.ticketId === id)
+      if (idx === -1) return res.status(404).json({ error: 'Ticket not found' })
+      if (ticketsList[idx].email.toLowerCase() !== req.user.email.toLowerCase()) {
+        return res.status(403).json({ error: 'Access denied' })
+      }
+      ticketsList[idx].replies.push(newReply)
+      if (ticketsList[idx].status === 'Resolved') {
+        ticketsList[idx].status = 'Open'
+      }
+      return res.json({ ok: true, ticket: ticketsList[idx] })
+    }
+    const query = ObjectId.isValid(id)
+      ? { _id: new ObjectId(id), email: { $regex: new RegExp(`^${req.user.email}$`, 'i') } }
+      : { ticketId: id, email: { $regex: new RegExp(`^${req.user.email}$`, 'i') } }
+
+    const result = await tickets.findOneAndUpdate(
+      query,
+      {
+        $push: { replies: newReply },
+        $set: { status: 'Open' }
+      },
+      { returnDocument: 'after' }
+    )
+    if (!result) return res.status(404).json({ error: 'Ticket not found or unauthorized' })
     return res.json({ ok: true, ticket: result })
   } catch (err) {
     next(err)
