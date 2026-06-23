@@ -644,19 +644,20 @@ const getCountryFilter = (countryParam) => {
   if (c === 'in') {
     return { region: { $in: ['INDIA', 'IN', 'india', 'in'] } };
   } else if (c === 'ca') {
-    return { region: { $nin: ['INDIA', 'IN', 'india', 'in'] } };
+    return { region: { $in: ['CANADA', 'CA', 'canada', 'ca'] } };
   }
   return {};
 };
 
 const isMatchCountry = (itemRegion, countryParam) => {
   const c = (countryParam || 'all').toLowerCase();
-  const r = (itemRegion || 'GLOBAL').toUpperCase();
+  const r = (itemRegion || '').toUpperCase();
   const isIndia = r === 'INDIA' || r === 'IN';
+  const isCanada = r === 'CANADA' || r === 'CA';
   if (c === 'in') {
     return isIndia;
   } else if (c === 'ca') {
-    return !isIndia;
+    return isCanada;
   }
   return true;
 };
@@ -672,6 +673,7 @@ app.get('/api/admin/stats', adminAuth, async (req, res, next) => {
       const oList = ordersList.filter(o => isMatchCountry(o.region, c))
       const tList = ticketsList.filter(t => isMatchCountry(t.region, c))
       const rList = returnsList.filter(r => isMatchCountry(r.region, c))
+      const dList = deliveriesList.filter(d => isMatchCountry(d.region, c))
       const isIN = c === 'in'
 
       const totalEarningsVal = pList.reduce((sum, p) => {
@@ -727,6 +729,7 @@ app.get('/api/admin/stats', adminAuth, async (req, res, next) => {
         pendingOrdersCount: oList.filter(o => ['Processing', 'Pending'].includes(o.orderStatus)).length,
         openTicketsCount: tList.filter(t => ['Open', 'In Progress'].includes(t.status)).length,
         pendingReturnsCount: rList.filter(r => r.status === 'Pending').length,
+        pendingDeliveriesCount: dList.filter(d => !['Delivered', 'Returned'].includes(d.status)).length,
         waitlistCount: [
           { region: 'india' },
           { region: 'canada' },
@@ -768,6 +771,7 @@ app.get('/api/admin/stats', adminAuth, async (req, res, next) => {
         pendingOrdersCount: ordersList.filter(o => isMatchCountry(o.region, countryParam) && ['Processing', 'Pending'].includes(o.orderStatus)).length,
         openTicketsCount: ticketsList.filter(t => isMatchCountry(t.region, countryParam) && ['Open', 'In Progress'].includes(t.status)).length,
         pendingReturnsCount: returnsList.filter(r => isMatchCountry(r.region, countryParam) && r.status === 'Pending').length,
+        pendingDeliveriesCount: deliveriesList.filter(d => isMatchCountry(d.region, countryParam) && !['Delivered', 'Returned'].includes(d.status)).length,
         india: indiaMetrics,
         canada: canadaMetrics
       }
@@ -811,6 +815,7 @@ app.get('/api/admin/stats', adminAuth, async (req, res, next) => {
       const paymentFilter = getCountryFilter(c)
       const ticketFilter = getCountryFilter(c)
       const returnFilter = getCountryFilter(c)
+      const deliveryFilter = getCountryFilter(c)
 
       const totalWaitlist = await waitlist.countDocuments(waitlistFilter)
       
@@ -828,6 +833,11 @@ app.get('/api/admin/stats', adminAuth, async (req, res, next) => {
         ...returnFilter,
         status: 'Pending'
       }) : returnsList.filter(r => isMatchCountry(r.region, c) && r.status === 'Pending').length
+
+      const pendingDeliveriesCount = deliveries ? await deliveries.countDocuments({
+        ...deliveryFilter,
+        status: { $nin: ['Delivered', 'Returned'] }
+      }) : deliveriesList.filter(d => isMatchCountry(d.region, c) && !['Delivered', 'Returned'].includes(d.status)).length
 
       const allPayments = await payments.find(paymentFilter).toArray()
       const isIN = c === 'in'
@@ -885,6 +895,7 @@ app.get('/api/admin/stats', adminAuth, async (req, res, next) => {
         pendingOrdersCount,
         openTicketsCount,
         pendingReturnsCount,
+        pendingDeliveriesCount,
         waitlistCount: totalWaitlist
       }
     }
@@ -893,6 +904,7 @@ app.get('/api/admin/stats', adminAuth, async (req, res, next) => {
     const orderFilter = getCountryFilter(countryParam)
     const ticketFilter = getCountryFilter(countryParam)
     const returnFilter = getCountryFilter(countryParam)
+    const deliveryFilter = getCountryFilter(countryParam)
 
     const totalWaitlist = await waitlist.countDocuments(waitlistFilter)
     const allProducts = await products.find().toArray()
@@ -932,6 +944,11 @@ app.get('/api/admin/stats', adminAuth, async (req, res, next) => {
       orderStatus: { $in: ['Processing', 'Pending'] }
     }) : ordersList.filter(o => isMatchCountry(o.region, countryParam) && ['Processing', 'Pending'].includes(o.orderStatus)).length
 
+    const pendingDeliveriesCount = deliveries ? await deliveries.countDocuments({
+      ...deliveryFilter,
+      status: { $nin: ['Delivered', 'Returned'] }
+    }) : deliveriesList.filter(d => isMatchCountry(d.region, countryParam) && !['Delivered', 'Returned'].includes(d.status)).length
+
     let threshold = 20
     if (storeSettings) {
       const settings = await storeSettings.findOne()
@@ -959,6 +976,7 @@ app.get('/api/admin/stats', adminAuth, async (req, res, next) => {
       activeProductsCount,
       uniqueRegionsCount,
       pendingOrdersCount,
+      pendingDeliveriesCount,
       lowStockCount,
       openTicketsCount,
       pendingReturnsCount,
@@ -1881,6 +1899,7 @@ app.get('/api/admin/customers', adminAuth, async (req, res, next) => {
       
       const subRegion = (sub.region || 'GLOBAL').toUpperCase()
       const isIndia = subRegion === 'INDIA' || subRegion === 'IN'
+      const isCanada = subRegion === 'CANADA' || subRegion === 'CA'
 
       let ltvVal = '₹0 INR'
       if (isIndia) {
@@ -1909,7 +1928,7 @@ app.get('/api/admin/customers', adminAuth, async (req, res, next) => {
         _id: sub._id,
         name: sub.name || sub.email.split('@')[0] || 'Subscriber',
         email: sub.email,
-        region: isIndia ? 'INDIA' : 'CANADA',
+        region: isIndia ? 'INDIA' : (isCanada ? 'CANADA' : subRegion),
         orders: ordersCompleted,
         ltv: ltvVal,
         signout: dateStr

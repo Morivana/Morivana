@@ -754,7 +754,9 @@ export default function AdminPage() {
               >
                 <IconTruck size={17} className={`shrink-0 ${location.pathname === '/admin/deliveries' ? 'text-[var(--accent)]' : 'text-[var(--text-3)]'}`} />
                 <span>Deliveries</span>
-                <span className="nav-badge">3</span>
+                {stats?.metrics?.pendingDeliveriesCount > 0 && (
+                  <span className="nav-badge">{stats.metrics.pendingDeliveriesCount}</span>
+                )}
               </Link>
 
               <Link
@@ -1405,9 +1407,10 @@ function DeliveriesPage() {
     const r = (d.region || 'GLOBAL').toUpperCase()
     if (country === 'IN') {
       return r === 'INDIA' || r === 'IN'
-    } else {
-      return r !== 'INDIA' && r !== 'IN'
+    } else if (country === 'CA') {
+      return r === 'CANADA' || r === 'CA'
     }
+    return false
   })
 
   // Modals & Selection
@@ -1489,8 +1492,9 @@ function DeliveriesPage() {
       setPaymentMode('Prepaid')
       
       const isIN = (selectedDelivery.region || '').toUpperCase() === 'IN' || (selectedDelivery.region || '').toUpperCase() === 'INDIA'
-      setManualCarrier(isIN ? 'Shiprocket' : 'Canada Post')
-      setManualTracking((isIN ? 'SR' : 'CP') + Math.floor(1000000000 + Math.random() * 9000000000))
+      const isCA = (selectedDelivery.region || '').toUpperCase() === 'CA' || (selectedDelivery.region || '').toUpperCase() === 'CANADA'
+      setManualCarrier(isIN ? 'Shiprocket' : (isCA ? 'Canada Post' : 'Standard Courier'))
+      setManualTracking((isIN ? 'SR' : (isCA ? 'CP' : 'TRK')) + Math.floor(1000000000 + Math.random() * 9000000000))
       
       if (!settings?.delhiveryApiKey) {
         setFulfillmentType('manual')
@@ -1582,10 +1586,11 @@ function DeliveriesPage() {
 
   const handleAssignCourier = async (delivery) => {
     const isIN = (delivery.region || '').toUpperCase() === 'IN' || (delivery.region || '').toUpperCase() === 'INDIA'
-    const defaultCourier = isIN ? 'Shiprocket' : 'Canada Post'
-    const courier = prompt(`Enter courier name (${isIN ? 'Shiprocket / Delhivery' : 'Canada Post / Purolator'}):`, defaultCourier)
+    const isCA = (delivery.region || '').toUpperCase() === 'CA' || (delivery.region || '').toUpperCase() === 'CANADA'
+    const defaultCourier = isIN ? 'Shiprocket' : (isCA ? 'Canada Post' : 'Standard Courier')
+    const courier = prompt(`Enter courier name (${isIN ? 'Shiprocket / Delhivery' : (isCA ? 'Canada Post / Purolator' : 'Standard Courier')}):`, defaultCourier)
     if (!courier) return
-    const defaultTrackingPrefix = isIN ? 'SR' : 'CP'
+    const defaultTrackingPrefix = isIN ? 'SR' : (isCA ? 'CP' : 'TRK')
     const tracking = prompt("Enter AWB / Tracking number:", defaultTrackingPrefix + Math.floor(1000000000 + Math.random() * 9000000000))
     if (!tracking) return
     try {
@@ -2121,6 +2126,7 @@ function PaymentsPage() {
 
   const processedTransactions = transactions.map(t => {
     const isIN = (t.region || '').toUpperCase() === 'IN' || (t.region || '').toUpperCase() === 'INDIA'
+    const isCA = (t.region || '').toUpperCase() === 'CA' || (t.region || '').toUpperCase() === 'CANADA'
     let displayGateway = isIN ? 'Razorpay' : 'Stripe'
     let displayAmount = ''
     let displayUsdEquiv = t.usd
@@ -2133,13 +2139,13 @@ function PaymentsPage() {
       const usdVal = parseFloat(t.usd.replace(/[^0-9.]/g, '')) || 0
       const cadVal = (usdVal * 1.35).toFixed(2)
       displayAmount = `$${cadVal} CAD`
-      displayUsdEquiv = t.usd
-      parsedAmount = parseFloat(cadVal) || 0
+      parsedAmount = parseFloat(usdVal) || 0
     }
 
     return {
       ...t,
       isIN,
+      isCA,
       gateway: displayGateway,
       amount: displayAmount,
       usd: displayUsdEquiv,
@@ -2151,8 +2157,8 @@ function PaymentsPage() {
     if (viewMode === 'razorpay') return true
     if (country === 'all') return true
     if (country === 'IN') return t.isIN
-    if (country === 'CA') return !t.isIN
-    return true
+    if (country === 'CA') return t.isCA
+    return false
   })
 
   const fetchPayments = async ({ silent = false } = {}) => {
@@ -2284,13 +2290,13 @@ function PaymentsPage() {
   // Settled transactions
   const settledIN = processedTransactions.filter(t => t.isIN && t.status === 'Settled')
     .reduce((sum, t) => sum + t.parsedAmount, 0)
-  const settledCA = processedTransactions.filter(t => !t.isIN && t.status === 'Settled')
+  const settledCA = processedTransactions.filter(t => t.isCA && t.status === 'Settled')
     .reduce((sum, t) => sum + t.parsedAmount, 0)
 
   // Pending transactions
   const pendingIN = processedTransactions.filter(t => t.isIN && (t.status === 'Pending' || t.status === 'Authorized'))
     .reduce((sum, t) => sum + t.parsedAmount, 0)
-  const pendingCA = processedTransactions.filter(t => !t.isIN && t.status === 'Pending')
+  const pendingCA = processedTransactions.filter(t => t.isCA && t.status === 'Pending')
     .reduce((sum, t) => sum + t.parsedAmount, 0)
 
   const settledCount = filteredTransactions.filter(t => t.status === 'Settled').length
@@ -4192,6 +4198,7 @@ function OrdersPage() {
   const processedOrders = orders.map(o => {
     const r = (o.region || 'GLOBAL').toUpperCase()
     const isIN = r === 'INDIA' || r === 'IN'
+    const isCA = r === 'CANADA' || r === 'CA'
     let displayTotal = ''
     if (isIN) {
       displayTotal = o.total.includes('INR') ? o.total : `${o.total} INR`
@@ -4203,6 +4210,7 @@ function OrdersPage() {
     return {
       ...o,
       isIN,
+      isCA,
       displayTotal
     }
   })
@@ -4210,8 +4218,8 @@ function OrdersPage() {
   const filteredOrders = processedOrders.filter(o => {
     if (country === 'all') return true
     if (country === 'IN') return o.isIN
-    if (country === 'CA') return !o.isIN
-    return true
+    if (country === 'CA') return o.isCA
+    return false
   }).filter(o => {
     if (filterStatus === 'All') return true
     return o.orderStatus?.toLowerCase() === filterStatus.toLowerCase()
@@ -4741,9 +4749,10 @@ function SupportPage() {
     const reg = (t.region || 'GLOBAL').toUpperCase()
     if (country === 'IN') {
       return reg === 'INDIA' || reg === 'IN'
-    } else {
-      return reg !== 'INDIA' && reg !== 'IN'
+    } else if (country === 'CA') {
+      return reg === 'CANADA' || reg === 'CA'
     }
+    return false
   })
 
   const fetchTickets = async () => {
@@ -5977,6 +5986,7 @@ function AbandonedCheckoutsPage() {
 
   const processedCheckouts = checkouts.map(c => {
     const isIN = (c.region || '').toUpperCase() === 'IN' || (c.region || '').toUpperCase() === 'INDIA'
+    const isCA = (c.region || '').toUpperCase() === 'CA' || (c.region || '').toUpperCase() === 'CANADA'
     let displayTotal = ''
     let parsedVal = 0
     if (isIN) {
@@ -5991,6 +6001,7 @@ function AbandonedCheckoutsPage() {
     return {
       ...c,
       isIN,
+      isCA,
       displayTotal,
       parsedVal
     }
@@ -5999,8 +6010,8 @@ function AbandonedCheckoutsPage() {
   const filteredCheckouts = processedCheckouts.filter(c => {
     if (country === 'all') return true
     if (country === 'IN') return c.isIN
-    if (country === 'CA') return !c.isIN
-    return true
+    if (country === 'CA') return c.isCA
+    return false
   })
 
   const fetchCheckouts = async () => {
@@ -6042,7 +6053,7 @@ function AbandonedCheckoutsPage() {
   const recoveryRate = totalCarts > 0 ? ((remindedCount / totalCarts) * 100).toFixed(1) : '0.0'
   
   const potentialLossIN = processedCheckouts.filter(c => c.isIN).reduce((sum, c) => sum + c.parsedVal, 0)
-  const potentialLossCA = processedCheckouts.filter(c => !c.isIN).reduce((sum, c) => sum + c.parsedVal, 0)
+  const potentialLossCA = processedCheckouts.filter(c => c.isCA).reduce((sum, c) => sum + c.parsedVal, 0)
 
   return (
     <div>
