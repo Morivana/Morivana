@@ -24,11 +24,7 @@ const STATUS_COLORS = {
   cancelled: { bg: "rgba(239, 68, 68, 0.12)", text: "#f87171", dot: "#ef4444" },
 };
 
-const MOCK_SHIPMENTS = [
-  { waybill: "1234567890", order: "ORD-CA-001", customer: "Priya Mehta", city: "Mumbai", status: "shipped", date: "Jun 13" },
-  { waybill: "1234567891", order: "ORD-CA-002", customer: "Arjun Sharma", city: "Pune", status: "delivered", date: "Jun 12" },
-  { waybill: "1234567892", order: "ORD-IN-003", customer: "Sneha Patel", city: "Delhi", status: "pending", date: "Jun 14" },
-];
+const MOCK_SHIPMENTS = [];
 
 function Badge({ status }) {
   const norm = status?.toLowerCase() || "pending";

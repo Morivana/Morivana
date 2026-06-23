@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete your Morivaná purchase</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #F1F5F9; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #F1F5F9; padding: 40px 10px;">
+    <tr>
+      <td align="center">
+        <!-- Main Email Container Card -->
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #E2E8F0;">
+          
+          <!-- Colored Brand Header Banner -->
+          <tr>
+            <td align="center" bgcolor="#1C3A1C" style="padding: 45px 30px; text-align: center;">
+              <h1 style="font-family: sans-serif; color: #ffffff; font-size: 26px; font-weight: bold; margin: 0 0 10px 0; letter-spacing: -0.5px; line-height: 1.2;">Did you forget something, {{name}}?</h1>
+              <p style="font-family: sans-serif; color: #C8D96A; font-size: 15px; margin: 0; font-weight: bold; letter-spacing: 0.05em; text-transform: uppercase;">Your super greens are waiting</p>
+            </td>
+          </tr>
+
+          <!-- Intro Paragraph -->
+          <tr>
+            <td style="padding: 30px 40px 15px 40px; font-family: sans-serif; text-align: center;">
+              <p style="font-size: 15px; color: #475569; line-height: 1.6; margin: 0 0 12px 0;">
+                We couldn't help but notice that you left some items in your shopping cart. Don't worry, we've saved your cart for you!
+              </p>
+              <p style="font-size: 15px; color: #475569; line-height: 1.6; margin: 0;">
+                Complete your purchase now before our fresh batch runs out of stock.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Cart Grid Section Title -->
+          <tr>
+            <td style="padding: 20px 40px 5px 40px; font-family: sans-serif; text-align: center;">
+              <h3 style="color: #1C3A1C; font-size: 16px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">Items left in the shopping cart</h3>
+            </td>
+          </tr>
+
+          <!-- Dynamic Cart Items list grid -->
+          <tr>
+            <td style="padding: 0px 40px 10px 40px;">
+              {{cartItemsListHtml}}
+            </td>
+          </tr>
+
+          <!-- Discount Banner Strip -->
+          <tr>
+            <td style="padding: 10px 40px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #C8D96A; border-radius: 8px; border-collapse: collapse;">
+                <tr>
+                  <td align="center" style="padding: 14px 20px; font-family: sans-serif; font-size: 14px; color: #1C3A1C; font-weight: bold;">
+                    Use code <span style="background-color: #1C3A1C; color: #ffffff; padding: 3px 8px; border-radius: 4px; font-family: monospace, sans-serif; font-size: 15px; letter-spacing: 0.05em; margin: 0 4px; display: inline-block;">{{couponCode}}</span> to get an additional 10% OFF.
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Action Button (Continue Checkout) -->
+          <tr>
+            <td align="center" style="padding: 25px 40px 30px 40px; font-family: sans-serif;">
+              <table cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" bgcolor="#EAA73B" style="border-radius: 8px;">
+                    <a href="{{checkoutUrl}}" target="_blank" style="font-family: sans-serif; font-size: 15px; font-weight: bold; color: #ffffff; text-decoration: none; padding: 14px 32px; display: inline-block; border-radius: 8px; border: 1px solid #EAA73B; text-transform: uppercase; letter-spacing: 0.05em; box-shadow: 0 2px 6px rgba(234, 167, 59, 0.15);">Continue Checkout</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Divider -->
+          <tr>
+            <td style="padding: 0 40px;">
+              <div style="border-top: 1px solid #E2E8F0; font-size: 1px; line-height: 1px;">&nbsp;</div>
+            </td>
+          </tr>
+
+          <!-- Support & Sign off -->
+          <tr>
+            <td align="center" style="padding: 25px 40px; font-family: sans-serif; text-align: center;">
+              <p style="font-size: 14px; color: #64748B; margin: 0 0 16px 0;">
+                Need help? Contact our friendly support team at 
+                <a href="mailto:morivanadaily@gmail.com" style="color: #1C3A1C; font-weight: 600; text-decoration: none;">morivanadaily@gmail.com</a>
+              </p>
+              <p style="font-size: 14px; color: #475569; margin: 0;">
+                Best regards,<br>
+                <strong style="color: #1C3A1C;">The Morivaná Team</strong>
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer Area (Socials only, centered) -->
+          <tr>
+            <td bgcolor="#F8FAFC" style="padding: 30px 40px; border-radius: 0 0 16px 16px; border-top: 1px solid #E2E8F0; font-family: sans-serif;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+                <tr>
+                  <td align="center" style="vertical-align: middle;">
+                    <table cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto;">
+                      <tr>
+                        <td style="font-size: 13px; font-weight: bold; color: #64748B; padding-right: 12px; vertical-align: middle;">Follow us</td>
+                        <td style="padding-right: 8px; vertical-align: middle;">
+                          <a href="#" style="display: block;"><img src="https://cdn-icons-png.flaticon.com/32/145/145802.png" width="22" height="22" style="display: block; border: 0;" alt="Facebook"/></a>
+                        </td>
+                        <td style="vertical-align: middle;">
+                          <a href="#" style="display: block;"><img src="https://cdn-icons-png.flaticon.com/32/174/174855.png" width="22" height="22" style="display: block; border: 0;" alt="Instagram"/></a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Copyright footer line -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 24px;">
+                <tr>
+                  <td align="center" style="font-size: 12px; color: #94A3B8;">
+                    &copy; 2026 Morivaná Daily. All rights reserved.
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

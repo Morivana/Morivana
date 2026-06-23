@@ -7,6 +7,7 @@ export const securityLog = {
       event: 'AUTH_FAILURE',
       reason,
       ip: req.ip,
+      method: req.method,
       path: req.path,
       userAgent: req.headers['user-agent'],
       timestamp: new Date().toISOString(),
@@ -17,6 +18,7 @@ export const securityLog = {
     console.warn(JSON.stringify({
       event: 'RATE_LIMIT',
       ip: req.ip,
+      method: req.method,
       path: req.path,
       timestamp: new Date().toISOString(),
     }))
@@ -26,8 +28,12 @@ export const securityLog = {
     console.warn(JSON.stringify({
       event: 'SUSPICIOUS_INPUT',
       field,
+      // Never log the actual suspicious value in production — only in dev
+      value: process.env.NODE_ENV === 'development' ? value : '[redacted]',
       ip: req.ip,
+      method: req.method,
       path: req.path,
+      userAgent: req.headers['user-agent'],
       timestamp: new Date().toISOString(),
     }))
   },
@@ -37,6 +43,35 @@ export const securityLog = {
       event: 'ORDER_ANOMALY',
       orderId,
       reason,
+      timestamp: new Date().toISOString(),
+    }))
+  },
+
+  // ── Admin audit logging ──────────────────────────────────────────────────
+  adminAction: (req, adminId, action, summary) => {
+    console.log(JSON.stringify({
+      event: 'ADMIN_ACTION',
+      adminId,
+      adminEmail: req.adminUser?.email || 'unknown',
+      action,
+      summary,
+      method: req.method,
+      path: req.path,
+      ip: req.ip,
+      userAgent: req.headers['user-agent'],
+      timestamp: new Date().toISOString(),
+    }))
+  },
+
+  injectionAttempt: (req, type, detail) => {
+    console.error(JSON.stringify({
+      event: 'INJECTION_ATTEMPT',
+      type,
+      detail: process.env.NODE_ENV === 'development' ? detail : '[redacted]',
+      ip: req.ip,
+      method: req.method,
+      path: req.path,
+      userAgent: req.headers['user-agent'],
       timestamp: new Date().toISOString(),
     }))
   },

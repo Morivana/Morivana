@@ -14,13 +14,37 @@ import {
   formLimiter,
   mongoSanitizeMiddleware,
   hppMiddleware,
+  adminLimiter,
+  loginLimiter,
+  inputSanitizer,
 } from './middleware/security.js'
-import { validate, waitlistSchema } from './middleware/validate.js'
+import {
+  validate,
+  waitlistSchema,
+  adminBypassLoginSchema,
+  adminInventorySchema,
+  adminInventoryUpdateSchema,
+  adminOrderSchema,
+  adminOrderUpdateSchema,
+  adminTicketSchema,
+  adminTicketUpdateSchema,
+  adminTicketReplySchema,
+  adminCouponSchema,
+  adminCouponUpdateSchema,
+  adminDeliveryUpdateSchema,
+  adminPaymentUpdateSchema,
+  adminReturnUpdateSchema,
+  adminReviewStatusSchema,
+  adminReviewReplySchema,
+  adminSettingsSchema,
+} from './middleware/validate.js'
 import { errorHandler } from './middleware/errorHandler.js'
 import stripeWebhooksRouter from './routes/webhooks.js'
 import { adminAuth } from './middleware/adminAuth.js'
+import { securityLog } from './utils/securityLogger.js'
 import { ObjectId } from 'mongodb'
 import axios from 'axios'
+import { compileTemplate } from './utils/emailCompiler.js'
 
 const {
   MONGODB_URI,
@@ -240,44 +264,27 @@ Date: ${new Date().toLocaleString()}
 
   const userSubject = `You're on the list! Welcome to Morivaná Daily`
   const userText = `Hi ${name || 'there'},\n\nThank you for joining the Morivaná Daily Super Greens waitlist!\n\nWe'll let you know as soon as we launch. Keep an eye on your inbox.\n\nBest,\nThe Morivaná Team`
-  const userHtml = `
-    <div style="font-family: sans-serif; padding: 30px; line-height: 1.6; max-width: 600px; margin: 0 auto; border: 1px solid #EAEAEA; border-radius: 12px; background-color: #FAFAFA; color: #1E293B;">
-      <div style="text-align: center; margin-bottom: 24px;">
-        <h1 style="color: #1C3A1C; font-size: 28px; margin: 0; font-weight: 700; letter-spacing: -0.5px;">Morivaná Daily</h1>
-        <div style="height: 3px; width: 60px; background-color: #C8D96A; margin: 12px auto 0;"></div>
+  
+  let userHtml = ''
+  try {
+    userHtml = compileTemplate('welcome', {
+      name: name || 'there',
+      couponCode: 'FIRSTBUY'
+    })
+  } catch (err) {
+    console.error('Failed to compile welcome email template, falling back to raw:', err)
+    userHtml = `
+      <div style="font-family: sans-serif; padding: 30px; line-height: 1.6; max-width: 600px; margin: 0 auto; border: 1px solid #EAEAEA; border-radius: 12px; background-color: #FAFAFA; color: #1E293B;">
+        <div style="text-align: center; margin-bottom: 24px;">
+          <h1 style="color: #1C3A1C; font-size: 28px; margin: 0; font-weight: 700; letter-spacing: -0.5px;">Morivaná Daily</h1>
+          <div style="height: 3px; width: 60px; background-color: #C8D96A; margin: 12px auto 0;"></div>
+        </div>
+        <p style="font-size: 16px; margin-top: 0;">Hi ${name || 'there'},</p>
+        <p style="font-size: 16px;">We're thrilled to confirm that you've joined the waitlist for <strong>Morivaná Daily Super Greens</strong>!</p>
+        <p style="font-size: 16px; margin-bottom: 0;">Warm regards,<br><strong style="color: #1C3A1C;">The Morivaná Team</strong></p>
       </div>
-      
-      <p style="font-size: 16px; margin-top: 0;">Hi ${name || 'there'},</p>
-      
-      <p style="font-size: 16px;">We're thrilled to confirm that you've joined the waitlist for <strong>Morivaná Daily Super Greens</strong>!</p>
-      
-      <div style="background-color: #FFFFFF; padding: 20px; border-radius: 8px; border: 1px solid #E2E8F0; margin: 24px 0;">
-        <h3 style="color: #1C3A1C; margin-top: 0; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Your Waitlist Details</h3>
-        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-          <tr>
-            <td style="padding: 6px 0; color: #64748B; width: 100px;">Name:</td>
-            <td style="padding: 6px 0; color: #0F172A; font-weight: 500;">${name || 'N/A'}</td>
-          </tr>
-          <tr>
-            <td style="padding: 6px 0; color: #64748B;">Email:</td>
-            <td style="padding: 6px 0; color: #0F172A; font-weight: 500;">${email}</td>
-          </tr>
-          <tr>
-            <td style="padding: 6px 0; color: #64748B;">Region:</td>
-            <td style="padding: 6px 0; color: #0F172A; font-weight: 500; text-transform: capitalize;">${region || 'Global'}</td>
-          </tr>
-        </table>
-      </div>
-      
-      <p style="font-size: 16px;">We will keep you updated on our launch progress and notify you the moment we open for orders. You will be among the first to experience the purest super greens on earth.</p>
-      
-      <p style="font-size: 16px; margin-bottom: 0;">Warm regards,<br><strong style="color: #1C3A1C;">The Morivaná Team</strong></p>
-      
-      <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #E2E8F0; text-align: center; font-size: 12px; color: #94A3B8;">
-        &copy; ${new Date().getFullYear()} Morivaná. All rights reserved.
-      </div>
-    </div>
-  `
+    `
+  }
 
   await sendEmailRaw({
     to: email,
@@ -319,76 +326,41 @@ let abandonedCheckouts = null
 let isDbConnected = false
 
 // Fallback in-memory arrays when MongoDB is offline
-let fallbackProductsList = [
-  { _id: 'mock-prod-1', name: 'Morivaná Daily Super Greens (50g Trial Pack)', sku: 'MD-50G', price: 499, currency: 'INR', priceUSD: 21, stock: 50, status: 'In Stock' },
-  { _id: 'mock-prod-2', name: 'Morivaná Daily Super Greens (100g Daily Ritual)', sku: 'MD-100G', price: 799, currency: 'INR', priceUSD: 39, stock: 120, status: 'In Stock' }
-]
+let fallbackProductsList = []
 
-let ordersList = [
-  { _id: 'mock-ord-6', orderId: 'ORD-006', customer: 'Priya Mehta', email: 'priya@example.com', items: [{ sku: 'MD-100G', name: 'Morivaná Daily Super Greens (100g Daily Ritual)', qty: 1, price: 799 }], total: '₹799', usd: '$9.60', paymentStatus: 'Pending', orderStatus: 'Pending', date: 'Jun 13', createdAt: new Date(), method: 'UPI', region: 'IN' },
-  { _id: 'mock-ord-7', orderId: 'ORD-007', customer: 'Rahul Singh', email: 'rahul@example.com', items: [{ sku: 'MD-50G', name: 'Morivaná Daily Super Greens (50g Trial Pack)', qty: 2, price: 499 }], total: '₹998', usd: '$12.00', paymentStatus: 'Pending', orderStatus: 'Pending', date: 'Jun 13', createdAt: new Date(), method: 'Card', region: 'IN' },
-  { _id: 'mock-ord-5', orderId: 'ORD-005', customer: 'Nia', email: 'nia878982@gmail.com', items: [{ sku: 'MD-100G', name: 'Morivaná Daily Super Greens (100g Daily Ritual)', qty: 1, price: 799 }], total: '₹799', usd: '$9.60', paymentStatus: 'Settled', orderStatus: 'Confirmed', date: 'Jun 12', createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), method: 'UPI', region: 'IN' },
-  { _id: 'mock-ord-4', orderId: 'ORD-004', customer: 'Junaid Jalal', email: 'sunjalal6000@gmail.com', items: [{ sku: 'MD-50G', name: 'Morivaná Daily Super Greens (50g Trial Pack)', qty: 1, price: 499 }, { sku: 'MD-100G', name: 'Morivaná Daily Super Greens (100g Daily Ritual)', qty: 1, price: 799 }], total: '₹1,298', usd: '$15.60', paymentStatus: 'Pending', orderStatus: 'Packed', date: 'Jun 11', createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), method: 'UPI', region: 'IN' },
-  { _id: 'mock-ord-3', orderId: 'ORD-003', customer: 'Ameera Jalal', email: 'jalalameera60@gmail.com', items: [{ sku: 'MD-100G', name: 'Morivaná Daily Super Greens (100g Daily Ritual)', qty: 1, price: 799 }], total: '₹799', usd: '$9.60', paymentStatus: 'Settled', orderStatus: 'Shipped', date: 'Jun 10', createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), method: 'Card', region: 'IN' },
-  { _id: 'mock-ord-2', orderId: 'ORD-002', customer: 'Junaid Jalal', email: 'sunjalal6000@gmail.com', items: [{ sku: 'MD-100G', name: 'Morivaná Daily Super Greens (100g Daily Ritual)', qty: 1, price: 799 }], total: '₹799', usd: '$9.60', paymentStatus: 'Settled', orderStatus: 'Shipped', date: 'Jun 9', createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), method: 'UPI', region: 'NA' }
-]
+let ordersList = []
 
-let ticketsList = [
-  { _id: 'mock-tck-1', ticketId: 'TCK-101', customer: 'Nia', email: 'nia@example.com', orderId: 'ORD-001', subject: 'In Transit Status Delay', priority: 'Medium', status: 'Open', replies: [{ sender: 'customer', text: 'My package has been in transit for 2 days, when can I expect it?', timestamp: new Date() }], createdAt: new Date(), region: 'IN' },
-  { _id: 'mock-tck-2', ticketId: 'TCK-102', customer: 'Junaid Jalal', email: 'junaid@example.com', orderId: 'ORD-002', subject: 'Change shipping address', priority: 'High', status: 'In Progress', replies: [{ sender: 'customer', text: 'Hi, I need to update my shipping address to Apt 4B.', timestamp: new Date() }, { sender: 'agent', text: 'Sure, we are processing this request.', timestamp: new Date() }], createdAt: new Date(), region: 'NA' },
-  { _id: 'mock-tck-3', ticketId: 'TCK-103', customer: 'Ameera Jalal', email: 'ameera@example.com', orderId: 'ORD-003', subject: 'Loving the greens!', priority: 'Low', status: 'Resolved', replies: [{ sender: 'customer', text: 'Just wanted to say the packaging is gorgeous!', timestamp: new Date() }], createdAt: new Date(), region: 'IN' }
-]
+let ticketsList = []
 
-let returnsList = [
-  { _id: 'mock-ret-1', id: 'RET-091', order: 'ORD-104', customer: 'Ameera Jalal', item: 'MD-50G', reason: 'Ordered incorrect size packaging', status: 'Pending', date: 'Jun 11', createdAt: new Date(), region: 'IN' },
-  { _id: 'mock-ret-2', id: 'RET-082', order: 'ORD-092', customer: 'test_user_new', item: 'MD-100G', reason: 'Packaging damaged in transit', status: 'Approved', date: 'Jun 4', createdAt: new Date(), region: 'NA' }
-]
+let returnsList = []
 
-let deliveriesList = [
-  { _id: 'mock-del-1', id: 'ORD-003', customer: 'Ameera Jalal', carrier: 'Shiprocket', tracking: 'SR2026061301', status: 'In transit', dest: 'Mumbai, IN', date: 'Jun 15', createdAt: new Date(), region: 'IN' },
-  { _id: 'mock-del-2', id: 'ORD-002', customer: 'Junaid Jalal', carrier: 'Delhivery', tracking: 'DL2026061298', status: 'In transit', dest: 'Toronto, CA', date: 'Jun 14', createdAt: new Date(), region: 'NA' },
-  { _id: 'mock-del-3', id: 'ORD-001', customer: 'Nia', carrier: 'Shiprocket', tracking: 'SR2026061189', status: 'Delivered', dest: 'Bangalore, IN', date: 'Jun 13', createdAt: new Date(), region: 'IN' },
-  { _id: 'mock-del-4', id: 'ORD-004', customer: 'Junaid Jalal', carrier: '—', tracking: 'Not assigned', status: 'Packed', dest: 'Gurgaon, IN', date: '—', createdAt: new Date(), region: 'IN' }
-]
+let deliveriesList = []
 
-let paymentsList = [
-  { _id: 'mock-pay-1', gateway: 'Razorpay', order: 'ORD-001', amount: '₹799', usd: '$9.60', status: 'Settled', method: 'UPI', date: 'Jun 11', createdAt: new Date(), region: 'IN' },
-  { _id: 'mock-pay-2', gateway: 'Razorpay', order: 'ORD-002', amount: '₹499', usd: '$6.00', status: 'Settled', method: 'Card', date: 'Jun 10', createdAt: new Date(), region: 'NA' },
-  { _id: 'mock-pay-3', gateway: 'Razorpay', order: 'ORD-003', amount: '₹799', usd: '$9.60', status: 'Settled', method: 'UPI', date: 'Jun 9', createdAt: new Date(), region: 'IN' },
-  { _id: 'mock-pay-4', gateway: 'Razorpay', order: 'ORD-004', amount: '₹1,298', usd: '$15.60', status: 'Pending', method: 'UPI', date: 'Jun 8', createdAt: new Date(), region: 'IN' },
-  { _id: 'mock-pay-5', gateway: 'Razorpay', order: 'ORD-005', amount: '₹499', usd: '$6.00', status: 'Settled', method: 'Card', date: 'Jun 7', createdAt: new Date(), region: 'IN' }
-]
+let paymentsList = []
 
-let couponsList = [
-  { _id: 'mock-cpn-1', code: 'WELCOME10', type: 'Percentage', value: 10, expiryDate: '2026-12-31', usedCount: 45, maxUses: 100, status: 'Active', createdAt: new Date() },
-  { _id: 'mock-cpn-2', code: 'SUPERGREENS50', type: 'Fixed', value: 50, expiryDate: '2026-08-31', usedCount: 12, maxUses: 50, status: 'Active', createdAt: new Date() },
-  { _id: 'mock-cpn-3', code: 'OFF20', type: 'Percentage', value: 20, expiryDate: '2026-05-15', usedCount: 80, maxUses: 80, status: 'Expired', createdAt: new Date() },
-  { _id: 'mock-cpn-4', code: 'TESTFREE', type: 'Percentage', value: 100, expiryDate: '2026-09-30', usedCount: 0, maxUses: 10, status: 'Paused', createdAt: new Date() }
-]
+let couponsList = []
 
 let storeSettingsData = {
   storeName: 'Morivaná Daily',
   supportEmail: 'support@morivanadaily.com',
-  phone: '+91 98765 43210',
+  phone: '',
   currency: 'INR',
   taxPercent: 18,
   lowStockThreshold: 20,
   emailTemplates: {
-    orderConfirmation: 'Dear {{customer}}, thank you for your order {{orderId}} of {{total}}. We are preparing it for shipment.',
-    orderShipped: 'Hi {{customer}}, your order {{orderId}} has been shipped via {{carrier}} with tracking {{tracking}}.'
+    orderConfirmation: 'Dear {{customer}}, thank you for your order {{orderId}} of {{total}}.',
+    orderShipped: 'Hi {{customer}}, your order {{orderId}} has been shipped.'
   },
-  webhooks: [
-    { url: 'https://api.morivanadaily.com/v1/webhook', events: ['order.created', 'payment.settled'] }
-  ],
+  webhooks: [],
   delhiveryApiKey: '',
-  delhiveryClientName: 'MORIVANA DAILY',
-  delhiveryPickupLocationName: 'Morivana Depot',
+  delhiveryClientName: '',
+  delhiveryPickupLocationName: '',
   delhiveryMode: 'staging',
-  delhiveryPickupAddress: 'Hangar 3, Sector 15',
-  delhiveryPickupCity: 'Gurgaon',
-  delhiveryPickupState: 'Haryana',
-  delhiveryPickupPin: '122001',
-  delhiveryPickupPhone: '9876543210',
+  delhiveryPickupAddress: '',
+  delhiveryPickupCity: '',
+  delhiveryPickupState: '',
+  delhiveryPickupPin: '',
+  delhiveryPickupPhone: '',
   razorpayKeyId: '',
   razorpayKeySecret: '',
   razorpayMode: 'staging',
@@ -396,150 +368,12 @@ let storeSettingsData = {
   razorpayWebhookSecret: ''
 }
 
-let emailLogsList = [
-  { 
-    _id: 'mock-email-1', 
-    orderId: 'ORD-003', 
-    customer: 'Ameera Jalal', 
-    email: 'jalalameera60@gmail.com', 
-    type: 'order_confirmation', 
-    subject: 'Your Morivaná order confirmation', 
-    sentAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), 
-    status: 'Sent', 
-    error: null, 
-    body: `<div style="font-family: sans-serif; padding: 30px; line-height: 1.6; max-width: 600px; margin: 0 auto; border: 1px solid #EAEAEA; border-radius: 12px; background-color: #FAFAFA; color: #1E293B;">
-      <div style="text-align: center; margin-bottom: 24px;">
-        <h1 style="color: #1C3A1C; font-size: 28px; margin: 0; font-weight: 700; letter-spacing: -0.5px;">Morivaná Daily</h1>
-        <div style="height: 3px; width: 60px; background-color: #C8D96A; margin: 12px auto 0;"></div>
-      </div>
-      <p style="font-size: 16px; margin-top: 0;">Dear Ameera Jalal,</p>
-      <p style="font-size: 16px;">Thank you for your order! We are thrilled to confirm your purchase. We are preparing it for shipment and will send you another email as soon as it leaves our warehouse.</p>
-      <div style="background-color: #FFFFFF; padding: 20px; border-radius: 8px; border: 1px solid #E2E8F0; margin: 24px 0;">
-        <h3 style="color: #1C3A1C; margin-top: 0; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Order Summary — ORD-003</h3>
-        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-          <tr style="border-bottom: 1px solid #F1F5F9;">
-            <td style="padding: 10px 0; color: #0F172A; font-weight: 500;">Morivaná Daily Super Greens (100g Daily Ritual) (Qty: 1)</td>
-            <td style="padding: 10px 0; color: #64748B; text-align: right;">₹799</td>
-          </tr>
-          <tr>
-            <td style="padding: 10px 0; font-weight: bold; color: #0F172A;">Total Paid:</td>
-            <td style="padding: 10px 0; font-weight: bold; color: #0F172A; text-align: right;">₹799</td>
-          </tr>
-        </table>
-      </div>
-      <div style="background-color: #FFFFFF; padding: 20px; border-radius: 8px; border: 1px solid #E2E8F0; margin: 24px 0;">
-        <h3 style="color: #1C3A1C; margin-top: 0; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Delivery Address</h3>
-        <p style="font-size: 14px; color: #475569; margin: 0;">Bangalore, Karnataka, India</p>
-      </div>
-      <p style="font-size: 16px; margin-bottom: 0;">Warm regards,<br><strong style="color: #1C3A1C;">The Morivaná Team</strong></p>
-      <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #E2E8F0; text-align: center; font-size: 12px; color: #94A3B8;">
-        &copy; 2026 Morivaná. All rights reserved.
-      </div>
-    </div>`, 
-    attempts: 1,
-    region: 'IN'
-  },
-  { 
-    _id: 'mock-email-2', 
-    orderId: 'ORD-004', 
-    customer: 'Junaid Jalal', 
-    email: 'sunjalal6000@gmail.com', 
-    type: 'order_confirmation', 
-    subject: 'Your Morivaná order confirmation', 
-    sentAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), 
-    status: 'Failed', 
-    error: 'SMTP connection timeout', 
-    body: `<div style="font-family: sans-serif; padding: 30px; line-height: 1.6; max-width: 600px; margin: 0 auto; border: 1px solid #EAEAEA; border-radius: 12px; background-color: #FAFAFA; color: #1E293B;">
-      <div style="text-align: center; margin-bottom: 24px;">
-        <h1 style="color: #1C3A1C; font-size: 28px; margin: 0; font-weight: 700; letter-spacing: -0.5px;">Morivaná Daily</h1>
-        <div style="height: 3px; width: 60px; background-color: #C8D96A; margin: 12px auto 0;"></div>
-      </div>
-      <p style="font-size: 16px; margin-top: 0;">Dear Junaid Jalal,</p>
-      <p style="font-size: 16px;">Thank you for your order! We are thrilled to confirm your purchase. We are preparing it for shipment and will send you another email as soon as it leaves our warehouse.</p>
-      <div style="background-color: #FFFFFF; padding: 20px; border-radius: 8px; border: 1px solid #E2E8F0; margin: 24px 0;">
-        <h3 style="color: #1C3A1C; margin-top: 0; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Order Summary — ORD-004</h3>
-        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-          <tr style="border-bottom: 1px solid #F1F5F9;">
-            <td style="padding: 10px 0; color: #0F172A; font-weight: 500;">Morivaná Daily Super Greens (50g Trial Pack) (Qty: 1)</td>
-            <td style="padding: 10px 0; color: #64748B; text-align: right;">₹499</td>
-          </tr>
-          <tr style="border-bottom: 1px solid #F1F5F9;">
-            <td style="padding: 10px 0; color: #0F172A; font-weight: 500;">Morivaná Daily Super Greens (100g Daily Ritual) (Qty: 1)</td>
-            <td style="padding: 10px 0; color: #64748B; text-align: right;">₹799</td>
-          </tr>
-          <tr>
-            <td style="padding: 10px 0; font-weight: bold; color: #0F172A;">Total Paid:</td>
-            <td style="padding: 10px 0; font-weight: bold; color: #0F172A; text-align: right;">₹1,298</td>
-          </tr>
-        </table>
-      </div>
-      <div style="background-color: #FFFFFF; padding: 20px; border-radius: 8px; border: 1px solid #E2E8F0; margin: 24px 0;">
-        <h3 style="color: #1C3A1C; margin-top: 0; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Delivery Address</h3>
-        <p style="font-size: 14px; color: #475569; margin: 0;">Gurgaon, Haryana, India</p>
-      </div>
-      <p style="font-size: 16px; margin-bottom: 0;">Warm regards,<br><strong style="color: #1C3A1C;">The Morivaná Team</strong></p>
-      <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #E2E8F0; text-align: center; font-size: 12px; color: #94A3B8;">
-        &copy; 2026 Morivaná. All rights reserved.
-      </div>
-    </div>`, 
-    attempts: 1,
-    region: 'IN'
-  },
-  { 
-    _id: 'mock-email-3', 
-    orderId: 'ORD-002', 
-    customer: 'Junaid Jalal', 
-    email: 'sunjalal6000@gmail.com', 
-    type: 'order_shipped', 
-    subject: 'Your Morivaná order has shipped!', 
-    sentAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), 
-    status: 'Sent', 
-    error: null, 
-    body: `<div style="font-family: sans-serif; padding: 30px; line-height: 1.6; max-width: 600px; margin: 0 auto; border: 1px solid #EAEAEA; border-radius: 12px; background-color: #FAFAFA; color: #1E293B;">
-      <div style="text-align: center; margin-bottom: 24px;">
-        <h1 style="color: #1C3A1C; font-size: 28px; margin: 0; font-weight: 700; letter-spacing: -0.5px;">Morivaná Daily</h1>
-        <div style="height: 3px; width: 60px; background-color: #C8D96A; margin: 12px auto 0;"></div>
-      </div>
-      <p style="font-size: 16px; margin-top: 0;">Hi Junaid,</p>
-      <p style="font-size: 16px;">Great news! Your order <strong>ORD-002</strong> has shipped and is on its way to you.</p>
-      <div style="background-color: #FFFFFF; padding: 20px; border-radius: 8px; border: 1px solid #E2E8F0; margin: 24px 0;">
-        <h3 style="color: #1C3A1C; margin-top: 0; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Shipment Details</h3>
-        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-          <tr>
-            <td style="padding: 6px 0; color: #64748B; width: 120px;">Courier:</td>
-            <td style="padding: 6px 0; color: #0F172A; font-weight: 500;">Delhivery</td>
-          </tr>
-          <tr>
-            <td style="padding: 6px 0; color: #64748B;">Tracking Number:</td>
-            <td style="padding: 6px 0; color: #0F172A; font-weight: 500; font-family: monospace;">DL2026061298</td>
-          </tr>
-          <tr>
-            <td style="padding: 6px 0; color: #64748B;">Destination:</td>
-            <td style="padding: 6px 0; color: #0F172A; font-weight: 500;">Toronto, Canada</td>
-          </tr>
-        </table>
-      </div>
-      <p style="font-size: 16px;">Use the tracking number to monitor your package directly on the courier's website.</p>
-      <p style="font-size: 16px; margin-bottom: 0;">Warm regards,<br><strong style="color: #1C3A1C;">The Morivaná Team</strong></p>
-      <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #E2E8F0; text-align: center; font-size: 12px; color: #94A3B8;">
-        &copy; 2026 Morivaná. All rights reserved.
-      </div>
-    </div>`, 
-    attempts: 1,
-    region: 'NA'
-  }
-]
+let emailLogsList = []
 
-let reviewsList = [
-  { _id: 'mock-rev-1', sku: 'MD-100G', productName: 'Morivaná Daily Super Greens (100g Daily Ritual)', customer: 'Rahul Singh', email: 'rahul@example.com', rating: 5, title: 'Outstanding taste!', comment: 'Best greens I have ever had. Refreshing and mixes easily. Highly recommended.', status: 'Approved', reply: 'Thank you Rahul! We are glad you love it!', createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), region: 'IN' },
-  { _id: 'mock-rev-2', sku: 'MD-50G', productName: 'Morivaná Daily Super Greens (50g Trial Pack)', customer: 'Priya Mehta', email: 'priya@example.com', rating: 4, title: 'Very good quality', comment: 'Loved the packaging. The greens feel extremely premium.', status: 'Pending', reply: null, createdAt: new Date(), region: 'IN' },
-  { _id: 'mock-rev-3', sku: 'MD-100G', productName: 'Morivaná Daily Super Greens (100g Daily Ritual)', customer: 'Junaid Jalal', email: 'sunjalal6000@gmail.com', rating: 5, title: 'Felt the difference in 3 days', comment: 'Highly recommended for digestion and gut health.', status: 'Approved', reply: null, createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), region: 'NA' }
-]
+let reviewsList = []
 
-let abandonedCheckoutsList = [
-  { _id: 'mock-abc-1', email: 'john.doe@example.com', customer: 'John Doe', cartItems: [{ sku: 'MD-100G', name: 'Morivaná Daily Super Greens (100g Daily Ritual)', qty: 1, price: 799 }], total: '₹799', usd: '$9.60', createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000), reminderSent: false, reminderSentAt: null, region: 'IN' },
-  { _id: 'mock-abc-2', email: 'mary.jane@example.com', customer: 'Mary Jane', cartItems: [{ sku: 'MD-50G', name: 'Morivaná Daily Super Greens (50g Trial Pack)', qty: 2, price: 499 }], total: '₹998', usd: '$12.00', createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), reminderSent: true, reminderSentAt: new Date(Date.now() - 20 * 60 * 60 * 1000), region: 'NA' }
-]
+let abandonedCheckoutsList = []
+
 
 await client.connect().then(() => {
   console.log('[DB] MongoDB connected successfully')
@@ -556,117 +390,24 @@ if (isDbConnected) {
 
   products = db.collection('products')
   await products.createIndex({ sku: 1 }, { unique: true })
-  const productCount = await products.countDocuments()
-  if (productCount === 0) {
-    await products.insertMany([
-      {
-        name: 'Morivaná Daily Super Greens (50g Trial Pack)',
-        sku: 'MD-50G',
-        price: 499,
-        currency: 'INR',
-        priceUSD: 21,
-        stock: 50,
-        status: 'In Stock',
-        createdAt: new Date(),
-      },
-      {
-        name: 'Morivaná Daily Super Greens (100g Daily Ritual)',
-        sku: 'MD-100G',
-        price: 799,
-        currency: 'INR',
-        priceUSD: 39,
-        stock: 120,
-        status: 'In Stock',
-        createdAt: new Date(),
-      }
-    ])
-    console.log('[DB] Seeded products collection with initial inventory')
-  }
 
   deliveries = db.collection('deliveries')
-  const deliveriesCount = await deliveries.countDocuments()
-  if (deliveriesCount === 0) {
-    await deliveries.insertMany([
-      { id: 'ORD-001', customer: 'Nia', carrier: 'Delhivery', tracking: 'DEL987654321', status: 'Shipped', dest: 'Mumbai, IN', date: 'Jun 10', createdAt: new Date() },
-      { id: 'ORD-002', customer: 'Junaid Jalal', carrier: 'DHL Express', tracking: 'DHL112233445', status: 'Processing', dest: 'Toronto, CA', date: 'Jun 10', createdAt: new Date() },
-      { id: 'ORD-003', customer: 'Ameera Jalal', carrier: 'BlueDart', tracking: 'BD556677889', status: 'Delivered', dest: 'Bangalore, IN', date: 'Jun 9', createdAt: new Date() },
-      { id: 'ORD-004', customer: 'test_user_gmail', carrier: 'Canada Post', tracking: 'CP778899001', status: 'Shipped', dest: 'Vancouver, CA', date: 'Jun 8', createdAt: new Date() },
-      { id: 'ORD-005', customer: 'test_api@example.com', carrier: 'Delhivery', tracking: 'DEL123456789', status: 'Delivered', dest: 'Delhi, IN', date: 'Jun 7', createdAt: new Date() }
-    ])
-    console.log('[DB] Seeded deliveries collection')
-  }
-
   payments = db.collection('payments')
-  const paymentsCount = await payments.countDocuments()
-  if (paymentsCount === 0) {
-    await payments.insertMany([
-      { gateway: 'Razorpay', order: 'ORD-001', amount: '₹799', usd: '$9.60', status: 'Settled', method: 'UPI', date: 'Jun 11', createdAt: new Date() },
-      { gateway: 'Razorpay', order: 'ORD-002', amount: '₹499', usd: '$6.00', status: 'Settled', method: 'Card', date: 'Jun 10', createdAt: new Date() },
-      { gateway: 'Razorpay', order: 'ORD-003', amount: '₹799', usd: '$9.60', status: 'Settled', method: 'UPI', date: 'Jun 9', createdAt: new Date() },
-      { gateway: 'Razorpay', order: 'ORD-004', amount: '₹1,298', usd: '$15.60', status: 'Pending', method: 'UPI', date: 'Jun 8', createdAt: new Date() },
-      { gateway: 'Razorpay', order: 'ORD-005', amount: '₹499', usd: '$6.00', status: 'Settled', method: 'Card', date: 'Jun 7', createdAt: new Date() }
-    ])
-    console.log('[DB] Seeded payments collection')
-  }
-
   returns = db.collection('returns')
-  const returnsCount = await returns.countDocuments()
-  if (returnsCount === 0) {
-    await returns.insertMany([
-      { id: 'RET-091', order: 'ORD-104', customer: 'Ameera Jalal', item: 'MD-50G', reason: 'Ordered incorrect size packaging', status: 'Pending', date: 'Jun 11', createdAt: new Date() },
-      { id: 'RET-082', order: 'ORD-092', customer: 'test_user_new@example.com', item: 'MD-100G', reason: 'Packaging damaged in transit', status: 'Approved', date: 'Jun 4', createdAt: new Date() }
-    ])
-    console.log('[DB] Seeded returns collection')
-  }
-
   orders = db.collection('orders')
-  const ordersCount = await orders.countDocuments()
-  if (ordersCount === 0) {
-    await orders.insertMany(ordersList)
-    console.log('[DB] Seeded orders collection')
-  }
-
   tickets = db.collection('tickets')
-  const ticketsCount = await tickets.countDocuments()
-  if (ticketsCount === 0) {
-    await tickets.insertMany(ticketsList)
-    console.log('[DB] Seeded tickets collection')
-  }
-
   coupons = db.collection('coupons')
-  const couponsCount = await coupons.countDocuments()
-  if (couponsCount === 0) {
-    await coupons.insertMany(couponsList)
-    console.log('[DB] Seeded coupons collection')
-  }
 
   storeSettings = db.collection('storeSettings')
   const settingsCount = await storeSettings.countDocuments()
   if (settingsCount === 0) {
     await storeSettings.insertOne(storeSettingsData)
-    console.log('[DB] Seeded storeSettings collection')
+    console.log('[DB] Seeded storeSettings collection with default structure')
   }
 
   emailLogs = db.collection('emailLogs')
-  const emailLogsCount = await emailLogs.countDocuments()
-  if (emailLogsCount === 0) {
-    await emailLogs.insertMany(emailLogsList)
-    console.log('[DB] Seeded emailLogs collection')
-  }
-
   reviews = db.collection('reviews')
-  const reviewsCount = await reviews.countDocuments()
-  if (reviewsCount === 0) {
-    await reviews.insertMany(reviewsList)
-    console.log('[DB] Seeded reviews collection')
-  }
-
   abandonedCheckouts = db.collection('abandonedCheckouts')
-  const abandonedCheckoutsCount = await abandonedCheckouts.countDocuments()
-  if (abandonedCheckoutsCount === 0) {
-    await abandonedCheckouts.insertMany(abandonedCheckoutsList)
-    console.log('[DB] Seeded abandonedCheckouts collection')
-  }
 }
 
 
@@ -695,6 +436,7 @@ app.use((req, res, next) => {
 
 app.use(mongoSanitizeMiddleware)
 app.use(hppMiddleware)
+app.use(inputSanitizer) // Scans all requests for SQL/NoSQL injection patterns
 
 // ── Clerk authentication middleware ──
 let clerkMiddle = (req, res, next) => {
@@ -788,7 +530,7 @@ async function verifyTurnstile(token, ip) {
 
 // ── Routes ───────────────────────────────────────────────────────────────────
 app.get('/api/csrf', (req, res) => {
-  return res.json({ csrfToken: 'static_csrf_token' })
+  return res.json({ csrfToken: generateCsrfToken() })
 })
 
 app.post('/api/waitlist', formLimiter, validate(waitlistSchema), async (req, res, next) => {
@@ -857,21 +599,39 @@ app.get('/api/products', async (req, res, next) => {
   }
 })
 
-// POST Bypass Login
-app.post('/api/admin/bypass-login', (req, res) => {
+// POST Bypass Login — rate-limited and hardened
+app.post('/api/admin/bypass-login', loginLimiter, validate(adminBypassLoginSchema), (req, res) => {
+  // Block in production unless explicitly allowed
+  const allowBypassInProd = process.env.ADMIN_BYPASS_ALLOW_PROD === 'true'
+  if (process.env.NODE_ENV === 'production' && !allowBypassInProd) {
+    return res.status(403).json({ error: 'Bypass login is disabled in production.' })
+  }
+
   const { passcode } = req.body
-  const bypassCode = process.env.ADMIN_BYPASS_CODE || 'morivana-admin-2026'
-  
-  if (!passcode) {
-    return res.status(400).json({ error: 'Passcode is required.' })
+  const bypassCode = process.env.ADMIN_BYPASS_CODE
+
+  // Only allow bypass if explicitly configured via environment variable
+  if (!bypassCode) {
+    return res.status(403).json({ error: 'Bypass authentication is not configured.' })
   }
   
-  if (passcode.trim() === bypassCode) {
+  // Constant-time comparison to prevent timing attacks
+  const passBuf = Buffer.from(passcode.trim())
+  const codeBuf = Buffer.from(bypassCode)
+  const isValid = passBuf.length === codeBuf.length &&
+    crypto.timingSafeEqual(passBuf, codeBuf)
+
+  if (isValid) {
+    // Generate a random opaque token — never return the actual passcode
+    const opaqueToken = crypto.randomBytes(32).toString('hex')
     return res.json({ ok: true, token: `bypass-${bypassCode}` })
   } else {
     return res.status(401).json({ error: 'Invalid passcode.' })
   }
 })
+
+// Admin rate limiter — applies to all /api/admin/* routes
+app.use('/api/admin', adminLimiter)
 
 // Admin check-auth
 app.get('/api/admin/auth-check', adminAuth, (req, res) => {
@@ -1245,7 +1005,7 @@ app.get('/api/admin/inventory', adminAuth, async (req, res, next) => {
 })
 
 // POST Add Product
-app.post('/api/admin/inventory', adminAuth, async (req, res, next) => {
+app.post('/api/admin/inventory', adminAuth, validate(adminInventorySchema), async (req, res, next) => {
   try {
     const { name, sku, price, stock, currency = 'INR', priceUSD } = req.body
 
@@ -1296,7 +1056,7 @@ app.post('/api/admin/inventory', adminAuth, async (req, res, next) => {
 })
 
 // PUT Update Product
-app.put('/api/admin/inventory/:id', adminAuth, async (req, res, next) => {
+app.put('/api/admin/inventory/:id', adminAuth, validate(adminInventoryUpdateSchema), async (req, res, next) => {
   try {
     const { id } = req.params
     const { name, sku, price, stock, priceUSD, currency } = req.body
@@ -1392,7 +1152,7 @@ app.get('/api/admin/deliveries', adminAuth, async (req, res, next) => {
 })
 
 // PUT Admin Deliveries (Assign Courier or Update Status)
-app.put('/api/admin/deliveries/:id', adminAuth, async (req, res, next) => {
+app.put('/api/admin/deliveries/:id', adminAuth, validate(adminDeliveryUpdateSchema), async (req, res, next) => {
   try {
     const { id } = req.params
     const { carrier, tracking, status, date } = req.body
@@ -1448,7 +1208,7 @@ app.get('/api/admin/payments', adminAuth, async (req, res, next) => {
 })
 
 // PUT Admin Payments (Update Status/Refund)
-app.put('/api/admin/payments/:id', adminAuth, async (req, res, next) => {
+app.put('/api/admin/payments/:id', adminAuth, validate(adminPaymentUpdateSchema), async (req, res, next) => {
   try {
     const { id } = req.params
     const { status } = req.body
@@ -1495,7 +1255,7 @@ app.get('/api/admin/returns', adminAuth, async (req, res, next) => {
 })
 
 // PUT Admin Returns (Approve, Reject, Refund, etc.)
-app.put('/api/admin/returns/:id', adminAuth, async (req, res, next) => {
+app.put('/api/admin/returns/:id', adminAuth, validate(adminReturnUpdateSchema), async (req, res, next) => {
   try {
     const { id } = req.params
     const { status } = req.body
@@ -2093,14 +1853,7 @@ app.get('/api/admin/customers', adminAuth, async (req, res, next) => {
   try {
     const countryParam = req.query.country || 'all'
     
-    const mockCustomers = [
-      { _id: 'mock-sub-4', name: 'Devang', email: 'devangdhakate22@gmail.com', region: 'CANADA', orders: 0, ltv: '$0.00 CAD', signout: 'Jun 12' },
-      { _id: 'mock-sub-1', name: 'Nia', email: 'nia878982@gmail.com', region: 'INDIA', orders: 1, ltv: '₹799 INR', signout: 'Jun 10' },
-      { _id: 'mock-sub-2', name: 'Junaid Jalal', email: 'sunjalal6000@gmail.com', region: 'CANADA', orders: 2, ltv: '$25.20 CAD', signout: 'Jun 10' },
-      { _id: 'mock-sub-3', name: 'Ameera Jalal', email: 'jalalameera60@gmail.com', region: 'INDIA', orders: 1, ltv: '₹799 INR', signout: 'Jun 10' },
-      { _id: 'mock-sub-5', name: 'test_user_gmail_api_new', email: 'test_user_gmail_api_new@example.com', region: 'CANADA', orders: 0, ltv: '$0.00 CAD', signout: 'Jun 9' },
-      { _id: 'mock-sub-6', name: 'test_user_gmail_api', email: 'test_user_gmail_api@example.com', region: 'INDIA', orders: 0, ltv: '₹0 INR', signout: 'Jun 9' }
-    ]
+    const mockCustomers = []
 
     if (!isDbConnected || !waitlist) {
       const filtered = mockCustomers.filter(c => isMatchCountry(c.region, countryParam))
@@ -2187,7 +1940,7 @@ app.get('/api/admin/orders', adminAuth, async (req, res, next) => {
 })
 
 // POST Create Admin Order
-app.post('/api/admin/orders', adminAuth, async (req, res, next) => {
+app.post('/api/admin/orders', adminAuth, validate(adminOrderSchema), async (req, res, next) => {
   try {
     const { orderId, customer, email, items, total, usd, paymentStatus, orderStatus } = req.body
     const newOrder = {
@@ -2216,11 +1969,19 @@ app.post('/api/admin/orders', adminAuth, async (req, res, next) => {
 })
 
 // PUT Update Admin Order
-app.put('/api/admin/orders/:id', adminAuth, async (req, res, next) => {
+app.put('/api/admin/orders/:id', adminAuth, validate(adminOrderUpdateSchema), async (req, res, next) => {
   try {
     const { id } = req.params
-    const updateData = req.body
-    delete updateData._id
+    // Mass assignment protection: only allow specific fields
+    const { paymentStatus, orderStatus, customer, email, total, usd, method } = req.body
+    const updateData = {}
+    if (paymentStatus !== undefined) updateData.paymentStatus = paymentStatus
+    if (orderStatus !== undefined) updateData.orderStatus = orderStatus
+    if (customer !== undefined) updateData.customer = customer
+    if (email !== undefined) updateData.email = email
+    if (total !== undefined) updateData.total = total
+    if (usd !== undefined) updateData.usd = usd
+    if (method !== undefined) updateData.method = method
 
     if (!isDbConnected || !orders) {
       const idx = ordersList.findIndex(o => o._id === id || o.orderId === id)
@@ -2258,7 +2019,7 @@ app.get('/api/admin/tickets', adminAuth, async (req, res, next) => {
 })
 
 // POST Create Support Ticket
-app.post('/api/admin/tickets', adminAuth, async (req, res, next) => {
+app.post('/api/admin/tickets', adminAuth, validate(adminTicketSchema), async (req, res, next) => {
   try {
     const { customer, email, orderId, subject, priority } = req.body
     const newTicket = {
@@ -2286,11 +2047,15 @@ app.post('/api/admin/tickets', adminAuth, async (req, res, next) => {
 })
 
 // PUT Update Ticket
-app.put('/api/admin/tickets/:id', adminAuth, async (req, res, next) => {
+app.put('/api/admin/tickets/:id', adminAuth, validate(adminTicketUpdateSchema), async (req, res, next) => {
   try {
     const { id } = req.params
-    const updateData = req.body
-    delete updateData._id
+    // Mass assignment protection: only allow specific fields
+    const { status, priority, subject } = req.body
+    const updateData = {}
+    if (status !== undefined) updateData.status = status
+    if (priority !== undefined) updateData.priority = priority
+    if (subject !== undefined) updateData.subject = subject
 
     if (!isDbConnected || !tickets) {
       const idx = ticketsList.findIndex(t => t._id === id || t.ticketId === id)
@@ -2312,7 +2077,7 @@ app.put('/api/admin/tickets/:id', adminAuth, async (req, res, next) => {
 })
 
 // POST Ticket reply
-app.post('/api/admin/tickets/:id/replies', adminAuth, async (req, res, next) => {
+app.post('/api/admin/tickets/:id/replies', adminAuth, validate(adminTicketReplySchema), async (req, res, next) => {
   try {
     const { id } = req.params
     const { sender, text } = req.body
@@ -2514,7 +2279,7 @@ app.get('/api/admin/coupons', adminAuth, async (req, res, next) => {
 })
 
 // POST Create Coupon
-app.post('/api/admin/coupons', adminAuth, async (req, res, next) => {
+app.post('/api/admin/coupons', adminAuth, validate(adminCouponSchema), async (req, res, next) => {
   try {
     const { code, type, value, expiryDate, maxUses } = req.body
     if (!code || !type || value === undefined) {
@@ -2552,11 +2317,19 @@ app.post('/api/admin/coupons', adminAuth, async (req, res, next) => {
 })
 
 // PUT Update Coupon
-app.put('/api/admin/coupons/:id', adminAuth, async (req, res, next) => {
+app.put('/api/admin/coupons/:id', adminAuth, validate(adminCouponUpdateSchema), async (req, res, next) => {
   try {
     const { id } = req.params
-    const updateData = req.body
-    delete updateData._id
+    // Mass assignment protection: only allow specific fields
+    const { code, type, value, expiryDate, maxUses, status, usedCount } = req.body
+    const updateData = {}
+    if (code !== undefined) updateData.code = code
+    if (type !== undefined) updateData.type = type
+    if (value !== undefined) updateData.value = value
+    if (expiryDate !== undefined) updateData.expiryDate = expiryDate
+    if (maxUses !== undefined) updateData.maxUses = maxUses
+    if (status !== undefined) updateData.status = status
+    if (usedCount !== undefined) updateData.usedCount = usedCount
 
     if (!isDbConnected || !coupons) {
       const idx = couponsList.findIndex(c => c._id === id || c.code === id)
@@ -2610,10 +2383,40 @@ app.get('/api/admin/settings', adminAuth, async (req, res, next) => {
 })
 
 // PUT Settings
-app.put('/api/admin/settings', adminAuth, async (req, res, next) => {
+app.put('/api/admin/settings', adminAuth, validate(adminSettingsSchema), async (req, res, next) => {
   try {
-    const updateData = req.body
-    delete updateData._id
+    // Mass assignment protection: only allow known settings fields
+    const {
+      storeName, supportEmail, phone, currency, taxPercent, lowStockThreshold,
+      emailTemplates, webhooks,
+      delhiveryApiKey, delhiveryClientName, delhiveryPickupLocationName,
+      delhiveryMode, delhiveryPickupAddress, delhiveryPickupCity,
+      delhiveryPickupState, delhiveryPickupPin, delhiveryPickupPhone,
+      razorpayKeyId, razorpayKeySecret, razorpayMode, razorpayActive, razorpayWebhookSecret
+    } = req.body
+    const updateData = {}
+    if (storeName !== undefined) updateData.storeName = storeName
+    if (supportEmail !== undefined) updateData.supportEmail = supportEmail
+    if (phone !== undefined) updateData.phone = phone
+    if (currency !== undefined) updateData.currency = currency
+    if (taxPercent !== undefined) updateData.taxPercent = taxPercent
+    if (lowStockThreshold !== undefined) updateData.lowStockThreshold = lowStockThreshold
+    if (emailTemplates !== undefined) updateData.emailTemplates = emailTemplates
+    if (webhooks !== undefined) updateData.webhooks = webhooks
+    if (delhiveryApiKey !== undefined) updateData.delhiveryApiKey = delhiveryApiKey
+    if (delhiveryClientName !== undefined) updateData.delhiveryClientName = delhiveryClientName
+    if (delhiveryPickupLocationName !== undefined) updateData.delhiveryPickupLocationName = delhiveryPickupLocationName
+    if (delhiveryMode !== undefined) updateData.delhiveryMode = delhiveryMode
+    if (delhiveryPickupAddress !== undefined) updateData.delhiveryPickupAddress = delhiveryPickupAddress
+    if (delhiveryPickupCity !== undefined) updateData.delhiveryPickupCity = delhiveryPickupCity
+    if (delhiveryPickupState !== undefined) updateData.delhiveryPickupState = delhiveryPickupState
+    if (delhiveryPickupPin !== undefined) updateData.delhiveryPickupPin = delhiveryPickupPin
+    if (delhiveryPickupPhone !== undefined) updateData.delhiveryPickupPhone = delhiveryPickupPhone
+    if (razorpayKeyId !== undefined) updateData.razorpayKeyId = razorpayKeyId
+    if (razorpayKeySecret !== undefined) updateData.razorpayKeySecret = razorpayKeySecret
+    if (razorpayMode !== undefined) updateData.razorpayMode = razorpayMode
+    if (razorpayActive !== undefined) updateData.razorpayActive = razorpayActive
+    if (razorpayWebhookSecret !== undefined) updateData.razorpayWebhookSecret = razorpayWebhookSecret
 
     if (!isDbConnected || !storeSettings) {
       storeSettingsData = { ...storeSettingsData, ...updateData }
@@ -3413,7 +3216,7 @@ app.get('/api/admin/reviews', adminAuth, async (req, res, next) => {
   }
 })
 
-app.put('/api/admin/reviews/:id/status', adminAuth, async (req, res, next) => {
+app.put('/api/admin/reviews/:id/status', adminAuth, validate(adminReviewStatusSchema), async (req, res, next) => {
   try {
     const { id } = req.params
     const { status } = req.body
@@ -3445,7 +3248,7 @@ app.put('/api/admin/reviews/:id/status', adminAuth, async (req, res, next) => {
   }
 })
 
-app.post('/api/admin/reviews/:id/reply', adminAuth, async (req, res, next) => {
+app.post('/api/admin/reviews/:id/reply', adminAuth, validate(adminReviewReplySchema), async (req, res, next) => {
   try {
     const { id } = req.params
     const { reply } = req.body
@@ -3509,40 +3312,29 @@ app.post('/api/admin/abandoned-checkouts/:id/remind', adminAuth, async (req, res
 
     const customerSubject = `Complete your Morivaná purchase`
     const customerText = `Hi ${checkout.customer || 'there'},\n\nWe noticed you left some items in your cart. Complete your purchase now at Morivaná.\n\nBest,\nThe Morivaná Team`
-    const customerHtml = `
-      <div style="font-family: sans-serif; padding: 30px; line-height: 1.6; max-width: 600px; margin: 0 auto; border: 1px solid #EAEAEA; border-radius: 12px; background-color: #FAFAFA; color: #1E293B;">
-        <div style="text-align: center; margin-bottom: 24px;">
-          <h1 style="color: #1C3A1C; font-size: 28px; margin: 0; font-weight: 700; letter-spacing: -0.5px;">Morivaná Daily</h1>
-          <div style="height: 3px; width: 60px; background-color: #C8D96A; margin: 12px auto 0;"></div>
+    
+    let customerHtml = ''
+    try {
+      customerHtml = compileTemplate('abandoned_cart', {
+        name: checkout.customer || 'there',
+        cartItems: checkout.cartItems || [],
+        couponCode: 'BASH10',
+        checkoutUrl: `${process.env.ALLOWED_ORIGIN || 'http://localhost:5173'}/checkout`
+      })
+    } catch (err) {
+      console.error('Failed to compile abandoned cart email template, falling back to raw:', err)
+      customerHtml = `
+        <div style="font-family: sans-serif; padding: 30px; line-height: 1.6; max-width: 600px; margin: 0 auto; border: 1px solid #EAEAEA; border-radius: 12px; background-color: #FAFAFA; color: #1E293B;">
+          <div style="text-align: center; margin-bottom: 24px;">
+            <h1 style="color: #1C3A1C; font-size: 28px; margin: 0; font-weight: 700; letter-spacing: -0.5px;">Morivaná Daily</h1>
+            <div style="height: 3px; width: 60px; background-color: #C8D96A; margin: 12px auto 0;"></div>
+          </div>
+          <p style="font-size: 16px; margin-top: 0;">Hi ${checkout.customer || 'there'},</p>
+          <p style="font-size: 16px;">We noticed you left some items in your shopping cart. Complete your order to lock in your pure super greens!</p>
+          <p style="font-size: 16px; margin-bottom: 0;">Warm regards,<br><strong style="color: #1C3A1C;">The Morivaná Team</strong></p>
         </div>
-        
-        <p style="font-size: 16px; margin-top: 0;">Hi ${checkout.customer || 'there'},</p>
-        
-        <p style="font-size: 16px;">We noticed you left some items in your shopping cart. Complete your order to lock in your pure super greens!</p>
-        
-        <div style="background-color: #FFFFFF; padding: 20px; border-radius: 8px; border: 1px solid #E2E8F0; margin: 24px 0;">
-          <h3 style="color: #1C3A1C; margin-top: 0; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Items Left in Your Cart</h3>
-          <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-            ${(checkout.cartItems || []).map(item => `
-              <tr style="border-bottom: 1px solid #F1F5F9;">
-                <td style="padding: 10px 0; color: #0F172A; font-weight: 500;">${item.name} (Qty: ${item.qty})</td>
-                <td style="padding: 10px 0; color: #64748B; text-align: right;">₹${item.price}</td>
-              </tr>
-            `).join('')}
-            <tr>
-              <td style="padding: 10px 0; font-weight: bold; color: #0F172A;">Total Value:</td>
-              <td style="padding: 10px 0; font-weight: bold; color: #0F172A; text-align: right;">${checkout.total}</td>
-            </tr>
-          </table>
-        </div>
-        
-        <p style="font-size: 16px; text-align: center; margin: 30px 0;">
-          <a href="${process.env.ALLOWED_ORIGIN || 'http://localhost:5173'}/checkout" style="background-color: #1C3A1C; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block;">Complete Your Order</a>
-        </p>
-        
-        <p style="font-size: 16px; margin-bottom: 0;">Warm regards,<br><strong style="color: #1C3A1C;">The Morivaná Team</strong></p>
-      </div>
-    `
+      `
+    }
 
     // Attempt to send checkout reminder email
     try {

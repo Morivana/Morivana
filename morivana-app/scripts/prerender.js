@@ -421,16 +421,52 @@ allRoutes.forEach(route => {
 
   let html = originalHtml
 
-  // Replace title tag content
+  // Replace title tag content (handles multiline or singleline)
   html = html.replace(
-    /<title>.*?<\/title>/,
+    /<title>.*?<\/title>/s,
     `<title>${route.title}</title>`
   )
 
-  // Replace meta description content
+  // Replace meta description content (handles multiline or singleline)
   html = html.replace(
-    /<meta name="description" content=".*?" \/>/,
+    /<meta\s+name="description"\s+content=".*?"\s*\/>/is,
     `<meta name="description" content="${route.description}" />`
+  )
+
+  // Replace canonical link tag (handles multiline or singleline)
+  html = html.replace(
+    /<link\s+rel="canonical"\s+href=".*?"\s*\/>/is,
+    `<link rel="canonical" href="https://morivanadaily.com/${route.path}" />`
+  )
+
+  // Replace og:url tag (handles multiline or singleline)
+  html = html.replace(
+    /<meta\s+property="og:url"\s+content=".*?"\s*\/>/is,
+    `<meta property="og:url" content="https://morivanadaily.com/${route.path}" />`
+  )
+
+  // Replace og:title tag (handles multiline or singleline)
+  html = html.replace(
+    /<meta\s+property="og:title"\s+content=".*?"\s*\/>/is,
+    `<meta property="og:title" content="${route.title}" />`
+  )
+
+  // Replace og:description tag (handles multiline or singleline)
+  html = html.replace(
+    /<meta\s+property="og:description"\s+content=".*?"\s*\/>/is,
+    `<meta property="og:description" content="${route.description}" />`
+  )
+
+  // Replace twitter:title tag (handles multiline or singleline)
+  html = html.replace(
+    /<meta\s+name="twitter:title"\s+content=".*?"\s*\/>/is,
+    `<meta name="twitter:title" content="${route.title}" />`
+  )
+
+  // Replace twitter:description tag (handles multiline or singleline)
+  html = html.replace(
+    /<meta\s+name="twitter:description"\s+content=".*?"\s*\/>/is,
+    `<meta name="twitter:description" content="${route.description}" />`
   )
 
   // Replace the pre-rendered body inside root with the specific page content, heading levels, and rich text content (>500 words)
