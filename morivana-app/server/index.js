@@ -59,7 +59,7 @@ const {
   EMAIL_CLIENT_SECRET,
   EMAIL_REFRESH_TOKEN,
   ADMIN_EMAIL,
-  EMAIL_FROM = 'Morivaná Daily <no-reply@morivanadaily.com>',
+  EMAIL_FROM = 'Morivana Daily <no-reply@morivanadaily.com>',
 } = process.env
 
 if (!MONGODB_URI) {
@@ -126,12 +126,33 @@ function startTokenRefreshScheduler() {
   }, 50 * 60 * 1000)
 }
 
+function encodeFromHeader(fromStr) {
+  if (!fromStr) return ''
+  // Match standard format: "Display Name" <email@address.com> or Display Name <email@address.com>
+  const match = fromStr.match(/^(?:"?([^"]*)"?\s+)?<(.*)>$/)
+  if (!match) return fromStr
+  
+  const displayName = match[1]
+  const emailAddress = match[2]
+  if (!displayName) return `<${emailAddress}>`
+  
+  // Check if display name contains non-ASCII characters
+  const hasNonAscii = /[^\x00-\x7F]/.test(displayName)
+  if (hasNonAscii) {
+    // Encode display name using Base64 UTF-8 encoded-word syntax
+    const encodedName = `=?utf-8?B?${Buffer.from(displayName).toString('base64')}?=`
+    return `"${encodedName}" <${emailAddress}>`
+  }
+  return `"${displayName}" <${emailAddress}>`
+}
+
 function buildRawMessage({ to, from, subject, text, html }) {
   const boundary = `__boundary_${crypto.randomUUID()}__`
   const utf8Subject = `=?utf-8?B?${Buffer.from(subject).toString('base64')}?=`
+  const utf8From = encodeFromHeader(from)
   
   const headers = [
-    `From: ${from}`,
+    `From: ${utf8From}`,
     `To: ${to}`,
     `Subject: ${utf8Subject}`,
     'MIME-Version: 1.0',
@@ -224,33 +245,45 @@ Region: ${region || 'N/A'}
 Source: ${source || 'waitlist'}
 Date: ${new Date().toLocaleString()}
 `
-  const adminHtml = `
-    <div style="font-family: sans-serif; padding: 20px; line-height: 1.6; max-width: 600px; border: 1px solid #eee; border-radius: 8px;">
-      <h2 style="color: #1C3A1C; margin-bottom: 20px; border-bottom: 2px solid #C8D96A; padding-bottom: 10px;">New Waitlist Submission</h2>
-      <table style="width: 100%; border-collapse: collapse;">
-        <tr>
-          <td style="padding: 8px 0; font-weight: bold; width: 120px;">Name:</td>
-          <td style="padding: 8px 0;">${name || 'N/A'}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px 0; font-weight: bold;">Email:</td>
-          <td style="padding: 8px 0;"><a href="mailto:${email}">${email}</a></td>
-        </tr>
-        <tr>
-          <td style="padding: 8px 0; font-weight: bold;">Region:</td>
-          <td style="padding: 8px 0; text-transform: capitalize;">${region || 'N/A'}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px 0; font-weight: bold;">Source:</td>
-          <td style="padding: 8px 0;">${source || 'waitlist'}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px 0; font-weight: bold;">Submitted At:</td>
-          <td style="padding: 8px 0;">${new Date().toLocaleString()}</td>
-        </tr>
-      </table>
-    </div>
-  `
+  let adminHtml = ''
+  try {
+    adminHtml = compileTemplate('admin_notification', {
+      name: name || 'N/A',
+      email: email,
+      region: region ? region.toUpperCase() : 'N/A',
+      source: source || 'waitlist',
+      submittedAt: new Date().toLocaleString()
+    })
+  } catch (err) {
+    console.error('Failed to compile admin notification email template, falling back to raw:', err)
+    adminHtml = `
+      <div style="font-family: sans-serif; padding: 20px; line-height: 1.6; max-width: 600px; border: 1px solid #eee; border-radius: 8px;">
+        <h2 style="color: #1C3A1C; margin-bottom: 20px; border-bottom: 2px solid #C8D96A; padding-bottom: 10px;">New Waitlist Submission</h2>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="padding: 8px 0; font-weight: bold; width: 120px;">Name:</td>
+            <td style="padding: 8px 0;">${name || 'N/A'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-weight: bold;">Email:</td>
+            <td style="padding: 8px 0;"><a href="mailto:${email}">${email}</a></td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-weight: bold;">Region:</td>
+            <td style="padding: 8px 0; text-transform: capitalize;">${region || 'N/A'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-weight: bold;">Source:</td>
+            <td style="padding: 8px 0;">${source || 'waitlist'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-weight: bold;">Submitted At:</td>
+            <td style="padding: 8px 0;">${new Date().toLocaleString()}</td>
+          </tr>
+        </table>
+      </div>
+    `
+  }
 
   const adminRecipient = ADMIN_EMAIL || EMAIL_USER || 'morivana.daily@gmail.com'
   await sendEmailRaw({
