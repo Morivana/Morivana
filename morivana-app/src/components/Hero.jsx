@@ -263,7 +263,7 @@ export default function Hero({ revealKey = 0, bigEntrance = false }) {
                 textTransform: 'uppercase',
               }}
             >
-              50g · 10 Servings · Ships India &amp; Canada
+              100g · 20 Servings · Ships India &amp; Canada
             </span>
           </div>
         </div>

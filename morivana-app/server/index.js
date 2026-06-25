@@ -779,8 +779,8 @@ app.get('/api/admin/stats', adminAuth, async (req, res, next) => {
     if (!isDbConnected || !waitlist) {
       // Offline fallback computations
       const fallbackProducts = [
-        { sku: 'MD-50G', stock: 50, price: 499 },
-        { sku: 'MD-100G', stock: 120, price: 799 }
+        { sku: 'MD-100G', stock: 50, price: 499 },
+        { sku: 'MD-200G', stock: 120, price: 799 }
       ]
       const totalStock = fallbackProducts.reduce((sum, p) => sum + p.stock, 0)
       const lowStockThreshold = parseInt(storeSettingsData.lowStockThreshold || 20, 10)

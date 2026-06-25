@@ -549,13 +549,13 @@ export default function AdminPage() {
   ]
   const finalGrowthData = growthData.length > 0 ? growthData : defaultGrowthData
 
-  // Stock values from DB if matching MD-50G / MD-100G
+  // Stock values from DB if matching MD-100G / MD-200G
   const getSKUStock = (sku, fallback) => {
     const item = inventory.find(i => i.sku === sku)
     return item ? item.stock : fallback
   }
-  const stock50 = getSKUStock('MD-50G', 50)
-  const stock100 = getSKUStock('MD-100G', 120)
+  const stock100 = getSKUStock('MD-100G', 50)
+  const stock200 = getSKUStock('MD-200G', 120)
 
   const getStockLabel = (stock) => {
     if (stock <= 0) return 'Out of Stock'
@@ -5770,14 +5770,14 @@ function ReviewsPage() {
   })
 
   // Aggregate ratings per SKU
-  const skus = ['MD-100G', 'MD-50G']
+  const skus = ['MD-200G', 'MD-100G']
   const skuAgg = skus.map(sku => {
     const skuReviews = regionReviews.filter(r => r.sku === sku && r.status === 'Approved')
     const count = skuReviews.length
     const avg = count > 0 ? (skuReviews.reduce((sum, r) => sum + r.rating, 0) / count).toFixed(1) : '—'
     return {
       sku,
-      name: sku === 'MD-100G' ? '100g Daily Ritual' : '50g Trial Pack',
+      name: sku === 'MD-200G' ? '200g Daily Ritual' : '100g Trial Pack',
       count,
       avg
     }
@@ -5835,8 +5835,8 @@ function ReviewsPage() {
             className="h-9 px-3 bg-[var(--bg-input)] border border-[var(--border)] rounded-lg text-xs focus:outline-none focus:border-[var(--accent)] text-[var(--text-1)]"
           >
             <option value="all">All Products</option>
-            <option value="MD-100G">MD-100G (100g Daily Ritual)</option>
-            <option value="MD-50G">MD-50G (50g Trial Pack)</option>
+            <option value="MD-200G">MD-200G (200g Daily Ritual)</option>
+            <option value="MD-100G">MD-100G (100g Trial Pack)</option>
           </select>
         </div>
 

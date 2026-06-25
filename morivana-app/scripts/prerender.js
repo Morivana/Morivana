@@ -209,17 +209,17 @@ const staticRoutes = [
   {
     path: 'shop',
     title: 'Pre-Order Morivaná Daily | Super Greens Powder India & Canada',
-    description: 'Pre-order Morivaná Daily super greens powder. 8 whole plants, cold-dried, fully transparent. Sizing from 50g trial to 100g daily ritual packs. Shipping to India & Canada.',
+    description: 'Pre-order Morivaná Daily super greens powder. 8 whole plants, cold-dried, fully transparent. Sizing from 100g trial to 200g daily ritual packs. Shipping to India & Canada.',
     h1: 'Pre-Order Morivaná Daily',
     content: `
       <section>
         <h2>Pre-Order Early Bird Offer</h2>
-        <p>Thank you for your interest in Morivaná Daily Super Greens. We are currently in our pre-launch phase, preparing our first batch of premium, cold-dried greens. By pre-ordering today, you secure your place in our priority shipping queue and lock in an exclusive 15% early bird discount. Packaging comes in two sizes: a 50g Trial Pack (₹499 India / CA$21 Canada) and a 100g Daily Ritual Pack (₹799 India / CA$39 Canada), including a measuring scoop. This pre-order discount is our way of thanking our early supporters who share our vision of transparent, whole-plant nutrition.</p>
+        <p>Thank you for your interest in Morivaná Daily Super Greens. We are currently in our pre-launch phase, preparing our first batch of premium, cold-dried greens. By pre-ordering today, you secure your place in our priority shipping queue and lock in an exclusive 15% early bird discount. Packaging comes in two sizes: a 100g Trial Pack (₹499 India / CA$21 Canada) and a 200g Daily Ritual Pack (₹799 India / CA$39 Canada), including a measuring scoop. This pre-order discount is our way of thanking our early supporters who share our vision of transparent, whole-plant nutrition.</p>
         <p>Pre-ordering is fully risk-free. Your payment is processed securely, and we will notify you via email 7 days before your order is packaged and shipped. If you change your mind at any point before shipping, simply contact our customer support team, and we will issue a full refund immediately with no questions asked.</p>
       </section>
       <section style="margin-top: 24px;">
         <h2>Product Features & Serving Details</h2>
-        <p>Every pouch of Morivaná Daily contains either 50 grams or 100 grams of pure super greens powder, providing 10 or 20 individual servings of 5 grams each. The blend is crafted from exactly 8 whole plants: Moringa oleifera, spirulina, organic amla, Kerala ginger, Mediterranean lemon, orange peel, chicory root inulin, and monk fruit. We use low-temperature cold-drying to ensure all nutrients remain active, resulting in a fine, easy-to-mix powder with a refreshing citrus finish.</p>
+        <p>Every pouch of Morivaná Daily contains either 100 grams or 200 grams of pure super greens powder, providing 20 or 40 individual servings of 5 grams each. The blend is crafted from exactly 8 whole plants: Moringa oleifera, spirulina, organic amla, Kerala ginger, Mediterranean lemon, orange peel, chicory root inulin, and monk fruit. We use low-temperature cold-drying to ensure all nutrients remain active, resulting in a fine, easy-to-mix powder with a refreshing citrus finish.</p>
         <p>Morivaná Daily is fully vegan, soy-free, gluten-free, dairy-free, and contains no added sugar, making it suitable for a wide range of dietary needs. Each scoop delivers natural iron, calcium, Vitamin C, and prebiotic fibers to support your body's energy, digestion, and immune defense. The powder is packaged in recyclable, resealable pouches designed to lock out moisture and light, keeping the ingredients fresh for daily use.</p>
       </section>
       <section style="margin-top: 24px;">
@@ -301,13 +301,13 @@ const staticRoutes = [
   {
     path: 'shop/daily-greens',
     title: 'Morivaná Daily Super Greens | Buy Online India & Canada',
-    description: 'Buy Morivaná Daily Super Greens — clean greens powder made from 8 whole plants. Sizing from 50g trial pack to 100g daily ritual pack. Pre-order ₹499/₹799 India or CA$21/CA$39 Canada.',
+    description: 'Buy Morivaná Daily Super Greens — clean greens powder made from 8 whole plants. Sizing from 100g trial pack to 200g daily ritual pack. Pre-order ₹499/₹799 India or CA$21/CA$39 Canada.',
     h1: 'Morivaná Daily Super Greens',
     content: `
       <section>
         <h2>Morivaná Daily Super Greens Product Description</h2>
         <p>Morivaná Daily Super Greens is a clean, whole-plant greens powder designed to support your daily energy, gut health, and immune system. Crafted from exactly 8 whole plants, our formula is completely transparent, disclosing the precise gram and milligram amounts of every ingredient on the label. We avoid the common supplement practice of using "proprietary blends" to hide cheap fillers. With Morivaná Daily, you get exactly what you see: 8 nutrient-dense plants, cold-dried at low temperatures to lock in chlorophyll and active enzymes, ground to a fine powder for optimal mixing.</p>
-        <p>Morivaná Daily is available in two pouch sizes: a 50g Trial Pack (10 servings) and a 100g Daily Ritual Pack (20 servings). The blend is naturally sweetened with a standardized extract of monk fruit, delivering a refreshing citrus flavor with no added sugar, artificial sweeteners, or bitter aftertaste. Vegan, gluten-free, and soy-free, it is the perfect daily companion to supplement clean nutrition.</p>
+        <p>Morivaná Daily is available in two pouch sizes: a 100g Trial Pack (20 servings) and a 200g Daily Ritual Pack (40 servings). The blend is naturally sweetened with a standardized extract of monk fruit, delivering a refreshing citrus flavor with no added sugar, artificial sweeteners, or bitter aftertaste. Vegan, gluten-free, and soy-free, it is the perfect daily companion to supplement clean nutrition.</p>
       </section>
       <section style="margin-top: 24px;">
         <h2>8 Active Sourced Plants & Nutritional Profile</h2>

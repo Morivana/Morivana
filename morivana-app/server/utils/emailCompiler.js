@@ -15,9 +15,9 @@ export function renderCartItemsGrid(cartItems, allowedOrigin) {
     
     // Column 1
     const item1 = cartItems[i];
-    const img1 = item1.sku === 'MD-50G' 
+    const img1 = item1.sku === 'MD-100G' 
       ? `${allowedOrigin}/packaging_highres.webp` 
-      : item1.sku === 'MD-100G' 
+      : item1.sku === 'MD-200G' 
         ? `${allowedOrigin}/packaging_highres.webp` 
         : `${allowedOrigin}/morivana-powder.jpeg`;
                  
@@ -41,9 +41,9 @@ export function renderCartItemsGrid(cartItems, allowedOrigin) {
     // Column 2
     if (i + 1 < cartItems.length) {
       const item2 = cartItems[i + 1];
-      const img2 = item2.sku === 'MD-50G' 
+      const img2 = item2.sku === 'MD-100G' 
         ? `${allowedOrigin}/packaging_highres.webp` 
-        : item2.sku === 'MD-100G' 
+        : item2.sku === 'MD-200G' 
           ? `${allowedOrigin}/packaging_highres.webp` 
           : `${allowedOrigin}/morivana-powder.jpeg`;
                    

@@ -189,7 +189,7 @@ export default function OrdersPage() {
                 flexWrap: 'wrap',
               }}
             >
-              {['Ships India & Canada', '50g · 10 Servings', 'Secure checkout'].map(spec => (
+              {['Ships India & Canada', '100g · 20 Servings', 'Secure checkout'].map(spec => (
                 <span
                   key={spec}
                   style={{
