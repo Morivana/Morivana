@@ -43,6 +43,9 @@ export default function WaitlistPage() {
       })
       if (res.ok || res.status === 200 || res.status === 422) {
         setSubmitted(true)
+        if (typeof window.fbq === 'function') {
+          window.fbq('track', 'Lead', { content_name: 'waitlist-page', content_category: 'Waitlist' })
+        }
       } else {
         const data = await res.json().catch(() => ({}))
         setError(data.error || 'Something went wrong. Please contact our support team.')
@@ -50,6 +53,9 @@ export default function WaitlistPage() {
     } catch {
       // Even on network failure, mark as submitted to avoid frustrating the user
       setSubmitted(true)
+      if (typeof window.fbq === 'function') {
+        window.fbq('track', 'Lead', { content_name: 'waitlist-page', content_category: 'Waitlist' })
+      }
     }
   }
 

@@ -109,6 +109,11 @@ export default function WaitlistCTA() {
         setError('root', { message: error || 'Something went wrong. Please try again.' })
         throw new Error(error || 'Request failed')
       }
+      
+      // Track Lead event in Meta Pixel
+      if (typeof window.fbq === 'function') {
+        window.fbq('track', 'Lead', { content_name: 'waitlist-cta', content_category: 'Waitlist' })
+      }
     } catch (err) {
       console.error('Waitlist submission error:', err)
       throw err

@@ -201,6 +201,13 @@ function App() {
     location.pathname.startsWith('/admin-portal') ||
     location.pathname.startsWith('/admin')
 
+  // Track page views on route changes using Meta Pixel
+  useEffect(() => {
+    if (typeof window.fbq === 'function') {
+      window.fbq('track', 'PageView')
+    }
+  }, [location.pathname])
+
   const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
   if (!PUBLISHABLE_KEY) {

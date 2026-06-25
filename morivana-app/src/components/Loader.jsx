@@ -278,6 +278,9 @@ export default function Loader({ onDismiss, onLeaveStart }) {
         return
       }
       setSubmitted(true)
+      if (typeof window.fbq === 'function') {
+        window.fbq('track', 'Lead', { content_name: 'loader-waitlist', content_category: 'Waitlist' })
+      }
     } catch (err) {
       setError('root', { message: 'Network error. Please retry.' })
     }
