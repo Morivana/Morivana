@@ -52,7 +52,8 @@ export const helmetConfig = helmet({
         'https://www.google-analytics.com',
         'https://*.clerk.accounts.dev',
         'https://*.clerk.com',
-        'https://clerk.morivanadaily.com'
+        'https://clerk.morivanadaily.com',
+        'https://connect.facebook.net'
       ],
       frameSrc: [
         "'self'",
@@ -68,6 +69,7 @@ export const helmetConfig = helmet({
         'https://img.clerk.com',
         'https://cdn-icons-png.flaticon.com',
         'https://upload.wikimedia.org',
+        'https://www.facebook.com',
         'http://localhost:5173',
         'http://localhost:5174',
         ...allowedOrigins
@@ -90,7 +92,9 @@ export const helmetConfig = helmet({
         'https://moriavandaily.com',
         'https://morivana.pages.dev',
         'https://api.morivanadaily.com',
-        'https://morivana-api-0l3l.onrender.com'
+        'https://morivana-api-0l3l.onrender.com',
+        'https://connect.facebook.net',
+        'https://www.facebook.com'
       ],
       objectSrc: ["'none'"],
       upgradeInsecureRequests: [],

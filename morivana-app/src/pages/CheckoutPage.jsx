@@ -172,6 +172,11 @@ export default function CheckoutPage() {
               to="/#waitlist-cta"
               className="cta-btn"
               style={{ textDecoration: 'none' }}
+              onClick={() => {
+                if (typeof window.fbq === 'function') {
+                  window.fbq('track', 'AddToWishlist', { content_name: 'Checkout Page CTA', content_category: 'Waitlist' })
+                }
+              }}
             >
               Join the Waitlist
             </Link>

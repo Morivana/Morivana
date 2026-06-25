@@ -110,9 +110,10 @@ export default function WaitlistCTA() {
         throw new Error(error || 'Request failed')
       }
       
-      // Track Lead event in Meta Pixel
+      // Track Lead and AddToWishlist events in Meta Pixel
       if (typeof window.fbq === 'function') {
         window.fbq('track', 'Lead', { content_name: 'waitlist-cta', content_category: 'Waitlist' })
+        window.fbq('track', 'AddToWishlist', { content_name: 'waitlist-cta', content_category: 'Waitlist' })
       }
     } catch (err) {
       console.error('Waitlist submission error:', err)

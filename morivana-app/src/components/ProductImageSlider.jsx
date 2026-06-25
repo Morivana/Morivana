@@ -7,28 +7,34 @@ const CDN = import.meta.env.DEV
 
 const SLIDES = [
   {
-    src: `${CDN}/bg-removed-front.png`,
-    label: 'Front View',
+    src: `${CDN}/shop.webp`,
+    label: 'Daily Greens Blend',
     bg: 'linear-gradient(135deg, #EEF7E4 0%, #F4FBEC 100%)',
     bgRaw: '#EEF7E4',
   },
   {
-    src: `${CDN}/bgremoved-back.png`,
-    label: 'Back View',
-    bg: 'linear-gradient(135deg, #E9F5E1 0%, #F0F9E8 100%)',
-    bgRaw: '#E9F5E1',
-  },
-  {
-    src: `${CDN}/flat-front.png`,
-    label: 'Flat Lay — Front',
+    src: `${CDN}/shop2.webp`,
+    label: 'Trial Pack — 100g',
     bg: 'linear-gradient(135deg, #F5F0E8 0%, #FAF7F0 100%)',
     bgRaw: '#F5F0E8',
   },
   {
-    src: `${CDN}/flat-back.png`,
-    label: 'Flat Lay — Back',
+    src: `${CDN}/shop3.webp`,
+    label: 'Nutrition & Quality',
     bg: 'linear-gradient(135deg, #EEF0F5 0%, #F4F5FA 100%)',
     bgRaw: '#EEF0F5',
+  },
+  {
+    src: `${CDN}/shop4.webp`,
+    label: 'Serving Ritual',
+    bg: 'linear-gradient(135deg, #FAF4E8 0%, #FFFDF8 100%)',
+    bgRaw: '#FAF4E8',
+  },
+  {
+    src: `${CDN}/shop5.webp`,
+    label: 'Sustainable Pouch',
+    bg: 'linear-gradient(135deg, #EBF5F1 0%, #F4FAF7 100%)',
+    bgRaw: '#EBF5F1',
   },
 ]
 
@@ -295,7 +301,7 @@ export default function ProductImageSlider() {
         <div
           style={{
             display:               'grid',
-            gridTemplateColumns:   'repeat(4, 1fr)',
+            gridTemplateColumns:   `repeat(${SLIDES.length}, 1fr)`,
             gap:                   '8px',
           }}
         >

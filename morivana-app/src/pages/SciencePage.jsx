@@ -79,7 +79,7 @@ export default function SciencePage() {
           </div>
 
           {/* Hero Image */}
-          <div style={{ marginBottom: '64px', borderRadius: '20px', overflow: 'hidden', height: 'clamp(200px, 40vw, 360px)' }}>
+          <div style={{ marginBottom: '64px', borderRadius: '20px', overflow: 'hidden', height: 'clamp(240px, 35vw, 400px)' }}>
             <img
               src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/research-test.png"
               alt="Scientific plant-based nutritional research setup"
@@ -220,7 +220,7 @@ export default function SciencePage() {
                 For amla specifically our primary vitamin C source the cold-drying method is critical. Amla's vitamin C is partially bound to tannins which protect it from oxidation, but high heat still accelerates degradation. Our cold-dried amla retains 85%+ of its natural vitamin C compared to &lt;40% in conventionally spray-dried amla powder.
               </p>
             </div>
-            <div style={{ marginTop: '28px', borderRadius: '12px', overflow: 'hidden', height: 'clamp(160px, 30vw, 240px)' }}>
+            <div style={{ marginTop: '28px', borderRadius: '12px', overflow: 'hidden', height: 'clamp(180px, 25vw, 260px)' }}>
               <img
                 src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/morivana-powder.jpeg"
                 alt="Cold-dried Morivaná super greens powder close-up"

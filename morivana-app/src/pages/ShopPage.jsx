@@ -499,11 +499,29 @@ export default function ShopPage() {
               {/* CTA */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {activeProduct && activeProduct.stock === 0 ? (
-                  <Link to="/waitlist" className="cta-btn" style={{ textAlign: 'center', background: '#7A8A6E', borderColor: '#7A8A6E', pointerEvents: 'auto' }}>
+                  <Link
+                    to="/waitlist"
+                    className="cta-btn"
+                    style={{ textAlign: 'center', background: '#7A8A6E', borderColor: '#7A8A6E', pointerEvents: 'auto' }}
+                    onClick={() => {
+                      if (typeof window.fbq === 'function') {
+                        window.fbq('track', 'AddToWishlist', { content_name: activeProduct.name || 'Daily Greens', content_category: 'Waitlist' })
+                      }
+                    }}
+                  >
                     Sold Out — Join Waitlist →
                   </Link>
                 ) : (
-                  <Link to="/waitlist" className="cta-btn" style={{ textAlign: 'center' }}>
+                  <Link
+                    to="/waitlist"
+                    className="cta-btn"
+                    style={{ textAlign: 'center' }}
+                    onClick={() => {
+                      if (typeof window.fbq === 'function') {
+                        window.fbq('track', 'AddToWishlist', { content_name: activeProduct?.name || 'Daily Greens', content_category: 'Waitlist' })
+                      }
+                    }}
+                  >
                     Join Waitlist Get 15% Off →
                   </Link>
                 )}

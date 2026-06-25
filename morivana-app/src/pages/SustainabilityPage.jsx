@@ -101,7 +101,7 @@ export default function SustainabilityPage() {
           </div>
 
           {/* Hero Image */}
-          <div style={{ marginBottom: '64px', borderRadius: '20px', overflow: 'hidden', height: 'clamp(200px, 40vw, 360px)' }}>
+          <div style={{ marginBottom: '64px', borderRadius: '20px', overflow: 'hidden', height: 'clamp(240px, 35vw, 400px)' }}>
             <img
               src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/farm-nature.png"
               alt="Lush green Moringa farm and nature scenery"
@@ -292,12 +292,12 @@ export default function SustainabilityPage() {
             <p style={{ color: 'var(--ink-soft)', lineHeight: 1.75, maxWidth: '580px' }}>
               Our roadmap includes: (1) a refill pouch program in Phase 2 that reduces packaging per serving by 60%, and (2) a full packaging lifecycle assessment published on this page. We'll update this when we have the data.
             </p>
-            <div style={{ marginTop: '28px', borderRadius: '12px', overflow: 'hidden', height: 'clamp(180px, 35vw, 280px)', maxWidth: '480px' }}>
+            <div style={{ marginTop: '28px', borderRadius: '12px', overflow: 'hidden', maxWidth: '480px' }}>
               <img
                 src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/packaging_highres_back.webp"
                 alt="Morivaná Daily packaging back details"
                 loading="lazy"
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                style={{ width: '100%', height: 'auto', display: 'block' }}
               />
             </div>
           </section>

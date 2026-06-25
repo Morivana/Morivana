@@ -111,12 +111,12 @@ export default function BenefitsPage() {
           </div>
 
           {/* Hero Image */}
-          <div style={{ marginBottom: '64px', borderRadius: '20px', overflow: 'hidden', height: 'clamp(200px, 40vw, 360px)' }}>
+          <div style={{ maxWidth: '900px', margin: '0 auto 64px', borderRadius: '20px', overflow: 'hidden' }}>
             <img
               src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/benefit-timeline.png"
               alt="Timeline of health benefits from taking Morivaná Daily"
               loading="eager"
-              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              style={{ width: '100%', height: 'auto', display: 'block' }}
             />
           </div>
 
@@ -266,7 +266,7 @@ export default function BenefitsPage() {
             >
               Read the Full Research →
             </Link>
-            <div style={{ marginTop: '28px', borderRadius: '12px', overflow: 'hidden', height: 'clamp(160px, 30vw, 240px)' }}>
+            <div style={{ marginTop: '28px', borderRadius: '12px', overflow: 'hidden', height: 'clamp(200px, 25vw, 300px)' }}>
               <img
                 src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/morning-ritual.png"
                 alt="Morning ritual wellness setup with Morivaná greens powder"

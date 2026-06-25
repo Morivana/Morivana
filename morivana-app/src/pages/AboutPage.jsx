@@ -70,7 +70,7 @@ export default function AboutPage() {
           </div>
 
           {/* Hero image */}
-          <div style={{ marginBottom: '64px', borderRadius: '20px', overflow: 'hidden', height: 'clamp(200px, 40vw, 360px)' }}>
+          <div style={{ marginBottom: '64px', borderRadius: '20px', overflow: 'hidden', height: 'clamp(240px, 35vw, 400px)' }}>
             <img
               src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/morivana-jar.jpeg"
               alt="Morivaná Daily super greens powder jar with fresh moringa leaves"
@@ -104,7 +104,7 @@ export default function AboutPage() {
                 So we built what we wanted to use: a greens powder that starts with the sourcing, not the marketing. Eight plants, nothing else. Every amount disclosed. Cold-dried to preserve what the plants actually contain. Priced for daily use.
               </p>
             </div>
-            <div style={{ marginTop: '28px', borderRadius: '12px', overflow: 'hidden', height: 'clamp(160px, 30vw, 240px)' }}>
+            <div style={{ marginTop: '28px', borderRadius: '12px', overflow: 'hidden', height: 'clamp(180px, 25vw, 260px)' }}>
               <img
                 src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/Moringa Leaves Overhead.webp"
                 alt="Fresh green moringa leaves overhead view"
@@ -136,7 +136,7 @@ export default function AboutPage() {
             </p>
 
             {/* Processing image */}
-            <div style={{ marginTop: '28px', borderRadius: '12px', overflow: 'hidden', height: 'clamp(160px, 30vw, 240px)' }}>
+            <div style={{ marginTop: '28px', borderRadius: '12px', overflow: 'hidden', height: 'clamp(180px, 25vw, 260px)' }}>
               <img
                 src="https://cdn.jsdelivr.net/gh/Morivana/Morivana@main/morivana-app/public/about-processing.png"
                 alt="Cold-drying process used for Morivaná Daily ingredients"

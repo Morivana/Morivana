@@ -45,6 +45,7 @@ export default function WaitlistPage() {
         setSubmitted(true)
         if (typeof window.fbq === 'function') {
           window.fbq('track', 'Lead', { content_name: 'waitlist-page', content_category: 'Waitlist' })
+          window.fbq('track', 'AddToWishlist', { content_name: 'waitlist-page', content_category: 'Waitlist' })
         }
       } else {
         const data = await res.json().catch(() => ({}))
@@ -55,6 +56,7 @@ export default function WaitlistPage() {
       setSubmitted(true)
       if (typeof window.fbq === 'function') {
         window.fbq('track', 'Lead', { content_name: 'waitlist-page', content_category: 'Waitlist' })
+        window.fbq('track', 'AddToWishlist', { content_name: 'waitlist-page', content_category: 'Waitlist' })
       }
     }
   }

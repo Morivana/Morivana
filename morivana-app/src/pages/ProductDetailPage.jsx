@@ -496,11 +496,29 @@ export default function ProductDetailPage() {
 
               {/* CTA */}
               {activeProduct && activeProduct.stock === 0 ? (
-                <Link to="/waitlist" className="cta-btn" style={{ textAlign: 'center', background: '#7A8A6E', borderColor: '#7A8A6E' }}>
+                <Link
+                  to="/waitlist"
+                  className="cta-btn"
+                  style={{ textAlign: 'center', background: '#7A8A6E', borderColor: '#7A8A6E' }}
+                  onClick={() => {
+                    if (typeof window.fbq === 'function') {
+                      window.fbq('track', 'AddToWishlist', { content_name: activeProduct.name || 'Daily Greens', content_category: 'Waitlist' })
+                    }
+                  }}
+                >
                   Sold Out — Join Waitlist →
                 </Link>
               ) : (
-                <Link to="/waitlist" className="cta-btn" style={{ textAlign: 'center' }}>
+                <Link
+                  to="/waitlist"
+                  className="cta-btn"
+                  style={{ textAlign: 'center' }}
+                  onClick={() => {
+                    if (typeof window.fbq === 'function') {
+                      window.fbq('track', 'AddToWishlist', { content_name: activeProduct?.name || 'Daily Greens', content_category: 'Waitlist' })
+                    }
+                  }}
+                >
                   Join Waitlist Be First →
                 </Link>
               )}
