@@ -77,6 +77,7 @@
 
 /* ─── Base reset ─── */
 @layer base {
+
   *,
   *::before,
   *::after {
@@ -679,7 +680,7 @@ main section {
     text-align: center !important;
   }
 
-  .footer-cols > div,
+  .footer-cols>div,
   .footer-cols .footer-col-item,
   .footer-cols .footer-nav-grid {
     flex: none !important;
@@ -756,6 +757,14 @@ main section {
   /* Disable Ken Burns tile drift on mobile — pure decoration, not worth GPU cost */
   .cta-tile {
     animation: none !important;
+  }
+
+  /* Mobile-only box styling for text elements in WhatIsMorivana section */
+  .what-mobile-box {
+    background: #D8E1BD !important;
+    border: 1px solid #CAD7C0 !important;
+    border-radius: 4px !important;
+    padding: 16px 20px !important;
   }
 }
 
@@ -1155,50 +1164,65 @@ main section {
 
 /* ─── Admin Panel Design Tokens ─── */
 :root {
-  --bg-page:     #0F0F0F;
-  --bg-sidebar:  #0A0A0A;
-  --bg-card:     #181818;
-  --bg-input:    #141414;
-  --bg-hover:    #1F1F1F;
-  --border:      #242424;
-  --border-sub:  #1E1E1E;
-  --text-1:      #F2F2F2;
-  --text-2:      #888888;
-  --text-3:      #555555;
-  --danger:      #EF4444;
-  --danger-dim:  rgba(239,68,68,0.10);
-  --warning:     #F59E0B;
-  --info:        #3B82F6;
+  --bg-page: #0F0F0F;
+  --bg-sidebar: #0A0A0A;
+  --bg-card: #181818;
+  --bg-input: #141414;
+  --bg-hover: #1F1F1F;
+  --border: #242424;
+  --border-sub: #1E1E1E;
+  --text-1: #F2F2F2;
+  --text-2: #888888;
+  --text-3: #555555;
+  --danger: #EF4444;
+  --danger-dim: rgba(239, 68, 68, 0.10);
+  --warning: #F59E0B;
+  --info: #3B82F6;
 }
 
 html.light {
-  --bg-page:     #F7F7F6;
-  --bg-sidebar:  #FFFFFF;
-  --bg-card:     #FFFFFF;
-  --bg-input:    #F4F4F3;
-  --bg-hover:    #F0F0EF;
-  --border:      #E5E5E3;
-  --border-sub:  #EBEBEA;
-  --text-1:      #111111;
-  --text-2:      #6B6B6B;
-  --text-3:      #ABABAB;
-  --danger-dim:  rgba(239,68,68,0.08);
+  --bg-page: #F7F7F6;
+  --bg-sidebar: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-input: #F4F4F3;
+  --bg-hover: #F0F0EF;
+  --border: #E5E5E3;
+  --border-sub: #EBEBEA;
+  --text-1: #111111;
+  --text-2: #6B6B6B;
+  --text-3: #ABABAB;
+  --danger-dim: rgba(239, 68, 68, 0.08);
 }
 
 /* Animations for Admin Panel */
 @keyframes pulseGreen {
-  0% { opacity: 1; }
-  50% { opacity: 0.4; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
+
 .pulse-green-dot {
   animation: pulseGreen 2s infinite ease-in-out;
 }
 
 @keyframes flashGreen {
-  0% { background-color: var(--accent-dim); }
-  100% { background-color: transparent; }
+  0% {
+    background-color: var(--accent-dim);
+  }
+
+  100% {
+    background-color: transparent;
+  }
 }
+
 .flash-green {
   animation: flashGreen 200ms ease-out forwards;
 }
@@ -1240,8 +1264,8 @@ body {
   --color-background-info: var(--admin-accent-dim);
   --color-text-info: var(--admin-accent);
   /* Admin-specific green accent — scoped here so it doesn't pollute the brand palette */
-  --admin-accent:     #22C55E;
-  --admin-accent-dim: rgba(34,197,94,0.12);
+  --admin-accent: #22C55E;
+  --admin-accent-dim: rgba(34, 197, 94, 0.12);
 }
 
 .admin-portal-wrapper,
@@ -1297,6 +1321,7 @@ body {
     padding-left: 20px !important;
     padding-right: 16px !important;
   }
+
   .admin-portal-wrapper main {
     padding-left: 20px !important;
     padding-right: 20px !important;
@@ -1310,16 +1335,19 @@ body {
     padding-left: 16px !important;
     padding-right: 12px !important;
   }
+
   .admin-portal-wrapper main {
     padding-left: 16px !important;
     padding-right: 16px !important;
     padding-top: 20px !important;
     padding-bottom: 80px !important;
   }
+
   .admin-portal-wrapper nav {
     flex-direction: column !important;
     gap: 4px !important;
   }
+
   .admin-portal-wrapper nav a {
     font-size: 13px !important;
     padding: 0 14px !important;
@@ -1336,6 +1364,7 @@ body {
     margin-bottom: 4px;
     font-family: 'Inter', sans-serif !important;
   }
+
   .admin-page-sub {
     font-size: 13px;
     color: var(--color-text-secondary);
@@ -1348,6 +1377,7 @@ body {
     .admin-page-title {
       font-size: 16px;
     }
+
     .admin-page-sub {
       font-size: 12px;
       margin-bottom: 16px;
@@ -1360,39 +1390,45 @@ body {
     gap: var(--gap);
     margin-bottom: var(--gap);
   }
+
   @media (max-width: 480px) {
     .stat-grid {
       grid-template-columns: repeat(1, minmax(0, 1fr));
       gap: 10px;
     }
   }
+
   @media (min-width: 1280px) {
     .stat-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
+
   .stat-card {
     background: var(--color-background-primary);
     border: 0.5px solid var(--color-border-tertiary);
     border-radius: var(--r);
     padding: 18px 20px 16px;
   }
+
   @media (max-width: 480px) {
     .stat-card {
       padding: 14px 16px 12px;
     }
   }
+
   .stat-label {
     font-size: 11px;
     font-weight: 500;
     letter-spacing: .07em;
-    text-transform: none; 
+    text-transform: none;
     color: var(--color-text-secondary);
     margin-bottom: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
+
   .stat-value {
     font-size: 26px;
     font-weight: 500;
@@ -1400,11 +1436,13 @@ body {
     line-height: 1;
     font-family: 'Inter', sans-serif !important;
   }
+
   @media (max-width: 480px) {
     .stat-value {
       font-size: 22px;
     }
   }
+
   .stat-change {
     margin-top: 8px;
     font-size: 12px;
@@ -1412,56 +1450,77 @@ body {
     align-items: center;
     gap: 4px;
   }
-  .change-pos { color: var(--green); }
-  .change-neg { color: var(--color-text-danger); }
-  .change-neutral { color: var(--color-text-secondary); }
-  .change-label { color: var(--color-text-secondary); }
+
+  .change-pos {
+    color: var(--green);
+  }
+
+  .change-neg {
+    color: var(--color-text-danger);
+  }
+
+  .change-neutral {
+    color: var(--color-text-secondary);
+  }
+
+  .change-label {
+    color: var(--color-text-secondary);
+  }
 
   .bottom-row {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--gap);
   }
+
   @media (min-width: 1280px) {
     .bottom-row {
       grid-template-columns: 1fr 320px;
     }
   }
+
   .chart-card {
     background: var(--color-background-primary);
     border: 0.5px solid var(--color-border-tertiary);
     border-radius: var(--r);
     padding: 20px;
   }
+
   @media (max-width: 480px) {
     .chart-card {
       padding: 14px;
     }
   }
+
   .chart-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 16px;
   }
+
   .chart-title {
     font-size: 14px;
     font-weight: 500;
     color: var(--color-text-primary);
   }
+
   .chart-meta {
     font-size: 11.5px;
     color: var(--color-text-tertiary);
   }
+
   .chart-area {
     position: relative;
     height: 160px;
   }
+
   @media (max-width: 480px) {
     .chart-area {
       height: 130px;
     }
   }
+
   .stock-card {
     background: var(--color-background-primary);
     border: 0.5px solid var(--color-border-tertiary);
@@ -1469,22 +1528,26 @@ body {
     padding: 18px 20px;
     margin-top: var(--gap);
   }
+
   .stock-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 12px;
   }
+
   .stock-title {
     font-size: 14px;
     font-weight: 500;
     color: var(--color-text-primary);
   }
+
   .stock-label {
     font-size: 11px;
     color: var(--color-text-secondary);
     margin-bottom: 6px;
   }
+
   .stock-bar-bg {
     height: 8px;
     background: var(--color-background-secondary);
@@ -1492,22 +1555,26 @@ body {
     overflow: hidden;
     margin-bottom: 4px;
   }
+
   .stock-bar-fill {
     height: 100%;
     border-radius: 20px;
     background: var(--green);
   }
+
   .stock-nums {
     display: flex;
     justify-content: space-between;
     font-size: 11.5px;
     color: var(--color-text-secondary);
   }
+
   .stock-sku {
     font-size: 12px;
     font-weight: 500;
     color: var(--color-text-primary);
   }
+
   .waitlist-card {
     background: var(--color-background-primary);
     border: 0.5px solid var(--color-border-tertiary);
@@ -1515,6 +1582,7 @@ body {
     display: flex;
     flex-direction: column;
   }
+
   .wl-header {
     padding: 16px 18px 12px;
     border-bottom: 0.5px solid var(--color-border-tertiary);
@@ -1525,10 +1593,12 @@ body {
     align-items: center;
     justify-content: space-between;
   }
+
   .wl-search {
     padding: 10px 16px;
     border-bottom: 0.5px solid var(--color-border-tertiary);
   }
+
   .wl-search input {
     width: 100%;
     background: var(--color-background-secondary);
@@ -1538,10 +1608,12 @@ body {
     font-size: 12.5px;
     color: var(--color-text-primary);
   }
+
   .wl-filter {
     padding: 8px 16px;
     border-bottom: 0.5px solid var(--color-border-tertiary);
   }
+
   .wl-filter select {
     width: 100%;
     background: transparent;
@@ -1551,11 +1623,13 @@ body {
     font-size: 12px;
     color: var(--color-text-secondary);
   }
+
   .wl-list {
     flex: 1;
     overflow: auto;
     max-height: 240px;
   }
+
   .wl-item {
     display: flex;
     align-items: center;
@@ -1564,9 +1638,11 @@ body {
     border-bottom: 0.5px solid var(--color-border-tertiary);
     cursor: pointer;
   }
+
   .wl-item:hover {
     background: var(--color-background-secondary);
   }
+
   .wl-avatar {
     width: 30px;
     height: 30px;
@@ -1578,11 +1654,13 @@ body {
     justify-content: center;
     flex-shrink: 0;
   }
+
   .wl-name {
     font-size: 13px;
     font-weight: 500;
     color: var(--color-text-primary);
   }
+
   .wl-email {
     font-size: 11px;
     color: var(--color-text-secondary);
@@ -1591,6 +1669,7 @@ body {
     text-overflow: ellipsis;
     max-width: 100%;
   }
+
   .locale-badge {
     margin-left: auto;
     font-size: 10px;
@@ -1600,24 +1679,38 @@ body {
     flex-shrink: 0;
     letter-spacing: .04em;
   }
+
   /* Dark mode badge colors (default — dark theme) */
   .badge-global {
     background: rgba(34, 197, 94, 0.12);
     color: #4ade80;
   }
+
   .badge-canada {
     background: rgba(59, 130, 246, 0.12);
     color: #60a5fa;
   }
+
   .badge-india {
     background: rgba(249, 115, 22, 0.12);
     color: #fb923c;
   }
 }
 
-html.light .admin-portal-wrapper .badge-global { background: #f0fdf4; color: #166534; }
-html.light .admin-portal-wrapper .badge-canada { background: #eff6ff; color: #1e40af; }
-html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #854d0e; }
+html.light .admin-portal-wrapper .badge-global {
+  background: #f0fdf4;
+  color: #166534;
+}
+
+html.light .admin-portal-wrapper .badge-canada {
+  background: #eff6ff;
+  color: #1e40af;
+}
+
+html.light .admin-portal-wrapper .badge-india {
+  background: #fefce8;
+  color: #854d0e;
+}
 
 /* Upgraded Admin Dashboard Styles */
 .admin-portal-wrapper {
@@ -1627,6 +1720,7 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     gap: 12px;
     margin-top: 20px;
   }
+
   @media (min-width: 768px) {
     .kpi-grid-4 {
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1673,6 +1767,7 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     border-collapse: collapse;
     font-size: 12.5px;
   }
+
   .data-table th {
     text-align: left;
     font-size: 10px;
@@ -1683,18 +1778,22 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     padding: 8px 12px;
     text-transform: uppercase;
   }
+
   .data-table td {
     padding: 11px 12px;
     border-bottom: 1px solid var(--color-border-tertiary);
     color: var(--color-text-primary);
     vertical-align: middle;
   }
+
   .data-table tr:last-child td {
     border-bottom: none;
   }
+
   .data-table tr:hover td {
     background: var(--color-background-secondary);
   }
+
   .table-wrap {
     background: var(--color-background-primary);
     border: 1px solid var(--color-border-tertiary);
@@ -1715,22 +1814,27 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     margin-right: 4px;
     transition: all 0.15s;
   }
+
   .act-btn:hover {
     color: var(--color-text-primary);
     border-color: var(--color-text-secondary);
     background: var(--color-background-secondary);
   }
+
   .act-btn.danger {
     color: var(--color-text-danger);
     border-color: rgba(239, 68, 68, 0.2);
   }
+
   .act-btn.danger:hover {
     background: rgba(239, 68, 68, 0.08);
   }
+
   .act-btn.success {
     color: var(--admin-accent);
     border-color: rgba(34, 197, 94, 0.2);
   }
+
   .act-btn.success:hover {
     background: rgba(34, 197, 94, 0.08);
   }
@@ -1742,6 +1846,7 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     gap: 16px;
     margin-top: 20px;
   }
+
   @media (min-width: 1024px) {
     .two-col {
       grid-template-columns: 1fr 1fr;
@@ -1754,6 +1859,7 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     gap: 16px;
     margin-top: 20px;
   }
+
   @media (min-width: 1024px) {
     .two-col-wide {
       grid-template-columns: 1.6fr 1fr;
@@ -1783,12 +1889,14 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     gap: 10px;
     margin-bottom: 10px;
   }
+
   .funnel-label {
     font-size: 11.5px;
     color: var(--color-text-secondary);
     width: 140px;
     flex-shrink: 0;
   }
+
   .funnel-bar-bg {
     flex: 1;
     height: 6px;
@@ -1796,11 +1904,13 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     border-radius: 3px;
     overflow: hidden;
   }
+
   .funnel-bar {
     height: 100%;
     background: var(--admin-accent);
     border-radius: 3px;
   }
+
   .funnel-val {
     font-size: 11.5px;
     color: var(--color-text-primary);
@@ -1816,6 +1926,7 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     font-size: 11px;
     color: var(--admin-accent);
   }
+
   .live-dot {
     width: 6px;
     height: 6px;
@@ -1842,12 +1953,14 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
   .form-row {
     margin-bottom: 14px;
   }
+
   .form-label {
     font-size: 11.5px;
     color: var(--color-text-secondary);
     margin-bottom: 5px;
     display: block;
   }
+
   .form-input {
     width: 100%;
     background: var(--color-background-secondary);
@@ -1859,9 +1972,11 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     outline: none;
     transition: border-color 0.15s;
   }
+
   .form-input:focus {
     border-color: var(--admin-accent);
   }
+
   .form-select {
     width: 100%;
     background: var(--color-background-secondary);
@@ -1873,9 +1988,11 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     outline: none;
     transition: border-color 0.15s;
   }
+
   .form-select:focus {
     border-color: var(--admin-accent);
   }
+
   .btn-primary {
     background: var(--admin-accent);
     color: #052e0f;
@@ -1889,9 +2006,11 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     margin-top: 8px;
     transition: opacity 0.15s;
   }
+
   .btn-primary:hover {
     opacity: 0.9;
   }
+
   .btn-ghost {
     background: transparent;
     color: var(--color-text-secondary);
@@ -1902,6 +2021,7 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     cursor: pointer;
     transition: all 0.15s;
   }
+
   .btn-ghost:hover {
     color: var(--color-text-primary);
     border-color: var(--color-text-secondary);
@@ -1919,6 +2039,7 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     align-items: flex-start;
     gap: 14px;
   }
+
   .ticket-icon {
     width: 32px;
     height: 32px;
@@ -1929,32 +2050,40 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     justify-content: center;
     flex-shrink: 0;
   }
+
   .ticket-icon i {
     font-size: 16px;
     color: #f59e0b;
   }
+
   .ticket-icon.open {
     background: rgba(239, 68, 68, 0.08);
   }
+
   .ticket-icon.open i {
     color: var(--color-text-danger);
   }
+
   .ticket-icon.closed {
     background: rgba(34, 197, 94, 0.08);
   }
+
   .ticket-icon.closed i {
     color: var(--admin-accent);
   }
+
   .ticket-title {
     font-size: 13px;
     color: var(--color-text-primary);
     font-weight: 500;
   }
+
   .ticket-meta {
     font-size: 11px;
     color: var(--color-text-secondary);
     margin-top: 3px;
   }
+
   .ticket-actions {
     margin-left: auto;
     display: flex;
@@ -1973,6 +2102,7 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     align-items: center;
     justify-content: space-between;
   }
+
   .coupon-code {
     font-size: 14px;
     font-weight: 600;
@@ -1980,6 +2110,7 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     font-family: var(--font-mono);
     letter-spacing: 0.1em;
   }
+
   .coupon-detail {
     font-size: 11.5px;
     color: var(--color-text-secondary);
@@ -1994,6 +2125,7 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     gap: 6px;
     padding-top: 10px;
   }
+
   .bar {
     background: var(--admin-accent);
     border-radius: 2px 2px 0 0;
@@ -2001,6 +2133,7 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     flex: 1;
     transition: opacity 0.2s;
   }
+
   .bar:hover {
     opacity: 1;
   }
@@ -2013,6 +2146,7 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     overflow-x: auto;
     padding-bottom: 4px;
   }
+
   .pipe-col {
     min-width: 140px;
     background: var(--color-background-primary);
@@ -2021,6 +2155,7 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     padding: 10px;
     flex: 1;
   }
+
   .pipe-col-title {
     font-size: 10px;
     letter-spacing: 0.1em;
@@ -2032,6 +2167,7 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     align-items: center;
     justify-content: space-between;
   }
+
   .pipe-count {
     background: var(--color-background-secondary);
     color: var(--color-text-secondary);
@@ -2039,22 +2175,26 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     padding: 1px 6px;
     border-radius: 8px;
   }
+
   .pipe-order {
     background: var(--color-background-secondary);
     border-radius: 6px;
     padding: 8px 10px;
     margin-bottom: 6px;
   }
+
   .pipe-order-id {
     font-size: 11px;
     color: var(--color-text-secondary);
   }
+
   .pipe-order-name {
     font-size: 12px;
     color: var(--color-text-primary);
     font-weight: 500;
     margin-top: 2px;
   }
+
   .pipe-order-amt {
     font-size: 11px;
     color: var(--admin-accent);
@@ -2070,10 +2210,12 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     border-radius: 10px;
     margin-left: auto;
   }
+
   .nav-badge.warn {
     background: #f59e0b;
     color: #1c0f00;
   }
+
   .nav-badge.alert {
     background: #ef4444;
     color: #fff;
@@ -2083,12 +2225,15 @@ html.light .admin-portal-wrapper .badge-india  { background: #fefce8; color: #85
     scrollbar-width: thin;
     scrollbar-color: var(--border-sub) transparent;
   }
+
   .admin-sidebar-nav::-webkit-scrollbar {
     width: 4px;
   }
+
   .admin-sidebar-nav::-webkit-scrollbar-track {
     background: transparent;
   }
+
   .admin-sidebar-nav::-webkit-scrollbar-thumb {
     background: var(--border-sub);
     border-radius: 4px;

@@ -89,7 +89,7 @@ export default function WhatIsMorivana() {
 
 
           <div className="what-text-block">
-            <p style={{
+            <p className="what-mobile-box" style={{
               fontFamily: 'var(--font-body)',
               fontSize: '0.92rem',
               lineHeight: 1.7,
@@ -103,7 +103,7 @@ export default function WhatIsMorivana() {
           </div>
 
           <div className="what-text-block">
-            <p style={{
+            <p className="what-mobile-box" style={{
               fontFamily: 'var(--font-body)',
               fontSize: '0.92rem',
               lineHeight: 1.7,
@@ -116,7 +116,7 @@ export default function WhatIsMorivana() {
           </div>
 
           {/* Numbered highlights typographic, no icons */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '8px' }}>
+          <div className="what-mobile-box" style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '8px' }}>
             {highlights.map(h => (
               <div
                 key={h.label}
