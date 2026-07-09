@@ -70,6 +70,7 @@ export const helmetConfig = helmet({
         'https://cdn-icons-png.flaticon.com',
         'https://upload.wikimedia.org',
         'https://www.facebook.com',
+        'https://facebook.com',
         'http://localhost:5173',
         'http://localhost:5174',
         ...allowedOrigins
@@ -94,7 +95,9 @@ export const helmetConfig = helmet({
         'https://api.morivanadaily.com',
         'https://morivana-api-0l3l.onrender.com',
         'https://connect.facebook.net',
-        'https://www.facebook.com'
+        'https://www.facebook.com',
+        'https://facebook.com',
+        'https://graph.facebook.com'
       ],
       objectSrc: ["'none'"],
       upgradeInsecureRequests: [],
