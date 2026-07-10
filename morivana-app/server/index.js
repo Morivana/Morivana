@@ -453,19 +453,19 @@ if (isDbConnected) {
   products = db.collection('products')
   await products.createIndex({ sku: 1 }, { unique: true })
 
-  // Database migration: Ensure correct Canada pricing for MD-100G and MD-200G
+  // Database migration: Ensure correct India & Canada pricing for MD-100G and MD-200G
   try {
     const res1 = await products.updateOne(
       { sku: 'MD-100G' },
-      { $set: { priceUSD: 29 } }
+      { $set: { price: 499, priceUSD: 29 } }
     );
     const res2 = await products.updateOne(
       { sku: 'MD-200G' },
-      { $set: { priceUSD: 49 } }
+      { $set: { price: 799, priceUSD: 49 } }
     );
-    console.log(`[DB Migration] Verified Canada prices: MD-100G ($29) updated=${res1.modifiedCount}, MD-200G ($49) updated=${res2.modifiedCount}`);
+    console.log(`[DB Migration] Verified pricing: MD-100G (₹499/$29) updated=${res1.modifiedCount}, MD-200G (₹799/$49) updated=${res2.modifiedCount}`);
   } catch (dbMigrateErr) {
-    console.error('[DB Migration] Failed to update Canada pricing:', dbMigrateErr);
+    console.error('[DB Migration] Failed to update pricing:', dbMigrateErr);
   }
 
   deliveries = db.collection('deliveries')
