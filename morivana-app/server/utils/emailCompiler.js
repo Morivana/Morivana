@@ -95,7 +95,10 @@ export function compileTemplate(templateName, data = {}) {
   }
   
   let html = fs.readFileSync(filePath, 'utf-8');
-  const allowedOrigin = process.env.ALLOWED_ORIGIN || 'https://morivanadaily.com';
+  let allowedOrigin = process.env.ALLOWED_ORIGIN || 'https://morivanadaily.com';
+  if (allowedOrigin.includes(',')) {
+    allowedOrigin = allowedOrigin.split(',')[0].trim();
+  }
   
   // Inject defaults
   const compileData = {

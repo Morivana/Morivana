@@ -62,6 +62,10 @@ const {
   EMAIL_FROM = 'Morivana Daily <no-reply@morivanadaily.com>',
 } = process.env
 
+const primaryOrigin = ALLOWED_ORIGIN
+  ? ALLOWED_ORIGIN.split(',')[0].trim()
+  : 'https://morivanadaily.com'
+
 if (!MONGODB_URI) {
   console.error('Missing MONGODB_URI in environment. Set it in morivana-app/.env')
   process.exit(1)
@@ -253,7 +257,7 @@ Date: ${new Date().toLocaleString()}
       region: region ? region.toUpperCase() : 'N/A',
       source: source || 'waitlist',
       submittedAt: new Date().toLocaleString(),
-      allowedOrigin: ALLOWED_ORIGIN || 'https://morivanadaily.com'
+      allowedOrigin: primaryOrigin
     })
   } catch (err) {
     console.error('Failed to compile admin notification email template, falling back to raw:', err)
@@ -304,7 +308,7 @@ Date: ${new Date().toLocaleString()}
     userHtml = compileTemplate('welcome', {
       name: name || 'there',
       couponCode: 'FIRSTBUY',
-      allowedOrigin: ALLOWED_ORIGIN || 'https://morivanadaily.com'
+      allowedOrigin: primaryOrigin
     })
   } catch (err) {
     console.error('Failed to compile welcome email template, falling back to raw:', err)
@@ -3411,7 +3415,7 @@ app.post('/api/admin/abandoned-checkouts/:id/remind', adminAuth, async (req, res
         name: checkout.customer || 'there',
         cartItems: checkout.cartItems || [],
         couponCode: 'BASH10',
-        checkoutUrl: `${process.env.ALLOWED_ORIGIN || 'https://morivanadaily.com'}/checkout`
+        checkoutUrl: `${primaryOrigin}/checkout`
       })
     } catch (err) {
       console.error('Failed to compile abandoned cart email template, falling back to raw:', err)
