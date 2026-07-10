@@ -372,9 +372,6 @@ export default function ShopPage() {
                         <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '2rem', color: 'var(--surface-deep)', lineHeight: 1 }}>
                           {activeProduct ? `₹${activeProduct.price}` : (selectedPack === '100g' ? '₹499' : '₹799')}
                         </span>
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)', textDecoration: 'line-through' }}>
-                          {selectedPack === '100g' ? '₹599' : '₹999'}
-                        </span>
                       </div>
                       <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--ink-mute)', marginTop: '4px' }}>
                         {selectedPack === '100g' ? '₹25/day' : '₹20/day'}
