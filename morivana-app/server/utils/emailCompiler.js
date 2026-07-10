@@ -95,7 +95,7 @@ export function compileTemplate(templateName, data = {}) {
   }
   
   let html = fs.readFileSync(filePath, 'utf-8');
-  const allowedOrigin = process.env.ALLOWED_ORIGIN || 'http://localhost:5173';
+  const allowedOrigin = process.env.ALLOWED_ORIGIN || 'https://morivanadaily.com';
   
   // Inject defaults
   const compileData = {

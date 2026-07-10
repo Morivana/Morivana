@@ -252,7 +252,8 @@ Date: ${new Date().toLocaleString()}
       email: email,
       region: region ? region.toUpperCase() : 'N/A',
       source: source || 'waitlist',
-      submittedAt: new Date().toLocaleString()
+      submittedAt: new Date().toLocaleString(),
+      allowedOrigin: ALLOWED_ORIGIN || 'https://morivanadaily.com'
     })
   } catch (err) {
     console.error('Failed to compile admin notification email template, falling back to raw:', err)
@@ -302,7 +303,8 @@ Date: ${new Date().toLocaleString()}
   try {
     userHtml = compileTemplate('welcome', {
       name: name || 'there',
-      couponCode: 'FIRSTBUY'
+      couponCode: 'FIRSTBUY',
+      allowedOrigin: ALLOWED_ORIGIN || 'https://morivanadaily.com'
     })
   } catch (err) {
     console.error('Failed to compile welcome email template, falling back to raw:', err)
@@ -3409,7 +3411,7 @@ app.post('/api/admin/abandoned-checkouts/:id/remind', adminAuth, async (req, res
         name: checkout.customer || 'there',
         cartItems: checkout.cartItems || [],
         couponCode: 'BASH10',
-        checkoutUrl: `${process.env.ALLOWED_ORIGIN || 'http://localhost:5173'}/checkout`
+        checkoutUrl: `${process.env.ALLOWED_ORIGIN || 'https://morivanadaily.com'}/checkout`
       })
     } catch (err) {
       console.error('Failed to compile abandoned cart email template, falling back to raw:', err)
