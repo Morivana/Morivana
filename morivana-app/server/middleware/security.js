@@ -53,7 +53,8 @@ export const helmetConfig = helmet({
         'https://*.clerk.accounts.dev',
         'https://*.clerk.com',
         'https://clerk.morivanadaily.com',
-        'https://connect.facebook.net'
+        'https://*.facebook.net',
+        'https://*.facebook.com'
       ],
       frameSrc: [
         "'self'",
@@ -69,8 +70,8 @@ export const helmetConfig = helmet({
         'https://img.clerk.com',
         'https://cdn-icons-png.flaticon.com',
         'https://upload.wikimedia.org',
-        'https://www.facebook.com',
-        'https://facebook.com',
+        'https://*.facebook.com',
+        'https://*.facebook.net',
         'http://localhost:5173',
         'http://localhost:5174',
         ...allowedOrigins
@@ -94,10 +95,8 @@ export const helmetConfig = helmet({
         'https://morivana.pages.dev',
         'https://api.morivanadaily.com',
         'https://morivana-api-0l3l.onrender.com',
-        'https://connect.facebook.net',
-        'https://www.facebook.com',
-        'https://facebook.com',
-        'https://graph.facebook.com'
+        'https://*.facebook.net',
+        'https://*.facebook.com'
       ],
       objectSrc: ["'none'"],
       upgradeInsecureRequests: [],

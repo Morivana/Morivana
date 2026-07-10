@@ -359,7 +359,30 @@ let abandonedCheckouts = null
 let isDbConnected = false
 
 // Fallback in-memory arrays when MongoDB is offline
-let fallbackProductsList = []
+let fallbackProductsList = [
+  {
+    _id: 'mock-prod-100g',
+    name: '100g Trial Pack',
+    sku: 'MD-100G',
+    price: 499,
+    priceUSD: 29,
+    currency: 'INR',
+    stock: 50,
+    status: 'In Stock',
+    createdAt: new Date()
+  },
+  {
+    _id: 'mock-prod-200g',
+    name: '200g Daily Ritual Pack',
+    sku: 'MD-200G',
+    price: 799,
+    priceUSD: 49,
+    currency: 'INR',
+    stock: 120,
+    status: 'In Stock',
+    createdAt: new Date()
+  }
+]
 
 let ordersList = []
 
@@ -423,6 +446,21 @@ if (isDbConnected) {
 
   products = db.collection('products')
   await products.createIndex({ sku: 1 }, { unique: true })
+
+  // Database migration: Ensure correct Canada pricing for MD-100G and MD-200G
+  try {
+    const res1 = await products.updateOne(
+      { sku: 'MD-100G' },
+      { $set: { priceUSD: 29 } }
+    );
+    const res2 = await products.updateOne(
+      { sku: 'MD-200G' },
+      { $set: { priceUSD: 49 } }
+    );
+    console.log(`[DB Migration] Verified Canada prices: MD-100G ($29) updated=${res1.modifiedCount}, MD-200G ($49) updated=${res2.modifiedCount}`);
+  } catch (dbMigrateErr) {
+    console.error('[DB Migration] Failed to update Canada pricing:', dbMigrateErr);
+  }
 
   deliveries = db.collection('deliveries')
   payments = db.collection('payments')
@@ -779,8 +817,8 @@ app.get('/api/admin/stats', adminAuth, async (req, res, next) => {
     if (!isDbConnected || !waitlist) {
       // Offline fallback computations
       const fallbackProducts = [
-        { sku: 'MD-100G', stock: 50, price: 499 },
-        { sku: 'MD-200G', stock: 120, price: 799 }
+        { sku: 'MD-100G', stock: 50, price: 499, priceUSD: 29 },
+        { sku: 'MD-200G', stock: 120, price: 799, priceUSD: 49 }
       ]
       const totalStock = fallbackProducts.reduce((sum, p) => sum + p.stock, 0)
       const lowStockThreshold = parseInt(storeSettingsData.lowStockThreshold || 20, 10)
@@ -1076,7 +1114,7 @@ app.post('/api/admin/inventory', adminAuth, validate(adminInventorySchema), asyn
         sku: upperSku,
         price: Number(price),
         currency,
-        priceUSD: priceUSD ? Number(priceUSD) : Math.round(Number(price) / 24),
+        priceUSD: priceUSD ? Number(priceUSD) : (upperSku === 'MD-100G' ? 29 : (upperSku === 'MD-200G' ? 49 : Math.round(Number(price) / 24))),
         stock: Number(stock),
         status: Number(stock) > 0 ? 'In Stock' : 'Out of Stock',
         createdAt: new Date()
@@ -1090,7 +1128,7 @@ app.post('/api/admin/inventory', adminAuth, validate(adminInventorySchema), asyn
       sku: upperSku,
       price: Number(price),
       currency,
-      priceUSD: priceUSD ? Number(priceUSD) : Math.round(Number(price) / 24),
+      priceUSD: priceUSD ? Number(priceUSD) : (upperSku === 'MD-100G' ? 29 : (upperSku === 'MD-200G' ? 49 : Math.round(Number(price) / 24))),
       stock: Number(stock),
       status: Number(stock) > 0 ? 'In Stock' : 'Out of Stock',
       createdAt: new Date()
@@ -3150,7 +3188,7 @@ app.post('/api/admin/inventory/bulk', adminAuth, async (req, res, next) => {
       sku: (item.sku || '').trim().toUpperCase(),
       price: parseFloat(item.price || 0),
       currency: item.currency || 'INR',
-      priceUSD: item.priceUSD ? parseFloat(item.priceUSD) : Math.round(parseFloat(item.price || 0) / 24),
+      priceUSD: item.priceUSD ? parseFloat(item.priceUSD) : (((item.sku || '').trim().toUpperCase() === 'MD-100G') ? 29 : (((item.sku || '').trim().toUpperCase() === 'MD-200G') ? 49 : Math.round(parseFloat(item.price || 0) / 24))),
       stock: parseInt(item.stock || 0, 10),
       status: parseInt(item.stock || 0, 10) > 0 ? 'In Stock' : 'Out of Stock',
       createdAt: new Date()

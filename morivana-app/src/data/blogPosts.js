@@ -354,8 +354,8 @@ export const getRegionalizedPosts = (region) => {
       if (!text) return text
       if (region === 'CA') {
         return text
-          .replaceAll('₹1,299 / 30 servings (₹43/day)', 'CA$39 / 20 servings (CA$1.95/day)')
-          .replaceAll('₹1,299/month', 'CA$39 / 20 servings (CA$1.95/day)')
+          .replaceAll('₹1,299 / 30 servings (₹43/day)', 'CA$49 / 40 servings (CA$1.23/day)')
+          .replaceAll('₹1,299/month', 'CA$49 / 40 servings (CA$1.23/day)')
           .replaceAll('~₹1,199 / 30 servings', '~CA$20 / 30 servings')
           .replaceAll('~₹999–1,299 / 30 servings', '~CA$16–21 / 30 servings')
           .replaceAll('~₹6,500–9,000 / 30 servings (imported)', 'CA$140 / 30 servings')
@@ -371,8 +371,8 @@ export const getRegionalizedPosts = (region) => {
           .replaceAll('~₹7,500–9,000', '~CA$140')
       } else {
         return text
-          .replaceAll('₹1,299 / 30 servings (₹43/day)', '₹799 / 20 servings (₹40/day)')
-          .replaceAll('₹1,299/month', '₹799 / 20 servings (₹40/day)')
+          .replaceAll('₹1,299 / 30 servings (₹43/day)', '₹799 / 40 servings (₹20/day)')
+          .replaceAll('₹1,299/month', '₹799 / 40 servings (₹20/day)')
           .replaceAll('~₹7,000/month', '~₹7,500–9,000/month')
           .replaceAll('~₹6,500–9,000', '~₹7,500–9,000')
       }

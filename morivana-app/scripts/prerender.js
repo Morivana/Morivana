@@ -77,7 +77,7 @@ const staticRoutes = [
       <section>
         <h2>Side-by-Side Super Greens Comparison</h2>
         <p>The daily greens supplement market has grown rapidly, offering consumers a wide variety of choices. However, finding a clean, transparent, and affordable option can be challenging. Many popular brands hide their ingredient amounts behind "proprietary blends," making it impossible to know how much of each superfood you are actually consuming. We believe that consumers deserve better. When comparing greens powders, you should evaluate four key criteria: ingredient transparency, processing method, sweetener type, and price per serving.</p>
-        <p>Morivaná Daily stands out by offering complete transparency. Our label lists the exact gram and milligram amounts of all 8 whole-plant ingredients. We use low-temperature cold-drying to preserve delicate nutrients, sweeten our blend naturally with monk fruit, and price our daily greens blend at an affordable rate (starting at ₹499/₹799 in India, and CA$21/CA$39 in Canada). Here is how we compare to the top options available on the market today.</p>
+        <p>Morivaná Daily stands out by offering complete transparency. Our label lists the exact gram and milligram amounts of all 8 whole-plant ingredients. We use low-temperature cold-drying to preserve delicate nutrients, sweeten our blend naturally with monk fruit, and price our daily greens blend at an affordable rate (starting at ₹499/₹799 in India, and CA$29/CA$49 in Canada). Here is how we compare to the top options available on the market today.</p>
       </section>
       <section style="margin-top: 24px;">
         <h2>Morivaná Daily vs AG1 (Athletic Greens)</h2>
@@ -214,7 +214,7 @@ const staticRoutes = [
     content: `
       <section>
         <h2>Pre-Order Early Bird Offer</h2>
-        <p>Thank you for your interest in Morivaná Daily Super Greens. We are currently in our pre-launch phase, preparing our first batch of premium, cold-dried greens. By pre-ordering today, you secure your place in our priority shipping queue and lock in an exclusive 15% early bird discount. Packaging comes in two sizes: a 100g Trial Pack (₹499 India / CA$21 Canada) and a 200g Daily Ritual Pack (₹799 India / CA$39 Canada), including a measuring scoop. This pre-order discount is our way of thanking our early supporters who share our vision of transparent, whole-plant nutrition.</p>
+        <p>Thank you for your interest in Morivaná Daily Super Greens. We are currently in our pre-launch phase, preparing our first batch of premium, cold-dried greens. By pre-ordering today, you secure your place in our priority shipping queue and lock in an exclusive 15% early bird discount. Packaging comes in two sizes: a 100g Trial Pack (₹499 India / CA$29 Canada) and a 200g Daily Ritual Pack (₹799 India / CA$49 Canada), including a measuring scoop. This pre-order discount is our way of thanking our early supporters who share our vision of transparent, whole-plant nutrition.</p>
         <p>Pre-ordering is fully risk-free. Your payment is processed securely, and we will notify you via email 7 days before your order is packaged and shipped. If you change your mind at any point before shipping, simply contact our customer support team, and we will issue a full refund immediately with no questions asked.</p>
       </section>
       <section style="margin-top: 24px;">
@@ -301,7 +301,7 @@ const staticRoutes = [
   {
     path: 'shop/daily-greens',
     title: 'Morivaná Daily Super Greens | Buy Online India & Canada',
-    description: 'Buy Morivaná Daily Super Greens — clean greens powder made from 8 whole plants. Sizing from 100g trial pack to 200g daily ritual pack. Pre-order ₹499/₹799 India or CA$21/CA$39 Canada.',
+    description: 'Buy Morivaná Daily Super Greens — clean greens powder made from 8 whole plants. Sizing from 100g trial pack to 200g daily ritual pack. Pre-order ₹499/₹799 India or CA$29/CA$49 Canada.',
     h1: 'Morivaná Daily Super Greens',
     content: `
       <section>

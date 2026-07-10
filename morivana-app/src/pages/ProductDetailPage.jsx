@@ -131,7 +131,7 @@ const schemas = [
         name: '100g Trial Pack - Canada',
         availability: 'https://schema.org/PreOrder',
         priceCurrency: 'CAD',
-        price: '21',
+        price: '29',
         priceValidUntil: '2027-12-31',
         url: 'https://morivanadaily.com/shop/daily-greens',
         eligibleRegion: { '@type': 'Country', name: 'Canada' },
@@ -176,7 +176,7 @@ const schemas = [
         name: '200g Daily Ritual Pack - Canada',
         availability: 'https://schema.org/PreOrder',
         priceCurrency: 'CAD',
-        price: '39',
+        price: '49',
         priceValidUntil: '2027-12-31',
         url: 'https://morivanadaily.com/shop/daily-greens',
         eligibleRegion: { '@type': 'Country', name: 'Canada' },
@@ -258,7 +258,7 @@ export default function ProductDetailPage() {
     <>
       <SEOHead
         title="Morivaná Daily Super Greens | Buy Online India & Canada"
-        description="Buy Morivaná Daily Super Greens clean greens powder made from 8 whole plants. Sizing from 100g trial pack to 200g daily ritual pack. Pre-order ₹499/₹799 India or CA$21/CA$39 Canada."
+        description="Buy Morivaná Daily Super Greens clean greens powder made from 8 whole plants. Sizing from 100g trial pack to 200g daily ritual pack. Pre-order ₹499/₹799 India or CA$29/CA$49 Canada."
         canonical="/shop/daily-greens"
         ogType="product"
         schemas={schemas}
@@ -425,14 +425,11 @@ export default function ProductDetailPage() {
                     <div>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
                         <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '2rem', color: 'var(--surface-deep)', lineHeight: 1 }}>
-                          {activeProduct ? `CA$${activeProduct.priceUSD || Math.round(activeProduct.price / 24)}` : (selectedPack === '100g' ? 'CA$21' : 'CA$39')}
-                        </span>
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--ink-mute)', textDecoration: 'line-through' }}>
-                          {selectedPack === '100g' ? 'CA$25' : 'CA$47'}
+                          {activeProduct ? `CA$${activeProduct.priceUSD || Math.round(activeProduct.price / 24)}` : (selectedPack === '100g' ? 'CA$29' : 'CA$49')}
                         </span>
                       </div>
                       <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--ink-mute)', marginTop: '4px' }}>
-                        {selectedPack === '100g' ? 'CA$1.05/day' : 'CA$0.98/day'}
+                        {selectedPack === '100g' ? 'CA$1.45/day' : 'CA$1.23/day'}
                       </div>
                     </div>
                   ) : (

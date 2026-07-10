@@ -38,8 +38,8 @@ export default function ComparePage() {
   const comparisonData = [
     {
       brand: 'Morivaná Daily',
-      price: region === 'CA' ? 'CA$39 / 20 servings' : '₹799 / 20 servings',
-      pricePerDay: region === 'CA' ? 'CA$1.95/day' : '₹40/day',
+      price: region === 'CA' ? 'CA$49 / 40 servings' : '₹799 / 40 servings',
+      pricePerDay: region === 'CA' ? 'CA$1.23/day' : '₹20/day',
       ingredients: '8',
       proprietary: 'No all amounts disclosed',
       sourcing: '✓ Full transparency',
