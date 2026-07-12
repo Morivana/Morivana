@@ -307,7 +307,7 @@ Date: ${new Date().toLocaleString()}
   try {
     userHtml = compileTemplate('welcome', {
       name: name || 'there',
-      couponCode: 'FIRSTBUY',
+      couponCode: 'FIRST15',
       allowedOrigin: primaryOrigin
     })
   } catch (err) {
@@ -3414,7 +3414,7 @@ app.post('/api/admin/abandoned-checkouts/:id/remind', adminAuth, async (req, res
       customerHtml = compileTemplate('abandoned_cart', {
         name: checkout.customer || 'there',
         cartItems: checkout.cartItems || [],
-        couponCode: 'BASH10',
+        couponCode: 'BASH15',
         checkoutUrl: `${primaryOrigin}/checkout`
       })
     } catch (err) {
